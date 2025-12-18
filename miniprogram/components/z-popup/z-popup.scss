@@ -1,0 +1,294 @@
+// 从下到中间
+@keyframes centerUp {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+// 从中间到下 - 优化版
+@keyframes centerUpDown {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+}
+
+// 从左到右开始
+@keyframes leftUp {
+  0% {
+    transform: translate(-100%, 0%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+}
+
+// 从左到右结束 - 优化版
+@keyframes leftUpDown {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-100%, 0%) scale(0.9);
+    opacity: 0;
+  }
+}
+
+// 从右到左开始
+@keyframes rightUp {
+  0% {
+    transform: translate(100%, 0%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+}
+
+// 从右到左结束 - 优化版
+@keyframes rightUpDown {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100%, 0%) scale(0.9);
+    opacity: 0;
+  }
+}
+
+// 从上到中开始
+@keyframes topUp {
+  0% {
+    transform: translate(0%, -100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+}
+
+// 从上到中结束 - 优化版
+@keyframes topUpDown {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0%, -100%) scale(0.9);
+    opacity: 0;
+  }
+}
+
+// 从下到中开始
+@keyframes bottomUp {
+  0% {
+    transform: translate(0%, 100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+}
+
+// 从下到中结束 - 优化版
+@keyframes bottomUpDown {
+  0% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(0%, 100%) scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInUpBg {
+  0% {
+    background: rgba(0,0,0,0);
+  }
+  100% {
+    background: rgba(0,0,0,0.7);
+  }
+}
+
+// 背景淡出优化版
+@keyframes slideOutDownBg {
+  0% {
+    background: rgba(0,0,0,0.7);
+  }
+  50% {
+    background: rgba(0,0,0,0.4);
+  }
+  100% {
+    background: rgba(0,0,0,0);
+  }
+}
+
+.popup {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  bottom: 0;
+  z-index: 999;
+  transform: translateY(0);
+  visibility: hidden;
+  pointer-events: auto;
+  transition: visibility 0s linear 0.3s; /* 添加延迟隐藏 */
+  
+  &.visible{
+    visibility: visible;
+    transition-delay: 0s; /* 立即显示 */
+  }
+  
+  &.hidden{
+    visibility: hidden;
+  }
+  
+  &.events{
+    pointer-events: none;
+  }
+  
+  &.slideInUpBg {
+    animation: slideInUpBg 0.3s forwards ease-out;
+  }
+
+  &.slideOutDownBg {
+    animation: slideOutDownBg 0.4s forwards ease-in;
+  }
+
+  // ----
+  .popup-box-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    height: 100vh;
+    min-width:50%;
+    top: 0%;
+    left: 0%;
+    transform: translate(-100%, 0%);
+
+    &.leftUp {
+      animation: leftUp 0.3s forwards ease-out;
+    }
+
+    &.leftUpDown{
+      animation: leftUpDown 0.4s forwards ease-in-out;
+    }
+  }
+  // ----
+
+  // ---
+  .popup-box-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    height: 100vh;
+    min-width:50%;
+    top: 0%;
+    right: 0%;
+    transform: translate(100%, 0%);
+
+    &.rightUp {
+      animation: rightUp 0.3s forwards ease-out;
+    }
+
+    &.rightUpDown{
+      animation: rightUpDown 0.4s forwards ease-in-out;
+    }
+  }
+  // ---·
+
+  // ---
+  .popup-box-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    min-height: 25%;
+    width:100vw;
+    top: 0%;
+    right: 0%;
+    transform: translate(0%, -100%);
+
+    &.topUp {
+      animation: topUp 0.3s forwards ease-out;
+    }
+
+    &.topUpDown{
+      animation: topUpDown 0.4s forwards ease-in-out;
+    }
+  }
+  // ---
+
+  // ---
+  .popup-box-bottom  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: absolute;
+    min-height: 25%;
+    width:100vw;
+    bottom: 0%;
+    right: 0%;
+    transform: translate(0%, 100%);
+
+    &.bottomUp {
+      animation: bottomUp 0.3s forwards ease-out;
+    }
+
+    &.bottomUpDown{
+      animation: bottomUpDown 0.4s forwards ease-in-out;
+    }
+  }
+  // ---
+
+  .popup-box-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    position: absolute;
+    min-width: 25%;
+    min-height: 25%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+
+    &.centerUp {
+      animation: centerUp 0.3s forwards ease-out;
+    }
+  
+    &.centerUpDown{
+      animation: centerUpDown 0.2s forwards ease-in-out;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<!-- <horizontal-drag-gesture-handler worklet:ongesture="ongesture" > -->
+<view class="swiper_cell">
+
+
+  <view class="swiper_cell_container" bindtouchstart="touchStart" bindtouchend="touchEnd">
+    <slot></slot>
+
+
+    <view class="delete" bind:tap="handleDelete">
+      <image class="img" src="../../static/componentImg/delete_white.png" mode=""/>
+    </view>
+  </view>
+
+
+</view>
+<!-- </horizontal-drag-gesture-handler> -->

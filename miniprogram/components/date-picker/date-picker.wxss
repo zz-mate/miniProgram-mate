@@ -1,0 +1,77 @@
+/* DatePicker/DatePicker.wxss */
+
+page {
+  width: 100%;
+  height: 100%;
+  font-family: 'WeChatSansStd' ;
+}
+
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+
+
+.date-picker {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.view-hidde{
+transform: translateY(100%);
+  visibility: hidden;
+}
+
+.view-show{
+  transform: translateY(0%);
+
+  visibility:visible;
+}
+
+.date-picker-c {
+  display: flex;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ok-c {
+  width: 100%;
+  height: 120rpx;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  gap: 40rpx;
+}
+
+.ok {
+  width: 200rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  align-items: center;
+  color: #fff;
+  background: #427ce8;
+}
+
+.cancell {
+  width: 200rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  align-items: center;
+  color: #427ce8;
+  background: #f3f5f4;
+}
+button { margin: 0; }
+button::after{ border: none; }

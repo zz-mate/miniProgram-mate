@@ -1,0 +1,74 @@
+<!--subPackages/pages/transaction/info/index.wxml-->
+<navigation-bar title="{{title}}" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="{{navBgColor}}">
+</navigation-bar>
+<scroll-view type="custom" scroll-y style="height:calc(100%) ">
+	<sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
+		<view class="transaction-info">
+
+			<view class="card item radius-10 flex flex-align-items-center flex-center flex-space-between">
+				<view class="icon-category flex flex-align-items-center">
+					<image src="{{transactionInfo.category.icon}}" class="icon" />
+					<text>{{transactionInfo.category.name}}</text>
+				</view>
+				<view class="right-text money num {{transactionInfo.type==1? 'text-error' :''}}">
+					{{transactionInfo.type==1?'+':'-'}} {{transactionInfo.amount}}</view>
+			</view>
+
+
+			<view class=" item radius-10 flex flex-align-items-center flex-center flex-space-between">
+				<view class="icon-category ">
+
+					<text>付款账户</text>
+				</view>
+				<view class="right-text">{{transactionInfo.account_id?transactionInfo.accountInfo.account_name:'--'}}</view>
+			</view>
+			<view class=" item flex flex-align-items-center flex-center flex-space-between">
+				<view class="icon-category ">
+
+					<text>消费人</text>
+				</view>
+				<view class="right-text ">{{transactionInfo.creatorInfo.nickname}}</view>
+			</view>
+			<view class=" item flex flex-align-items-center flex-center flex-space-between">
+				<view class="icon-category ">
+					<text>时间</text>
+				</view>
+				<view class="right-text num">{{transactionInfo.bill_time}}</view>
+			</view>
+			<view class=" item flex flex-align-items-center flex-center flex-space-between">
+				<view class="icon-category ">
+					<text>备注</text>
+				</view>
+				<view class="right-text ">{{transactionInfo.remark|| '--'}}</view>
+			</view>
+			<view class=" item flex flex-align-items-center flex-center flex-space-between">
+				<view class="icon-category ">
+					<text>标签</text>
+				</view>
+				<view class="right-text flex" wx:if="{{transactionInfo.tags.length}}">
+					<text wx:for="{{transactionInfo.tags}}" style="margin-right: 6rpx;color: #666;">#{{item.name}}</text>
+				</view>
+				<view class="right-text" wx:else>
+					<text>--</text>
+				</view>
+			</view>
+			<view class=" item flex flex-align-items-center flex-center flex-space-between">
+				<view class="icon-category ">
+					<text>账本</text>
+				</view>
+				<view class="right-text ">{{transactionInfo.book.name}}</view>
+			</view>
+
+		</view>
+	</sticky-section>
+</scroll-view>
+
+<view class="edit-del-btn flex flex-align-items-center flex-space-between flex-center">
+	<view class="del btn" bind:tap="handleRemove">
+		删除
+	</view>
+	<view class="edit btn" bind:tap="handleUpdate">
+		编辑
+	</view>
+</view>

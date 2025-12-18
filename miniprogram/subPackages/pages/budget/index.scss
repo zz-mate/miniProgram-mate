@@ -1,0 +1,121 @@
+/* subPackages/pages/budget/index.wxss */
+@import "../../../app.scss"; // 引入全局变量
+
+.header-card {
+  position: relative;
+  margin: 20rpx;
+  background-color: #FFF;
+
+  .budget-info {
+
+    padding: 20rpx;
+    transition: all .3s ease;
+
+    .icon-edit {
+      position: absolute;
+      top: 20rpx;
+      right: 20rpx;
+      width: 40rpx;
+      height: 40rpx;
+			z-index: 999;
+    }
+
+    .num {
+      color: #999999;
+    }
+
+    .budget-title {
+      text-align: center;
+      padding-top: 10rpx;
+      color: #000;
+      font-size: 24rpx;
+			z-index: -1;
+    }
+
+    .budget-amount {
+      text-align: center;
+      font-size: 44rpx;
+      font-weight: bold;
+      padding: 20rpx 0;
+      color: #000;
+    }
+
+    .budget-progress-container {
+      margin: 10rpx 0;
+      height: 8rpx;
+      background-color: #faf8fd;
+      border-radius: 4rpx;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      transition: width .3s ease;
+    }
+
+    .budget-card {
+      padding: 0;
+    }
+  }
+}
+
+
+
+.budget-category-title {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #000;
+  margin: 20rpx;
+}
+
+.budget-list{
+  background-color: #FFF;
+}
+
+.budget-card {
+  padding: 20rpx;
+  background-color: #FFF;
+
+  .icon {
+    width: 54rpx;
+    height: 54rpx;
+    
+  }
+
+  .card {
+    flex: 1;
+    margin-left: 20rpx;
+
+    .card-bp {
+      height:40rpx;
+      color: #333333;
+    }
+
+    .card-bt {
+      font-size: 20rpx;
+      text {
+       
+        color: #999999;
+      }
+    }
+
+    .budget-progress-container {
+      margin: 6rpx 0;
+      height: 4rpx;
+      background-color: #faf8fd;
+      border-radius: 2rpx;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      transition: width .3s ease;
+    }
+
+    .budget-money {
+      color: #999999;
+    }
+  }
+}
+
+

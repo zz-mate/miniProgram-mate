@@ -1,0 +1,3 @@
+<navigation-bar title="日历" back="{{false}}" homeButton="{{false}}" color="black" background="#FFF"></navigation-bar>
+
+<z-calendar bind:select="select"></z-calendar>

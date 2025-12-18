@@ -1,0 +1,76 @@
+/* subPackagesMine/pages/userInfo/index.wxss */
+.mine-container {
+  // margin-top: 20rpx;
+
+  .menu {
+    margin: 20rpx;
+
+    background-color: #FFF;
+
+    .item {
+      // margin-bottom: 30rpx;
+      height: 80rpx;
+      border-bottom: 1rpx solid #efedf188;
+      padding: 24rpx;
+
+      &:last-child {
+        border: 0;
+      }
+
+      .icon {
+        width: 58rpx;
+        height: 58rpx;
+        margin-right: 20rpx;
+      }
+
+      .title {
+
+        font-size: 22rpx;
+      }
+
+      .info {
+        flex: 1;
+        justify-content: flex-end;
+
+      }
+
+      .value {
+        margin-right: 10rpx;
+        color: #666666;
+				font-size: 22rpx;
+      }
+			.qrcode{
+				width: 32rpx;
+				height: 32rpx;
+			}
+      .avatar {
+        width: 74rpx;
+        height: 74rpx;
+        margin-right: 0;
+				border-radius: 50%;
+      }
+
+
+
+      .icon-arrow {
+				width: 26rpx;
+				height: 26rpx;
+      }
+    }
+  }
+}
+
+
+.logout {
+  margin: 0 20rpx;
+  padding: 24rpx;
+  background-color: #FFF;
+
+
+
+  .title {
+    font-size: 22rpx;
+  }
+
+
+}

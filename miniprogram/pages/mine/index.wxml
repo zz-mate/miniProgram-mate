@@ -1,0 +1,205 @@
+<navigation-bar  class="nav-bar" title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="black" background="{{navBgColor}}">
+  <!-- <view slot="left" class="navbar-title">❤️已经陪伴32天</view> -->
+</navigation-bar>
+
+
+<!-- <view class="mineContainer">
+<view class="head">
+<view>
+  <view class="head_text">欢迎来到coder_z</view>
+  <view class="head_text1"> 一键绑定手机号码，获取更好的会员服务</view>
+</view>
+
+<view>
+<button size="mini" class="head_btn" bind:tap="handleLogin">登录/注册</button>
+</view>
+
+</view>
+
+  <z-cell-group>
+
+    <z-cell type="true" cellList="{{cellList}}" bind:handleClick="handleClick" />
+
+  </z-cell-group>
+
+
+<view  style="margin-top: 20rpx;">
+  <z-cell-group bind:tap="handlePopup">
+  <z-cell leftimg="../../static/componentImg/yinsi.png" center="隐私政策" note="99" cellborder="{{false}}" />
+</z-cell-group>
+</view>
+
+
+</view>
+
+<z-popup bind:popup="handlePopup" bind:closeOnClickOverlay="handleCloseOverlay" show="{{show}}" closeOnClickOverlay="{{false}}" mode="{{'center'}}">
+
+<view style="width:200px;height: 200px;">
+
+<image src="../../static/componentImg/bg.png" mode="" style="width: 100%;height:100%;"/>
+</view>
+</z-popup> -->
+
+<!-- <navigation-bar title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="black"
+  background="rgba(255,255,255,0.9);">
+  <view slot="left">我的</view>
+</navigation-bar> -->
+
+
+
+
+<scroll-view type="custom" scroll-y style="height:calc(100% - {{height - statusBarHeight-navBarHeight}}px) ">
+	<!-- 备忘录内容 -->
+	<sticky-section push-pinned-header="{{false}}">
+
+
+		<view class="mine-container">
+			<view class="header">
+				<view class="cover">
+					<!-- <image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/miniProgram/istockphoto-2173605332-612x612.jpg"
+						mode="" /> -->
+				</view>
+				<!-- style="top:{{navBarHeight+statusBarHeight}}px" -->
+				<view class="content">
+					<view class="logo" bind:tap="handleUserInfo">
+						<image
+							src="{{userInfo.avatar_url||'https://env-00jxubueh4pn.normal.cloudstatic.cn/默认占位图.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c'}}"
+							mode="widthFix" />
+					</view>
+					<view class="nickname" bind:tap="handleUserInfo">{{userInfo.nickname|| '登录注册'}}</view>
+
+					<view class="tips" wx:if="{{!userInfo.nickname}}">欢迎来到记账小程序，注册并开启您的记账之旅</view>
+					<view class="tips">轻量记账 财务状况一手掌握</view>
+				</view>
+			</view>
+			<view class="ribbon-content">
+				<view class="list radius-10">
+					<view class="item">
+						<view class="icon">
+							<image
+								src="/static/icon/icon-bil.png"
+								mode="widthFix" />
+						</view>
+						<view class="title">明细</view>
+					</view>
+					<view class="item ">
+						<view class="icon">
+							<image
+							src="/static/icon/icon-import.png"
+								mode="widthFix" />
+						</view>
+						<view class="title">导入</view>
+					</view>
+					<view class="item">
+						<view class="icon">
+							<image
+							src="/static/icon/icon-export.png"
+								mode="widthFix" />
+						</view>
+						<view class="title">导出</view>
+					</view>
+					<view class="item">
+						<view class="icon">
+							<image
+							src="/static/icon/icon-share.png"
+								mode="widthFix" />
+						</view>
+						<view class="title">分享</view>
+					</view>
+				</view>
+			</view>
+
+			<view class="menu radius-10">
+				<view class="item flex flex-align-items-center flex-space-between">
+					<view class="icon">
+						<image
+							src="/static/icon/icon-accout.png"
+							mode="widthFix" />
+					</view>
+					<view class="title">
+						账本管理
+					</view>
+					<view class="icon-arrow">
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+					</view>
+				</view>
+				<view class="item flex flex-align-items-center flex-space-between">
+					<view class="icon">
+						<image
+						src="/static/icon/icon-category.png"
+							mode="widthFix" />
+					</view>
+					<view class="title">
+						类别管理
+					</view>
+					<view class="icon-arrow">
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+					</view>
+				</view>
+				<view class="item flex flex-align-items-center flex-space-between">
+					<view class="icon">
+						<image
+						src="/static/icon/icon-users.png"
+							mode="widthFix" />
+					</view>
+					<view class="title">
+						成员管理
+					</view>
+					<view class="icon-arrow">
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+					</view>
+				</view>
+			</view>
+
+
+
+			<view class="menu radius-10">
+				<view class="item flex flex-align-items-center flex-space-between">
+					<view class="icon">
+						<image
+						src="/static/icon/icon-qrcode.png"
+							mode="widthFix" />
+					</view>
+					<view class="title">
+						面对面邀请
+					</view>
+					<view class="icon-arrow">
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+					</view>
+				</view>
+				<view class="item flex flex-align-items-center flex-space-between">
+					<view class="icon">
+						<image
+						src="/static/icon/icon-about.png"
+							mode="widthFix" />
+					</view>
+					<view class="title">
+						关于
+					</view>
+					<view class="icon-arrow">
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+					</view>
+				</view>
+
+
+			</view>
+		</view>
+
+
+	</sticky-section>
+
+
+
+</scroll-view>
+
+<!-- <view class="no-data">
+  <view class="no-data-icon">
+    <image
+      src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+      mode="widthFix" />
+  </view>
+  <view class="no-data-text">
+    <view>抱歉呀，这个功能还在 “修炼”</view>
+    <view>等它解锁新技能就和您见面</view>
+  </view>
+</view> -->

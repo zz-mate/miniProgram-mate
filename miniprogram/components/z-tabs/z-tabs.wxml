@@ -1,0 +1,9 @@
+<view class="tabsCntainer"  style="height: {{capsuleHeight}}px;">
+
+  
+    <view wx:for="{{tabs}}" wx:key="index"  class="tabsItem {{active==index? 'tabsItemActive':''}}" style="height: {{capsuleHeight-10}}px;line-height: {{capsuleHeight-10}}px ; color:{{active==index?item.color:'#999999'}};font-weight: {{active==index?'bold':''}};" data-sub="{{index}}" bind:tap="handleItemActive">
+      {{item.name}}
+    </view>
+
+  <view class="tabsline" style=" height: {{capsuleHeight-10}}px; left: {{lineLeft}}px;width: {{lineWidth}}px;"></view>
+</view>

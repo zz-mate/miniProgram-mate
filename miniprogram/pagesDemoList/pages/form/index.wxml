@@ -1,0 +1,40 @@
+<navigation-bar title="表单验证" back="{{false}}" homeButton="{{false}}" color="black" background="#FFF"></navigation-bar>
+
+<view class="formWrap">
+    <form bindsubmit="formSubmit">
+        <view class="formItem">
+            <view class="formItemLable">公司名称：</view>
+            <input type="text" name="companyName" value="{{form.companyName}}" bindinput="handleInput"
+                bindblur="handleBlur" data-name="companyName" placeholder="请输入公司名称" />
+            <view class="tip" wx:if="{{errorMsg['companyName'].param == 'companyName'}}">{{errorMsg['companyName'].msg}}
+            </view>
+        </view>
+
+        <view class="formItem">
+            <view class="formItemLable">统一社会信用代码：</view>
+            <input type="text" name="creditCode" value="{{form.creditCode}}" bindinput="handleInput"
+                bindblur="handleBlur" data-name="creditCode" placeholder="请输入统一社会信用代码" />
+            <view class="tip" wx:if="{{errorMsg['creditCode'].param == 'creditCode'}}">{{errorMsg['creditCode'].msg}}
+            </view>
+        </view>
+
+        <view class="formItem">
+            <view class="formItemLable">申请人姓名：</view>
+            <input type="text" name="applyName" value="{{form.applyName}}" bindinput="handleInput" bindblur="handleBlur"
+                data-name="applyName" placeholder="请输入申请人姓名" />
+            <view class="tip" wx:if="{{errorMsg['applyName'].param == 'applyName'}}">{{errorMsg['applyName'].msg}}
+            </view>
+        </view>
+
+
+        <view class="formItem">
+            <view class="formItemLable">申请人身份证号码：</view>
+            <input type="text" name="idcardCode" value="{{form.idcardCode}}" bindinput="handleInput"
+                bindblur="handleBlur" data-name="idcardCode" placeholder="请输入申请人身份证号码" maxlength="18" />
+            <view class="tip" wx:if="{{errorMsg['idcardCode'].param == 'idcardCode'}}">{{errorMsg['idcardCode'].msg}}
+            </view>
+        </view>
+
+        <button class="formBtn" form-type='submit'>提交</button>
+    </form>
+</view>

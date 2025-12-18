@@ -1,0 +1,5 @@
+<view class='main_view'>
+      <text class='befor' style="background:{{lineColor?lineColor:''}};" ></text>
+     <text class='reason_txt' style="color: {{textColor}};font-size: {{textSize}};"  wx:if="{{text}}">{{text}}</text>
+      <text class='after' style="background:{{lineColor}};" ></text>
+</view>

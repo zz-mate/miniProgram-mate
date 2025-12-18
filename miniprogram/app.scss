@@ -1,0 +1,247 @@
+/**app.wxss**/
+page {
+	box-sizing: border-box;
+	background-color: #f4f2f7;
+	font-size: 24rpx;
+}
+
+/* font.wxss */
+@font-face {
+	font-family: 'WeChatSansStd';
+	src: url('https://env-00jxubueh4pn.normal.cloudstatic.cn/WeChatSansStd-Regular.ttf?expire_at=1764047061&er_sign=acc877bca1f5872e4cbd7cfb2c7da03f');
+}
+
+.num {
+	font-family: 'WeChatSansStd';
+}
+
+.container {
+	height: 100%;
+	width: 100%;
+	padding: 0rpx 20rpx;
+	box-sizing: border-box;
+}
+
+
+/* 行为相关颜色 */
+$z-color-primary: #237EFA;
+$z-color-success: #67C23A;
+$z-color-warning: #FF8C08;
+$z-color-error: #FF4308;
+/** 主题颜色**/
+$-theme-color:#FFD608;
+/* 文字基本颜色 */
+$z-text-color:#333; //基本色
+$z-text-color-inverse:#fff; //反色
+$z-text-color-grey:#999; //辅助灰色，如加载更多的提示信息
+$z-text-color-placeholder: #808080;
+$z-text-color-disable:#c0c0c0;
+
+/* 背景颜色 */
+$z-bg-color:#ffffff;
+$z-bg-color-grey:#f8f8f8;
+$z-bg-color-hover:#f1f1f1; //点击状态颜色
+$z-bg-color-mask:rgba(0, 0, 0, 0.4); //遮罩颜色
+
+/* 边框颜色 */
+$z-border-color:#c8c7cc;
+
+/* 尺寸变量 */
+
+/* 文字尺寸 */
+$z-font-size-sm:12px;
+$z-font-size-base:14px;
+$z-font-size-lg:16px;
+
+/* 图片尺寸 */
+$z-img-size-sm:20px;
+$z-img-size-base:26px;
+$z-img-size-lg:40px;
+
+/* Border Radius */
+$z-border-radius-sm: 2px;
+$z-border-radius-base: 3px;
+$z-border-radius-lg: 6px;
+$z-border-radius-circle: 50%;
+
+/* 水平间距 */
+$z-spacing-row-sm: 5px;
+$z-spacing-row-base: 10px;
+$z-spacing-row-lg: 15px;
+
+/* 垂直间距 */
+$z-spacing-col-sm: 4px;
+$z-spacing-col-base: 8px;
+$z-spacing-col-lg: 12px;
+
+/* 透明度 */
+$z-opacity-disabled: 0.3; // 组件禁用态的透明度
+
+/* 文章场景相关 */
+$z-color-title: #2C405A; // 文章标题颜色
+$z-font-size-title:20px;
+$z-color-subtitle: #555555; // 二级标题颜色
+$z-font-size-subtitle:26px;
+$z-color-paragraph: #3F536E; // 文章段落颜色
+$z-color-paragraph: #3F536E; // 文章段落颜色
+$z-font-size-paragraph:15px;
+
+.p-fixed {
+	position: fixed;
+	width: 100%;
+	z-index: 999;
+}
+
+.flex {
+	display: flex;
+}
+
+.flex-center {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.flex-align-items-center {
+	align-items: center;
+}
+
+.flex-space-between {
+	justify-content: space-between;
+}
+.flex-space-around{
+	justify-content: space-around;
+}
+.z_position {
+	position: relative;
+}
+
+.z_absolute {
+	position: absolute;
+}
+
+.z_font_w {
+	// font-weight: bold;
+	color: $z-text-color;
+	margin-bottom: 100rpx;
+}
+
+.z_margin_t20 {
+	margin-top: 40rpx;
+}
+
+image {
+	width: 100%;
+	height: 100%;
+	vertical-align: middle;
+}
+
+input {
+	font-weight: normal;
+}
+
+.radius-2 {
+	border-radius: 0rpx;
+}
+
+.radius-4 {
+	border-radius: 0rpx;
+}
+
+.radius-6 {
+	border-radius: 0rpx;
+}
+
+.radius-10 {
+	border-radius: 0rpx;
+}
+
+.fade-animate {
+	/* 初始状态：透明 + 轻微位移（让动画更自然） */
+	opacity: 0;
+	transform: translateY(20px);
+	/* 可选：从下方滑入，不加则纯透明度渐变 */
+
+	/* 关键：定义过渡效果（渐变动画的核心） */
+	transition:
+		opacity 0.5s ease,
+		/* 透明度渐变：0.5秒，缓动曲线 */
+		transform 0.5s ease;
+	/* 位移渐变：0.5秒，缓动曲线 */
+
+	/* 确保元素渲染时触发过渡（解决部分浏览器兼容问题） */
+	will-change: opacity, transform;
+}
+
+/* 元素显示时：覆盖初始状态，触发渐变 */
+.fade-animate {
+	opacity: 1;
+	/* 完全不透明 */
+	transform: translateY(0);
+	/* 回到原始位置 */
+}
+
+.no-data {
+	height: 500rpx;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #FFF;
+
+	&-icon {
+		width: 240rpx;
+		height: 240rpx;
+		margin-bottom: 20rpx;
+	}
+
+	&-text {
+		font-size: 20rpx;
+		text-align: center;
+		color: #666;
+
+		view {
+			// padding-bottom: 6rpx;
+		}
+
+		.add {
+			font-size: 24rpx;
+			width: 200rpx;
+			margin: 30rpx auto 0;
+			height: 50rpx;
+			line-height: 50rpx;
+			color: #fff;
+			font-weight: 550;
+			background-color: $z-color-error;
+			letter-spacing: 2px;
+			border-radius: 6rpx;
+		}
+	}
+}
+
+.develop-tips {
+	background-color: #FFF;
+	width: 560rpx;
+	padding: 40rpx 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10rpx;
+
+	&-icon {
+		width: 200rpx;
+		height: 200rpx;
+		margin-bottom: 20rpx;
+	}
+
+	view {
+		padding-bottom: 14rpx;
+		font-size: 20rpx;
+	}
+}
+/*弹窗样式*/
+.popup-content {
+	width: 100vw;
+	background-color: #FFF;
+}

@@ -1,0 +1,88 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/demo/index",
+		"pages/plan/index",
+    "pages/mine/index",
+    "pages/home/detail/index",
+    "pages/secondFloor/secondFloor",
+    "pages/login/index",
+    "pages/logs/logs",
+    "pages/index/index",
+    "pages/home/book/index",
+    "pages/home/book/add/index",
+    "pages/account/index",
+    "pages/statement/index",
+    "pages/add/index"
+  ],
+  "subPackages": [
+    {
+      "root": "pagesDemoList",
+      "pages": []
+    },
+    {
+      "root": "subPackagesMine",
+      "pages": [
+        "pages/userInfo/index"
+      ]
+    },
+    {
+      "root": "subPackages",
+      "pages": [
+        "pages/transaction/add/index",
+				"pages/transaction/bill/index",
+				"pages/transaction/date/index",
+        "pages/transaction/info/index",
+        "pages/budget/index",
+        "pages/budget/add/index",
+				"pages/transaction/calendar/index"
+      ]
+    }
+  ],
+  "window": {
+    "navigationStyle": "custom",
+		"navigationBarTextStyle":"black"
+  },
+  "usingComponents": {
+    "navigation-bar": "./components/navigation-bar/navigation-bar",
+    "z-popup": "./components/z-popup/z-popup"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": ""
+      },
+      {
+        "pagePath": "pages/plan/index",
+        "text": ""
+      },
+      {
+        "pagePath": "pages/statement/index",
+        "text": ""
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": ""
+      }
+    ]
+  },
+  "renderer": "skyline",
+  "appBar": {},
+  "rendererOptions": {
+    "skyline": {
+      "defaultDisplayBlock": true,
+      "disableABTest": true,
+      "sdkVersionBegin": "3.0.0",
+      "sdkVersionEnd": "15.255.255"
+    }
+  },
+  "componentFramework": "glass-easel",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

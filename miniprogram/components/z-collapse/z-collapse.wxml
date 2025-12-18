@@ -1,0 +1,36 @@
+<view class="collapse-container">
+  <!-- 折叠面板标题 -->
+  <view 
+    class="collapse-header" 
+    bindtap="onHeaderTap"
+    hover-class="collapse-header-hover"
+  >
+    <view class="collapse-title">{{ title }} <text wx:if="{{count}}">（{{count}}）</text> </view>
+    <view class="right-arrow">  
+    <text class="total-money num" style="color: {{ isExpanded ? '#666' : '#000' }};font-size: {{ isExpanded ? '24rpx' : '26rpx' }}; transition: transform 0.3s ease;">{{totalMoney}}</text>
+      <view 
+      class="collapse-icon" 
+      style="transform: rotate({{ isExpanded ? '180deg' : '0deg' }}); transition: transform 0.3s ease;"
+    >
+    
+      <text class="iconfont icon-arrow-down">+</text>
+    </view>
+    </view>
+  
+  
+  </view>
+  
+  <!-- 折叠面板内容 -->
+  <view 
+    class="collapse-content-wrapper"
+    style="height: {{ isExpanded ? contentHeight + 'px' : '0' }}; opacity: {{ isExpanded ? '1' : '0' }}; transition: height 0.3s ease, opacity 0.3s ease;"
+  >
+    <view 
+      class="collapse-content"
+      bindload="onContentLoad"
+      style="visibility: {{ isExpanded ? 'visible' : 'hidden' }};"
+    >
+      <slot></slot>
+    </view>
+  </view>
+</view>

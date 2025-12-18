@@ -1,0 +1,28 @@
+<navigation-bar title="选择账本" back="{{true}}" homeButton="{{false}}" color="black" background="transparent">
+</navigation-bar>
+
+<pan-gesture-handler style="height: 100%;" onGestureEvent="handlepan" shouldCancelWhenOutside="{{false}}">
+  <scroll-view
+  class="scroll"
+			 style="flex: 1;  width: 100%;height: 100vh;"
+			 scroll-y
+			 worklet:onscrollupdate="handleScroll"
+			 adjustDecelerationVelocity="adjustDecelerationVelocity"
+			 bounces="{{ false }}"
+			 refresher-enabled="{{ false }}"
+			 type="list"
+			>
+			<view class="book-list" style="width: 100%;height: 50px;">
+    <view class="book-item flex flex-align-items-center" wx:for="{{5}}" wx:key="id">
+      <view class="cover">
+        <image src="http://iph.href.lu/60x80?fg=666666&bg=cccccc" mode="widthFix" />
+      </view>
+      <view class="info">
+        <view class="book-name">账本名称</view>
+        <view class="num">1人</view>
+      </view>
+    </view>
+  </view>
+			</scroll-view>
+</pan-gesture-handler>
+

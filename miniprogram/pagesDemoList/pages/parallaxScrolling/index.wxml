@@ -1,0 +1,28 @@
+<navigation-bar title="视差滚动" back="{{false}}" homeButton="{{false}}" color="black" background="#FFF"></navigation-bar>
+<scroll-view scroll-y type="list" style="height: 100vh;background: blue;">
+  <view style="position: relative; height: 100vh;width: 100%;background: #b49191;margin-bottom: 10px;"></view>
+  <view style="position: relative; height: 100vh;width: 100%;background: #ededed;margin-bottom: 10px;"></view>
+  <view style="position: relative; height: 100vh;width: 100%;background: #1a1111;margin-bottom: 10px;"></view>
+</scroll-view>
+
+
+<!-- <scroll-view scroll-y type="list" style="height: 100vh;"> -->
+<!-- <view class="scrollingContainer">
+  <view class="img-one img box">
+    <text class="text-box">
+      Time
+    </text>
+  </view>
+
+  <view class="content-one img box">
+    <text class="text-box" style="color: black;">
+     瑞克与莫迪
+    </text>
+  </view>
+
+  <view style="height: 400px;width: 100%;background: rgba(161, 208, 216, 0.8);line-height: 400px;text-align: center;">
+<text style="font-size: 32px;"> 学习一坤年</text>
+  </view>
+  
+</view> -->
+<!-- </scroll-view> -->

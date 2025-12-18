@@ -1,0 +1,82 @@
+/* subPackages/pages/transaction/calendar/index.wxss */
+
+.bill-item_header {
+	padding:20rpx 20rpx 0 20rpx;
+
+	.bill-title {
+		font-weight: 550;
+
+	}
+	.money{
+		view{
+			margin-left: 20rpx;
+		}
+	}
+
+}
+
+
+.bill-list {
+	// background-color: #FFF;
+	// padding: 0 20rpx;
+	// margin: 20rpx 0;
+
+	.bill-item {
+
+		&_items {
+			padding: 0 20rpx;
+			margin: 10rpx 0;
+			background-color: #FFF;
+
+			.left-icon {
+				width: 54rpx;
+				height: 54rpx;
+				margin-right: 14rpx;
+			}
+
+			.border {
+				flex: 1;
+				display: flex;
+				border-bottom: 1rpx solid #f1f1f1;
+				padding: 14rpx 0 14rpx 14rpx;
+				// &:last-child{
+				//   border: none;
+				// }
+			}
+
+			.center-info {
+				flex: 1;
+
+				.title {
+					font-size: 22rpx;
+					color: #000;
+					font-weight: 550;
+				}
+
+				.tags {
+					font-size: 18rpx;
+					color: #999999;
+					padding: 3rpx 0;
+
+					text {
+						margin-right: 4rpx;
+					}
+				}
+
+				.date-other {
+					font-size: 20rpx;
+					color: #999999;
+
+					.text {
+						margin-right: 4rpx;
+					}
+				}
+			}
+
+			.right-money {
+				font-size: 24rpx;
+				// margin-top: -40rpx;
+			}
+		}
+	}
+}

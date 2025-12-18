@@ -1,0 +1,29 @@
+<view class="popup {{show?'visible slideInUpBg ':!show & hidden? 'visible events slideOutDownBg':'hidden '}}" catch:tap="handlePopup">
+  <block wx:if="{{mode=='left'}}">
+    <view class="popup-box-left  {{show?'leftUp':!show & hidden? 'leftUpDown':''}}" catch:tap="closeOnClickOverlay" >
+      <slot></slot>
+    </view>
+  </block>
+  <block wx:if="{{mode=='right'}}">
+    <view class="popup-box-right  {{show?'rightUp':!show & hidden? 'rightUpDown':''}}" catch:tap="closeOnClickOverlay">
+      <slot></slot>
+    </view>
+  </block>
+  <block wx:if="{{mode=='top'}}">
+    <view class="popup-box-top  {{show?'topUp':!show & hidden? 'topUpDown':''}}" catch:tap="closeOnClickOverlay">
+      <slot></slot>
+    </view>
+  </block>
+  <block wx:if="{{mode=='bottom'}}">
+    <view class="popup-box-bottom   {{show?'bottomUp':!show & hidden? 'bottomUpDown':''}}" bind:tap="closeOnClickOverlay">
+      <slot></slot>
+    </view>
+  </block>
+  <block wx:if="{{mode=='center'}}">
+    <view class="popup-box-center {{show?'centerUp':!show & hidden? 'centerUpDown':''}}" catch:tap="closeOnClickOverlay">
+      <slot></slot>
+    </view>
+  </block>
+</view>
+
+

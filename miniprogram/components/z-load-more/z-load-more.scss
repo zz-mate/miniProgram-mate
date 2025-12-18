@@ -1,0 +1,43 @@
+.load-more {
+  font-size: 24rpx;
+  height: 100rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+// 转转转动画
+@keyframes circle {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.load-more .load-more_loading {
+  display: flex;justify-content: center;align-items: center;
+}
+.load-more .loading{
+  animation: circle infinite 0.75s linear;
+}
+
+
+
+
+
+.load-more .t-class-loading-text {
+  color: #bbbbbb;
+}
+
+
+
+
+.load-more__error {
+  margin: auto;
+}
+
+.load-more__refresh-btn {
+  margin-left: 16rpx;
+  color: #fa4126;
+}

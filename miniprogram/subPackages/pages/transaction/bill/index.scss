@@ -1,0 +1,240 @@
+/* subPackages/pages/transaction/bill/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
+
+
+.bg-primary {
+	background-color: $z-color-primary;
+}
+
+.bg-success {
+	background-color: $z-color-success;
+}
+
+.bg-warning {
+	background-color: $z-color-warning;
+}
+
+.bg-error {
+	background-color: $z-color-error;
+}
+
+.text-primary {
+	color: $z-color-primary;
+}
+
+.text-success {
+	color: $z-color-success;
+}
+
+.text-warning {
+	color: $z-color-warning;
+}
+
+.text-error {
+	color: $z-color-error;
+}
+
+.subsection{
+	width: 320rpx;
+	font-size: 22rpx;
+}
+.filter-date{
+	background-color: #FFF;
+	height: 60rpx;
+}
+.bill-card {
+padding: 20rpx ;
+	.item{
+		flex: 0 0 calc((100% - 24rpx) / 3); 
+		
+		padding: 20rpx;
+		background-color: #FFF;
+		border: 1rpx solid transparent;
+		box-sizing: border-box;
+		text{
+			font-size: 20rpx;
+			color: #666;
+		}
+	}
+	.active{
+		border: 1rpx solid $-theme-color;
+	}
+	.money{
+		padding-top: 4rpx;
+		font-size: 24rpx;
+	}
+}
+
+.bill-item_header {
+	padding:20rpx;
+
+	.bill-title {
+		font-weight: 550;
+
+	}
+	.money{
+		view{
+			margin-left: 20rpx;
+		}
+	}
+
+}
+
+.collapse-wrap{
+	padding:0 20rpx 20rpx 20rpx;
+}
+
+.bill-list {
+	// background-color: #FFF;
+	// padding: 0 20rpx;
+	// margin: 20rpx 0;
+width: 100%;
+	.bill-item {
+
+		// 
+		&_header {
+			color: #999999;
+			padding: 20rpx 0;
+			font-size: 20rpx;
+
+			.money {
+				.income {
+					margin-right: 10rpx;
+				}
+			}
+		}
+
+		&_items {
+			padding: 0 20rpx;
+			// margin: 4rpx 0;
+			background-color: #FFF;
+			overflow: hidden;
+
+			.left-icon {
+				width: 54rpx;
+				height: 54rpx;
+				margin-right: 14rpx;
+			}
+
+			.border {
+				flex: 1;
+				display: flex;
+				border-bottom: 1rpx solid #f1f1f1;
+				padding: 14rpx 0 14rpx 14rpx;
+				// &:last-child{
+				//   border: none;
+				// }
+			}
+
+			.center-info {
+				flex: 1;
+
+				.title {
+					font-size: 22rpx;
+					color: #000;
+					font-weight: 550;
+				}
+
+				.tags {
+					font-size: 18rpx;
+					color: #999999;
+					padding: 3rpx 0;
+
+					text {
+						margin-right: 4rpx;
+					}
+				}
+
+				.date-other {
+					font-size: 20rpx;
+					color: #999999;
+
+					.text {
+						margin-right: 4rpx;
+					}
+				}
+			}
+
+			.right-money {
+				font-size: 24rpx;
+				// margin-top: -40rpx;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+.sticky-card {
+	background-color: #FFF;
+	padding: 20rpx;
+	margin-bottom: 20rpx;
+	border-bottom: 1rpx solid #f4f2f7;
+	overflow: hidden;
+
+	.left {
+		text-align: center;
+		width: 60rpx;
+		height: 60rpx;
+		background-color: #f4f2f7;
+		padding-top: 2rpx;
+
+		.month {
+			font-weight: 600;
+			font-size: 22rpx;
+		}
+
+		.year {
+			color: #999999;
+			font-size: 20rpx;
+		}
+	}
+
+	.center {
+		flex: 1;
+		margin-left: 20rpx;
+		font-size: 20rpx;
+
+		.progress-content {
+			.default {
+				margin-bottom: 4rpx;
+			}
+
+			.red,
+			.default {
+				height: 4rpx;
+				border-radius: 2rpx;
+				overflow: hidden;
+	background-color: #f4f2f758;
+				.progress-bar {
+					height: 100%;
+				
+					transition: width .3s ease;
+				}
+			}
+		}
+
+
+	}
+
+	.right {
+		text-align: right;
+
+		.num {
+			font-size: 22rpx;
+		}
+
+		.text {
+			color: #999999;
+			font-size: 20rpx;
+		}
+	}
+	.arror{
+		width: 24rpx;
+		height: 24rpx;
+		margin-left: 4rpx;
+	}
+}

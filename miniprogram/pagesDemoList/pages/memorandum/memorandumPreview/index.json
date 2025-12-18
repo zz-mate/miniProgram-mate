@@ -1,0 +1,6 @@
+{
+  "usingComponents": {},
+  "renderer": "webview",
+  "enablePullDownRefresh": false,
+  "disableScroll": true
+}

@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "z-cell":"../../../components/z-cell/z-cell",
+    "z-cell-group":"../../../components/z-cell-group/z-cell-group",
+    "z-divider":"../../../components/z-divider/z-divider"
+  }
+}

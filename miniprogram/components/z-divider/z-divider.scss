@@ -1,0 +1,26 @@
+ // 文字两边横线
+ .main_view{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  flex: 1 1 auto;
+  width: 50%;
+  height: 60rpx;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.befor{
+  flex: 1 1 auto;
+  height: 1rpx;
+}
+.after{
+  flex: 1 1 auto;
+  height: 1rpx;
+}
+
+.reason_txt{
+  padding: 0 16rpx;
+  text-align: center;
+}

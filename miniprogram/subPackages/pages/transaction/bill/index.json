@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+		"z-tabs":"../../../../components/z-tabs/z-tabs"
+	}
+}

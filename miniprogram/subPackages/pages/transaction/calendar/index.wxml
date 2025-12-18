@@ -1,0 +1,66 @@
+<!--subPackages/pages/transaction/calendar/index.wxml-->
+<navigation-bar title="" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+background="{{navBgColor}}">
+<view slot="center">
+	{{queryParams.year}}-{{queryParams.month}}
+	</view>
+</navigation-bar>
+
+
+			<z-calendar class="num" wx:if="{{dailySummary.length}}" id="calendar" calendarDate="{{calendarDate}}" list="{{dailySummary}}"
+			bind:select="select"></z-calendar>	
+			<view class="bill-item_header flex flex-align-items-center flex-space-between">
+				<view class="bill-title">账单明细</view>
+					<!-- <view class="date num">{{item.month}}-{{item.day}} {{item.weekday }}</view> -->
+					<view class="money flex">
+						<view class="income num">收{{totalIncome}}</view>
+						<view class="disburse num">支{{totalExpense}}</view>
+					</view>
+				</view>
+			<scroll-view type="custom" scroll-y style="height:calc(100% - {{200}}px);padding:20rpx; ">
+
+			<!-- 流水列表 & 数据为空 区域 -->
+		
+		<view class="bill-list  radius-10">
+			<view class="bill-item" >
+
+				<view class="bill-item_items flex flex-space-between flex-center" wx:for="{{transactionList}}" wx:key="index"
+					data-transaction_type="{{item.type}}" data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo">
+					<view class="left-icon">
+						<image src="{{item.category.icon}}" mode="widthFix" />
+					</view>
+					<view class="border">
+						<view class="center-info">
+							<view class="title">{{item.category.name}}</view>
+							<view class="tags flex">
+								<text wx:for="{{item.tags}}">#{{item.name}}</text>
+							</view>
+							<!-- <view class="desc">{{item.remark}}</view> -->
+							<view class="date-other num flex flex-align-items-center">
+								<text class="time-text text">{{item.bill_time}} </text>
+								<text class="account-text text">微信</text>
+								<text class="consume-text text">{{item.consume_user_id==userInfo.user_id?'自己':item.operator.nickname}}</text>
+								<text class="remark-text text">{{item.remark}}</text>
+							</view>
+						</view>
+						<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
+							<text>{{item.type==1||item.type==4?'+':'-'}}</text> {{item.amount}}
+						</view>
+					</view>
+
+				</view>
+			</view>
+			<view class="no-data" wx:if="{{!transactionList.length}}" style="margin-top:{{token?'':'20rpx'}}">
+				<view class="no-data-icon">
+					<image
+						src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+						mode="widthFix" />
+				</view>
+				<view class="no-data-text">
+					<view>记账就是记录生活</view>
+					<view>暂无账单</view>
+				</view>
+			</view>
+		</view>
+
+</scroll-view>

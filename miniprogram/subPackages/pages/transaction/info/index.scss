@@ -1,0 +1,103 @@
+/* subPackages/pages/transaction/info/index.wxss */
+
+@import "../../../../app.scss"; // 引入全局变量
+
+.bg-primary {
+	background-color: $z-color-primary;
+}
+
+.bg-success {
+	background-color: $z-color-success;
+}
+
+.bg-warning {
+	background-color: $z-color-warning;
+}
+
+.bg-error {
+	background-color: $z-color-error;
+}
+
+.text-primary {
+	color: $z-color-primary;
+}
+
+.text-success {
+	color: $z-color-success;
+}
+
+.text-warning {
+	color: $z-color-warning;
+}
+
+.text-error {
+	color: $z-color-error;
+}
+.transaction-info {
+	.card {
+		margin: 20rpx 0;
+		background: #FFF;
+		height: 100rpx;
+		text {
+			font-size: 22rpx;
+		}
+		.icon-category {
+			.icon {
+				width: 54rpx;
+				height: 54rpx;
+				margin-right: 20rpx;
+			}
+
+		}
+
+	}
+
+	.item {
+		padding: 20rpx;
+		background: #FFF;
+		height: 90rpx;
+
+		text {
+			font-size: 22rpx;
+		}
+		.right-text {
+			font-size: 22rpx;
+			// font-size:50rpx;
+
+		}
+		.money {
+			font-size: 26rpx;
+			font-weight: 550;
+		}
+		
+	}
+}
+
+.edit-del-btn {
+	position: fixed;
+	bottom: 0;
+	height: 140rpx;
+	background-color: #FFFFFF;
+	width: 100%;
+	// padding: 28rpx;
+	padding-bottom: constant(safe-area-inset-bottom);
+	/* 兼容iOS<11.2 */
+	padding-bottom: env(safe-area-inset-bottom);
+	box-sizing: border-box;
+	/* 兼容iOS>=11.2 */
+	.btn {
+		flex: 1;
+		height: 100%;
+		text-align: center;
+		font-size: 22rpx;
+		line-height: 140rpx;
+	}
+
+	.del {
+		color: #ff0000;
+	}
+
+	.edit {
+		color: #000000;
+	}
+}

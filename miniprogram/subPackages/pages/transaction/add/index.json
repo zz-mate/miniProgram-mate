@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+		"z-tabs":"../../../../components/z-tabs/z-tabs",
+    "z-popup":"../../../../components/z-popup/z-popup",
+    "date-picker": "../../../../components/date-picker/date-picker"
+  }
+}

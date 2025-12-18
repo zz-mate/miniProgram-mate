@@ -1,0 +1,131 @@
+/* pages/account/index.wxss */
+@import "../../app.scss"; // 引入全局变量
+
+.bg-primary {
+  background-color: $z-color-primary;
+}
+
+.bg-success {
+  background-color: $z-color-success;
+}
+
+.bg-warning {
+  background-color: $z-color-warning;
+}
+
+.bg-error {
+  background-color: $z-color-error;
+}
+
+.text-primary {
+  color: $z-color-primary;
+}
+
+.text-success {
+  color: $z-color-success;
+}
+
+.text-warning {
+  color: $z-color-warning;
+}
+
+.text-error {
+  color: $z-color-error;
+}
+.custom-circle{
+	position: relative;
+	// background-color: rgba(0, 0, 0, .15);
+  // border: 2rpx solid rgba(225, 225, 225, .25);
+	background-color: rgba(255, 255, 255, .6);
+	border: 2rpx solid rgba(0, 0, 0, .1);
+	margin-right: 20rpx;
+	.icon-calendar{
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%,-50%);
+		// margin: 14rpx;
+	}
+}
+
+.fake-nav-bar {
+  position: relative;
+  height: 240rpx;
+	overflow: hidden;
+	margin:20rpx 20rpx 0 20rpx ;
+  // box-sizing: border-box;
+	background-color: $-theme-color;
+}
+
+.nav {
+  //  text-align: center;
+  // position: relative;
+  // left: 0;
+  // right: 0;
+  // display: flex;
+  // flex-direction: row;
+  // align-items: center;
+  // justify-content: center;
+}
+
+// 账单卡片
+.bill-card {
+  position: absolute;
+  bottom: 32rpx;
+  left: 32rpx;
+  color: #000;
+}
+
+.bill-card .current-title text {
+  margin-right: 30rpx;
+}
+
+.current-title{
+	font-size: 22rpx;
+}
+.bill-card .current-money {
+  padding: 10rpx 0 20rpx 0;
+  font-size: 40rpx;
+  font-weight: 600;
+	.icon-eye{
+		width: 40rpx;
+		height:40rpx;
+		margin-left:38rpx;
+	}
+}
+
+.account-container {
+  margin-top: 20rpx;
+  padding: 0 20rpx;
+}
+
+.collapse-container {
+  width: 100%;
+  margin-bottom: 10px;
+  overflow: hidden;
+  background-color: #ffffff;
+}
+
+.content-item {
+  color: #000;
+  margin-bottom: 20rpx;
+
+  &:last-child {
+    margin: 0;
+  }
+
+  .icon {
+    width: 46rpx;
+    height: 46rpx;
+  }
+
+  .book-name {
+    flex: 1;
+    margin-left: 20rpx;
+		font-size: 20rpx;
+  }
+
+  .money {
+    font-size: 22rpx;
+  }
+}

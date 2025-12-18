@@ -1,0 +1,8 @@
+<navigation-bar title="numberScrolling" back="{{false}}" homeButton="{{false}}" color="black" background="#FFF"></navigation-bar>
+<input type="number" style="height: 40px;width: 100%;border: 1px solid;margin: 40px 0;" placeholder="输入数字" bind:blur="bindKeyInput"/>
+
+
+<view style="position:relative;z-index: -1;">
+
+  <z-number-scrolling value='{{value}}' container-class='acg'></z-number-scrolling>
+</view>

@@ -1,0 +1,36 @@
+<!--subPackages/pages/transaction/date/index.wxml-->
+<navigation-bar title="{{title}}" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="rgba(255,255,255,0.9);">
+
+</navigation-bar>
+
+<view class="bill-list  radius-10">
+		<view class="bill-item_items flex flex-space-between flex-center" wx:for="{{transactionList}}" wx:key="index"
+			data-transaction_type="{{item.transaction_type}}" data-transaction_id="{{item.transaction_id}}"
+			bind:tap="handleTransactionInfo">
+			<view class="left-icon">
+				<image src="{{item.category.icon}}" mode="widthFix" />
+			</view>
+			<view class="border">
+				<view class="center-info">
+					<view class="title">{{item.category.name}}</view>
+					<view class="desc">{{item.remark}}</view>
+					<view class="date-other num">{{item.transaction_time}} 微信
+						{{item.creator_id==userInfo.user_id?'自己':item.nickname}}
+					</view>
+				</view>
+				<view class="right-money num flex flex-align-items-center {{item.transaction_type==1?'text-error':''}}">
+					<text>{{item.transaction_type==1||item.transaction_type==4?'+':'-'}}</text> {{item.amount}}
+				</view>
+			</view>
+
+		</view>
+
+	<view class="no-data" wx:if="{{!transactionList.length}}" style="margin-top:{{token?'':'20rpx'}}">
+		<view class="no-data-icon">
+			<image
+				src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+				mode="widthFix" />
+		</view>
+	</view>
+</view>

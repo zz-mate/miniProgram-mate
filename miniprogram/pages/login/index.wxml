@@ -1,0 +1,72 @@
+<navigation-bar extClass="p-fixed" back="{{true}}" background="transparent">
+
+</navigation-bar>
+
+<view class="z_position">
+	<!-- <image class="top_img z_absolute"
+		src="https://env-00jxubueh4pn.normal.cloudstatic.cn/生成创意插画.jpg?expire_at=1764303325&er_sign=f919dee56e1848086ac79303073dbc30" /> -->
+<view class="top_img">
+	<image
+			class="icon-copperplate"
+				src="/static/imgs/icon-copperplate.png"
+				mode="widthFix" /></view>
+
+	<view class="z_absolute login_container">
+
+		<!-- <text class="z_font_w">欢迎加入</text> -->
+
+
+		<view class="flex  login_phone">
+			<image src="/static/imgs/icon-phone.png" mode="heightFix" />
+			<input class="login_phone_placeholder num" type="number" placeholder="请输入手机号" maxlength="11"
+				adjust-position="{{false}}" bindinput="bindKeyInput" />
+			<!-- <text class=" login_phone_placeholder">{{phone || '请授权手机号'}}</text> -->
+
+			<view class="login_phone_open" bind:tap="handlePopup">请选择授权手机号</view>
+		</view>
+
+		<!-- 
+    <view class="login_push "> 
+          <label class="flex" style="align-items: center;" bind:tap="handleChange">
+
+
+            
+              <icon wx:if="{{checked}}" class="icon-small" type="success" size="23"></icon>
+              <icon wx:else class="icon-small" type="circle" size="23"></icon>
+
+            <view class="login_push_placeholder">我已经同意</view>
+          </label>
+</view> -->
+
+		<view class="login_push ">
+			<label class="flex" style="align-items: center;" bind:tap="handlePrivacy">
+				<icon wx:if="{{privacy}}" class="icon-small" type="success" color="#FFD608" size="16"></icon>
+				<icon wx:else class="icon-small" type="circle" size="16"></icon>
+
+				<view class="login_push_placeholder">我已经阅读与同意 <text class="privacy"
+						catch:tap="handlePrivacyOpen">《隐私保护指引》</text></view>
+			</label>
+		</view>
+
+		<view class="login_btn radius-10 {{!privacy||phone.length!==11?'login_btn_d':''}} " bind:tap="handleLogin">确定授权绑定会员
+		</view>
+
+
+	</view>
+</view>
+
+
+
+<z-popup bind:popup="handlePopup" bind:closeOnClickOverlay="handleCloseOverlay" show="{{show}}"
+	closeOnClickOverlay="{{false}}" mode="{{'center'}}">
+
+	<view class="develop-tips">
+		<view class="develop-tips-icon">
+			<image
+				src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+				mode="widthFix" />
+		</view>
+		<view>抱歉呀，这个功能还在 “修炼”</view>
+		<view>等它解锁新技能就和您见面</view>
+	</view>
+</z-popup>

@@ -1,0 +1,111 @@
+/* pages/mine/index.wxss */
+@import '../../app.scss';
+
+.navbar-title{
+	font-size: 22rpx;
+	font-weight: normal;
+}
+
+.mine-container {
+	padding-bottom: 20rpx;
+
+	.header {
+		position: relative;
+		height: 360rpx;
+
+		.cover {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: $-theme-color;
+		}
+
+		.content {
+			position: absolute;
+			left: 0;
+			right: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			color: #000;
+
+			.logo {
+				width: 140rpx;
+				height: 140rpx;
+				border-radius: 50%;
+				overflow: hidden;
+			}
+
+			.nickname {
+				font-size: 30rpx;
+				font-weight: 550;
+				padding: 30rpx 0;
+			}
+
+			.tips {
+				font-size: 20rpx;
+				padding-top: 14rpx;
+			}
+		}
+	}
+
+	.ribbon-content {
+		padding: 20rpx;
+
+		.list {
+			display: flex;
+			justify-content: center;
+			overflow: hidden;
+
+			.item {
+				flex: 1;
+				background-color: #FFF;
+				padding: 20rpx;
+
+				.icon {
+					width: 44rpx;
+					height: 44rpx;
+					margin: 0 auto 4rpx;
+				}
+
+				.title {
+					text-align: center;
+					font-size: 20rpx;
+					padding-top:4rpx;
+					color: #535252;
+				}
+			}
+		}
+	}
+
+	.menu {
+		margin: 0 20rpx 20rpx 20rpx;
+		padding: 20rpx;
+		background-color: #FFF;
+
+		.item {
+			// margin-bottom: 20rpx;
+			height: 80rpx;
+
+			.icon {
+				width: 42rpx;
+				height: 42rpx;
+				margin-right: 20rpx;
+			}
+
+			.title {
+				flex: 1;
+				font-size: 22rpx;
+				color: #535252;
+			}
+
+			.icon-arrow {
+				width: 26rpx;
+				height: 26rpx;
+			}
+		}
+	}
+}

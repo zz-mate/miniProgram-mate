@@ -1,0 +1,228 @@
+/* pages/statement/index.wxss */
+@import "../../app.scss"; // 引入全局变量
+
+.bg-primary {
+  background-color: $z-color-primary;
+}
+
+.bg-success {
+  background-color: $z-color-success;
+}
+
+.bg-warning {
+  background-color: $z-color-warning;
+}
+
+.bg-error {
+  background-color: $z-color-error;
+}
+
+.text-primary {
+  color: $z-color-primary;
+}
+
+.text-success {
+  color: $z-color-success;
+}
+
+.text-warning {
+  color: $z-color-warning;
+}
+
+.text-error {
+  color: $z-color-error;
+}
+
+
+.filter-content {
+	padding: 20rpx;
+
+	.date {
+		min-width: 180rpx;
+		height: 60rpx;
+		line-height: 60rpx;
+		text-align: center;
+		background-color: #FFF;
+		padding: 0 20rpx;
+		overflow: hidden;
+	}
+
+	.type {
+		min-width: 240rpx;
+		font-size: 22rpx;
+	}
+}
+
+
+.popup-content {
+	width: 100vw;
+	background-color: #FFF;
+
+	.more-list {
+		padding: 20rpx;
+
+		.more-item {
+			.more-title {
+				font-size: 24rpx;
+				font-weight: 550;
+			}
+
+			.items {
+				padding: 20rpx 0;
+				flex-wrap: wrap;
+				/* 自动换行 */
+				justify-content: flex-start;
+				/* 左对齐，保持每行4个的规整 */
+				gap: 10rpx;
+				/* 关键：上下间距20rpx，左右间距10rpx，替代margin更简洁 */
+				box-sizing: border-box;
+
+				view {
+					font-size: 22rpx;
+					flex: 0 0 calc(25% - 7.5rpx);
+					/* 计算：4个元素占满行，减去gap的均分 */
+					width: calc(25% - 7.5rpx);
+					/* 兼容部分小程序flex计算问题 */
+					background-color: #faf8fd;
+					text-align: center;
+					height: 60rpx;
+					line-height: 60rpx;
+					box-sizing: border-box;
+				}
+			}
+
+			// &:view:nth-child(4n) {
+			// 	margin-right: 0;
+			// }
+		}
+	}
+}
+
+
+
+.tab-container {
+	margin: 20rpx;
+}
+
+
+
+// 图表
+.card-echart {
+	height: auto;
+
+	.card {
+		padding: 20rpx;
+		background-color: #FFF;
+		margin-bottom: 20rpx;
+
+		// background: linear-gradient(90deg, #03224e 0%, #011030 100%);
+		.title {
+			font-size: 22rpx;
+			font-weight: 550;
+			padding-bottom: 10rpx;
+			color: #000;
+
+		}
+
+
+		.echart {
+
+			width: 100%;
+			height: 200px;
+
+			&.pie {
+				height: 250px;
+			}
+
+			&.income {}
+		}
+
+		.tips-content {
+			background-color: #faf8fd;
+			padding: 20rpx;
+			font-size: 22rpx;
+			color: #666666;
+			margin-top: 30rpx;
+		}
+
+		.bill-day {
+			margin-top: 20rpx;
+			padding: 10rpx 0;
+			.day {
+				width: 48rpx;
+				height: 48rpx;
+				text-align: center;
+				line-height: 48rpx;
+				margin-right: 12rpx;
+
+				&.disburse {
+					background-color: #67c23a56;
+					color: $z-color-success;
+				}
+
+				&.income {
+					background-color: #f56c6c58;
+					color: $z-color-error;
+				}
+				&.jy {
+					background-color: #e6a23c52;
+					color: $z-color-warning;
+				}
+
+				.icon {
+					width: 48rpx;
+					height: 48rpx;
+				}
+			}
+
+			.info {
+				flex: 1;
+
+				.date-money {
+					color: #333333;
+
+					.date {
+						font-weight: 550;
+					}
+
+					.money {
+						font-weight: 550;
+					}
+				}
+			}
+
+			.progress-container {
+				margin: 6rpx 0;
+				height: 6rpx;
+				background-color: #faf8fd;
+				border-radius: 2rpx;
+				overflow: hidden;
+			}
+
+			.progress-bar {
+				height: 100%;
+				transition: width .3s ease;
+			}
+
+			.num {
+				color: #666666;
+				font-size: 20rpx;
+			}
+		}
+
+		.unfold {
+			text-align: center;
+			padding: 10rpx 0 0 0;
+			font-size: 22rpx;
+			color: #999999;
+			/* 蓝色文字，和之前波纹按钮风格统一 */
+			cursor: pointer;
+		}
+
+		// .unfold:active {
+		//   color: #2980b9; /* 点击时加深颜色 */
+		// }
+
+	}
+
+}

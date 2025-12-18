@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "z-number-scrolling":"../../../components/z-number-scrolling/z-number-scrolling"
+  }
+}

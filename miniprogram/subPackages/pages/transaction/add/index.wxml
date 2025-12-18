@@ -1,0 +1,344 @@
+<!--subPackages/pages/transaction/add/index.wxml-->
+<navigation-bar title="" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="{{navBgColor}}">
+	<view slot="center" class="subsection" data-type="book" bind:tap="handlePopup">
+		{{bookInfo.name}}
+	</view>
+</navigation-bar>
+
+
+<!-- 轮播图下的选项 -->
+
+<view class="tab-list">
+	<view wx:for="{{swiperTabs}}" wx:key="title"
+		class="tab-item item-{{selectedTab}} {{selectedTab === index ? 'active' : ''}}" data-tab="{{index}}"
+		data-type="{{item.id}}" bindtap="onTapTab">
+		<view>{{ item.title }}</view>
+	</view>
+</view>
+<view class="money-content ">
+	<view class="conent radius-10 flex flex-align-items-center flex-space-between">
+		<view class="lt flex flex-align-items-center">
+			<view class="icon">
+				<image src="{{categoryList[categoryIndex].icon}}" mode="" />
+			</view>
+			<view class="icon-title">{{categoryList[categoryIndex].name}}</view>
+		</view>
+
+		<view class="money num {{selectedTab==0?'active':''}}">{{bill.num || '0.00'}}</view>
+	</view>
+
+</view>
+
+
+
+<!-- 分类 -->
+<view class="tab-container"
+	style="height: calc(100vh - {{calculatorHeight + safeAreaBottom + tabMoneyCardHeight + navBarHeight + statusBarHeight}}px)">
+	<swiper class="scroll-list" current="{{selectedTab}}" bind:change="onTabChanged"
+		worklet:onscrollstart="onTabTransition" worklet:onscrollupdate="onTabTransition"
+		worklet:onscrollend="onTabTransitionEnd" duration="{{400}}" cache-extent="1">
+		<swiper-item wx:for="{{swiperTabs}}" wx:key="index" class="swiper-{{index}}">
+			<view class="card">
+				<view class="list" wx:if="{{categoryList.length}}">
+					<view class="item" wx:for="{{categoryList}}" wx:key="index" data-index="{{index}}" wx:if="{{index < 14}}"
+						bind:tap="handleChooseCategory">
+						<view class="icon {{ categoryIndex==index?'active':''}}">
+							<image src="{{item.icon}}" mode="widthFix" />
+						</view>
+						<view class="icon-title">{{item.name}}</view>
+					</view>
+					<view class="item" data-type="category" bind:tap="handlePopup">
+						<view class="icon">
+							<image
+								src="https://env-00jxubueh4pn.normal.cloudstatic.cn/%E9%BB%98%E8%AE%A4%E5%8D%A0%E4%BD%8D%E5%9B%BE.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c"
+								mode="widthFix" />
+						</view>
+						<view class="icon-title">全部</view>
+					</view>
+				</view>
+				<block wx:else>
+					<view class="no-data-1">
+						<view class="no-data-icon">
+							<image
+								src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+								mode="" />
+						</view>
+						<view class="no-data-text">
+							<view>抱歉呀，这个功能还在 “修炼”</view>
+							<view>等它解锁新技能就和您见面</view>
+						</view>
+					</view>
+				</block>
+			</view>
+		</swiper-item>
+	</swiper>
+</view>
+
+
+
+
+<!-- 自定义数字键盘 -->
+<view class="keyboard">
+	<view class='keyboard-head' style="bottom: {{keyboardHeight}}px; transition: bottom 0.3s ease;">
+		<view class="remark">
+			<input class="remark_placeholder" style="font-size: 24rpx;" type="text" maxlength="20" placeholder="输入备注..."
+				adjust-position="{{false}}" bindinput="bindKeyInput" bindfocus="onInputFocus" bindblur="onInputBlur" />
+		</view>
+		<view class="keyboard-tab-list flex  flex-space-between" style="padding-bottom:{{tagList.length? '0':' 10rpx'}};">
+			<view class="left">
+				<scroll-view class=" flex" scroll-x="{{true}}"
+					style="height:46rpx;width:calc(100vw - 80rpx);white-space: nowrap;">
+					<view class="bill-tag radius-4" bind:tap="handlePopup" data-type="date">{{bill.date}}</view>
+					<!-- <view class="bill-tag radius-4" bind:tap="handlePopup" data-type="account"
+						style="color:{{bill.account_id?'#000':'#999'}}">
+						{{bill.account_name || '账户'}}
+					</view>
+					<view class="bill-tag radius-4" bind:tap="handlePopup" data-type="user">自己</view>
+					<view class="bill-tag radius-4" bind:tap="handleRefund" style="color:{{bill.refound?'#000':'#999'}}">退款</view> -->
+				</scroll-view>
+				<!-- <scroll-view class="flex category-child-list" scroll-x="{{true}}"
+					wx:if="{{categoryList[categoryIndex].children.length}}"
+					style="height:40rpx;width:100%;white-space: nowrap;margin-top: 10rpx;">
+		
+						<view wx:for="{{categoryList[categoryIndex].children}}" wx:key="id" data-category="{{item}}"
+							data-index="{{index}}" class="radius-4 {{item.isSelected ? 'active' : 'not-active'}}"
+							bind:tap="handleCategoryTagSelect">
+							{{item.name}}
+						</view>
+		
+
+					<view class="not-active radius-4">+添加标签</view>
+				</scroll-view> -->
+			</view>
+			<view class="right">
+				<image class="upload"
+					src="https://env-00jxubueh4pn.normal.cloudstatic.cn/相机 (1).png?expire_at=1764470058&er_sign=a35a4a1ac05926913a3c6d243800f5dc"
+					mode="" />
+			</view>
+
+		</view>
+	</view>
+
+	<view class='keyboard-row'>
+		<view class='key one' hover-class="weui-cell_active" data-key='1' bindtap='tapKey'>1</view>
+		<view class='key two' hover-class="weui-cell_active" data-key='2' bindtap='tapKey'>2</view>
+		<view class='key three' hover-class="weui-cell_active" data-key='3' bindtap='tapKey'>3</view>
+		<!-- <view class='key del' hover-class="weui-cell_active">
+      --
+    </view> -->
+		<view class='key dot' hover-class="weui-cell_active" data-key='.' bindtap='tapDel' bindlongpress="longpressDel"
+			bindtouchend="stopInterval">
+			<image class="del-image"
+				src="https://env-00jxubueh4pn.normal.cloudstatic.cn/miniProgram/%E7%94%B3%E8%AF%B7%E5%9B%9E%E9%80%80.png"
+				mode="widthFix"></image>
+		</view>
+	</view>
+	<view class="keyboard-bottom3">
+		<view class="keyboard-bottom3-num">
+			<view class='keyboard-row'>
+				<view class='key four' hover-class="weui-cell_active" data-key='4' bindtap='tapKey'>4</view>
+				<view class='key five' hover-class="weui-cell_active" data-key='5' bindtap='tapKey'>5</view>
+				<view class='key six' hover-class="weui-cell_active" data-key='6' bindtap='tapKey'>6</view>
+			</view>
+			<view class='keyboard-row'>
+				<view class='key seven' hover-class="weui-cell_active" data-key='7' bindtap='tapKey'>7</view>
+				<view class='key eight' hover-class="weui-cell_active" data-key='8' bindtap='tapKey'>8</view>
+				<view class='key nine' hover-class="weui-cell_active" data-key='9' bindtap='tapKey'>9</view>
+			</view>
+			<view class='keyboard-row'>
+				<view class='key nine' hover-class="weui-cell_active" data-key='.' bindtap='tapKey'>.</view>
+				<view class='key nine' hover-class="weui-cell_active" data-key='0' bindtap='tapKey'>0</view>
+				<view class='key del' hover-class="weui-cell_active">
+					--
+				</view>
+				<!-- <view class='key dot' hover-class="weui-cell_active" data-key='.' bindtap='tapDel' bindlongpress="longpressDel"
+          bindtouchend="stopInterval">
+          <image class="del-image"
+            src="https://env-00jxubueh4pn.normal.cloudstatic.cn/回退-copy.png?expire_at=1764331732&er_sign=d9325173ccb72396bbde5adba88c18c0"
+            mode=""></image>
+        </view> -->
+			</view>
+		</view>
+		<view class="key submit {{selectedTab==0?'active':''}}" hover-class="weui-cell_active" bindtap='tapSubmit'>确定</view>
+	</view>
+</view>
+
+<!-- 日期 -->
+<z-popup bind:popup="handleChildPopup" showTitle="date" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_date}}" closeOnClickOverlay="{{false}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content" style="height:35vh">
+		<date-picker bind:onCancel="handleCloseOverlay" bind:onConfirm="onConfirmDate" mode="{{mode}}" date="{{date}}"
+			startDate="{{startDate}}" endDate="{{endDate}}" minScale="{{minScale}}"></date-picker>
+	</view>
+</z-popup>
+<!-- 账户 -->
+<z-popup bind:popup="handleChildPopup" showTitle="account" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_account}}" closeOnClickOverlay="{{false}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content" style="height:65vh">
+		<view class="account-list list">
+			<view class="default flex flex-align-items-center flex-space-between" bind:tap="handleAccountDefault">
+				<view class="account-name">
+					不使用账户
+				</view>
+				<view class=" icon" wx:if="{{ selectedParentIndex==-1 &&selectedChildIndex==-1}}">
+					<image
+						src="https://env-00jxubueh4pn.normal.cloudstatic.cn/选中.png?expire_at=1764261862&er_sign=70a70d791e41e1880e6ea64c4c61fd8b"
+						mode="widthFix" />
+				</view>
+			</view>
+			<scroll-view class="account-scroll" scroll-y="{{true}}" style="height:50vh">
+				<view wx:if="{{accountList.length}}">
+					<view class="item" wx:for="{{accountList}}" wx:key="index">
+						<view class="item-header">{{item.type.type_name}}</view>
+						<view class="item-items  flex flex-space-between flex-align-items-center" wx:for="{{item.list}}"
+							wx:for-index="i" wx:for-item="v" bind:tap="handleChooseAccount" data-parent-index="{{index}}"
+							data-child-index="{{i}}">
+							<view class="account-icon">
+								<image src="{{v.icon}}" mode="widthFix" />
+							</view>
+							<view class="account-name">{{v.account_name}}</view>
+							<view class=" icon" wx:if="{{index === selectedParentIndex && i === selectedChildIndex}}">
+								<image
+									src="https://env-00jxubueh4pn.normal.cloudstatic.cn/选中.png?expire_at=1764261862&er_sign=70a70d791e41e1880e6ea64c4c61fd8b"
+									mode="widthFix" />
+							</view>
+						</view>
+					</view>
+				</view>
+
+				<view class="no-data" wx:else>
+					<view class="no-data-icon">
+						<image
+							src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+							mode="widthFix" />
+					</view>
+					<view class="no-data-text">
+						<view>记账就是记录生活</view>
+						<view>财务自由，从记第一笔开始</view>
+					</view>
+				</view>
+
+
+
+
+			</scroll-view>
+		</view>
+	</view>
+
+</z-popup>
+<!-- 消费人 -->
+<z-popup bind:popup="handleChildPopup" showTitle="user" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_user}}" closeOnClickOverlay="{{false}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content" style="height:60vh">
+		<view class="no-data">
+			<view class="no-data-icon">
+				<image
+					src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+					mode="widthFix" />
+			</view>
+			<view class="no-data-text">
+				<view>抱歉呀，这个功能还在 “修炼”</view>
+				<view>等它解锁新技能就和您见面</view>
+			</view>
+		</view>
+	</view>
+
+
+</z-popup>
+<!-- 账本 -->
+<z-popup bind:popup="handleChildPopup" showTitle="book" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_book}}" closeOnClickOverlay="{{false}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content">
+		<scroll-view scroll-y style="height:60vh">
+			<block wx:if="{{bookList.length>0}}">
+				<block wx:for="{{bookList}}" wx:key="index">
+					<view class="book-list {{index==bookIndex?'book-list_active':''}}" style="width: 100%;height: 100rpx;"
+						data-index="{{index}}" bind:tap="handleMenoSelected">
+						<view class="book-item flex flex-align-items-center flex-space-between">
+							<view class="cover">
+								<image src="{{item.icon}}" mode="aspectFill" />
+							</view>
+							<view class="info">
+								<view class="book-name">{{item.book_name}}</view>
+								<view class="num">1人</view>
+							</view>
+							<view class="icon" wx:if="{{bookIndex==index}}">
+								<image
+									src="https://env-00jxubueh4pn.normal.cloudstatic.cn/选中.png?expire_at=1764261862&er_sign=70a70d791e41e1880e6ea64c4c61fd8b"
+									mode="widthFix" />
+							</view>
+						</view>
+					</view>
+				</block>
+			</block>
+
+			<view class="no-data" wx:else>
+				<view class="no-data-icon">
+					<image
+						src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+						mode="widthFix" />
+				</view>
+				<view class="no-data-text">
+					<view>记账就是记录生活</view>
+					<view>财务自由，从记第一笔开始</view>
+				</view>
+			</view>
+		</scroll-view>
+
+	</view>
+
+</z-popup>
+<!--消费类别 -->
+<z-popup bind:popup="handleChildPopup" showTitle="category" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_category}}" closeOnClickOverlay="{{false}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content">
+		<scroll-view scroll-y style="height:60vh">
+			<block wx:if="{{categoryList.length>0}}">
+				<block wx:for="{{categoryList}}" wx:key="index">
+					<view class="category-list {{index==categoryIndex?'book-list_active':''}}" style="width: 100%;height: 100rpx;"
+						data-index="{{index}}" bind:tap="handleChooseCategory">
+						<view class="category-item flex flex-align-items-center flex-space-between">
+							<view class="cover">
+								<image src="{{item.icon}}" mode="aspectFill" />
+							</view>
+							<view class="info">
+								<view class="category-name">{{item.name}}</view>
+							</view>
+							<view class="icon" wx:if="{{categoryIndex==index}}">
+								<image
+									src="https://env-00jxubueh4pn.normal.cloudstatic.cn/选中.png?expire_at=1764261862&er_sign=70a70d791e41e1880e6ea64c4c61fd8b"
+									mode="widthFix" />
+							</view>
+						</view>
+					</view>
+
+				</block>
+
+			</block>
+
+			<view class="no-data" wx:else>
+				<view class="no-data-icon">
+					<image
+						src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+						mode="widthFix" />
+				</view>
+				<view class="no-data-text">
+					<view>记账就是记录生活</view>
+					<view>财务自由，从记第一笔开始</view>
+				</view>
+
+			</view>
+			<view class="scroll-fixed">
+				<view class="scroll-add">添加</view>
+			</view>
+		</scroll-view>
+
+	</view>
+
+</z-popup>

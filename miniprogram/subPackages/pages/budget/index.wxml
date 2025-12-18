@@ -1,0 +1,80 @@
+<!--subPackages/pages/budget/index.wxml-->
+<navigation-bar title="" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black" background="{{navBgColor}}">
+  <view slot="center" class="subsection" data-type="book" bind:tap="handlePopup">
+    支出月预算
+  </view>
+</navigation-bar>
+
+<view class="header-card radius-10">
+  <view class="budget-info fade-animate">
+    <view class="icon-edit" bind:tap="handleSettingBudget">
+			<image src="/static/icon/icon-edit.png"  mode="widthFix" />
+    </view>
+    <view class="budget-title" :style="color:{{budgetInfo.remaining_percent>=0?'#000000':'#ff0000'}}">总预算{{budgetInfo.remaining_percent>=0?'剩余':'超支'}}</view>
+    <view class="budget-amount num">{{budgetInfo.surplus_amount}}</view>
+    <view class="budget-progress-container">
+      <view class="progress-bar"
+        style="width: {{100 - budgetInfo.remaining_percent}}%;background-color:{{ budgetInfo.remaining_percent>0?'#e2ab63':budgetInfo.remaining_percent==0?'#e2ab63':'#ff0000'}}">
+      </view>
+    </view>
+    <view class="flex flex-center flex-align-items-center flex-space-between num" style="font-size: 22rpx;">
+      <text wx:if="{{budgetInfo.remaining_amount!=='0.00'}}">预算 {{budgetInfo.amount}} 支出{{budgetInfo.actual_amount}}</text>
+      <text wx:else>预算 未设置</text>
+      <text wx:if="{{budgetInfo.amount>0}}"> {{budgetInfo.remaining_percent>=0?'剩余 '+budgetInfo.remaining_percent:''+ budgetInfo.remaining_percent}}%</text>
+    </view>
+  </view>
+</view>
+<view class="budget-category-title">分类预算</view>
+<scroll-view type="custom" scroll-y style="height:calc(100% - {{height}}px) ">
+  <sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
+
+    <view class="budget-list">
+      <view wx:if="{{categoryList.length}}">
+        <view wx:for="{{categoryList}}" wx:key="index">
+          <view class="budget-card radius-10 flex flex-space-between flex-align-items-center">
+            <view class="icon">
+              <image src="{{item.icon}}" mode="" />
+            </view>
+
+            <view class="card">
+              <view class="card-bp num flex flex-space-between flex-align-items-center">
+                <view class="budget-title" style="font-weight:550;font-size: 22rpx;"> {{item.category_name}}</view>
+                <view class="budget-title  flex flex-center" style="color:{{item.remaining_percent>=0?'#000':'#ff0000'}};font-size: 20rpx;"> 
+                
+                 <!-- <text style="margin-right:10rpx; color:{{item.remaining_amount_flag>=0?'#999999':'#ff0000'}}"> -->
+                 {{item.remaining_percent>=0?'剩余 '+ item.remaining_amount :'超支 ' + item.remaining_amount}} 
+                 <!-- </text>  -->
+                 
+                 
+                 </view>
+              </view>
+
+              <view class="budget-progress-container">
+                <view class="progress-bar"  style="width: {{100 - item.remaining_percent}}%;background-color: {{ item.remaining_percent>0?'#e2ab63':item.remaining_percent==0?'#e2ab63':'#ff0000'}}">
+                </view>
+              </view>
+
+              <view class="card-bt num flex flex-space-between">
+                <view class="budget-title flex flex-center"><text>预算 {{item.category_amount}}</text> <text style="margin-left:10rpx">支出{{item.category_actual_amount}}</text> </view>
+                <view class="budget-title" style="color:#999999"> {{item.remaining_percent}}%</view>
+              </view>
+            </view>
+          </view>
+
+        </view>
+      </view>
+      <view class="no-data" wx:else>
+        <view class="no-data-icon">
+          <image
+            src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+            mode="widthFix" />
+        </view>
+        <view class="no-data-text">
+          <view>暂无分类预算</view>
+          <view>请点击右上角设置</view>
+        </view>
+      </view>
+    </view>
+  </sticky-section>
+</scroll-view>
+

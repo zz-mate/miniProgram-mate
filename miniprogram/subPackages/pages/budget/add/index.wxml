@@ -1,0 +1,61 @@
+<!--subPackages/pages/budget/add/index.wxml-->
+<navigation-bar title="" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black" background="#FFF">
+  <view slot="center" class="subsection" data-type="book" bind:tap="handlePopup">
+    支出月预算
+  </view>
+</navigation-bar>
+
+<view class="header-card radius-10">
+  <view class="budget-info fade-animate alternative">
+    <view class="budget-list">
+      <view class="budget-card flex flex-space-between flex-align-items-center">
+        <view class="icon" style="width:50rpx;height:50rpx">
+          <image src="/static/icon/icon-edit.png"  mode="widthFix" />
+        </view>
+        <view class="budget-title total">总预算</view>
+        <view class="budget-money total-total num flex flex-space-between flex-align-items-center">
+          <!-- 总预算输入框：绑定 focus、blur、input 事件 -->
+          <input class="budget-input num" type="digit" placeholder="0.00" maxlength="11"
+            value="{{budgetInfo.budget_amount}}" adjust-position="{{false}}" bindinput="bindTotalBudgetInput"
+            bindfocus="bindTotalBudgetFocus" bindblur="bindTotalBudgetBlur" data-val="{{budgetInfo.budget_amount}}"
+            min="0" />
+        </view>
+
+      </view>
+    </view>
+
+  </view>
+</view>
+
+<view class="budget-category-title">分类预算</view>
+
+<scroll-view type="custom" scroll-y style="height:calc(100% - {{scrollHeight}}px) ">
+  <sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
+
+    <view class="budget-list">
+      <view wx:for="{{categoryList}}" wx:key="index">
+        <view class="budget-card radius-10 flex flex-space-between flex-align-items-center">
+          <view class="icon">
+            <image src="{{item.icon}}" mode="" />
+          </view>
+          <view class="budget-title">
+            {{item.name}}
+          </view>
+          <view class="budget-money num flex flex-space-between flex-align-items-center">
+            <input class="budget-input num" type="digit" placeholder="0.00" maxlength="11"
+              data-index="{{index}}" data-val="{{item.category_amount}}" value="{{item.category_amount}}"
+              adjust-position="{{false}}" bindinput="bindTotalBudgetInput" bindfocus="bindBudgetInputFocus"
+              bindblur="bindBudgetInputBlur" required min="0" />
+          </view>
+
+        </view>
+      </view>
+    </view>
+  </sticky-section>
+</scroll-view>
+
+<view class="save-button" bind:tap="save">
+  <view class="btn">
+    保存
+  </view>
+</view>

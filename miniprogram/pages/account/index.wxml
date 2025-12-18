@@ -1,0 +1,78 @@
+<navigation-bar title="资产" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+background="{{navBgColor}}">
+
+</navigation-bar>
+
+
+<view class="fake-nav-bar radius-10">
+  <!-- <image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/miniProgram/istockphoto-2221933968-612x612.jpg"
+    style=" width: 100%;height: 240rpx;" mode="scaleToFill" /> -->
+  <view class="bill-card">
+    <view class="current-title">净资产</view>
+		<view class="current-money num flex flex-align-items-center">
+				<view class="money">{{eyeIndex==1?net_asset||'0.00':'*******'}}</view>
+				<image class="icon-eye" src="/static/imgs/icon-eye_{{eyeIndex}}.png" data-eye="{{eyeIndex}}" mode="widthFix" bind:tap="handleEye"/>
+				</view>
+
+
+    <!-- <view class="current-money num">{{net_asset||'0.00'}}</view> -->
+    <view class="current-title flex num">
+      <text>总资产  {{eyeIndex==1?total_asset||'0.00':'****'}}</text>
+      <text>总负债 {{eyeIndex==1?total_debt||'0.00':'****'}}</text>
+    </view>
+  </view>
+</view>
+
+
+
+<view class="account-container" wx:if="{{accountList.length}}">
+  <collapse title="{{item.category_name}}" count="{{item.children.length}}" totalMoney="{{eyeIndex==1?item.category_remaining_amount||'0.00':'*******'}}"
+    expanded="{{false}}" wx:for="{{accountList}}" wx:for-index="index" wx:for-item="item">
+
+    <view class="content-item flex flex-space-between flex-align-items-center" wx:for="{{item.children}}" wx:for-index="i"
+      wx:for-item="v">
+      <view class="icon">
+        <image src="{{v.icon}}" mode="widthFix" />
+      </view>
+      <view class="book-name">{{v.bank_name|| v.name}}</view>
+      <view class="num money">{{eyeIndex==1?v.remaining_amount||'0.00':'*******'}}</view>
+
+
+    </view>
+  </collapse>
+  <!-- </view> -->
+
+
+</view>
+<view wx:else style="background-color: #FFF;margin:20rpx" class="radius-10">
+  <view class="no-data" style="margin-top:{{token?'':'20rpx'}}">
+    <view class="no-data-icon">
+      <image
+        src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+        mode="widthFix" />
+    </view>
+    <view class="no-data-text">
+      <view>账户暂无资产</view>
+      <view>是否添加第一笔账户资金</view>
+      <!-- <view class="add" bind:tap="handleCreate">
+        添加账户
+      </view> -->
+    </view>
+  </view>
+</view>
+
+
+
+<z-popup bind:popup="handlePopup" bind:closeOnClickOverlay="handleCloseOverlay" show="{{show}}"
+  closeOnClickOverlay="{{false}}" mode="{{'center'}}">
+
+  <view class="develop-tips">
+    <view class="develop-tips-icon">
+      <image
+        src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+        mode="widthFix" />
+    </view>
+    <view>抱歉呀，这个功能还在 “修炼”</view>
+    <view>等它解锁新技能就和您见面</view>
+  </view>
+</z-popup>

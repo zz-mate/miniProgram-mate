@@ -1,0 +1,45 @@
+<navigation-bar title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="black" background="transparent">
+  <view slot="left" bind:tap="onTapOpenComment">组件</view>
+</navigation-bar>
+<!-- <button bind:tap="handleTabs">tabs </button> -->
+<scroll-view class="demo-container" type="list" scroll-y show-scrollbar="{{false}}">
+
+  <view class="z_flex toolbar">
+    <view class="toolbar-left"></view>
+
+    <view class="toolbar-box">
+      <view class="toolbar-right-t">
+      </view>
+
+      <view class="toolbar-right-b">
+      </view>
+    </view>
+
+  </view>
+</scroll-view>
+
+<view class="comment-container" style="height: {{height}}px;">
+  <!-- 顶部不参与手势协商，单独控制 -->
+  <pan-gesture-handler worklet:ongesture="handlePan" style="flex-shrink: 0;">
+    <view class="comment-header">
+      <view class="close-comment" bind:tap="onTapCloseComment">▽</view>
+      <view class="line-comment"></view>
+    </view>
+  </pan-gesture-handler>
+
+  <!-- 滚动区要与 pan 手势协商 -->
+  <pan-gesture-handler id="pan" worklet:should-response-on-move="shouldPanResponse" simultaneous-handlers="{{['scroll']}}" worklet:ongesture="handlePan">
+    <vertical-drag-gesture-handler id="scroll" native-view="scroll-view" worklet:should-response-on-move="shouldScrollViewResponse" simultaneous-handlers="{{['pan']}}">
+      <scroll-view class="comment-list" scroll-y worklet:adjust-deceleration-velocity="adjustDecelerationVelocity" worklet:onscrollupdate="handleScroll" type="list" show-scrollbar="{{false}}">
+        <block wx:for="{{list}}">
+          <view class="demoItem" data-url="{{item.url}}" bind:tap="handleDemoList">
+         <view >{{index+1}} </view> <view>{{item.title}}</view> 
+          </view>
+        </block>
+
+        <!-- 内容区域 -->
+        <view class="safe-area-inset-bottom"></view>
+      </scroll-view>
+    </vertical-drag-gesture-handler>
+  </pan-gesture-handler>
+</view>

@@ -1,0 +1,184 @@
+/* subPackages/pages/budget/add/index.wxss */
+
+
+.header-card {
+  position: relative;
+  margin: 20rpx;
+  background-color: #FFF;
+
+  .budget-info {
+    .num {
+      color: #999999;
+    }
+    // .budget-amount {
+    //   text-align: center;
+    //   font-size: 46rpx;
+    //   font-weight: bold;
+    //   padding: 20rpx 0;
+    //   color: #000;
+		.total {
+      font-size: 26rpx;
+    }
+      .total-total {
+        input{
+          font-size: 32rpx !important;
+        }
+      }
+    // }
+  }
+}
+
+
+
+.budget-category-title {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #000;
+  margin: 10rpx 20rpx 10rpx 20rpx;
+}
+
+.budget-list {
+  background-color: #FFF;
+  .budget-card {
+    // margin: 20rpx 0;
+    // padding: 20rpx;
+
+    .icon {
+      width: 54rpx;
+      height: 54rpx;
+    }
+
+    .budget-title {
+      font-size: 22rpx;
+      margin-left: 20rpx;
+    }
+
+
+    .budget-money {
+      flex: 1;
+      font-size: 26rpx;
+      .budget-input {
+        flex: 1;
+        text-align: right;
+        input{
+          font-size: 26rpx;
+        }
+      }
+    }
+
+
+    .total-money {
+      font-size: 32rpx;
+    }
+  }
+
+}
+
+
+
+
+
+
+
+.budget-card {
+  margin: 20rpx 0;
+  padding: 20rpx;
+  background-color: #FFF;
+
+  .icon {
+    width: 76rpx;
+    height: 76rpx;
+  }
+
+  .card {
+
+    flex: 1;
+    margin-left: 20rpx;
+
+    .budget-title {
+      flex: 1;
+      font-size: 28rpx;
+    }
+
+    .progress-container {
+      margin: 12rpx 0;
+      height: 6rpx;
+      background-color: #e6e6e6;
+      border-radius: 4rpx;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      transition: width .3s ease;
+    }
+
+    .budget-money {
+      color: #999999;
+    }
+  }
+}
+
+
+
+
+.memo_add {
+  position: fixed;
+  bottom: 100px;
+  right: 14px;
+  width: 49px;
+  height: 49px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 9999px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.001), rgba(0, 0, 0, 0.001)), #000000;
+  box-shadow: 0px 4px 6px -4px rgba(0, 0, 0, 0.1), 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  .memo_add_img {
+    width: 15.31px;
+    height: 24.5px;
+  }
+}
+
+.save-button{
+  position: fixed;
+  bottom: 0;
+  height: 140rpx;
+  background-color: #FFF;
+  color: #000;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+font-size: 32rpx;
+font-weight: bold;
+  padding-bottom: constant(safe-area-inset-bottom);
+  /* 兼容iOS<11.2 */
+  padding-bottom: env(safe-area-inset-bottom);
+  /* 兼容iOS>=11.2 */
+  box-shadow: 0 -4rpx 16rpx 0 rgb(243, 242, 242);
+  z-index: 999;
+  .btn{
+    line-height: 140rpx;
+    font-size: 30rpx;
+  }
+}
+
+/* 占位符颜色 */
+.budget-input.num::placeholder {
+  color: #999999;
+  opacity: 1; /* 统一各浏览器透明度 */
+}
+
+/* 有值且未聚焦：文字变黑 */
+.budget-input.num:not(:focus):valid {
+  color: #000000;
+}
+
+/* 聚焦时样式优化（可选） */
+.budget-input.num:focus {
+  border-color: #999999;
+  box-shadow: 0 0 4px rgba(153, 153, 153, 0.3); /* 轻微发光效果 */
+}
