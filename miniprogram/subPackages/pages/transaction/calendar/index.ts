@@ -40,7 +40,7 @@ Page({
 			calendar.createDays(this.data.queryParams.year, this.data.queryParams.month);
 		}
 		let deta = {
-			detail: getThisDate('YY/MM/DD')
+			detail: getThisDate('YY-MM-DD')
 		}
 
 		this.select(deta)
@@ -68,6 +68,14 @@ Page({
 			calendarDate: date
 		})
 	},
+			// 跳转到账单详情页面
+			handleTransactionInfo(evt) {
+				const { transaction_id, transaction_type } = evt.currentTarget.dataset
+				wx.vibrateShort({ type: 'heavy' })
+				wx.navigateTo({
+					url: `/subPackages/pages/transaction/info/index?id=${transaction_id}&type=${transaction_type}`
+				})
+			},
 	/**
 	 * 生命周期函数--监听页面加载
 	 */

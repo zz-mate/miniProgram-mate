@@ -79,10 +79,11 @@
 	height: 140rpx;
 	background-color: #FFFFFF;
 	width: 100%;
-	// padding: 28rpx;
-	padding-bottom: constant(safe-area-inset-bottom);
-	/* 兼容iOS<11.2 */
-	padding-bottom: env(safe-area-inset-bottom);
+ /* 核心：iOS 安全区适配（兼容不同版本） */
+ padding-bottom: constant(safe-area-inset-bottom); /* iOS < 11.2 */
+ padding-bottom: env(safe-area-inset-bottom);     /* iOS >= 11.2 */
+ /* 补充：微信小程序安卓端兼容（避免底部被虚拟按键遮挡） */
+ padding-bottom: calc(env(safe-area-inset-bottom) + 0rpx); /* 统一计算方式 */
 	box-sizing: border-box;
 	/* 兼容iOS>=11.2 */
 	.btn {

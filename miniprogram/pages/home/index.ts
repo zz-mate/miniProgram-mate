@@ -274,7 +274,7 @@ Component({
 
 			let res: any = await getTransactionList(data)
 			this.setData({
-				transactionList: res.list.dataList[0].children,
+				transactionList: res.list.dataList[0]?.children,
 				dailySummary: res.dailySummary,
 				summary: res.summary,
 				queryParams: {

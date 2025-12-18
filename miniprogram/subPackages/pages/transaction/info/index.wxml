@@ -16,7 +16,8 @@
 			</view>
 
 
-			<view class=" item radius-10 flex flex-align-items-center flex-center flex-space-between">
+	<view class="radius-10" style="overflow: hidden;">
+		<view class=" item  flex flex-align-items-center flex-center flex-space-between">
 				<view class="icon-category ">
 
 					<text>付款账户</text>
@@ -28,7 +29,7 @@
 
 					<text>消费人</text>
 				</view>
-				<view class="right-text ">{{transactionInfo.creatorInfo.nickname}}</view>
+				<view class="right-text ">{{transactionInfo.creatorInfo.nickname||'自己'}}</view>
 			</view>
 			<view class=" item flex flex-align-items-center flex-center flex-space-between">
 				<view class="icon-category ">
@@ -53,12 +54,13 @@
 					<text>--</text>
 				</view>
 			</view>
-			<view class=" item flex flex-align-items-center flex-center flex-space-between">
+			<view class=" item  flex flex-align-items-center flex-center flex-space-between">
 				<view class="icon-category ">
 					<text>账本</text>
 				</view>
 				<view class="right-text ">{{transactionInfo.book.name}}</view>
 			</view>
+	</view>
 
 		</view>
 	</sticky-section>

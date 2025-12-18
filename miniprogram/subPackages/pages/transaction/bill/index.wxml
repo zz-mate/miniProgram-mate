@@ -14,14 +14,14 @@
 	<view></view>
 </view>
 <view class="bill-card flex flex-space-between">
-	<view class="surplus item {{typeIndex==0?'active':''}}" data-type="0" bind:tap="handleTabType">
+	<view class="surplus radius-10 item {{typeIndex==0?'active-yellow':''}}" data-type="0" bind:tap="handleTabType">
 		<text>结余</text>
 		<view class="money num">{{summary.totalSurplus||'0.00'}}</view>
 	</view>
-	<view class="expend item {{typeIndex==1?'active':''}}" data-type="1" bind:tap="handleTabType"> <text>支出</text>
+	<view class="expend radius-10 item {{typeIndex==1?'active-green':''}}" data-type="1" bind:tap="handleTabType"> <text>支出</text>
 		<view class="money num">{{summary.totalExpend||'0.00'}}</view>
 	</view>
-	<view class="income item {{typeIndex==2?'active':''}}" data-type="2" bind:tap="handleTabType"> <text>收入</text>
+	<view class="income radius-10 item {{typeIndex==2?'active-red':''}}" data-type="2" bind:tap="handleTabType"> <text>收入</text>
 		<view class="money num">{{summary.totalIncome||'0.00'}}</view>
 	</view>
 </view>
@@ -47,7 +47,7 @@
 		<view class="sticky-content  radius-10" style="top:{{navBarHeight +'px'}}">
 			<!--  offset-top="{{navBarHeight}}"-->
 			
-			<view class="sticky-card flex flex-space-between  flex-align-items-center radius-10" bind:tap="handleBillPage" wx:for="{{transactionList}}" wx:for-index="index" wx:for-item="item"> 
+			<view class="sticky-card  flex flex-space-between  flex-align-items-center radius-10" bind:tap="handleBillPage" wx:for="{{transactionList}}" wx:for-index="index" wx:for-item="item"> 
 				<!-- -->
 				<view class="left">
 					<view class="month num">{{item.month}}月</view>

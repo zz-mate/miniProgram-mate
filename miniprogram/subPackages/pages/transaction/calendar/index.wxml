@@ -23,8 +23,34 @@ background="{{navBgColor}}">
 		
 		<view class="bill-list  radius-10">
 			<view class="bill-item" >
+				<view class="radius-10" style="overflow: hidden;">
+					<view class="bill-item_items  flex flex-space-between flex-center" wx:for="{{transactionList}}" wx:key="index"
+						data-transaction_type="{{item.type}}" data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo">
+						<view class="left-icon">
+							<image src="{{item.category.icon|| '/static/imgs/icon-c.png'}}" mode="widthFix" />
+						</view>
+						<view class="border">
+							<view class="center-info">
+								<view class="title">{{item.category.name}}</view>
+								<!-- <view class="tags flex">
+								<text wx:for="{{item.tags}}">#{{item.name}}</text>
+							</view> -->
+								<!-- <view class="desc">{{item.remark}}</view> -->
+								<view class="date-other num flex flex-align-items-center">
+									<text class="time-text text">{{item.bill_time}} </text>
+									<!-- <text class="account-text text">微信</text>
+								<text class="consume-text text">{{item.consume_user_id==userInfo.user_id?'自己':item.operator.nickname}}</text>
+								<text class="remark-text text">{{item.remark}}</text> -->
+								</view>
+							</view>
+							<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
+								<text>{{item.type==1||item.type==4?'+':'-'}}</text> {{item.amount}}
+							</view>
+						</view>
 
-				<view class="bill-item_items flex flex-space-between flex-center" wx:for="{{transactionList}}" wx:key="index"
+					</view>
+				</view>
+				<!-- <view class="bill-item_items flex flex-space-between flex-center" wx:for="{{transactionList}}" wx:key="index"
 					data-transaction_type="{{item.type}}" data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo">
 					<view class="left-icon">
 						<image src="{{item.category.icon}}" mode="widthFix" />
@@ -35,7 +61,7 @@ background="{{navBgColor}}">
 							<view class="tags flex">
 								<text wx:for="{{item.tags}}">#{{item.name}}</text>
 							</view>
-							<!-- <view class="desc">{{item.remark}}</view> -->
+							<view class="desc">{{item.remark}}</view>
 							<view class="date-other num flex flex-align-items-center">
 								<text class="time-text text">{{item.bill_time}} </text>
 								<text class="account-text text">微信</text>
@@ -48,7 +74,10 @@ background="{{navBgColor}}">
 						</view>
 					</view>
 
-				</view>
+				</view> -->
+
+
+
 			</view>
 			<view class="no-data" wx:if="{{!transactionList.length}}" style="margin-top:{{token?'':'20rpx'}}">
 				<view class="no-data-icon">

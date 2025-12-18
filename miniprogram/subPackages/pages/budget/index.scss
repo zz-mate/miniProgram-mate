@@ -5,7 +5,7 @@
   position: relative;
   margin: 20rpx;
   background-color: #FFF;
-
+	overflow: hidden;
   .budget-info {
 
     padding: 20rpx;
@@ -70,6 +70,7 @@
 
 .budget-list{
   background-color: #FFF;
+	overflow: hidden;
 }
 
 .budget-card {

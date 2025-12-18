@@ -149,8 +149,8 @@
 			<view class='keyboard-row'>
 				<view class='key nine' hover-class="weui-cell_active" data-key='.' bindtap='tapKey'>.</view>
 				<view class='key nine' hover-class="weui-cell_active" data-key='0' bindtap='tapKey'>0</view>
-				<view class='key del' hover-class="weui-cell_active">
-					--
+				<view class='key del again' hover-class="weui-cell_active" data-again="1" bindtap='tapSubmit'>
+					再记
 				</view>
 				<!-- <view class='key dot' hover-class="weui-cell_active" data-key='.' bindtap='tapDel' bindlongpress="longpressDel"
           bindtouchend="stopInterval">
@@ -160,7 +160,7 @@
         </view> -->
 			</view>
 		</view>
-		<view class="key submit {{selectedTab==0?'active':''}}" hover-class="weui-cell_active" bindtap='tapSubmit'>确定</view>
+		<view class="key submit {{selectedTab==0?'active':''}}" hover-class="weui-cell_active"  data-again="2"  bindtap='tapSubmit'>完成</view>
 	</view>
 </view>
 

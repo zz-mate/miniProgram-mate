@@ -141,19 +141,19 @@ input {
 }
 
 .radius-2 {
-	border-radius: 0rpx;
+	border-radius: 2rpx;
 }
 
 .radius-4 {
-	border-radius: 0rpx;
+	border-radius: 4rpx;
 }
 
 .radius-6 {
-	border-radius: 0rpx;
+	border-radius: 6rpx;
 }
 
 .radius-10 {
-	border-radius: 0rpx;
+	border-radius: 10rpx;
 }
 
 .fade-animate {
@@ -188,7 +188,7 @@ input {
 	align-items: center;
 	justify-content: center;
 	background-color: #FFF;
-
+	overflow: hidden;
 	&-icon {
 		width: 240rpx;
 		height: 240rpx;

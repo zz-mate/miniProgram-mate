@@ -1,4 +1,8 @@
 /* subPackages/pages/transaction/calendar/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
+.text-error {
+	color: $z-color-error;
+}
 
 .bill-item_header {
 	padding:20rpx 20rpx 0 20rpx;
@@ -20,13 +24,28 @@
 	// background-color: #FFF;
 	// padding: 0 20rpx;
 	// margin: 20rpx 0;
+	margin-top: 60rpx;
 
 	.bill-item {
 
+		// 
+		&_header {
+			color: #999999;
+			padding: 20rpx 0;
+			font-size: 20rpx;
+
+			.money {
+				.income {
+					margin-right: 10rpx;
+				}
+			}
+		}
+
 		&_items {
 			padding: 0 20rpx;
-			margin: 10rpx 0;
+			// margin: 4rpx 0;
 			background-color: #FFF;
+			overflow: hidden;
 
 			.left-icon {
 				width: 54rpx;
@@ -50,13 +69,13 @@
 				.title {
 					font-size: 22rpx;
 					color: #000;
-					font-weight: 550;
+					padding-bottom: 4rpx;
 				}
 
 				.tags {
 					font-size: 18rpx;
 					color: #999999;
-					padding: 3rpx 0;
+					padding: 4rpx 0;
 
 					text {
 						margin-right: 4rpx;
@@ -64,7 +83,7 @@
 				}
 
 				.date-other {
-					font-size: 20rpx;
+					font-size: 18rpx;
 					color: #999999;
 
 					.text {
@@ -80,3 +99,5 @@
 		}
 	}
 }
+
+

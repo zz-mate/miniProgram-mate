@@ -45,7 +45,7 @@ background="{{navBgColor}}">
 
 </view>
 <view wx:else style="background-color: #FFF;margin:20rpx" class="radius-10">
-  <view class="no-data" style="margin-top:{{token?'':'20rpx'}}">
+  <view class="no-data radius-10" style="margin-top:{{token?'':'20rpx'}}">
     <view class="no-data-icon">
       <image
         src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"

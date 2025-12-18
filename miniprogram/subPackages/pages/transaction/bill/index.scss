@@ -2,37 +2,16 @@
 @import "../../../../app.scss"; // 引入全局变量
 
 
-.bg-primary {
-	background-color: $z-color-primary;
-}
 
 .bg-success {
 	background-color: $z-color-success;
 }
 
-.bg-warning {
-	background-color: $z-color-warning;
-}
 
 .bg-error {
 	background-color: $z-color-error;
 }
 
-.text-primary {
-	color: $z-color-primary;
-}
-
-.text-success {
-	color: $z-color-success;
-}
-
-.text-warning {
-	color: $z-color-warning;
-}
-
-.text-error {
-	color: $z-color-error;
-}
 
 .subsection{
 	width: 320rpx;
@@ -51,13 +30,20 @@ padding: 20rpx ;
 		background-color: #FFF;
 		border: 1rpx solid transparent;
 		box-sizing: border-box;
+		overflow: hidden;
 		text{
 			font-size: 20rpx;
 			color: #666;
 		}
 	}
-	.active{
+	.active-yellow{
 		border: 1rpx solid $-theme-color;
+	}
+	.active-green{
+		border: 1rpx solid $z-color-success;
+	}
+	.active-red{
+		border: 1rpx solid $z-color-error;
 	}
 	.money{
 		padding-top: 4rpx;
