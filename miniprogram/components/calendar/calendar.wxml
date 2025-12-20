@@ -1,0 +1,60 @@
+<!--components/calendar/calendar.wxml-->
+<view class="calendar">
+	<view class="title flex">
+		<!-- 标题 -->
+		<view class="cal_title">{{cal_title}}</view>
+		<view class="flex">
+			<!-- 上个月 -->
+			<view class="iconfont" bindtap="lastMonth">
+			<image src="/static/icon/icon-calendar-left.png" mode="widthFix" />
+				<!-- <view class='left-color' style="border-right-color:{{theme_color}}"></view> -->
+			</view>
+			<!-- 选择日期 -->
+			<picker value="{{selectDay.year+'-'+selectDay.month}}" bindchange="editMonth" mode="date" fields="month"
+				class="year-month">{{selectDay.year}}年{{selectDay.month>9?selectDay.month:"0"+selectDay.month}}月</picker>
+			<!-- 下个月 -->
+			<view class="iconfont" bindtap="nextMonth">
+				<image src="/static/icon/icon-calendar-right.png" mode="widthFix" />
+			</view>
+		</view>
+		<view class="cal_title">{{cal_title}}</view>
+	</view>
+
+	<!-- 日历头部 -->
+
+	<!-- style="background:{{color1}};color:{{color2}}" -->
+	<view class="flex-around calendar-week">
+		<view class="view">日</view>
+		<view class="view">一</view>
+		<view class="view">二</view>
+		<view class="view">三</view>
+		<view class="view">四</view>
+		<view class="view">五</view>
+		<view class="view">六</view>
+	</view>
+
+
+	<!-- style="color:{{(item.year === selectDay.year && item.month === selectDay.month &&  item.day === selectDay.day)?theme_color:''}}" -->
+	<!-- 日历主体 -->
+	<view class="flex-start flex-wrap calendar-main" style="height:{{dateList.length/7*90}}rpx">
+		<view wx:for="{{dateList}}" wx:key="dateList" class="day">
+			<view
+				
+				class="bg {{(item.year === selectDay.year && item.month === selectDay.month) ? (item.day === selectDay.day?'select':''): 'other-month'}}"
+				catchtap="selectChange" data-day="{{item.day}}" data-year="{{item.year}}" data-month="{{item.month}}"
+				data-date-string="{{item.dateString}}">
+				{{item.day}}
+
+
+				<view class="money">
+             <text class="text-error" wx:if="{{item.income!=0}}">{{item.income}}</text>
+             <text class="text-success" wx:if="{{item.expense!=0}}">{{item.expense}}</text>
+            </view>
+				<view style="background:{{theme_color}}"
+					class="spot {{(item.year === selectDay.year && item.month === selectDay.month &&  item.day === selectDay.day)?'spot_ative':''}}"
+					wx:if="{{item.spot}}"></view>
+			</view>
+
+		</view>
+	</view>
+</view>

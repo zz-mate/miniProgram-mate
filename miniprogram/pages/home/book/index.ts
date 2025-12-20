@@ -49,6 +49,13 @@ Component({
     bookList: [],
   },
   methods: {
+		// 添加账本
+		handleBookAdd(){
+			wx.vibrateShort({type: 'heavy'})
+			wx.navigateTo({
+				url:'/pages/home/book/add/index'
+			})
+		},
     /**
      * 
      * 修改账本

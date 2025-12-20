@@ -16,8 +16,8 @@
         <view class="budget-money total-total num flex flex-space-between flex-align-items-center">
           <!-- 总预算输入框：绑定 focus、blur、input 事件 -->
           <input class="budget-input num" type="digit" placeholder="0.00" maxlength="11"
-            value="{{budgetInfo.budget_amount}}" adjust-position="{{false}}" bindinput="bindTotalBudgetInput"
-            bindfocus="bindTotalBudgetFocus" bindblur="bindTotalBudgetBlur" data-val="{{budgetInfo.budget_amount}}"
+            value="{{budgetInfo.category_amount}}" adjust-position="{{false}}" bindinput="bindTotalBudgetInput"
+            bindfocus="bindTotalBudgetFocus" bindblur="bindTotalBudgetBlur" data-val="{{budgetInfo.category_amount}}"
             min="0" />
         </view>
 

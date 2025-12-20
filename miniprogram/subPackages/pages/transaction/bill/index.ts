@@ -21,6 +21,7 @@ Page({
 			page: 1,
 			pageSize: 100,
 		},
+		total:0,
 		startDate: 0,
 		endDate: 0,
 		typeIndex: 0,
@@ -133,11 +134,19 @@ Page({
 		})
 
 	},
+	handleBillDataPage(evt){
+		const {date} = evt.currentTarget.dataset
+		// wx.vibrateShort({ type: 'heavy' })
+		// wx.navigateTo({
+		// 	url: `/subPackages/pages/transaction/data/index?date=${date}`
+		// })
+	},
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad() {
 		this.getScrollHeight()
+		this.handleTransactionList('')
 	},
 
 	/**
@@ -151,7 +160,7 @@ Page({
 	 * 生命周期函数--监听页面显示
 	 */
 	onShow() {
-		this.handleTransactionList('')
+		
 	},
 
 	/**

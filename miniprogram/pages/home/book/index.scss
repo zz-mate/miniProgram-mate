@@ -1,28 +1,34 @@
 /* pages/home/book/index.wxss */
-
+// page{
+// 	background-color: #4B5563;
+// }
 .scroll {
   // height: 80vh;
   // background-color: #ff0000;
 }
 
 .book-list {
-  // padding: 32rpx;
+  padding: 20rpx;
+background-color: #fff;
+.book-item {
+	margin-bottom: 20rpx;
+	&:last-child{
+		margin-bottom: 0;
+	}
+	.cover {
+		width: 50rpx;
+		height: 60rpx;
+		margin-right: 20rpx;
+	}
 
-  .book-item {
-    margin-bottom: 40rpx;
-
-    .cover {
-      width: 80rpx;
-      height: 100rpx;
-      margin-right: 20rpx;
-    }
 
     .info {
       flex: 1;
       .book-name {
         color: #000000;
-        font-weight: 550;
-        padding-bottom: 8rpx;
+				font-size: 22rpx;
+        // font-weight: 550;
+        // padding-bottom: 8rpx;
       }
 
       .num {
@@ -39,9 +45,7 @@
 
 
 /* pagesDemoList/pages/memorandum/index.wxss */
-page {
-  background-color: #F9FAFB;
-}
+
 
 .search_bar {
   width: 100%;

@@ -3,7 +3,8 @@ background="{{navBgColor}}">
 
 </navigation-bar>
 
-<view class="no-data">
+<view class="floor-container">
+	<view class="no-data">
   <view class="no-data-icon">
     <image
       src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
@@ -13,6 +14,7 @@ background="{{navBgColor}}">
     <view>抱歉呀，这个功能还在 “修炼”</view>
     <view>等它解锁新技能就和您见面</view>
   </view>
+</view>
 </view>
 
 

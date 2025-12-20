@@ -479,13 +479,12 @@ Component({
 					url: "/pages/login/index"
 				})
 			}
-			//  else {
-			// 	wx.vibrateShort({ type: 'heavy' })
-			// 	wx.navigateTo({
-			// 		url: "/pages/home/book/index",
-			// 		routeType: "wx://upwards"
-			// 	})
-			// }
+			 else {
+				wx.navigateTo({
+					url: "/pages/home/book/index",
+					routeType: "wx://upwards"
+				})
+			}
 
 		},
 		// 记一笔

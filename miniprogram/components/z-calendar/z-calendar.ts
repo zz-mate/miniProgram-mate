@@ -1,3 +1,8 @@
+function formatDateStr(dateStr: string) {
+	// 匹配 "2025/12/10 10:06" 格式的字符串
+	const regex = /(\d{4})\/(\d{2})\/(\d{2})\s.*/;
+	return dateStr.replace(regex, "$1-$2-$3");
+}
 Component({
   //初始默认为当前日期
   properties: {
@@ -31,8 +36,9 @@ Component({
 				value:'',
 				observer(newVal, oldVal) {
 					// 可选：属性值变化时的回调（比如更新日历视图）
+					console.log(newVal)
 					if (newVal) {
-						this.setData({ select: newVal });
+						this.setData({ select: formatDateStr(newVal) });
 					}
 				}
 			}
@@ -147,7 +153,7 @@ Component({
       select: function (e) {
         const now = new Date();
           let date = e.currentTarget.dataset.date,
-              select = `${this.data.year}/${this.zero(this.data.month)}/${this.zero(date)} ${this.zero(now.getHours())}:${this.zero(now.getMinutes())}`    ;
+              select = `${this.data.year}-${this.zero(this.data.month)}-${this.zero(date)}`    ;
               let _index=this.zero(date)
               let abc="thisMonthDays["+_index +"].checked"
           this.setData({
@@ -158,7 +164,7 @@ Component({
               date: date,
               [abc]:true
           });
-        console.log(select)
+
         // return
           //发送事件监听
           this.triggerEvent('select', select);
@@ -219,7 +225,7 @@ Component({
             checked: false,
             date: i, // 数字格式（如 2）
             dateFormat: currentDay, // 字符串带零格式（如 "02"）
-            monthFormat: this.zero(month),
+            monthFormat: this.zero(month) + '',
             week: this.data.weekText[new Date(Date.UTC(year, month - 1, i)).getDay()],
             income: income, // 当日收入
             expense: expense, // 当日支出

@@ -71,16 +71,12 @@ Component({
 		switchTab(e) {
 			const data = e.currentTarget.dataset
 			const url = data.path
-
+			wx.vibrateShort({ type: 'heavy' })
 			//防止重复点击
 			if (data.index == this.data.selected) {
 				return false
 			}
 			if(data.index==2){
-				// wx.navigateTo({
-				// 	url: "/subPackages/pages/transaction/add/index?bookIndex=" + 1 + '&date=' + '2025-12-12 23:56',
-				// 	routeType: "wx://upwards"
-				// })
 				const token = wx.getStorageSync('token') || null
 				if (!token) {
 					wx.navigateTo({
@@ -88,7 +84,7 @@ Component({
 					})
 				} else {
 					const userInfo = wx.getStorageSync('userInfo') || null
-					wx.vibrateShort({ type: 'heavy' })
+		
 					wx.navigateTo({
 						url: "/subPackages/pages/transaction/add/index?bookId=" + userInfo.default_book_id,
 						routeType: "wx://upwards"
@@ -99,10 +95,6 @@ Component({
 			this.setData({
 				selected: data.index,
 			})
-			wx.vibrateShort({
-				type: 'light'
-			})
-
 			wx.switchTab({
 				url: url
 			})

@@ -1,143 +1,23 @@
 <!--pages/statement/index.wxml-->
-
 <navigation-bar title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="#000"
 	background="{{navBgColor}}">
-	<!-- <view slot="custom-center" class="subsection">
-    <z-tabs bind:change="handleChange" active="{{yearMonthMoreActive}}" tabs="{{tabsList}}"></z-tabs>
-  </view> -->
 	<view slot="left">
 		报表
 	</view>
 </navigation-bar>
 
-<view class="filter-content  flex flex-space-between flex-align-items-center">
-	<view class="date num radius-6" data-type="date" bind:tap="handlePopup">{{queryParams.year}} - {{queryParams.month}}
-	</view>
-	<view class="type">
-		<z-tabs bind:change="handleChange" active="{{typeIndex}}" tabs="{{typeList}}"></z-tabs>
-	</view>
+<view class="plan-container">
+	<view class="no-data radius-10">
+  <view class="no-data-icon">
+    <image
+      src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+      mode="widthFix" />
+  </view>
+  <view class="no-data-text">
+    <view>抱歉呀，这个功能还在 “修炼”</view>
+    <view>等它解锁新技能就和您见面</view>
+  </view>
+</view>
 </view>
 
-<scroll-view style="height:calc(100vh - {{navBarHeight + statusBarHeight + filterHeight}}px) " type="custom" scroll-y>
 
-	<sticky-section push-pinned-header="{{false}}">
-		<view class="tab-container">
-			<view class="scroll-list">
-				<view class="card-echart">
-					<view class="card radius-10">
-						<!-- <view class="title">支出</view> -->
-						<view class="echart disburse">
-							<ec-canvas id="mychart-dom-line" ec="{{ ec }}"></ec-canvas>
-						</view>
-						<view class="tips-content num radius-4" wx:if="{{chartData.lineData}}">
-							{{chartData.lineData.summary.filterText}}，{{typeIndex==0?'支出':typeIndex==1?'收入':'结余'}}共计
-							{{chartData.lineData.summary.totalNum}} 笔 {{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
-							{{chartData.lineData.summary.totalAmount}}
-						</view>
-						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.lineData.summary.detailList}}"
-							data-date="{{item.date}}" wx:if="{{isLineExpand || index < 3}}" bind:tap="handleDatePage">
-							<view class="day  num radius-4 {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">{{item.day}}</view>
-							<view class="info">
-								<view class="date-money flex flex-space-between num">
-									<text class="date">{{item.date}}</text>
-									<text class="money">{{item.amount}}</text>
-								</view>
-								<view class="progress-container">
-									<view class="progress-bar"
-										style="width: {{item.percentage}}%;background-color:{{typeIndex==0? greenClor:typeIndex==1? redClor : yellowClor}}">
-									</view>
-								</view>
-
-								<view class="num" style="color:#999999">{{item.num}}笔</view>
-							</view>
-
-						</view>
-						<!-- 折叠/展开按钮（只有列表条数>3时显示） -->
-						<view wx:if="{{chartData.lineData.summary.detailList.length > 3}}"
-							class="unfold collapse {{isLineExpand ? 'fold' : ''}}" bind:tap="toggleLineExpand">
-							点击{{isLineExpand ? '收起' : '展开'}}
-						</view>
-						
-					</view>
-					<view class="card radius-10">
-						<view class="echart pie income">
-							<ec-canvas id="mychart-dom-pie" ec="{{ ec }}"></ec-canvas>
-						</view>
-						<view class="tips-content num radius-4" wx:if="{{chartData.PieData}}">
-							{{chartData.PieData.summary.filterText}}，{{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
-							{{chartData.PieData.summary.totalAmount}}
-							<!-- 收入共计 {{chartData.PieData.summary.detailList.length}} 笔分类， -->
-
-						</view>
-						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.PieData.summary.detailList}}"
-							data-date="{{item.date}}" data-category_id="{{item.category_id}}"
-							data-category_name="{{item.name}}" wx:if="{{isPieExpand || index < 3}}"
-							bind:tap="handleDatePage">
-							<view class="day radius-4 disburse num {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">
-								<image src="{{item.category_icon}}" mode="" class="icon" />
-							</view>
-							<view class="info">
-								<view class="date-money flex flex-space-between num">
-									<text class="date">{{item.name}}</text>
-									<text class="money">{{item.value}}</text>
-								</view>
-								<view class="progress-container">
-									<view class="progress-bar"
-										style="width: {{item.percentage}}%;background-color:{{typeIndex==0? greenClor:typeIndex==1? redClor : yellowClor}}">
-									</view>
-								</view>
-
-								<view class="flex flex-space-between">
-									<view class="num" style="color:#999999">{{item.num}}笔</view>
-									<view class="percentage num" style="color:#999999;font-size: 20rpx;">{{item.percentage}}%</view>
-								</view>
-							</view>
-
-						</view>
-						<!-- 折叠/展开按钮（只有列表条数>3时显示） -->
-						<view wx:if="{{chartData.PieData.summary.detailList.length > 3}}"
-							class="unfold collapse {{isPieExpand ? 'fold' : ''}}" bind:tap="togglePieExpand">
-							点击{{isPieExpand ? '收起' : '展开'}}
-						</view>
-					</view>
-
-				</view>
-			</view>
-		</view>
-		<view style="height: 90px;"></view>
-	</sticky-section>
-
-</scroll-view>
-<z-popup bind:popup="handleChildPopup" bind:tap="handlePopup" showTitle="date"
-	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_date}}" closeOnClickOverlay="{{true}}"
-	mode="{{'bottom'}}">
-	<view class="popup-content">
-		<scroll-view scroll-y style="height:40vh">
-			<view class="more-list">
-				<view class="more-item">
-					<view class="more-title">周期</view>
-					<view class="items flex">
-						<view wx:for="{{cycleList}}" class="radius-4" data-type="{{item.xx}}" data-title="{{item.title}}"
-							bind:tap="handleCycle">
-							{{item.title}}
-						</view>
-					</view>
-				</view>
-				<view class="more-item">
-					<view class="more-title">范围</view>
-					<view class="items flex">
-						<view wx:for="{{rangeList}}" class="radius-4" data-type="{{item.xx}}" data-title="{{item.title}}"
-							bind:tap="handleRange">
-							{{item.title}}
-						</view>
-						<!-- <view>近30天</view>
-            <view>近7天</view>
-            <view>自定义</view> -->
-					</view>
-				</view>
-			</view>
-		</scroll-view>
-
-	</view>
-
-</z-popup>

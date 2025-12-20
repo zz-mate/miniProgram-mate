@@ -21,14 +21,11 @@ Page({
       page: 1,
       pageSize: 50
     },
-    categoryList: [],
+    categoryList: [] as any,
     categories:[],
     budgetInfo: {
       budget_total_amount:"0.00",
       category_amount: "0.00",
-      remaining_amount: "0.00",
-      remaining_percentage: 100,
-      spent_amount: "0.00"
     },
     totalBudgetOriginal:"0.00",
     originalBudgets: {} // 存储每个输入框的原始预算值（key: 索引, value: 原始值）
@@ -38,24 +35,21 @@ Page({
   /**
    * 支出类别
    */
-  async getCategoryListFn(list) {
+  async getCategoryListFn(list,flag) {
     let userId = getStorageSync("userInfo").id
     let res = await getCategoryList({ userId, type: 2, ...this.data.queryParams })
-		// console.log(res)
-		console.log(list)
     const resultList = matchAndSortArrays({
       targetList: res.list,
       sourceList: list,
       // showOnlyMatched:false,
       assignKeys: ['category_amount', 'category_actual_amount', 'remaining_percent'] // 新增 remark 字段
     });
-		console.log(resultList,"resultList")
     this.setData({
       categoryList: resultList,
     })
     this.getSccollHeight()
     // 如果分类下有 预算分类 就计算分类的总预算
-    if(list.length){
+    if(list.length&&flag){
        this.calculateTotalBudget()
     }
    
@@ -73,11 +67,11 @@ Page({
     let res = await budgetInfo(data)
     this.setData({
       budgetInfo: res.data,
-      "budgetInfo.budget_total_amount": res.data==null?'0.00': res.data.category_amount,
-      "budgetInfo.category_amount": res.data==null?'0.00': res.data.category_amount
+      "budgetInfo.budget_total_amount": res.data==null?'0.00': res.data.amount,
+      "budgetInfo.category_amount": res.data==null?'0.00': res.data.amount
     })
     let list =res.data==null?[]: res.data.categories 
-    this.getCategoryListFn(list)
+    this.getCategoryListFn(list,false)
   },
   /**
    * 
@@ -130,8 +124,9 @@ Page({
     // 2. 清空当前输入框的值（仅在聚焦时清空，方便用户重新输入）
     categoryList[index].category_amount = '';
     this.setData({ categoryList });
+		console.log(categoryList)
 
-    console.log(`【${categoryList[index].category_name}】输入框聚焦，已清空原有值，原始预算：`, originalVal);
+    console.log(`【${categoryList[index].name}】输入框聚焦，已清空原有值，原始预算：`, originalVal);
   },
 
   /**
@@ -149,11 +144,11 @@ Page({
     if (inputVal === '') {
       // 空输入：恢复原始值（若原始值也为空，设为默认值 0）
       currentItem.category_amount = originalVal || 0;
-      console.log(`【${currentItem.category_name}】输入为空，已恢复原始值/默认值：`, currentItem.category_amount);
+      console.log(`【${currentItem.name}】输入为空，已恢复原始值/默认值：`, currentItem.category_amount);
     } else {
       // 有输入：保留输入值（转为数字类型，避免后续计算时字符串拼接问题）
       currentItem.category_amount = Number(inputVal);
-      console.log(`【${currentItem.category_name}】失焦，已保存输入值：`, currentItem.category_amount);
+      console.log(`【${currentItem.name}】失焦，已保存输入值：`, currentItem.category_amount);
     }
 
     // 更新数据，确保值被保留
@@ -203,17 +198,15 @@ Page({
    * 保存预算
    */
 async  save() {
-    let bookInfo = getStorageSync("bookInfo")
+
 const {categoryList,userId,bookId } = this.data
     let data = {
       "user_id":userId , // 用户ID
       "book_id":bookId,
-      "budget_name": `${getThisDate('YY-MM')}  ${bookInfo.book_name}预算`,
-      "category_amount":this.data.budgetInfo.category_amount,
-      "budget_type": "monthly", // 月预算
-      "start_date": `${getThisDate('YY-MM')}-01`,
-      "end_date": `${getThisDate('YY-MM')}-${getCurrentMonthDays()}`,
-      "warning_rate": 0.8, // 80%预警
+      "amount":this.data.budgetInfo.category_amount,
+      "cycle_type": "month", // 月预算
+      "cycle_start": `${getThisDate('YY-MM')}-01`,
+      // "warning_rate": 0.8, // 80%预警
       "categories":this.getValidBudgetArray(categoryList )
     }
     console.log(data)
@@ -245,8 +238,11 @@ const {categoryList,userId,bookId } = this.data
     const formattedTotal = total.toFixed(2);
     // 判断 分类的总预算金额 小于 之前设置现有的总预算 就不计入总预算
     console.log(total,Number(this.data.budgetInfo.category_amount),Number(this.data.budgetInfo.budget_total_amount))
-    if(total>Number(this.data.budgetInfo.category_amount)){
+
+		console.log(total>Number(this.data.budgetInfo.budget_total_amount))
+    if(total>Number(this.data.budgetInfo.budget_total_amount)){
       this.setData({ 'budgetInfo.category_amount': formattedTotal });
+			// this.setData({ 'budgetInfo.budget_total_amount': formattedTotal });
     }else{
       
       this.setData({ 'budgetInfo.category_amount': this.data.budgetInfo.budget_total_amount });
@@ -260,13 +256,14 @@ const {categoryList,userId,bookId } = this.data
     // 遍历筛选+格式化
     const validArray = categoryList.filter(item => {
       // 筛选条件：category_amount 非空、是数字、且大于0
-      const amount = parseFloat(item.category_amount);
-      return item.category_amount !== '' && !isNaN(amount) && amount > 0;
+      // const amount = parseFloat(item.category_amount);
+      // return item.category_amount !== '' && !isNaN(amount) && amount > 0;
+			return item
     }).map(item => {
       // 格式化每一项为目标结构（category_amount 转为整数）
       return {
         category_id: item.category_id, // 必须确保原数据有 category_id 字段
-        category_name: item.category_name,
+        category_name: item.name,
         category_amount:item.category_amount // 转为整数
       };
     });
@@ -396,9 +393,10 @@ if(formattedAmount<Number(category_amount)){
     success(res) {
       if (res.confirm) {
         that.setData({
-          'budgetInfo.category_amount': category_amount,
-          'budgetInfo.budget_total_amount':category_amount
+          'budgetInfo.category_amount': category_amount.toString(),
+          'budgetInfo.budget_total_amount':category_amount.toString()
         });
+				console.log(category_amount)
       }else{
         that.setData({
           'budgetInfo.category_amount': formattedAmount.toString(),

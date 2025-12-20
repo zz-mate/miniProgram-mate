@@ -1,19 +1,32 @@
 <!--pages/home/book/add/index.wxml-->
 
-<navigation-bar title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="black"
+<navigation-bar title="个人账本" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
 background="rgba(255,255,255,0.9);">
-  <view slot="left">添加账本</view>
 </navigation-bar>
 
 
-<view class="no-data">
-  <view class="no-data-icon">
-    <image
-      src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
-      mode="widthFix" />
-  </view>
-  <view class="no-data-text">
-    <view>抱歉呀，这个功能还在 “修炼”</view>
-    <view>等它解锁新技能就和您见面</view>
-  </view>
+
+  <!-- 备忘录内容 -->
+
+    
+<view class="book-container">
+
+        <view class="book-list  radius-10"  >
+          <view class="book-item  radius-10 flex flex-align-items-center flex-space-between" wx:for="{{bookList}}" wx:key="index"     data-index="{{index}}"  bind:tap="handleMenoSelected">
+            <view class="cover">
+              <image src="{{item.icon}}" mode="" />
+            </view>
+            <view class="info">
+              <view class="book-name">{{item.name}}</view>
+							<view class="book-desc">{{item.name}}</view>
+            </view>
+            <view class="icon" >
+							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+            </view>
+          </view>
+        </view>
+
+
 </view>
+
+

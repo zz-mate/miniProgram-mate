@@ -1,12 +1,11 @@
-// pages/statement/index.ts
-import { COLOR } from '../../utils/color.js';
+// pages/tools/index.ts
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-		navBgColor: COLOR.theme,
+
   },
 
   /**

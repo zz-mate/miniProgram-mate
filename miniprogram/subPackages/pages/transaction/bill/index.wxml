@@ -47,7 +47,7 @@
 		<view class="sticky-content  radius-10" style="top:{{navBarHeight +'px'}}">
 			<!--  offset-top="{{navBarHeight}}"-->
 			
-			<view class="sticky-card  flex flex-space-between  flex-align-items-center radius-10" bind:tap="handleBillPage" wx:for="{{transactionList}}" wx:for-index="index" wx:for-item="item"> 
+			<view class="sticky-card  flex flex-space-between  flex-align-items-center radius-10" bind:tap="handleBillDataPage" data-date="{{item.year+'-'+ item.month}}" wx:for="{{transactionList}}" wx:for-index="index" wx:for-item="item"> 
 				<!-- -->
 				<view class="left">
 					<view class="month num">{{item.month}}月</view>

@@ -212,7 +212,7 @@
 		</view>
 
 		<!-- 底部文字提示区域 -->
-		<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{10}}px" wx:if="{{transactionList.length}}">
+		<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{transactionList.length}}">
 		</z-divider>
 	</sticky-section>
 

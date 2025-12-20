@@ -63,7 +63,7 @@
 				<view class="content">
 					<view class="logo" bind:tap="handleUserInfo">
 						<image
-							src="{{userInfo.avatar_url||'https://env-00jxubueh4pn.normal.cloudstatic.cn/默认占位图.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c'}}"
+							src="{{userInfo.avatar||'https://env-00jxubueh4pn.normal.cloudstatic.cn/默认占位图.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c'}}"
 							mode="widthFix" />
 					</view>
 					<view class="nickname" bind:tap="handleUserInfo">{{userInfo.nickname|| '登录注册'}}</view>

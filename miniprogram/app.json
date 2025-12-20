@@ -13,7 +13,8 @@
     "pages/home/book/add/index",
     "pages/account/index",
     "pages/statement/index",
-    "pages/add/index"
+    "pages/add/index",
+		"pages/tools/index"
   ],
   "subPackages": [
     {
@@ -32,6 +33,7 @@
         "pages/transaction/add/index",
 				"pages/transaction/bill/index",
 				"pages/transaction/date/index",
+				"pages/transaction/data/index",
         "pages/transaction/info/index",
         "pages/budget/index",
         "pages/budget/add/index",
