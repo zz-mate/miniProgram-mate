@@ -1,20 +1,61 @@
-// pages/tools/index.ts
+// pages/secondFloor/secondFloor.ts
+import { COLOR } from '../../utils/color.js';
+const { shared, spring } = wx.worklet
+const GestureState={
+  ACTIVE:2,
+  END:3
+}
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    navBgColor: COLOR.white,
   },
+
+
+  onRouteDone() {
+    console.info('@@@ goods page routeDone ')
+    this.setData({
+      'goodsData.hasRouteDone': true,
+    })
+    if (this.eventChannel) {
+      this.eventChannel.emit('nextPageRouteDone', { });
+    }
+  },
+
+
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad() {
+    this.eventChannel = this.getOpenerEventChannel()
 
+
+    const offset = shared(0);
+    this.applyAnimatedStyle(".circle", () => {
+      "worklet";
+      return {
+        marginLeft: `${offset.value}px`,
+      };
+    });
+    this._offset = offset;
   },
-
+  handlepan(evt) {
+    "worklet";
+    console.log(evt);
+    
+    if (evt.state === GestureState.ACTIVE) {
+      this._offset.value += evt.deltaX;
+    } else if (evt.state === GestureState.END) {
+      this._offset.value = spring(100);
+      
+      
+    }
+    console.log( this._offset.value);
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

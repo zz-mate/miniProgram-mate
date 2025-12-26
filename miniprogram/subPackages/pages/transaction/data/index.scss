@@ -2,37 +2,41 @@
 @import "../../../../app.scss"; // 引入全局变量
 
 .bg-primary {
-  background-color: $z-color-primary;
+	background-color: $z-color-primary;
 }
 
 .bg-success {
-  background-color: $z-color-success;
+	background-color: $z-color-success;
 }
 
 .bg-warning {
-  background-color: $z-color-warning;
+	background-color: $z-color-warning;
 }
 
 .bg-error {
-  background-color: $z-color-error;
+	background-color: $z-color-error;
 }
 
 .text-primary {
-  color: $z-color-primary;
+	color: $z-color-primary;
 }
 
 .text-success {
-  color: $z-color-success;
+	color: $z-color-success;
 }
 
 .text-warning {
-  color: $z-color-warning;
+	color: $z-color-warning;
 }
 
 .text-error {
-  color: $z-color-error;
+	color: $z-color-error;
 }
 
+.subsection {
+	width: 320rpx;
+	font-size: 22rpx;
+}
 
 .filter-content {
 	padding: 20rpx;
@@ -111,10 +115,10 @@
 	height: auto;
 
 	.card {
-		padding: 20rpx;
+
 		background-color: #FFF;
 		margin-bottom: 20rpx;
-
+		transition: height 3s ease-in;
 		// background: linear-gradient(90deg, #03224e 0%, #011030 100%);
 		.title {
 			font-size: 22rpx;
@@ -129,7 +133,7 @@
 
 			width: 100%;
 			height: 200px;
-
+			// margin: 20rpx;
 			&.pie {
 				height: 250px;
 			}
@@ -138,16 +142,23 @@
 		}
 
 		.tips-content {
+			margin: 20rpx;
 			background-color: #faf8fd;
 			padding: 20rpx;
 			font-size: 22rpx;
 			color: #666666;
 			margin-top: 30rpx;
+
+			.icon-arrow {
+				width: 26rpx;
+				height: 26rpx;
+			}
 		}
 
 		.bill-day {
 			margin-top: 20rpx;
-			padding: 10rpx 0;
+			padding: 10rpx 20rpx;
+
 			.day {
 				width: 48rpx;
 				height: 48rpx;
@@ -156,17 +167,18 @@
 				margin-right: 12rpx;
 
 				&.disburse {
-					background-color: #67c23a56;
-					color: $z-color-success;
+					background-color: #c1e0ed;
+					color: $-chart-expense-color;
 				}
 
 				&.income {
-					background-color: #f56c6c58;
-					color: $z-color-error;
+					background-color: #eccdcd;
+					color: $-chart-income-color;
 				}
+
 				&.jy {
-					background-color: #e6a23c52;
-					color: $z-color-warning;
+					background-color: #eee0ca;
+					color: $-chart-jy-color;
 				}
 
 				.icon {
@@ -212,11 +224,18 @@
 
 		.unfold {
 			text-align: center;
-			padding: 10rpx 0 0 0;
+			padding:10rpx 0;
 			font-size: 22rpx;
 			color: #999999;
+			// letter-spacing: 2rpx;
 			/* 蓝色文字，和之前波纹按钮风格统一 */
 			cursor: pointer;
+		}
+
+		.icon-unfold {
+			width: 24rpx;
+			height: 24rpx;
+			margin-left: 4rpx;
 		}
 
 		// .unfold:active {

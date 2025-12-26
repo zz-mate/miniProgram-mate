@@ -1,19 +1,14 @@
 <!--subPackages/pages/transaction/data/index.wxml-->
-
-
-<navigation-bar title="{{start_time}}" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
-background="{{navBgColor}}">
-
-</navigation-bar>
-<view class="filter-content  flex flex-space-between flex-align-items-center">
-	<!-- <view class="date num radius-6" data-type="date" bind:tap="handlePopup">{{queryParams.year}} - {{queryParams.month}}
-	</view> -->
-	<view class="type">
+<navigation-bar class="nav-bar" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="{{navBgColor}}">
+	<view slot="center" class="subsection">
 		<z-tabs bind:change="handleChange" active="{{typeIndex}}" tabs="{{typeList}}"></z-tabs>
 	</view>
-</view>
+</navigation-bar>
 
-<scroll-view style="height:calc(100vh - {{navBarHeight + statusBarHeight + filterHeight}}px) " type="custom" scroll-y>
+
+<!-- {{typeIndex}} -->
+<scroll-view style="height:calc(100vh - {{navBarHeight + statusBarHeight}}px) " type="custom" scroll-y>
 
 	<sticky-section push-pinned-header="{{false}}">
 		<view class="tab-container">
@@ -24,52 +19,67 @@ background="{{navBgColor}}">
 						<view class="echart disburse">
 							<ec-canvas id="mychart-dom-line" ec="{{ ec }}"></ec-canvas>
 						</view>
-						<view class="tips-content num radius-4" wx:if="{{chartData.lineData}}">
-							{{chartData.lineData.summary.filterText}}，{{typeIndex==0?'支出':typeIndex==1?'收入':'结余'}}共计
-							{{chartData.lineData.summary.totalNum}} 笔 {{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
-							{{chartData.lineData.summary.totalAmount}}
+						<view class="tips-content flex flex-align-items-center flex-space-between  num radius-4" wx:if="{{chartData.lineData}}" data-date="{{start_time}}" bind:tap="handleDatePage"  data-title="{{title}}">
+							<view>
+								{{title}}，{{typeIndex==0?'支出':typeIndex==1?'收入':'结余'}}
+								共计 {{chartData.lineData.summary.totalCount}} 笔
+								{{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
+								{{chartData.lineData.summary.totalAmount}}
+							</view>
+		
+								<view class="icon-arrow">
+						<image src="/static/icon/icon-data-right.png" mode="widthFix"/>
+					</view>
+			
 						</view>
-						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.lineData.summary.detailList}}"
-							data-date="{{item.date}}" wx:if="{{isLineExpand || index < 3}}" bind:tap="handleDatePage">
+						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.lineData.list}}" hover-class="btn-hover" hover-stay-time='10' 
+							data-date="{{item.date}}" data-title="{{item.dateStr}}" wx:if="{{isLineExpand || index < 3}}" bind:tap="handleDatePage">
 							<view class="day  num radius-4 {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">{{item.day}}</view>
 							<view class="info">
 								<view class="date-money flex flex-space-between num">
-									<text class="date">{{item.date}}</text>
+									<text class="date">{{item.dateStr}}</text>
 									<text class="money">{{item.amount}}</text>
 								</view>
 								<view class="progress-container">
 									<view class="progress-bar"
-										style="width: {{item.percentage}}%;background-color:{{typeIndex==0? greenClor:typeIndex==1? redClor : yellowClor}}">
+										style="width: {{item.ratioPercent}}%;background-color:{{typeIndex==0? greenClor:typeIndex==1? redClor : yellowClor}}">
 									</view>
 								</view>
 
-								<view class="num" style="color:#999999">{{item.num}}笔</view>
+								<view class="num" style="color:#999999">{{item.count}}笔</view>
 							</view>
 
 						</view>
 						<!-- 折叠/展开按钮（只有列表条数>3时显示） -->
-						<view wx:if="{{chartData.lineData.summary.detailList.length > 3}}"
-							class="unfold collapse {{isLineExpand ? 'fold' : ''}}" bind:tap="toggleLineExpand">
-							点击{{isLineExpand ? '收起' : '展开'}}
+						<view wx:if="{{chartData.lineData.list.length > 3}}"
+							class="unfold flex flex-align-items-center flex-center collapse {{isLineExpand ? 'fold' : ''}}"
+							bind:tap="toggleLineExpand">
+							<text> 点击{{isLineExpand ? '收起' : '展开'}} </text>
+							<image src="/static/icon/icon-unfold-{{isLineExpand?'b':'t'}}.png" mode="widthFix" class="icon-unfold" />
 						</view>
-						
+
 					</view>
 					<view class="card radius-10">
 						<view class="echart pie income">
 							<ec-canvas id="mychart-dom-pie" ec="{{ ec }}"></ec-canvas>
 						</view>
-						<view class="tips-content num radius-4" wx:if="{{chartData.PieData}}">
-							{{chartData.PieData.summary.filterText}}，{{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
+						<view class="tips-content flex flex-align-items-center flex-space-between num radius-4" wx:if="{{chartData.PieData}}" data-date="{{start_time}}"  bind:tap="handleDatePage" data-title="{{title}}">
+							<view>
+								{{title}}，{{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
 							{{chartData.PieData.summary.totalAmount}}
-							<!-- 收入共计 {{chartData.PieData.summary.detailList.length}} 笔分类， -->
-
+							</view>
+							<!-- 收入共计 {{chartData.PieData.summary.totalCategory}} 笔分类， -->
+							<view class="icon-arrow">
+						<image src="/static/icon/icon-data-right.png" mode="widthFix"/>
+					</view>
 						</view>
-						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.PieData.summary.detailList}}"
-							data-date="{{item.date}}" data-category_id="{{item.category_id}}"
-							data-category_name="{{item.name}}" wx:if="{{isPieExpand || index < 3}}"
-							bind:tap="handleDatePage">
+						<!-- data-date="{{item.date}}" -->
+						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.PieData.list}}"
+							data-category_id="{{item.categoryId}}" data-date="{{start_time}}" data-category_name="{{item.name}}" hover-class="btn-hover" hover-stay-time='10' 
+							wx:if="{{isPieExpand || index < 3}}" bind:tap="handleDatePage">
 							<view class="day radius-4 disburse num {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">
-								<image src="{{item.category_icon}}" mode="" class="icon" />
+								<image src="{{item.category_icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" class="icon" />
+
 							</view>
 							<view class="info">
 								<view class="date-money flex flex-space-between num">
@@ -78,21 +88,23 @@ background="{{navBgColor}}">
 								</view>
 								<view class="progress-container">
 									<view class="progress-bar"
-										style="width: {{item.percentage}}%;background-color:{{typeIndex==0? greenClor:typeIndex==1? redClor : yellowClor}}">
+										style="width: {{item.ratioPercent}}%;background-color:{{typeIndex==0? greenClor:typeIndex==1? redClor : yellowClor}}">
 									</view>
 								</view>
 
 								<view class="flex flex-space-between">
-									<view class="num" style="color:#999999">{{item.num}}笔</view>
-									<view class="percentage num" style="color:#999999;font-size: 20rpx;">{{item.percentage}}%</view>
+									<view class="num" style="color:#999999">{{item.count}}笔</view>
+									<view class="percentage num" style="color:#999999;font-size: 20rpx;">{{item.ratioPercent}}%</view>
 								</view>
 							</view>
 
 						</view>
 						<!-- 折叠/展开按钮（只有列表条数>3时显示） -->
-						<view wx:if="{{chartData.PieData.summary.detailList.length > 3}}"
-							class="unfold collapse {{isPieExpand ? 'fold' : ''}}" bind:tap="togglePieExpand">
-							点击{{isPieExpand ? '收起' : '展开'}}
+						<view wx:if="{{chartData.PieData.list.length > 3}}"
+							class="unfold flex flex-align-items-center flex-center collapse {{isPieExpand ? 'fold' : ''}}"
+							bind:tap="togglePieExpand">
+							<text> 点击{{isPieExpand ? '收起' : '展开'}} </text>
+							<image src="/static/icon/icon-unfold-{{isPieExpand?'b':'t'}}.png" mode="widthFix" class="icon-unfold" />
 						</view>
 					</view>
 

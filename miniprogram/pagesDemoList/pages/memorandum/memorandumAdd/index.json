@@ -1,9 +1,0 @@
-{
-  "usingComponents": {
-    "richText":"../../../../components/richText/richText"
-  },
-  "renderer":"webview",
-  "enablePullDownRefresh": false,
-  "disableScroll": true
-  
-}

@@ -1,51 +1,7 @@
-<navigation-bar  class="nav-bar" title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="black" background="{{navBgColor}}">
-  <!-- <view slot="left" class="navbar-title">❤️已经陪伴32天</view> -->
+<navigation-bar class="nav-bar" title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="{{navBgColor}}">
+	<!-- <view slot="left" class="navbar-title">❤️已经陪伴32天</view> -->
 </navigation-bar>
-
-
-<!-- <view class="mineContainer">
-<view class="head">
-<view>
-  <view class="head_text">欢迎来到coder_z</view>
-  <view class="head_text1"> 一键绑定手机号码，获取更好的会员服务</view>
-</view>
-
-<view>
-<button size="mini" class="head_btn" bind:tap="handleLogin">登录/注册</button>
-</view>
-
-</view>
-
-  <z-cell-group>
-
-    <z-cell type="true" cellList="{{cellList}}" bind:handleClick="handleClick" />
-
-  </z-cell-group>
-
-
-<view  style="margin-top: 20rpx;">
-  <z-cell-group bind:tap="handlePopup">
-  <z-cell leftimg="../../static/componentImg/yinsi.png" center="隐私政策" note="99" cellborder="{{false}}" />
-</z-cell-group>
-</view>
-
-
-</view>
-
-<z-popup bind:popup="handlePopup" bind:closeOnClickOverlay="handleCloseOverlay" show="{{show}}" closeOnClickOverlay="{{false}}" mode="{{'center'}}">
-
-<view style="width:200px;height: 200px;">
-
-<image src="../../static/componentImg/bg.png" mode="" style="width: 100%;height:100%;"/>
-</view>
-</z-popup> -->
-
-<!-- <navigation-bar title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="black"
-  background="rgba(255,255,255,0.9);">
-  <view slot="left">我的</view>
-</navigation-bar> -->
-
-
 
 
 <scroll-view type="custom" scroll-y style="height:calc(100% - {{height - statusBarHeight-navBarHeight}}px) ">
@@ -55,133 +11,173 @@
 
 		<view class="mine-container">
 			<view class="header">
+
 				<view class="cover">
+					<image class="icon-copperplate" src="/static/imgs/icon-copperplate.png" mode="widthFix" />
 					<!-- <image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/miniProgram/istockphoto-2173605332-612x612.jpg"
 						mode="" /> -->
 				</view>
 				<!-- style="top:{{navBarHeight+statusBarHeight}}px" -->
-				<view class="content">
-					<view class="logo" bind:tap="handleUserInfo">
+				<view class="content flex  flex-align-items-center flex-space-between" bind:tap="handleUserInfo">
+					<view class="logo">
 						<image
-							src="{{userInfo.avatar||'https://env-00jxubueh4pn.normal.cloudstatic.cn/默认占位图.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c'}}"
+							src="{{userInfo.avatar||'/static/icon/icon-Placeholder-image.png'}}"
 							mode="widthFix" />
 					</view>
-					<view class="nickname" bind:tap="handleUserInfo">{{userInfo.nickname|| '登录注册'}}</view>
+					<view class="info">
+						<view class="nickname" bind:tap="handleUserInfo">{{userInfo.nickname|| '登录/注册'}}</view>
+						<view class="tips flex flex-align-items-center flex-space-between" wx:if="{{userInfo.nickname}}">
+							<view class="level-icon">
+								<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+							</view>
+							<view class="exp">{{userInfo.levelInfo.user_level_exp+'/'+userInfo.levelInfo.min_exp}}</view>
+						</view>
+						<view class="progress-content" wx:if="{{userInfo.nickname}}">
+							<view class="default">
+								<view class="progress-bar bg-error" style="width: {{userInfo.levelInfo.LevelProgress||0}}%">
+								</view>
+							</view>
+						</view>
+						<view class="tipss" wx:else>轻量记账 财务状况一手掌握</view>
+					</view>
+					
+					<view class="icon-arrow">
+						<!-- <image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/> -->
+					</view>
 
-					<view class="tips" wx:if="{{!userInfo.nickname}}">欢迎来到记账小程序，注册并开启您的记账之旅</view>
-					<view class="tips">轻量记账 财务状况一手掌握</view>
+					<!-- <
+					<view class="tips">轻量记账 财务状况一手掌握</view> -->
+				</view>
+				<view class="count-content flex flex-space-around">
+					<view class="item">
+						<view class="num">{{userInfo.total_used_days||0}}</view>
+						<view class="title">记账天数</view>
+					</view>
+					<view class="item">
+						<view class="num">{{userInfo.total_bill_count||0}}</view>
+						<view class="title">记账笔数</view>
+					</view>
+					<view class="item">
+						<view class="num">{{userInfo.pointsInfo.available_points||0}}</view>
+						<view class="title">我的积分</view>
+					</view>
 				</view>
 			</view>
 			<view class="ribbon-content">
 				<view class="list radius-10">
-					<view class="item">
+					<view class="item" data-url="/subPackages/pages/transaction/bill/index" data-type="page"
+						bind:tap="handlePageUrl">
 						<view class="icon">
-							<image
-								src="/static/icon/icon-bil.png"
-								mode="widthFix" />
+							<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
 						</view>
 						<view class="title">明细</view>
 					</view>
-					<view class="item ">
+					<view class="item " data-url="/subPackages/pages/transaction/import/index" data-type="page"
+						bind:tap="handlePageUrl">
 						<view class="icon">
-							<image
-							src="/static/icon/icon-import.png"
-								mode="widthFix" />
+							<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
 						</view>
 						<view class="title">导入</view>
 					</view>
-					<view class="item">
+					<view class="item" data-url="/subPackages/pages/transaction/export/index" data-type="page"
+						bind:tap="handlePageUrl">
 						<view class="icon">
-							<image
-							src="/static/icon/icon-export.png"
-								mode="widthFix" />
+							<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
 						</view>
 						<view class="title">导出</view>
 					</view>
-					<view class="item">
+					<view class="item" data-type="share" bind:tap="handlePageUrl">
 						<view class="icon">
-							<image
-							src="/static/icon/icon-share.png"
-								mode="widthFix" />
+							<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
 						</view>
 						<view class="title">分享</view>
 					</view>
 				</view>
 			</view>
 
-			<view class="menu radius-10">
-				<view class="item flex flex-align-items-center flex-space-between">
-					<view class="icon">
-						<image
-							src="/static/icon/icon-accout.png"
-							mode="widthFix" />
-					</view>
-					<view class="title">
-						账本管理
-					</view>
-					<view class="icon-arrow">
-						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
-					</view>
-				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
-					<view class="icon">
-						<image
-						src="/static/icon/icon-category.png"
-							mode="widthFix" />
-					</view>
-					<view class="title">
-						类别管理
-					</view>
-					<view class="icon-arrow">
-						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
-					</view>
-				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
-					<view class="icon">
-						<image
-						src="/static/icon/icon-users.png"
-							mode="widthFix" />
-					</view>
-					<view class="title">
-						成员管理
-					</view>
-					<view class="icon-arrow">
-						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
-					</view>
-				</view>
-			</view>
+			
 
 
 
 			<view class="menu radius-10">
-				<view class="item flex flex-align-items-center flex-space-between">
+				<!-- <view class="item flex flex-align-items-center flex-space-between"
+					data-url="/subPackages/pages/transaction/export/index" data-type="share" hover-class="btn-hover" hover-stay-time='150' bind:tap="handlePageUrl">
 					<view class="icon">
-						<image
-						src="/static/icon/icon-qrcode.png"
-							mode="widthFix" />
+						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
 					</view>
 					<view class="title">
 						面对面邀请
 					</view>
 					<view class="icon-arrow">
-						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+					</view>
+				</view> -->
+				<view class="item flex flex-align-items-center flex-space-between"
+					data-url="/subPackages/pages/transaction/export/index" data-type="share" hover-class="btn-hover" hover-stay-time='150' bind:tap="handlePageUrl">
+					<view class="icon">
+						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+					</view>
+					<view class="title">
+						用户手册
+					</view>
+					<view class="icon-arrow">
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
+					data-url="/subPackages/pages/transaction/export/index" data-type="share" bind:tap="handlePageUrl">
+					<view class="icon">
+						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+					</view>
+					<view class="title">
+						
+						<button class='button'	open-type="feedback">意见反馈</button>
+
+
+					</view>
+					<view class="icon-arrow">
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+					</view>
+				</view>
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
+					data-url="/subPackages/pages/transaction/export/index" data-type="share" bind:tap="handlePageUrl">
+					<view class="icon">
+						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+					</view>
+					<view class="title">
+						<button class='button'	open-type="contact">联系我们</button>
+						
+					</view>
+					<view class="icon-arrow">
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+					</view>
+				</view>
+				<!-- <view class="item flex flex-align-items-center flex-space-between"  data-url="/subPackages/pages/transaction/export/index" data-type="share"  bind:tap="handlePageUrl">
 					<view class="icon">
 						<image
-						src="/static/icon/icon-about.png"
+						src="/static/icon/icon-Placeholder-image.png"
 							mode="widthFix" />
 					</view>
 					<view class="title">
-						关于
+						关于掌账Mate
 					</view>
 					<view class="icon-arrow">
 						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
 					</view>
+				</view> -->
+
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
+					data-url="/subPackagesMine/pages/setting/index" data-type="page" bind:tap="handlePageUrl">
+					<view class="icon">
+						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+					</view>
+					<view class="title">
+						设置
+					</view>
+					<view class="icon-arrow">
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+					</view>
 				</view>
-
-
 			</view>
 		</view>
 

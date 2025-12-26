@@ -1,23 +1,20 @@
-<!--pages/plan/index.wxml-->
-<navigation-bar title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="#000"
-	background="{{navBgColor}}">
-	<view slot="left">
-		计划
-	</view>
-</navigation-bar>
+<!--pages/cart/index.wxml-->
+<view style="height:20vh"></view>
+  <view class="content" wx:if="{{effective_carts.length != 0}}">
+    <block wx:for="{{effective_carts}}" wx:key="index">
+      <view class="order_wrapper {{item.status ? '':'active'}}">
+        <view class='order_item cart-list' data-index="{{index}}" bindtouchstart="touchS" bindtouchmove="touchM">
+       
 
-<view class="plan-container">
-	<view class="no-data radius-10">
-  <view class="no-data-icon">
-    <image
-      src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
-      mode="widthFix" />
+   
+        </view>
+        <view class="del_button" data-index="{{index}}" data-id="{{item.id}}" data-type="single"
+          bindtap='deleteList'>删除</view>
+      </view>
+    </block>
   </view>
-  <view class="no-data-text">
-    <view>抱歉呀，这个功能还在 “修炼”</view>
-    <view>等它解锁新技能就和您见面</view>
-  </view>
-</view>
-</view>
+
+
+
 
 

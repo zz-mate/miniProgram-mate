@@ -1,0 +1,31 @@
+<!--subPackages/pages/account/list/index.wxml-->
+<!--subPackages/pages/book/category/index.wxml-->
+<navigation-bar title="选择账户类型" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="rgba(255,255,255,0.9);">
+</navigation-bar>
+
+
+
+<!-- 备忘录内容 -->
+
+
+<view class="book-container">
+
+	<view class="book-list  radius-10 ">
+		<view class="book-item flex flex-align-items-center flex-space-between" wx:for="{{bookCategoryList}}" wx:key="index"
+			data-index="{{index}}" data-item="{{item}}" bind:tap="handleBookSelected">
+			<view class="cover">
+				<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
+			</view>
+			<view class="info">
+				<view class="book-name">{{item.name}}</view>
+				<view class="book-desc">{{item.name}}</view>
+			</view>
+			<view class="icon">
+				<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+			</view>
+		</view>
+	</view>
+
+
+</view>

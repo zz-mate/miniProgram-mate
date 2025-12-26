@@ -1,7 +1,6 @@
 // pages/login/index.ts
 
 import { login, getUserInfo } from '../../api/user';
-import { createBook } from '../../api/book'
 import { validatePhoneNumber } from '../../utils/util'
 import { setStorageSync } from '../../utils/util';
 import { setToken } from '../../utils/config'
@@ -59,7 +58,7 @@ Page({
    * 登录 获取用户信息
    */
   handleLogin() {
-
+		wx.vibrateShort({ type: 'heavy' })
     if (!this.data.privacy) return
     if (!validatePhoneNumber(this.data.phone)) {
       wx.showToast({
@@ -74,26 +73,10 @@ Page({
 
         getUserInfo().then((res) => {
           setStorageSync('userInfo', res.data);
-          if (res.data.bookNums == 0) {//没有账本 就去创建账本页面
-            let data = {
-              user_id: res.data.user_id,
-              book_name: "日常账本",
-              currency: "CNY",
-              is_default:1
-            }
-            createBook(data).then(ret => {
-              if (ret.code == 200) {
-                wx.reLaunch({
-                  url: "/pages/home/index"
-                })
-              }
-            })
-          } else {
-            wx.reLaunch({
-              url: "/pages/home/index"
-            })
-
-          }
+					console.log(res.data)
+					wx.switchTab({
+						url: "/pages/index/index"
+					})
         })
       })
       .catch((error) => {

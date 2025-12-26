@@ -10,7 +10,7 @@
     <view class="budget-list">
       <view class="budget-card flex flex-space-between flex-align-items-center">
         <view class="icon" style="width:50rpx;height:50rpx">
-          <image src="/static/icon/icon-edit.png"  mode="widthFix" />
+          <image src="/static/icon/icon-Placeholder-image.png"  mode="widthFix" />
         </view>
         <view class="budget-title total">总预算</view>
         <view class="budget-money total-total num flex flex-space-between flex-align-items-center">
@@ -29,14 +29,14 @@
 
 <view class="budget-category-title">分类预算</view>
 
-<scroll-view type="custom" scroll-y style="height:calc(100% - {{scrollHeight}}px) ">
+<scroll-view type="custom" scroll-y style="height:calc(100% - {{height+scrollHeight+30}}px) ">
   <sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
 
     <view class="budget-list">
       <view wx:for="{{categoryList}}" wx:key="index">
         <view class="budget-card radius-10 flex flex-space-between flex-align-items-center">
           <view class="icon">
-            <image src="{{item.icon}}" mode="" />
+            <image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
           </view>
           <view class="budget-title">
             {{item.name}}
@@ -54,8 +54,13 @@
   </sticky-section>
 </scroll-view>
 
-<view class="save-button" bind:tap="save">
+<!-- <view class="save-button" bind:tap="save">
   <view class="btn">
     保存
   </view>
+</view> -->
+<view class="shortcut" bind:tap="save" hover-class="btn-hover" hover-stay-time='150'>
+	<view class="shortcut_count radius-10 flex flex-center" >
+		保存
+	</view>
 </view>

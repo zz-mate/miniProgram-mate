@@ -1,5 +1,4 @@
 // app.ts
-import UTILS from './util';
 App<IAppOption>({
   globalData: {
     systemInfo: null,

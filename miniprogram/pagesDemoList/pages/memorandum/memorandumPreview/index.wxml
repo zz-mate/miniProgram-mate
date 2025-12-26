@@ -1,9 +1,0 @@
-<navigation-bar title="预览"   back="{{false}}" homeButton="{{false}}" color="black" background="#FFF"></navigation-bar>
-<!-- <view style="padding:20rpx"> -->
-
-	<editor class="editor" id="editor"  style="--height:{{height}}px;" read-only bindready="onEditorReady"></editor>
-<!-- </view> -->
-
-<rich-text>
-
-</rich-text>

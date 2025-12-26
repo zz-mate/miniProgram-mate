@@ -1,5 +1,13 @@
 /* components/calendar/calendar.wxss */
 @import "../../app.scss"; 
+@font-face {
+	font-family: 'WeChatSansStd';
+	src: url('https://env-00jxubueh4pn.normal.cloudstatic.cn/WeChatSansStd-Regular.ttf?expire_at=1764047061&er_sign=acc877bca1f5872e4cbd7cfb2c7da03f');
+}
+
+.num {
+	font-family: 'WeChatSansStd';
+}
 .flex {
   display: flex;
   justify-content: space-between;
@@ -57,6 +65,8 @@
 .calendar {
   background-color: #fff;
 	padding:20rpx;
+	border-radius: 10rpx;
+	overflow: hidden;
 }
 
 // .calendar .title {

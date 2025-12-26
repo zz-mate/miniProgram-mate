@@ -1,75 +1,83 @@
 <!--subPackages/pages/transaction/add/index.wxml-->
 <navigation-bar title="" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
 	background="{{navBgColor}}">
-	<view slot="center" class="subsection" data-type="book" bind:tap="handlePopup">
+	<view slot="center" class="subsection flex flex-align-items-center" data-type="book" bind:tap="handlePopup">
 		{{bookInfo.name}}
+		<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"
+			wx:if="{{userInfo.level_exp>=200}}" />
 	</view>
 </navigation-bar>
 
 
 <!-- 轮播图下的选项 -->
 
-<view class="tab-list">
+<!-- <view class="tab-list">
 	<view wx:for="{{swiperTabs}}" wx:key="title"
 		class="tab-item item-{{selectedTab}} {{selectedTab === index ? 'active' : ''}}" data-tab="{{index}}"
 		data-type="{{item.id}}" bindtap="onTapTab">
 		<view>{{ item.title }}</view>
 	</view>
-</view>
+</view> -->
+
 <view class="money-content ">
-	<view class="conent radius-10 flex flex-align-items-center flex-space-between">
+<view class="conent radius-10">
+	<view class=" flex flex-align-items-center flex-space-between">
 		<view class="lt flex flex-align-items-center">
 			<view class="icon">
-				<image src="{{categoryList[categoryIndex].icon}}" mode="" />
+				<image src="{{categoryList[categoryIndex].icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
 			</view>
 			<view class="icon-title">{{categoryList[categoryIndex].name}}</view>
 		</view>
-
 		<view class="money num {{selectedTab==0?'active':''}}">{{bill.num || '0.00'}}</view>
+		<!-- <view class="money num calc-expression">{{calcExpression || bill.num}}</view> -->
+
 	</view>
+	<!-- <text class="exp-text">{{calcExpression || '0'}}</text>
+    <text class="num-text">¥{{bill.num.toFixed(2)}}</text> -->
+	<view class=" num calc-expression" wx:if="{{calcExpression}}">{{calcExpression ||'0.00'}}</view>
+</view>
 
 </view>
 
 
-
 <!-- 分类 -->
+
 <view class="tab-container"
-	style="height: calc(100vh - {{calculatorHeight + safeAreaBottom + tabMoneyCardHeight + navBarHeight + statusBarHeight}}px)">
+	style="height: calc(100vh - {{keyboardHeadHeight+calculatorHeight+safeAreaBottom + tabMoneyCardHeight + navBarHeight + statusBarHeight}}px); overflow: hidden;">
+	<view class="mask-category" wx:if="{{keyboardHeight}}"></view>
 	<swiper class="scroll-list" current="{{selectedTab}}" bind:change="onTabChanged"
 		worklet:onscrollstart="onTabTransition" worklet:onscrollupdate="onTabTransition"
 		worklet:onscrollend="onTabTransitionEnd" duration="{{400}}" cache-extent="1">
-		<swiper-item wx:for="{{swiperTabs}}" wx:key="index" class="swiper-{{index}}">
-			<view class="card">
-				<view class="list" wx:if="{{categoryList.length}}">
-					<view class="item" wx:for="{{categoryList}}" wx:key="index" data-index="{{index}}" wx:if="{{index < 14}}"
-						bind:tap="handleChooseCategory">
-						<view class="icon {{ categoryIndex==index?'active':''}}">
-							<image src="{{item.icon}}" mode="widthFix" />
-						</view>
-						<view class="icon-title">{{item.name}}</view>
-					</view>
-					<view class="item" data-type="category" bind:tap="handlePopup">
-						<view class="icon">
-							<image
-								src="https://env-00jxubueh4pn.normal.cloudstatic.cn/%E9%BB%98%E8%AE%A4%E5%8D%A0%E4%BD%8D%E5%9B%BE.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c"
-								mode="widthFix" />
-						</view>
-						<view class="icon-title">全部</view>
-					</view>
-				</view>
-				<block wx:else>
-					<view class="no-data-1">
-						<view class="no-data-icon">
-							<image
-								src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
-								mode="" />
-						</view>
-						<view class="no-data-text">
-							<view>抱歉呀，这个功能还在 “修炼”</view>
-							<view>等它解锁新技能就和您见面</view>
+		<swiper-item wx:for="{{swiperTabs}}" wx:key="index" class="swiper-{{index}}" >
+			<view class="card" style="height: 100%; box-sizing: border-box;">
+				<!-- 核心优化：添加可滚动容器 scroll-view -->
+				<scroll-view class="list-scroll" scroll-y enable-flex scroll-with-animation show-scrollbar="{{true}}"
+					style="height: 100%;">
+
+					<view class="list" wx:if="{{categoryList.length}}">
+						<view class="item" wx:for="{{categoryList}}" wx:key="index" data-index="{{index}}"
+							bind:tap="handleChooseCategory">
+							<view class="icon {{ categoryIndex==index?'active':''}}">
+								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+							</view>
+							<view class="icon-title">{{item.name}}</view>
 						</view>
 					</view>
-				</block>
+
+					<block wx:else>
+						<view class="no-data-1">
+							<view class="no-data-icon">
+								<image
+									src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+									mode="" />
+							</view>
+							<view class="no-data-text">
+								<view>抱歉呀，这个功能还在 “修炼”</view>
+								<view>等它解锁新技能就和您见面</view>
+							</view>
+						</view>
+					</block>
+				</scroll-view>
 			</view>
 		</swiper-item>
 	</swiper>
@@ -77,15 +85,42 @@
 
 
 
-
 <!-- 自定义数字键盘 -->
 <view class="keyboard">
 	<view class='keyboard-head' style="bottom: {{keyboardHeight}}px; transition: bottom 0.3s ease;">
-		<view class="remark">
-			<input class="remark_placeholder" style="font-size: 24rpx;" type="text" maxlength="20" placeholder="输入备注..."
-				adjust-position="{{false}}" bindinput="bindKeyInput" bindfocus="onInputFocus" bindblur="onInputBlur" />
+		<view class="remark-tags radius-6">
+			<view class="remark  flex">
+
+				<view class="label">备注</view>
+				<view class="value"> <input class="remark_placeholder" style="font-size: 24rpx;" type="text" maxlength="20"
+						placeholder="添加备注吧～" adjust-position="{{false}}" bindinput="bindKeyInput" bindfocus="onInputFocus"
+						bindblur="onInputBlur" /></view>
+				<view style="width:180rpx;font-size: 22rpx;">
+					<z-tabs bind:change="onTapTab" active="{{selectedTab}}" tabs="{{typeList}}"></z-tabs>
+				</view>
+			</view>
+
+			<scroll-view class="flex category-child-list" scroll-x="{{true}}"
+				style="height:40rpx;width:100%;white-space: nowrap" wx:if="{{categoryList[categoryIndex].children.length}}">
+				<block>
+					<view wx:for="{{categoryList[categoryIndex].children}}" wx:key="id" data-category="{{item}}"
+						data-index="{{index}}" class="radius-4 {{item.isSelected ? 'active' : 'not-active'}}"
+						bind:tap="handleCategoryTagSelect">
+						{{item.name}}
+					</view>
+				</block>
+
+
+
+				<!-- <view class="not-active radius-4">+添加标签</view> -->
+			</scroll-view>
 		</view>
-		<view class="keyboard-tab-list flex  flex-space-between" style="padding-bottom:{{tagList.length? '0':' 10rpx'}};">
+
+
+
+
+
+		<view class="keyboard-tab-list flex  flex-space-between">
 			<view class="left">
 				<scroll-view class=" flex" scroll-x="{{true}}"
 					style="height:46rpx;width:calc(100vw - 80rpx);white-space: nowrap;">
@@ -120,49 +155,48 @@
 		</view>
 	</view>
 
-	<view class='keyboard-row'>
-		<view class='key one' hover-class="weui-cell_active" data-key='1' bindtap='tapKey'>1</view>
-		<view class='key two' hover-class="weui-cell_active" data-key='2' bindtap='tapKey'>2</view>
-		<view class='key three' hover-class="weui-cell_active" data-key='3' bindtap='tapKey'>3</view>
-		<!-- <view class='key del' hover-class="weui-cell_active">
-      --
-    </view> -->
-		<view class='key dot' hover-class="weui-cell_active" data-key='.' bindtap='tapDel' bindlongpress="longpressDel"
-			bindtouchend="stopInterval">
-			<image class="del-image"
-				src="https://env-00jxubueh4pn.normal.cloudstatic.cn/miniProgram/%E7%94%B3%E8%AF%B7%E5%9B%9E%E9%80%80.png"
-				mode="widthFix"></image>
-		</view>
-	</view>
-	<view class="keyboard-bottom3">
-		<view class="keyboard-bottom3-num">
-			<view class='keyboard-row'>
-				<view class='key four' hover-class="weui-cell_active" data-key='4' bindtap='tapKey'>4</view>
-				<view class='key five' hover-class="weui-cell_active" data-key='5' bindtap='tapKey'>5</view>
-				<view class='key six' hover-class="weui-cell_active" data-key='6' bindtap='tapKey'>6</view>
-			</view>
-			<view class='keyboard-row'>
-				<view class='key seven' hover-class="weui-cell_active" data-key='7' bindtap='tapKey'>7</view>
-				<view class='key eight' hover-class="weui-cell_active" data-key='8' bindtap='tapKey'>8</view>
-				<view class='key nine' hover-class="weui-cell_active" data-key='9' bindtap='tapKey'>9</view>
-			</view>
-			<view class='keyboard-row'>
-				<view class='key nine' hover-class="weui-cell_active" data-key='.' bindtap='tapKey'>.</view>
-				<view class='key nine' hover-class="weui-cell_active" data-key='0' bindtap='tapKey'>0</view>
-				<view class='key del again' hover-class="weui-cell_active" data-again="1" bindtap='tapSubmit'>
-					再记
-				</view>
-				<!-- <view class='key dot' hover-class="weui-cell_active" data-key='.' bindtap='tapDel' bindlongpress="longpressDel"
-          bindtouchend="stopInterval">
+	<view class='keyboard-container'>
+  <view class="keyboard-bottom3">
+    <view class="keyboard-bottom3-num">
+      <view class='keyboard-row'>
+        <view class='key one' hover-class="weui-cell_active" data-key='1' bindtap='tapKey'>1</view>
+        <view class='key two' hover-class="weui-cell_active" data-key='2' bindtap='tapKey'>2</view>
+        <view class='key three' hover-class="weui-cell_active" data-key='3' bindtap='tapKey'>3</view>
+        <view class='key dot' hover-class="weui-cell_active" bindtap='tapDel'
+			bindlongpress="longpressDel" bindtouchend="stopInterval">
           <image class="del-image"
-            src="https://env-00jxubueh4pn.normal.cloudstatic.cn/回退-copy.png?expire_at=1764331732&er_sign=d9325173ccb72396bbde5adba88c18c0"
-            mode=""></image>
-        </view> -->
-			</view>
-		</view>
-		<view class="key submit {{selectedTab==0?'active':''}}" hover-class="weui-cell_active"  data-again="2"  bindtap='tapSubmit'>完成</view>
-	</view>
+            src="https://env-00jxubueh4pn.normal.cloudstatic.cn/miniProgram/%E7%94%B3%E8%AF%B7%E5%9B%9E%E9%80%80.png"
+            mode="widthFix"></image>
+        </view>
+      </view>
+      <view class='keyboard-row'>
+        <view class='key four' hover-class="weui-cell_active" hover-stay-time='10' data-key='4' bindtap='tapKey'>4</view>
+        <view class='key five' hover-class="weui-cell_active" data-key='5' bindtap='tapKey'>5</view>
+        <view class='key six' hover-class="weui-cell_active" data-key='6' bindtap='tapKey'>6</view>
+        <view class='key sub' hover-class="weui-cell_active" data-key='-' bindtap='tapKey'>-</view>
+      </view>
+      <view class='keyboard-row'>
+        <view class='key seven' hover-class="weui-cell_active" data-key='7' bindtap='tapKey'>7</view>
+        <view class='key eight' hover-class="weui-cell_active" data-key='8' bindtap='tapKey'>8</view>
+        <view class='key nine' hover-class="weui-cell_active" data-key='9' bindtap='tapKey'>9</view>
+        <view class='key add' hover-class="weui-cell_active" data-key='+' bindtap='tapKey'>+</view>
+      </view>
+      <view class='keyboard-row'>
+        <view class='key point' hover-class="weui-cell_active" data-key='.' bindtap='tapKey'>.</view>
+        <view class='key zero' hover-class="weui-cell_active" data-key='0' bindtap='tapKey'>0</view>
+				<view class="key" data-again="{{1}}" bindtap="tapSubmit">再记</view>
+      <!-- 核心：动态切换=和完成 -->
+      <view class="key submit main {{selectedTab==0?'active-0':'active-1'}}" data-again="{{2}}" bindtap="tapSubmit">
+        {{operator && secondNum ? '=' : '完成'}}
+      </view>
+      </view>
+    </view>
+  </view>
 </view>
+</view>
+
+
+
 
 <!-- 日期 -->
 <z-popup bind:popup="handleChildPopup" showTitle="date" bind:tap="handlePopup"

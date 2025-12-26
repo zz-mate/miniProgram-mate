@@ -34,3 +34,10 @@ export function updateBook(data:any) {
   });
 }
 
+export function getBookCagetgoryList(data?:any) {
+  return request({
+    url: '/miniProgram/book/category/list',
+    method: 'POST',
+    data,
+  });
+}

@@ -1,0 +1,20 @@
+<!--subPackages/pages/transaction/export/index.wxml-->
+<navigation-bar title="导出" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+background="{{navBgColor}}">
+
+</navigation-bar>
+
+<view class="export-container">
+	<view class="no-data">
+  <view class="no-data-icon">
+    <image
+      src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+      mode="widthFix" />
+  </view>
+  <view class="no-data-text">
+		<view wx:if="{{level_exp<500}}">抱歉呀，您目前积分不满足导出账单功能</view>
+  </view>
+</view>
+</view>
+
+

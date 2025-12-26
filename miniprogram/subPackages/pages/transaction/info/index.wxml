@@ -4,18 +4,19 @@
 </navigation-bar>
 <scroll-view type="custom" scroll-y style="height:calc(100%) ">
 	<sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
-		<view class="transaction-info">
+		<view class="transaction-info radius-10">
 
-			<view class="card item radius-10 flex flex-align-items-center flex-center flex-space-between">
-				<view class="icon-category flex flex-align-items-center">
-					<image src="{{transactionInfo.category.icon}}" class="icon" />
-					<text>{{transactionInfo.category.name}}</text>
+			<view class="card">
+				<view class="icon-category">
+					<image src="{{transactionInfo.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" class="icon" />
+					
 				</view>
-				<view class="right-text money num {{transactionInfo.type==1? 'text-error' :''}}">
+				<view class="category-name">{{transactionInfo.category.name}}</view>
+				<view class=" money num {{transactionInfo.type==1? 'text-error' :''}}">
 					{{transactionInfo.type==1?'+':'-'}} {{transactionInfo.amount}}</view>
 			</view>
 
-
+<view class="border"></view>
 	<view class="radius-10" style="overflow: hidden;">
 		<view class=" item  flex flex-align-items-center flex-center flex-space-between">
 				<view class="icon-category ">
@@ -39,12 +40,6 @@
 			</view>
 			<view class=" item flex flex-align-items-center flex-center flex-space-between">
 				<view class="icon-category ">
-					<text>备注</text>
-				</view>
-				<view class="right-text ">{{transactionInfo.remark|| '--'}}</view>
-			</view>
-			<view class=" item flex flex-align-items-center flex-center flex-space-between">
-				<view class="icon-category ">
 					<text>标签</text>
 				</view>
 				<view class="right-text flex" wx:if="{{transactionInfo.tags.length}}">
@@ -60,6 +55,18 @@
 				</view>
 				<view class="right-text ">{{transactionInfo.book.name}}</view>
 			</view>
+			<view class=" item flex flex-align-items-center flex-center flex-space-between">
+				<view class="icon-category ">
+					<text>备注</text>
+				</view>
+				<view class="right-text ">{{transactionInfo.remark|| '--'}}</view>
+			</view>
+			<view class=" item flex flex-align-items-center flex-center flex-space-between">
+				<view class="icon-category ">
+					<text>附件</text>
+				</view>
+				<view class="right-text ">{{ '--'}}</view>
+			</view>
 	</view>
 
 		</view>
@@ -67,10 +74,10 @@
 </scroll-view>
 
 <view class="edit-del-btn flex flex-align-items-center flex-space-between flex-center">
-	<view class="del btn" bind:tap="handleRemove">
+	<view class="del btn radius-10" bind:tap="handleRemove">
 		删除
 	</view>
-	<view class="edit btn" bind:tap="handleUpdate">
+	<view class="edit btn radius-10" bind:tap="handleUpdate">
 		编辑
 	</view>
 </view>

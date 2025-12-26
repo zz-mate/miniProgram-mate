@@ -1,0 +1,24 @@
+/* subPackages/pages/account/add/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
+
+.book-container {
+	padding: 20rpx;
+
+	.book-name {
+		background-color: #fff;
+		height: 80rpx;
+		padding: 20rpx;
+
+	}
+
+	.label {
+		font-size: 22rpx;
+	}
+
+	.input {
+		width: 200rpx;
+		text-align: right;
+	}
+}
+
+

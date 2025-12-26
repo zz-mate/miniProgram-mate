@@ -1,0 +1,24 @@
+/* subPackagesMine/pages/qrcode/index.wxss */
+page{
+	background-color: #FFF;
+}
+.qrcode-container{
+	// padding: 40rpx;
+}
+.qr-content{
+width: 550rpx;
+margin: 10vh auto 0;
+	.avatar-nickname{
+		margin-bottom: 30rpx;
+		.avatar{
+			width: 80rpx;
+			height: 80rpx;
+			margin-right: 10rpx;
+		}
+	}
+}
+.qr-code{
+	width: 550rpx;
+	height: 550rpx;
+	
+}

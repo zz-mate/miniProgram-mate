@@ -1,35 +1,152 @@
 /* subPackages/pages/transaction/add/index.wxss */
 @import "../../../../app.scss"; // 引入全局变量
+
 page {
-  height: 100vh;
-  background: #FFF;
+	height: 100vh;
+	background: #f4f2f7;
 }
 
 
 .no-data-1 {
-  height: 300rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+	height: 300rpx;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 
-  &-icon {
-    width: 60rpx;
-    height: 60rpx;
-    margin: 20rpx 0;
-  }
+	&-icon {
+		width: 68rpx;
+		height: 68rpx;
+		margin: 20rpx 0;
+	}
 
-  &-text {
-    font-size: 22rpx;
-    text-align: center;
-    color: #666;
-    font-weight: 550;
+	&-text {
+		font-size: 22rpx;
+		text-align: center;
+		color: #666;
+		font-weight: 550;
 
-    view {
-      padding-bottom: 14rpx;
-    }
-  }
+		view {
+			padding-bottom: 14rpx;
+		}
+	}
 }
+
+
+
+
+
+
+// .tab-container {
+// 	position: relative;
+// 	display: flex;
+// 	flex-direction: column;
+// }
+
+.mask-category {
+	position: absolute;
+	width: 100%;
+	background-color: transparent;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 99;
+}
+
+.tab-list {
+	display: flex;
+	flex-direction: row;
+	position: relative;
+	background-color: #f4f2f7;
+	margin-bottom: -1rpx;
+}
+
+.tab-item {
+	display: flex;
+	height: 80rpx;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	flex: 1;
+	font-weight: 550;
+	font-size: 22rpx;
+}
+
+.active {
+	font-size: 24rpx;
+	color: #FFD608;
+	transition: all .3s ease;
+}
+
+.item-0 {
+	&.active {
+		font-size: 24rpx;
+		color: #FF4308;
+		transition: all .3s ease;
+	}
+}
+
+.tab-border {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 3px;
+	background-color: #07c160;
+	width: 15%;
+	transform: translateX(0) scaleX(0.7);
+	z-index: 1;
+}
+
+
+.money-content {
+	// 
+	background-color: #f4f2f7;
+	// 
+	padding: 20rpx;
+
+	.conent {
+		background-color: #FFF;
+		// margin: 20rpx;
+		padding: 20rpx;
+	}
+
+	.lt {
+		.icon {
+			width: 60rpx;
+			height: 60rpx;
+			border-radius: 50%;
+			overflow: hidden;
+			flex-shrink: 0;
+
+		}
+
+		.icon-title {
+			margin-left: 12rpx;
+			font-size: 26rpx;
+			font-weight: 550;
+		}
+	}
+
+	.calc-expression {
+		padding-top: 20rpx;
+		text-align: right;
+		color: #666666;
+	}
+
+	.money {
+		font-size: 46rpx;
+		font-weight: 550;
+
+		&.active {
+			color: #ff0000;
+		}
+	}
+}
+
+
+
 
 
 
@@ -37,163 +154,62 @@ page {
 
 
 .tab-container {
-  display: flex;
-  flex-direction: column;
-}
+	position: relative;
 
-.tab-list {
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  background-color: #f4f2f7;
-  margin-bottom: -1rpx;
-}
+	.scroll-list {
+		flex: 1;
+		width: 100%;
+		// height: 40vh;
+		height: 100%;
+		overflow-y: scroll;
+		// background-color: #bea0eb;
+		padding: 20rpx 0;
+		// background-color: #07c160;
+	}
 
-.tab-item {
-  display: flex;
-  height: 80rpx;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  flex: 1;
-  font-weight: 550;
-  font-size: 22rpx;
-}
+	.swiper-item {
+		height: 100%;
+		box-sizing: border-box;
+	}
 
-.active {
-	font-size: 24rpx;
-  color: #FFD608;
-  transition: all .3s ease;
-}
+	.card {
+		.list {
+			display: flex;
+			flex-wrap: wrap;
+			width: 100%;
+			box-sizing: border-box;
 
-.item-0 {
-  &.active {
-		font-size: 24rpx;
-    color: #FF4308;
-    transition: all .3s ease;
-  }
-}
+			.item {
+				flex: 0 0 calc(20% - 2rpx);
+				height: 120rpx;
+				text-align: center;
+				box-sizing: border-box;
 
-.tab-border {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 3px;
-  background-color: #07c160;
-  width: 15%;
-  transform: translateX(0) scaleX(0.7);
-  z-index: 1;
-}
+				.icon {
+					width: 54rpx;
+					height: 54rpx;
+					margin: 0 auto;
+					border-radius: 50%;
+					overflow: hidden;
+				}
 
+				.icon-title {
+					padding-top: 8rpx;
+					font-size: 20rpx;
+					color: #666666;
+				}
+			}
+		}
 
-.money-content {
-  // 
-  background-color: #f4f2f7;
-  // 
-
-  .conent {
-    background-color: #FFF;
-    margin: 0 20rpx;
-    padding: 40rpx 20rpx;
-  }
-
-  .lt {
-    .icon {
-      width: 60rpx;
-      height: 60rpx;
-    }
-
-    .icon-title {
-      margin-left: 12rpx;
-      font-size: 26rpx;
-      font-weight: 550;
-    }
-  }
-
-  .money {
-    font-size: 46rpx;
-    font-weight: 550;
-
-    &.active {
-      color: #ff0000;
-    }
-  }
-}
+	}
 
 
-
-
-
-.scroll-list {
-  flex: 1;
-  width: 100%;
-  overflow-y: scroll;
-  background-color: #f4f2f7;
-}
-
-
-swiper-item {
-  padding: 30rpx 0;
-  height: 80%;
-}
-
-
-
-.card {
-  .list {
-    display: flex;
-    flex-wrap: wrap;
-    // justify-content: space-between;
-    /* 允许换行 */
-    // gap: 15rpx;
-    /* 项目之间的间距（小程序用rpx，Web用px） */
-    // padding: 20rpx;
-    width: 100%;
-    box-sizing: border-box;
-
-    // align-content: stretch;
-    // align-content: flex-start;
-    // justify-content: space-between;
-    .item {
-      // width: 20%;
-      // flex: 0 0 20%;
-      flex: 0 0 calc(20% - 2rpx);
-      /* 计算宽度：25%减去间距的一部分 */
-      /* 或者使用固定宽度：width: calc(25% - 11.25rpx); */
-      height: 120rpx;
-      text-align: center;
-      box-sizing: border-box;
-
-      .icon {
-        width: 54rpx;
-        height: 54rpx;
-        margin: 0 auto;
-
-        &.active {
-          border: 1rpx solid $-theme-color;
-        }
-      }
-
-      .icon-title {
-        padding-top: 4rpx;
-        font-size: 20rpx;
-      }
-    }
-  }
+	.icon.active {
+		background: $-theme-color;
+		/* 选中态背景色 */
+	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -204,206 +220,254 @@ swiper-item {
 
 
 .keyboard {
-  width: 100%;
-  // padding: 20rpx;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: space-between;
-  text-align: center;
-  position: absolute;
-  bottom: 0;
-  font-family: 'WeChatSansStd';
-  padding-bottom: env(safe-area-inset-bottom);
+	width: 100%;
+	// padding: 0 20rpx;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: space-between;
+	text-align: center;
+	position: absolute;
+	bottom: 0;
+	font-family: 'WeChatSansStd';
+	padding-bottom: env(safe-area-inset-bottom);
 }
 
+// 键盘容器 - 左右边距
+.keyboard-container {
+	padding: 0 20rpx;
+	box-sizing: border-box;
+}
+
+// 通用按键样式
 .key {
-  width: calc((100vw - 2rpx)/4);
-  box-sizing: border-box;
-  // background: rgb(36, 33, 33);
-  line-height: 110rpx;
-  // height: 110rpx;
-  color: #000;
-  font-size: 40rpx;
-
-  // &:active {
-  //   background-color: rgb(184, 84, 84);
-  // }
+	width: calc((100% - 30rpx)/4);
+	box-sizing: border-box;
+	line-height: 110rpx;
+	color: #000;
+	font-size: 30rpx;
+	margin: 0 5rpx 10rpx;
+	background-color: #fff;
+	border-radius: 8rpx;
+	position: relative;
+	box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-.key.flex2 {
-  width: calc((100vw - 30rpx - 40rpx)/2);
-}
-
-/* 底部3层键盘 */
+// 底部键盘容器
 .keyboard-bottom3 {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: space-between;
-  text-align: center;
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	justify-content: space-between;
+	text-align: center;
 }
 
-/* 底部3层左侧数字键盘 */
+// 数字键盘区域
 .keyboard-bottom3-num {
-  // flex: 3;
-  // margin-right: 12rpx;
-  // display: flex;
-  flex-direction: column;
-  // align-items: stretch;
-  justify-content: space-between;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: space-between;
 }
 
-/* 键盘每行 */
+// 键盘行样式
 .keyboard-row {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: space-between;
-  // margin-bottom: 12rpx;
-
+	flex: 1;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	justify-content: space-between;
 }
 
-/* 底部按钮margin清0 */
-.zero,
-.dot,
-.submit {
-  margin-bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+// 最后一行去掉底部间距
+.keyboard-row:last-child .key {
+	margin-bottom: 0;
 }
 
-/* 退格按钮图片 */
+// 退格按钮样式
 .del {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+	flex-direction: column;
 
-}
-.again{
-	font-size: 28rpx;
-}
-.del image {
-  width: 30rpx;
-  height: 28rpx;
+	&.again {
+		font-size: 28rpx;
+		color: #000;
+	}
 }
 
-/* 确定按钮文字居中 */
+// 退格按钮图片
+.del-image {
+	width: 30rpx;
+	height: 28rpx;
+}
+
+// 加减按钮样式
+// .add, .sub {
+//   color: #FF4308; // 突出显示运算符
+//   font-weight: bold;
+// }
+
+// 完成按钮样式
 .submit {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-  background: $-theme-color;
-  color: #FFFFFF;
-  height: 100%;
-  transition: all .3s ease;
+	color: #FFFFFF;
+	transition: all .3s ease;
 
-  &.active {
-    background: #FF4308;
-    transition: all .3s ease;
-  }
+	&.active-0 {
+		background: $z-color-error;
+	}
+
+	&.active-1 {
+		background: $-theme-color;
+	}
+}
+
+// 小数点按钮
+.point {
+	font-weight: bold;
+}
+
+// 悬浮效果
+.weui-cell_active {
+	background-color: #f0f0f0 !important;
+	opacity: 0.9;
 }
 
 
 .keyboard-head {
-  // display: flex;
-  // flex-direction: row;
-  // align-items: center;
+	// display: flex;
+	// flex-direction: row;
+	// align-items: center;
 
-  // margin-bottom: 15rpx;
-  position: relative;
-  background-color: #f4f2f7;
+	// margin-bottom: 15rpx;
+	position: relative;
+	background-color: #f4f2f7;
+	padding: 0 20rpx;
 
-  .remark {
-    padding: 0 20rpx;
-    height: 60rpx;
-    text-align: left;
-    color: #000;
-		line-height: 60rpx;
-		margin: 10rpx 0;
-		input{
-			height: 100%;
+
+	.remark-tags {
+		background-color: #fff;
+		padding: 10rpx;
+		margin-bottom: 10rpx;
+
+		.remark {
+			color: #000;
+			line-height: 60rpx;
+
+
+			.label {
+				margin-right: 10rpx;
+			}
+
+			.value {
+				flex: 1;
+			}
+
+			input {
+				width: 100%;
+				height: 100%;
+				text-align: left;
+				font-size: 22rpx;
+			}
 		}
-  }
-
-  .keyboard-tab-list {
-    position: relative;
-    // height: 70rpx;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
-    // transition: all .3s ease;
-    // background-color: #07c160
-    .left {
-      .bill-tag {
-        display: inline-block;
-        height: 46rpx;
-        line-height: 46rpx;
-        padding: 0 8rpx;
-        background-color: #FFF;
-        margin-right: 8rpx;
-      }
-
-    }
 
 
-    .right {
-      position: absolute;
-      right: 20rpx;
-      top: 0;
-      .upload {
+		.category-child-list {
+			transition: all .3s ease;
 
-        height: 50rpx;
-        width: 50rpx;
-        margin: 0 auto 0;
-      }
-    }
+			&::-webkit-scrollbar {
+				width: 0;
+				/* 竖向滚动条宽度设为0 */
+				height: 0;
+				/* 横向滚动条高度设为0 */
+				display: none;
+				/* 直接隐藏滚动条 */
+			}
 
-  }
+			view {
+				display: inline-block;
+				height: 40rpx;
+				line-height: 40rpx;
+				padding: 0 8rpx;
+				margin-right: 8rpx;
+				color: #999999;
+				border: 1rpx solid #999999;
+			}
+
+			.active {
+				background: $-theme-color;
+				color: #fff;
+				transition: all .3s ease;
+				border: 1rpx solid $-theme-color;
+			}
+
+			.not-active {
+				background-color: #FFF;
+			}
+		}
+	}
+
+
+
+	.keyboard-tab-list {
+		position: relative;
+		// height: 70rpx;
+		text-align: left;
+		display: flex;
+		align-items: center;
+		flex-wrap: nowrap;
+		margin-bottom: 10rpx;
+
+		// transition: all .3s ease;
+		// background-color: #07c160
+		.left {
+			.bill-tag {
+				display: inline-block;
+				height: 46rpx;
+				line-height: 46rpx;
+				padding: 0 8rpx;
+				background-color: #FFF;
+				margin-right: 8rpx;
+			}
+
+		}
+
+
+		.right {
+			position: absolute;
+			right: 20rpx;
+			top: 0;
+
+			.upload {
+
+				height: 50rpx;
+				width: 50rpx;
+				margin: 0 auto 0;
+			}
+		}
+
+	}
 }
 
-.category-child-list {
-  transition: all .3s ease;
-
-  view {
-    display: inline-block;
-    height: 40rpx;
-    line-height: 40rpx;
-    padding: 0 8rpx;
-    margin-right: 8rpx;
-  }
-
-  .active {
-    background:$-theme-color;
-    color: #fff;
-    transition: all .3s ease;
-  }
-  .not-active{
-    background-color: #FFF;
-  }
-}
 
 .l-input-class {
-  text-align: left;
+	text-align: left;
 }
 
 .amount {
-  position: absolute;
-  right: 0;
-  margin-right: 20rpx;
+	position: absolute;
+	right: 0;
+	margin-right: 20rpx;
 }
 
 .del-image {
-  width: 46rpx;
-  height: 46rpx;
-  vertical-align: middle;
+	width: 46rpx;
+	height: 46rpx;
+	vertical-align: middle;
 }
 
 
@@ -414,68 +478,68 @@ swiper-item {
 
 
 .popup-content {
-  width: 100vw;
-  background-color: #FFF;
+	width: 100vw;
+	background-color: #FFF;
 }
 
 .account-list {
 
-  // .account-scroll{
-  //   height: calc(100% -  env(safe-area-inset-bottom));
-  // }
-  .default {
-    padding: 20rpx;
-    line-height: 76rpx;
-    font-size: 24rpx;
-    font-weight: 550;
-    color: #000;
-    border-bottom: 20rpx solid #f4f2f7;
+	// .account-scroll{
+	//   height: calc(100% -  env(safe-area-inset-bottom));
+	// }
+	.default {
+		padding: 20rpx;
+		line-height: 76rpx;
+		font-size: 24rpx;
+		font-weight: 550;
+		color: #000;
+		border-bottom: 20rpx solid #f4f2f7;
 
-    .account-name {
-      flex: 1;
-      margin-left: 20rpx;
-    }
+		.account-name {
+			flex: 1;
+			margin-left: 20rpx;
+		}
 
-    .icon {
-      width: 32rpx;
-      height: 32rpx;
-    }
-  }
+		.icon {
+			width: 32rpx;
+			height: 32rpx;
+		}
+	}
 
-  .item {
-    margin-bottom: 20rpx;
-    padding: 20rpx;
+	.item {
+		margin-bottom: 20rpx;
+		padding: 20rpx;
 
-    .item-header {
-      padding-bottom: 20rpx;
-      color: #666666;
-      font-size: 20rpx;
-    }
+		.item-header {
+			padding-bottom: 20rpx;
+			color: #666666;
+			font-size: 20rpx;
+		}
 
-    .item-items {
-      color: #000;
-      margin-bottom: 20rpx;
+		.item-items {
+			color: #000;
+			margin-bottom: 20rpx;
 
-      &:last-child {
-        margin: 0;
-      }
+			&:last-child {
+				margin: 0;
+			}
 
-      .account-icon {
-        width: 76rpx;
-        height: 76rpx;
-      }
+			.account-icon {
+				width: 76rpx;
+				height: 76rpx;
+			}
 
-      .account-name {
-        flex: 1;
-        margin-left: 20rpx;
-      }
+			.account-name {
+				flex: 1;
+				margin-left: 20rpx;
+			}
 
-      .icon {
-        width: 32rpx;
-        height: 32rpx;
-      }
-    }
-  }
+			.icon {
+				width: 32rpx;
+				height: 32rpx;
+			}
+		}
+	}
 }
 
 
@@ -487,77 +551,89 @@ swiper-item {
 
 
 .book-list {
-  padding: 20rpx;
+	overflow: hidden;
+	background-color: #fff;
 
-  .book-item {
-    margin-bottom: 40rpx;
+	.book-item {
 
-    .cover {
-      width: 80rpx;
-      height: 100rpx;
-      margin-right: 20rpx;
-    }
 
-    .info {
-      flex: 1;
-      .book-name {
-        color: #000000;
-        font-weight: 550;
-        padding-bottom: 8rpx;
-      }
+		padding: 20rpx;
 
-      .num {
-        font-size: 20rpx;
-        color: #666666;
-      }
-    }
-    .icon{
-      width: 32rpx;
-      height: 32rpx;
-    }
-  }
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		.cover {
+			width: 50rpx;
+			height: 60rpx;
+			margin-right: 20rpx;
+		}
+
+
+		.info {
+			flex: 1;
+
+			.book-name {
+				color: #000000;
+				font-size: 22rpx;
+				// font-weight: 550;
+				// padding-bottom: 8rpx;
+			}
+
+			.num {
+				font-size: 20rpx;
+				color: #666666;
+			}
+		}
+
+		.icon {
+			width: 34rpx;
+			height: 34rpx;
+		}
+	}
 }
-
 
 .category-list {
-  padding: 20rpx;
+	padding: 20rpx;
 
-  .category-item {
-    .cover {
-      width: 54rpx;
-      height: 54rpx;
-      margin-right: 20rpx;
-    }
+	.category-item {
+		.cover {
+			width: 54rpx;
+			height: 54rpx;
+			margin-right: 20rpx;
+		}
 
-    .info {
-      flex: 1;
-      .category-name {
-        font-size: 22rpx;
-        color: #000000;
-        font-weight: 550;
-      }
+		.info {
+			flex: 1;
 
-    }
-    .icon{
-      width: 32rpx;
-      height: 32rpx;
-    }
-  }
+			.category-name {
+				font-size: 22rpx;
+				color: #000000;
+				font-weight: 550;
+			}
+
+		}
+
+		.icon {
+			width: 32rpx;
+			height: 32rpx;
+		}
+	}
 }
 
-.scroll-fixed{
-  position: fixed;
-  bottom: 0;
-  height: 140rpx;
-  background-color: #FFFFFF;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding:  28rpx ;
-  padding-bottom: constant(safe-area-inset-bottom);
-  /* 兼容iOS<11.2 */
-  padding-bottom: env(safe-area-inset-bottom);
-  /* 兼容iOS>=11.2 */
+.scroll-fixed {
+	position: fixed;
+	bottom: 0;
+	height: 140rpx;
+	background-color: #FFFFFF;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 28rpx;
+	padding-bottom: constant(safe-area-inset-bottom);
+	/* 兼容iOS<11.2 */
+	padding-bottom: env(safe-area-inset-bottom);
+	/* 兼容iOS>=11.2 */
 
 }

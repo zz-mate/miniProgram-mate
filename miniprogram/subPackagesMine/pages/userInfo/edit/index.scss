@@ -1,0 +1,34 @@
+/* subPackagesMine/pages/userInfo/edit/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
+
+.book-container {
+	padding: 20rpx;
+
+	.book-name {
+		background-color: #fff;
+		height: 80rpx;
+		padding: 20rpx;
+
+	}
+
+	.input {
+		width: 100%;
+	}
+}
+
+.gender-content {
+	background-color: #fff;
+
+	.gender-item {
+
+		height: 80rpx;
+		font-size: 22rpx;
+		padding: 20rpx;
+	}
+
+	.gender-item .active {
+		color: #007aff;
+		font-weight: bold;
+	}
+
+}

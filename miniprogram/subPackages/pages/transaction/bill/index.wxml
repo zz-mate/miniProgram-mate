@@ -1,27 +1,30 @@
 <!--subPackages/pages/transaction/bill/index.wxml-->
-<navigation-bar class="nav-bar" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black" background="{{navBgColor}}">
+<navigation-bar class="nav-bar" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="{{navBgColor}}">
 	<view slot="center" class="subsection">
 		<z-tabs bind:change="handleChange" active="{{yearMonthMoreActive}}" tabs="{{tabsList}}"></z-tabs>
 	</view>
 </navigation-bar>
 <view class="filter-date flex flex-space-between  flex-align-items-center">
 	<view></view>
-	<view class="date flex flex-align-items-center">
-	<text bind:tap="handlePopup" data-type="start_time">{{queryParams.start_time}}</text>
-	<text style="padding:0 12rpx" wx:if="{{queryParams.end_time}}">-</text>
-	<text bind:tap="handlePopup" data-type="end_time" >  {{queryParams.end_time}}</text>
+	<view class="date num flex flex-align-items-center">
+		<text bind:tap="handlePopup">{{queryParams.start_time}}</text>
+		<text style="padding:0 12rpx" wx:if="{{queryParams.end_time}}">-</text>
+		<text bind:tap="handlePopup" data-type="end_time"> {{queryParams.end_time}}</text>
 	</view>
 	<view></view>
 </view>
 <view class="bill-card flex flex-space-between">
-	<view class="surplus radius-10 item {{typeIndex==0?'active-yellow':''}}" data-type="0" bind:tap="handleTabType">
+	<view class="surplus radius-10 item {{typeIndex==0?'active-yellow':''}}" data-type="0" bind:tap="handleTabType" hover-class="btn-hover" hover-stay-time='10' >
 		<text>结余</text>
 		<view class="money num">{{summary.totalSurplus||'0.00'}}</view>
 	</view>
-	<view class="expend radius-10 item {{typeIndex==1?'active-green':''}}" data-type="1" bind:tap="handleTabType"> <text>支出</text>
+	<view class="expend radius-10 item {{typeIndex==1?'active-green':''}}" data-type="1" bind:tap="handleTabType" hover-class="btn-hover" hover-stay-time='10' >
+		<text>支出</text>
 		<view class="money num">{{summary.totalExpend||'0.00'}}</view>
 	</view>
-	<view class="income radius-10 item {{typeIndex==2?'active-red':''}}" data-type="2" bind:tap="handleTabType"> <text>收入</text>
+	<view class="income radius-10 item {{typeIndex==2?'active-red':''}}" data-type="2" hover-class="btn-hover" hover-stay-time='10'  bind:tap="handleTabType">
+		<text>收入</text>
 		<view class="money num">{{summary.totalIncome||'0.00'}}</view>
 	</view>
 </view>
@@ -36,8 +39,8 @@
 	</view> -->
 </view>
 <scroll-view type="custom" scroll-y style="height:calc(100% - {{scrollHeight}}px) ">
-<view class="collapse-wrap">
-<!-- <collapse title="{{item.year+'-'+item.month}}"
+	<view class="collapse-wrap">
+		<!-- <collapse title="{{item.year+'-'+item.month}}"
 	totalMoney="{{item.surplusMoney}}" expanded="{{false}}"
 	wx:for="{{transactionList}}" wx:for-index="index" wx:for-item="item">
 
@@ -46,8 +49,10 @@
 		<!-- 吸顶 本月支出 收入 结余 进度条区域 -->
 		<view class="sticky-content  radius-10" style="top:{{navBarHeight +'px'}}">
 			<!--  offset-top="{{navBarHeight}}"-->
-			
-			<view class="sticky-card  flex flex-space-between  flex-align-items-center radius-10" bind:tap="handleBillDataPage" data-date="{{item.year+'-'+ item.month}}" wx:for="{{transactionList}}" wx:for-index="index" wx:for-item="item"> 
+
+			<view class="sticky-card  flex flex-space-between  flex-align-items-center radius-10"
+				bind:tap="handleBillDataPage" data-date="{{item.year+'-'+ item.month}}" data-name="{{item.name}}" wx:for="{{transactionList}}"
+				wx:for-index="index" wx:for-item="item" hover-class="btn-hover" hover-stay-time='10' >
 				<!-- -->
 				<view class="left">
 					<view class="month num">{{item.month}}月</view>
@@ -72,22 +77,79 @@
 					<view class="text">结余</view>
 				</view>
 				<view class="arror">
-				<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+					<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 				</view>
 			</view>
 		</view>
 		<view class="no-data" wx:if="{{transactionList.length==0}}">
-  <view class="no-data-icon">
-    <image
-      src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
-      mode="widthFix" />
-  </view>
-  <view class="no-data-text">
-		<view>记账就是记录生活</view>
-					<view>财务自由，从记第一笔开始</view>
-  </view>
-</view>
-</view>
+			<view class="no-data-icon">
+				<image
+					src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+					mode="widthFix" />
+			</view>
+			<view class="no-data-text">
+				<view>记账就是记录生活</view>
+				<view>财务自由，从记第一笔开始</view>
+			</view>
+		</view>
+	</view>
 </scroll-view>
 
 
+<!--年 -->
+<z-popup bind:popup="handleChildPopup" showTitle="year" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_year}}" closeOnClickOverlay="{{false}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content num">
+		<view class="content">
+			<swiper indicator-dots="{{false}}" autoplay="{{false}}" interval="5000" duration="500" current="{{groupYearIndex}}" wx:if="{{isDataYReady}}">
+				<!-- 遍历二维数组yearList，外层循环对应swiper-item -->
+				<block wx:for="{{yearList}}" wx:key="index">
+					<swiper-item>
+						<!-- 内层循环：渲染当前swiper-item中的10个年份 -->
+						<view class="year-group">
+							<block wx:for="{{item}}" wx:for-item="year" wx:key="year">
+								<view class="year-item radius-4 {{year==queryParams.start_time?'active':''}}" data-year="{{year}}"
+									bind:tap="handleYear">{{year}}</view>
+							</block>
+						</view>
+					</swiper-item>
+				</block>
+			</swiper>
+		</view>
+	</view>
+</z-popup>
+<!--月 -->
+<z-popup bind:popup="handleChildPopup" showTitle="month" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_month}}" closeOnClickOverlay="{{false}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content num">
+		<view class="content">
+			<swiper indicator-dots="{{false}}" autoplay="{{false}}"  current="{{groupMonthIndex}}" easing-function="default"
+				bindchange="changeMonth" wx:if="{{isDataMReady}}">
+				<!-- 第一层循环：年份分组（对应最外层数组，如 [2025组, 2026组]） -->
+				<block wx:for="{{monthList}}" wx:for-item="yearGroupItem" wx:key="index">
+					<!-- 第二层循环：年份对象（每个年份分组内的单个年份对象） -->
+					<block wx:for="{{yearGroupItem}}" wx:for-item="yearObj" wx:key="yearObj.year">
+						<swiper-item>
+							<!-- 月份组容器：适配一行6个、两行布局 -->
+							<view class="header-year">{{yearObj.year}}</view>
+							<view class="month-group">
+								<!-- 第三层循环：月份行（如 [[1-6], [7-12]] 中的每一行） -->
+								<block wx:for="{{yearObj.monthList}}" wx:for-item="monthRow" wx:key="index">
+									<!-- 第四层循环：单个月份（行内的每个数字） -->
+									<block wx:for="{{monthRow}}" wx:for-item="month" wx:key="month">
+										<view class="month-item radius-4 {{yearObj.year+'-'+month == chooseYearDate ? 'active' : ''}}" data-month="{{month}}"
+											data-="{{yearObj.year}}" bind:tap="handleMonth">
+											{{month}}月
+										</view>
+									</block>
+								</block>
+							</view>
+						</swiper-item>
+					</block>
+				</block>
+			</swiper>
+		</view>
+	</view>
+</z-popup>

@@ -1,4 +1,0 @@
-<navigation-bar title="loadMore" back="{{false}}" homeButton="{{false}}" color="black" background="#FFF"></navigation-bar>
-
-<button bind:tap="handleStatus">点击切换{{status}}</button>
-<z-load-more status="{{status}}" bind:retry="handleRetry"></z-load-more>

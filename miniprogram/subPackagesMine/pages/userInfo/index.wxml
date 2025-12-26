@@ -11,13 +11,15 @@
 		<view class="mine-container">
 
 			<view class="menu radius-10">
-				<view class="item flex flex-align-items-center flex-space-between">
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
 					<view class="title">
 						头像
 					</view>
 					<view class="info flex flex-align-items-center">
 						<view class="value avatar">
-							<image src="{{userInfo.avatar||'https://env-00jxubueh4pn.normal.cloudstatic.cn/默认占位图.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c'}}" mode="widthFix" />
+							<image
+								src="{{userInfo.avatar||'/static/icon/icon-Placeholder-image.png'}}"
+								mode="widthFix" />
 						</view>
 						<!-- <view class="icon-arrow">
               <image
@@ -27,7 +29,21 @@
 					</view>
 
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
+
+					<view class="title">
+						ID
+					</view>
+					<view class="info flex flex-align-items-center">
+						<view class="value">
+							{{userInfo.id}}
+						</view>
+						<view class="icon-arrow">
+							<!-- <image src="/static/imgs/icon-arrow_right.png" mode="widthFix" /> -->
+						</view>
+					</view>
+				</view>
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'  data-type="nickname" data-value="{{userInfo.nickname}}" bind:tap="handlePageUrl" data-url="/subPackagesMine/pages/userInfo/edit/index">
 
 					<view class="title">
 						昵称
@@ -37,11 +53,11 @@
 							{{userInfo.nickname}}
 						</view>
 						<view class="icon-arrow">
-							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'  data-type="gender" data-value="{{userInfo.gender}}" bind:tap="handlePageUrl" data-url="/subPackagesMine/pages/userInfo/edit/index">
 
 					<view class="title">
 						性别
@@ -51,11 +67,11 @@
 							{{userInfo.gender_text}}
 						</view>
 						<view class="icon-arrow">
-							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
 
 					<view class="title">
 						生日
@@ -65,7 +81,7 @@
 							{{userInfo.birthday||'未设置'}}
 						</view>
 						<view class="icon-arrow">
-							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
 				</view>
@@ -74,7 +90,7 @@
 
 
 			<view class="menu radius-10">
-				<view class="item flex flex-align-items-center flex-space-between">
+				<!-- <view class="item flex flex-align-items-center flex-space-between">
 					<view class="title">
 						账号名称
 					</view>
@@ -83,39 +99,26 @@
 							{{userInfo.username}}
 						</view>
 						<view class="icon-arrow">
-							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
-				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
+				</view> -->
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
 
 					<view class="title">
-						我的二维码
-					</view>
-					<view class="info flex flex-align-items-center">
-						<view class="value qrcode">
-							<image src="/static/icon/icon-my-qrcode.png" mode="widthFix"/>
-						</view>
-						<view class="icon-arrow">
-							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
-						</view>
-					</view>
-				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
-
-					<view class="title">
-						手机号码
+						手机号
 					</view>
 					<view class="info flex flex-align-items-center">
 						<view class="value num">
 							{{userInfo.phone}}
 						</view>
 						<view class="icon-arrow">
-							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
+
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
 
 					<view class="title">
 						邮箱
@@ -125,11 +128,25 @@
 							{{userInfo.email || '未设置'}}
 						</view>
 						<view class="icon-arrow">
-							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
+				<view class="item flex flex-align-items-center flex-space-between" data-url="/subPackagesMine/pages/qrcode/index" hover-class="btn-hover" hover-stay-time='150'  data-type="page" bind:tap="handlePageUrl">
+
+					<view class="title">
+						我的二维码
+					</view>
+					<view class="info flex flex-align-items-center">
+						<view class="value qrcode">
+							<image src="/static/icon/icon-my-qrcode.png" mode="widthFix" />
+						</view>
+						<view class="icon-arrow">
+							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+						</view>
+					</view>
+				</view>
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
 
 					<view class="title">
 						版本号
@@ -139,23 +156,23 @@
 
 						</view>
 						<view class="icon-arrow">
-							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between">
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
 
 					<view class="title">
 						注销账号
 					</view>
 					<view class="icon-arrow">
-						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/>
+						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 					</view>
 				</view>
 			</view>
 
 
-			<view class="logout radius-10" bind:tap="logout">
+			<view class="logout radius-10" bind:tap="logout" hover-class="btn-hover" hover-stay-time='150'>
 				<view class="item flex flex-align-items-center flex-center">
 
 					<view class="title">

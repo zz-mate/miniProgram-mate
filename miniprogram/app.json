@@ -1,53 +1,54 @@
 {
   "pages": [
-    "pages/home/index",
-    "pages/demo/index",
-		"pages/plan/index",
-    "pages/mine/index",
-    "pages/home/detail/index",
-    "pages/secondFloor/secondFloor",
-    "pages/login/index",
-    "pages/logs/logs",
     "pages/index/index",
-    "pages/home/book/index",
-    "pages/home/book/add/index",
+    "pages/plan/index",
+    "pages/mine/index",
+    "pages/login/index",
     "pages/account/index",
     "pages/statement/index",
-    "pages/add/index",
-		"pages/tools/index"
+    "pages/tools/index"
   ],
   "subPackages": [
     {
-      "root": "pagesDemoList",
-      "pages": []
-    },
-    {
       "root": "subPackagesMine",
       "pages": [
-        "pages/userInfo/index"
+        "pages/userInfo/index",
+        "pages/userInfo/edit/index",
+        "pages/qrcode/index",
+        "pages/setting/index"
       ]
     },
     {
       "root": "subPackages",
       "pages": [
         "pages/transaction/add/index",
-				"pages/transaction/bill/index",
-				"pages/transaction/date/index",
-				"pages/transaction/data/index",
+        "pages/transaction/bill/index",
+        "pages/transaction/date/index",
+        "pages/transaction/data/index",
         "pages/transaction/info/index",
+        "pages/transaction/import/index",
+        "pages/transaction/export/index",
         "pages/budget/index",
         "pages/budget/add/index",
-				"pages/transaction/calendar/index"
+        "pages/transaction/calendar/index",
+        "pages/book/index",
+        "pages/book/list/index",
+        "pages/book/category/index",
+        "pages/book/add/index",
+        "pages/account/category/index",
+        "pages/account/list/index",
+        "pages/account/add/index"
       ]
     }
   ],
   "window": {
     "navigationStyle": "custom",
-		"navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
   },
   "usingComponents": {
     "navigation-bar": "./components/navigation-bar/navigation-bar",
-    "z-popup": "./components/z-popup/z-popup"
+    "z-popup": "./components/z-popup/z-popup",
+    "z-divider": "./components/z-divider/z-divider"
   },
   "tabBar": {
     "custom": true,
@@ -57,7 +58,7 @@
     "backgroundColor": "#ffffff",
     "list": [
       {
-        "pagePath": "pages/home/index",
+        "pagePath": "pages/index/index",
         "text": ""
       },
       {

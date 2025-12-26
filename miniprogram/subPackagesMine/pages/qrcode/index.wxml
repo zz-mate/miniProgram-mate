@@ -1,0 +1,39 @@
+<!--subPackagesMine/pages/qrcode/index.wxml-->
+<navigation-bar title="" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="#000"
+	background="{{navBgColor}}">
+
+</navigation-bar>
+
+<view class="qrcode-container">
+
+	<view class="qr-content">
+		<view class="avatar-nickname flex flex-align-items-center">
+			<view class="avatar">
+		  <image
+      src="{{userInfo.avatar || '/static/icon/icon-Placeholder-image.png'}}"
+      mode="widthFix" />
+		
+		</view>
+		<view class="nickname">{{userInfo.nickname}}</view>
+		</view>
+		<view class="qr-code">
+			<image
+      src="{{qrcode}}"
+      mode="widthFix" />
+		</view>
+	</view>
+
+	<!-- <view class="no-data radius-10">
+  <view class="no-data-icon">
+    <image
+      src="{{qrcode}}"
+      mode="widthFix" />
+  </view>
+  <view class="no-data-text" bind:tap="generateUserQRCodeFn">
+    <view>抱歉呀，这个功能还在 “修炼”</view>
+    <view>等它解锁新技能就和您见面</view>
+  </view>
+</view> -->
+</view>
+
+

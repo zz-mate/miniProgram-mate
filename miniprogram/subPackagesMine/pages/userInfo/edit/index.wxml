@@ -1,0 +1,34 @@
+<!--subPackagesMine/pages/userInfo/edit/index.wxml-->
+<navigation-bar title="{{title}}" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="{{navBgColor}}">
+
+</navigation-bar>
+
+<view class="book-container">
+	<view class="book-name radius-10 flex flex-align-items-center flex-space-between" wx:if="{{type=='nickname'}}">
+		<view class="input">
+			<input class="nickname" type="text" placeholder="请输入" maxlength="10" value="{{nickname}}"
+				adjust-position="{{false}}" bindinput="bindKeyInput" />
+		</view>
+	</view>
+	<view class="gender-content radius-10 " wx:if="{{type=='gender'}}">
+		<view class="gender-item flex flex-align-items-center flex-space-between"  bind:tap="selectGender" data-gender="0">
+			<text class="{{gender == 0 ? 'active' : ''}}">未知</text>
+		</view>
+		<view class="gender-item flex flex-align-items-center flex-space-between" bind:tap="selectGender" data-gender="1">
+			<text class="{{gender ==1 ? 'active' : ''}}">男</text>
+		</view>
+		<view class="gender-item flex flex-align-items-center flex-space-between"  bind:tap="selectGender" data-gender="2">
+			<text class="{{gender == 2 ? 'active' : ''}}">女</text>
+		</view>
+
+	</view>
+
+</view>
+
+
+<view class="shortcut" bind:tap="handleBookSave">
+	<view class="shortcut_count radius-10 flex flex-center">
+		完成
+	</view>
+</view>

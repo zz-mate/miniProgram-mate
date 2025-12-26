@@ -9,7 +9,7 @@
 
 <!-- <z-calendar class="calendar" id="calendar" calendarDate="{{calendarDate}}" list="{{dailyList}}" bind:select="select">
 </z-calendar> -->
-<view class="calendar-content">
+<view class="calendar-content radius-10">
 <calendar bind:change="dateChange" defaultTime="" spot="{{spot}}" dailyList="{{dailyList}}" theme_color="#FFD608"></calendar>
 
 </view>
@@ -28,11 +28,11 @@
 
 	<view class="bill-list  radius-10">
 		<view class="bill-item">
-			<view class="radius-10" style="overflow: hidden;">
-				<view class="bill-item_items  flex flex-space-between flex-center" wx:for="{{transactionList}}" wx:key="index"
+			<view class="radius-10"  style="overflow: hidden;background-color: #FFF;">
+				<view class="bill-item_items  flex flex-space-between flex-center" wx:for="{{transactionList}}" wx:key="index" hover-class="btn-hover" hover-stay-time='10' 
 					data-transaction_type="{{item.type}}" data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo">
 					<view class="left-icon">
-						<image src="{{item.category.icon|| '/static/imgs/icon-c.png'}}" mode="widthFix" />
+						<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 					</view>
 					<view class="border">
 						<view class="center-info">
@@ -54,6 +54,7 @@
 					</view>
 
 				</view>
+				<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{transactionList.length}}"></z-divider>
 			</view>
 			<!-- <view class="bill-item_items flex flex-space-between flex-center" wx:for="{{transactionList}}" wx:key="index"
 					data-transaction_type="{{item.type}}" data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo">
@@ -84,6 +85,7 @@
 
 
 		</view>
+
 		<view class="no-data" wx:if="{{!transactionList.length}}" style="margin-top:{{token?'':'20rpx'}}">
 			<view class="no-data-icon">
 				<image

@@ -30,10 +30,14 @@ $z-color-warning: #FF8C08;
 $z-color-error: #FF4308;
 /** 主题颜色**/
 $-theme-color:#FFD608;
+/* 图表*/
+$-chart-expense-color:#5BC0EB;
+$-chart-income-color:#FF6B6B;
+$-chart-jy-color:#FFB74D;
 /* 文字基本颜色 */
 $z-text-color:#333; //基本色
 $z-text-color-inverse:#fff; //反色
-$z-text-color-grey:#999; //辅助灰色，如加载更多的提示信息
+$z-text-color-grey:#6B7280; //辅助灰色，如加载更多的提示信息
 $z-text-color-placeholder: #808080;
 $z-text-color-disable:#c0c0c0;
 
@@ -109,9 +113,11 @@ $z-font-size-paragraph:15px;
 .flex-space-between {
 	justify-content: space-between;
 }
-.flex-space-around{
+
+.flex-space-around {
 	justify-content: space-around;
 }
+
 .z_position {
 	position: relative;
 }
@@ -189,6 +195,7 @@ input {
 	justify-content: center;
 	background-color: #FFF;
 	overflow: hidden;
+
 	&-icon {
 		width: 240rpx;
 		height: 240rpx;
@@ -240,8 +247,156 @@ input {
 		font-size: 20rpx;
 	}
 }
+
 /*弹窗样式*/
 .popup-content {
 	width: 100vw;
 	background-color: #FFF;
+}
+
+/**选择三角箭头**/
+.icon-choose-arrow-bottom {
+	width: 32rpx;
+	height: 32rpx;
+}
+
+.shortcut {
+	position: fixed;
+	bottom: 0;
+	height: 140rpx;
+	// background-color: #FFFFFF;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 28rpx;
+	padding-bottom: constant(safe-area-inset-bottom);
+	/* 兼容iOS<11.2 */
+	padding-bottom: env(safe-area-inset-bottom);
+	/* 兼容iOS>=11.2 */
+	padding-left: 20rpx;
+	padding-right: 20rpx;
+
+	.shortcut_count {
+		width: 100%;
+		height: 80rpx;
+		font-size: 22rpx;
+		font-weight: normal;
+		letter-spacing: 2rpx;
+		color: #000;
+		text-align: center;
+		background-color: $z-bg-color;
+	}
+}
+
+.btn-hover {
+	background-color: #f4f2f7b6 !important;
+}
+
+/* scroll-view 容器样式 */
+.scroll-view-container {
+	width: 100%;
+	height: 100%;
+	/* 核心：隐藏滚动条 */
+	scrollbar-width: none;
+	/* 兼容 Firefox */
+	-ms-overflow-style: none;
+	/* 兼容 IE/Edge */
+	/* 溢出隐藏（避免滚动条占位） */
+	overflow: hidden;
+	/* 强制隐藏滚动条 */
+	-webkit-mask: linear-gradient(180deg, #000, transparent);
+	/* 遮罩滚动条 */
+}
+
+/* 隐藏 webkit 内核滚动条（微信/Chrome/Safari） */
+.scroll-view-container::-webkit-scrollbar {
+	width: 0;
+	/* 竖滚动条宽度设为0 */
+	height: 0;
+	/* 横滚动条高度设为0 */
+	display: none;
+	/* 彻底隐藏 */
+}
+
+/* 可选：隐藏滚动条轨道/滑块（兜底） */
+.scroll-view-container::-webkit-scrollbar-track,
+.scroll-view-container::-webkit-scrollbar-thumb {
+	display: none;
+}
+
+
+
+
+
+
+
+
+
+.bill-item {
+
+	&_header {
+		color: #999999;
+		padding: 20rpx 0;
+		font-size: 20rpx;
+
+		.money {
+			.income {
+				margin-right: 10rpx;
+			}
+		}
+	}
+
+	&_items {
+		padding: 0 20rpx;
+		// margin: 4rpx 0;
+		background-color: #FFF;
+		overflow: hidden;
+
+		.left-icon {
+			width: 54rpx;
+			height: 54rpx;
+			margin-right: 14rpx;
+		}
+
+		.border {
+			flex: 1;
+			display: flex;
+			border-bottom: 1rpx solid #f1f1f1;
+			padding: 14rpx 0 14rpx 14rpx;
+		}
+
+		.center-info {
+			flex: 1;
+
+			.title {
+				font-size: 22rpx;
+				color: #000;
+				padding-bottom: 4rpx;
+			}
+
+			.tags {
+				font-size: 18rpx;
+				color: #999999;
+				padding: 4rpx 0;
+
+				text {
+					margin-right: 4rpx;
+				}
+			}
+
+			.date-other {
+				font-size: 18rpx;
+				color: #999999;
+
+				.text {
+					margin-right: 4rpx;
+				}
+			}
+		}
+
+		.right-money {
+			font-size: 24rpx;
+		}
+	}
 }

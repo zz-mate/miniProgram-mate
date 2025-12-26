@@ -33,43 +33,65 @@
 .text-error {
 	color: $z-color-error;
 }
+
 .transaction-info {
+	margin: 20rpx 0;
+	padding: 40rpx 0 0 0;
+	background: #FFF;
+
 	.card {
-		margin: 20rpx 0;
-		background: #FFF;
-		height: 100rpx;
-		text {
-			font-size: 22rpx;
-		}
+
+
+		// height: 100rpx;
+		padding: 20rpx 20rpx 40rpx 20rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	
 		.icon-category {
 			.icon {
-				width: 54rpx;
-				height: 54rpx;
-				margin-right: 20rpx;
+				width: 80rpx;
+				height: 80rpx;
+				// margin-right: 20rpx;
+				// background-color: #ff0000;
 			}
 
 		}
 
-	}
+		.category-name {
+			padding: 10rpx 0 20rpx 0;
+			font-size: 22rpx;
+		}
 
+		.money {
+			font-size: 38rpx;
+			font-weight: 600;
+		}
+	}
+.border{
+	margin: 20rpx;
+	border-bottom: 2rpx dashed #f4f2f7;
+
+}
 	.item {
 		padding: 20rpx;
 		background: #FFF;
-		height: 90rpx;
+		height: 80rpx;
 
+		// margin-bottom: 20rpx;
+		// border-radius: 10rpx;
 		text {
 			font-size: 22rpx;
 		}
+
 		.right-text {
 			font-size: 22rpx;
 			// font-size:50rpx;
 
 		}
-		.money {
-			font-size: 26rpx;
-			font-weight: 550;
-		}
-		
+
+
 	}
 }
 
@@ -77,28 +99,44 @@
 	position: fixed;
 	bottom: 0;
 	height: 140rpx;
-	background-color: #FFFFFF;
+	// background-color: #FFFFFF;
 	width: 100%;
- /* 核心：iOS 安全区适配（兼容不同版本） */
- padding-bottom: constant(safe-area-inset-bottom); /* iOS < 11.2 */
- padding-bottom: env(safe-area-inset-bottom);     /* iOS >= 11.2 */
- /* 补充：微信小程序安卓端兼容（避免底部被虚拟按键遮挡） */
- padding-bottom: calc(env(safe-area-inset-bottom) + 0rpx); /* 统一计算方式 */
+	/* 核心：iOS 安全区适配（兼容不同版本） */
+	padding-bottom: constant(safe-area-inset-bottom);
+	/* iOS < 11.2 */
+	padding-bottom: env(safe-area-inset-bottom);
+	/* iOS >= 11.2 */
+	/* 补充：微信小程序安卓端兼容（避免底部被虚拟按键遮挡） */
+	padding-bottom: calc(env(safe-area-inset-bottom) + 0rpx);
+	/* 统一计算方式 */
 	box-sizing: border-box;
+	padding-left: 20rpx;
+	padding-right: 20rpx;
+	/* 新增：父容器开启 flex 布局（核心） */
+	display: flex;
+	/* 按钮之间的间距（可自定义，比如 20rpx） */
+	gap: 20rpx;
+	/* 让按钮垂直居中（可选，优化视觉） */
+	align-items: center;
+
 	/* 兼容iOS>=11.2 */
 	.btn {
 		flex: 1;
-		height: 100%;
+		height: 80rpx;
 		text-align: center;
 		font-size: 22rpx;
-		line-height: 140rpx;
+		line-height: 80rpx;
+		letter-spacing: 2rpx;
+
 	}
 
 	.del {
 		color: #ff0000;
+		background-color: #FFF;
 	}
 
 	.edit {
-		color: #000000;
+		color: #fff;
+		background-color: $-theme-color;
 	}
 }

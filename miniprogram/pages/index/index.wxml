@@ -1,29 +1,223 @@
-<!--index.wxml-->
-<navigation-bar title="Weixin" back="{{false}}" homeButton="{{true}}" color="black" background="#FFF"></navigation-bar>
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
-          <view class="abc">121212</view>
-        </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
-    </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
-    </view>
-  </view>
+<!-- 自定义导航栏 -->
+<navigation-bar class="nav-bar" title="" back="{{false}}" auto="{{false}}" homeButton="{{false}}" color="black"
+	background="transparent">
+	<view slot="left" wx:if="{{refreshStatus!='松手进入二楼'&&refreshStatus!='进入二楼'}}">
+		<view class="custom-capsule flex flex-align-items-center"
+			style="height:{{capsuleHeight}}px;border-radius:0  {{capsuleHeight/2}}px {{capsuleHeight/2}}px 0;line-height: {{capsuleHeight}}px;"
+			catch:tap="handleBookPage">{{bookInfo.name||'未登录'}}
+			<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"/>
+			</view>
+	</view>
+	<!-- <view slot="right">
+		<view class="custom-circle"
+			style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius: {{capsuleHeight/2}}px"
+			catch:tap="handleCalenderPage">
+			<image class="icon-calendar" src="/static/imgs/calendar_black.png" mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;"/>
+			</view>
+	</view> -->
+</navigation-bar>
+
+<!-- 滚动内容区域 -->
+<scroll-view id="scrollview" class="scroll-area" type="custom" scroll-y show-scrollbar="{{false}}"
+	scroll-top="{{scrollBackTop}}" scroll-with-animation refresher-enabled="{{true}}" refresher-threshold="{{80}}"
+	refresher-default-style="none" refresher-triggered="{{triggered}}" refresher-two-level-pinned="{{false}}"
+	refresher-two-level-enabled refresher-two-level-threshold="{{150.0}}"
+	refresher-two-level-triggered="{{twoLevelTriggered}}" bind:refresherpulling="onPulling"
+	bind:refresherrefresh="onRefresh" bind:refresherrestore="onRestore" bind:refresherabort="onAbort"
+	bind:refresherstatuschange="onStatusChange" worklet:onstartstart="handleScrollStart"
+	worklet:onscrollupdate="handleScrollUpdate" worklet:onscrollend="handleScrollEnd" bind:scroll="handleScroll">
+
+	<!-- 刷新 -->
+	<view slot="refresher" class="exp-room">
+		<view class="expand">
+			<image class="expand" src="{{secondFloorCover}}" />
+			<view class="refresher-tips">{{refreshStatus}}</view>
+		</view>
+	</view>
+
+	<!-- 本月支出 收入 结余 卡片 & 支出月预算 区域 -->
+	<sticky-section push-pinned-header="{{false}}">
+		<!-- 本月支出 收入 结余 卡片 -->
+		<view class="fake-nav-bar">
+			<image class="icon-copperplate" src="/static/imgs/icon-copperplate.png" mode="widthFix" />
+			<view class="bill-card">
+				<view class="current-title">本月支出</view>
+				<view class="current-money num flex flex-align-items-center">
+					<view class="money">{{eyeIndex==1?summary.totalExpend||'0.00':'*******'}}</view>
+					<!-- <image class="icon-eye" src="/static/imgs/icon-eye_{{eyeIndex}}.png" data-eye="{{eyeIndex}}" mode="widthFix" bind:tap="handleEye"/> -->
+				</view>
+				<view class="current-title flex num">
+					<text>本月收入 {{eyeIndex==1?summary.totalIncome||'0.00':'****'}}</text>
+					<text>本月结余 {{eyeIndex==1?summary.totalSurplus||'0.00':'****'}}</text>
+				</view>
+			</view>
+			<view class="fast-card radius-10">
+				<view class="list radius-10 flex flex-space-around">
+					<view class="item" data-type="bill" data-url="/subPackages/pages/transaction/bill/index" bind:tap="handlePageUrl">
+
+						<image src="/static/icon/icon-bill.png" mode="widthFix" />
+						<view class="title">明细</view>
+					</view>
+					<view class="item" data-url="/subPackages/pages/budget/index" bind:tap="handlePageUrl">
+						<image src="/static/icon/icon-budget.png" mode="widthFix" />
+						<view class="title">预算</view>
+					</view>
+					<view class="item" data-url="/pages/account/index" bind:tap="handlePageUrl">
+						<image src="/static/icon/icon-account.png" mode="widthFix" />
+						<view class="title">资产</view>
+					</view>
+					<view class="item" data-url="/subPackages/pages/transaction/calendar/index" bind:tap="handlePageUrl">
+						<image src="/static/icon/icon-calendar.png" mode="widthFix" />
+						<view class="title">日历</view>
+					</view>
+					<view class="item" bind:tap="handlePageUrl">
+						<image src="/static/icon/icon-more.png" mode="widthFix" />
+						<view class="title">更多</view>
+					</view>
+				</view>
+			</view>
+		</view>
+
+
+		<!-- 预算 -->
+		<!-- <view class="budget-card" style="padding: 0 20rpx;" wx:if="{{token&&budgetInfo}}">
+			<view class="card num radius-10" bind:tap="handleSetting">
+				<view class="budget-title flex flex-space-between flex-align-items-center">
+					<text class="title">支出月预算</text>
+					<text class="text" wx:if="{{budgetInfo.remaining_amount!=0}}" style="color: {{budgetInfo.remaining_percent<0?'#ff0000':budgetInfo.remaining_percent==0?'#e6a23c':'#999999'}};">{{budgetInfo.remaining_percent<0?'超支':'剩余'}}<text class="num">{{budgetInfo.surplus_amount}}</text></text>
+					<view class="text flex flex-align-items-center" wx:else>
+
+						<text>去设置</text>
+						<image
+							src="https://env-00jxubueh4pn.normal.cloudstatic.cn/更多.png?expire_at=1764261154&er_sign=e26817fde04cdac42398774d7c99f71f"
+							mode="widthFix" style="width: 24rpx;height: 24rpx;margin-left: 8rpx;" />
+					</view>
+				</view>
+
+				<view class="progress-container">
+					<view
+						class="progress-bar {{ budgetInfo.remaining_percent>0?'bg-warning':budgetInfo.remaining_percent==0?'bg-warning':'bg-error'}}"
+						style="width: {{ 100 - budgetInfo.remaining_percent}}%">
+					</view>
+				</view>
+
+				<view class="budget-money num flex flex-space-between flex-align-items-center">
+					<view class="flex flex-align-items-center">
+						<text wx:if="{{budgetInfo.amount!='0.00'}}">总{{budgetInfo.amount}} <text style="margin-left: 8rpx;"
+								wx:if="{{budgetInfo.daily_available>0}}">剩余日均{{budgetInfo.daily_available}}</text> </text>
+						<text wx:else style="font-size: 20rpx;">节制使我更富足</text>
+
+					</view>
+					<view wx:if="{{budgetInfo.amount>0}}" class="percent">
+						{{ budgetInfo.remaining_percent }}%
+
+
+					</view>
+				</view>
+			</view>
+		</view> -->
+
+	</sticky-section>
+
+
+	<sticky-section push-pinned-header="{{true}}" padding="{{padding}}">
+
+		<!-- 吸顶 本月支出 收入 结余 进度条区域 -->
+		<view class="sticky-content  radius-10" style="top:{{navBarHeight +'px'}}">
+			<!--  offset-top="{{navBarHeight}}"-->
+			<view style="background-color: #f4f2f7;height: 20rpx;width:100%"
+				wx:if="{{showCard&&transactionList.length&&refreshStatus!='松手进入二楼'&&refreshStatus!='进入二楼'}}"></view>
+			<view class="sticky-card flex flex-space-between  flex-align-items-center radius-10"
+				wx:if="{{showCard&&transactionList.length&&refreshStatus!='松手进入二楼'&&refreshStatus!='进入二楼'}}"
+				bind:tap="handleBillPage">
+				<!-- -->
+				<view class="left">
+					<view class="month num">{{summary.end_month}}月</view>
+					<view class="year num">{{summary.end_year}}</view>
+				</view>
+				<view class="center">
+					<view class="num">收{{summary.totalIncome}}</view>
+					<view class="progress-content">
+						<view class="default">
+							<view class="progress-bar bg-error" style="width: {{summary.incomeProgress}}%">
+							</view>
+						</view>
+						<view class="red">
+							<view class="progress-bar bg-success" style="width: {{summary.expendProgress}}%">
+							</view>
+						</view>
+					</view>
+					<view class="num">支{{summary.totalExpend}}</view>
+				</view>
+				<view class="right">
+					<view class="num">{{summary.totalSurplus}}</view>
+					<view class="text">结余</view>
+				</view>
+				<view class="arror">
+					<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+				</view>
+			</view>
+		</view>
+		<!-- <z-calendar class="num" wx:if="{{transactionList.length}}" id="calendar" list="{{dailySummary}}"
+			bind:select="select"></z-calendar> -->
+
+		<!-- 流水列表 & 数据为空 区域 -->
+		<view class="bill-list">
+			<view class="bill-item " wx:for="{{transactionList}}" wx:key="index">
+				<view class="bill-item_header flex flex-space-between">
+					<view class="date num">{{item.month}}-{{item.day}} {{item.weekday }}</view>
+					<view class="money flex">
+						<view class="income num">收{{item.incomeMoney}}</view>
+						<view class="disburse num">支{{item.expendMoney}}</view>
+					</view>
+				</view>
+				<view class="radius-10" style="overflow: hidden;background-color: #FFF;">
+					<view class="bill-item_items   flex flex-space-between flex-center"  hover-class="btn-hover" hover-stay-time='150' wx:for="{{item.list}}" wx:key="index"
+						data-transaction_type="{{item.type}}" data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo">
+						<view class="left-icon">
+							<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+						</view>
+						<view class="border">
+							<view class="center-info">
+								<view class="title">{{item.category.name}}</view>
+								<!-- <view class="tags flex">
+								<text wx:for="{{item.tags}}">#{{item.name}}</text>
+							</view> -->
+								<!-- <view class="desc">{{item.remark}}</view> -->
+								<view class="date-other num flex flex-align-items-center">
+									<text class="time-text text">{{item.bill_time}} </text>
+									<!-- <text class="account-text text">微信</text>
+								<text class="consume-text text">{{item.consume_user_id==userInfo.user_id?'自己':item.operator.nickname}}</text>
+								<text class="remark-text text">{{item.remark}}</text> -->
+								</view>
+							</view>
+							<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
+								<text>{{item.type==1||item.type==4?'+':'-'}}</text> {{item.amount}}
+							</view>
+						</view>
+
+					</view>
+							<!-- 底部文字提示区域 -->
+		
+				</view>
+
+			</view>
+			<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{transactionList.length}}">
+		</z-divider>
+			<view class="no-data" wx:if="{{!transactionList.length}}">
+				<view class="no-data-icon">
+					<image
+						src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+						mode="widthFix" />
+				</view>
+				<view class="no-data-text">
+					<view>记账就是记录生活</view>
+					<view>财务自由，从记第一笔开始</view>
+				</view>
+			</view>
+		</view>
+
+
+	</sticky-section>
+
 </scroll-view>

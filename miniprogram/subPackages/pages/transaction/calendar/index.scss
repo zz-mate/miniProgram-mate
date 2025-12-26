@@ -6,6 +6,7 @@
 
 .calendar-content{
 	padding: 20rpx;
+	overflow: hidden;
 }
 .bill-item_header {
 	padding:20rpx 20rpx 0 20rpx;
@@ -15,6 +16,7 @@
 
 	}
 	.money{
+		font-size: 22rpx;
 		view{
 			margin-left: 20rpx;
 		}

@@ -19,84 +19,70 @@
 		"ignoreDevUnusedFiles": true,
 		"useApiHostProcess": true
 	},
-	"libVersion": "3.11.1",
+	"libVersion": "3.11.3",
 	"condition": {
 		"miniprogram": {
 			"list": [
 				{
-					"name": "subPackages/pages/transaction/calendar/index",
-					"pathName": "subPackages/pages/transaction/calendar/index",
+					"name": "pages/plan/index",
+					"pathName": "pages/plan/index",
 					"query": "",
 					"scene": null,
 					"launchMode": "default"
 				},
 				{
-					"name": "subPackages/pages/transaction/data/index",
-					"pathName": "subPackages/pages/transaction/data/index",
-					"query": "date=2025-12",
+					"name": "subPackagesMine/pages/userInfo/edit/index",
+					"pathName": "subPackagesMine/pages/userInfo/edit/index",
+					"query": "type=nickname&value=%E5%93%88%E5%93%88",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/date/index",
+					"pathName": "subPackages/pages/transaction/date/index",
+					"query": "start_time=2025-12&type=100&bookId=1&userId=1&categoryId=undefined&categoryName=undefined&title=2025%E5%B9%B412%E6%9C%88",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/date/index",
+					"pathName": "subPackages/pages/transaction/date/index",
+					"query": "start_time=2025-12&type=100&bookId=1&userId=1&categoryId=undefined&categoryName=undefined",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/add/index",
+					"pathName": "subPackages/pages/transaction/add/index",
+					"query": "bookId=1",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
 					"name": "subPackages/pages/transaction/calendar/index",
 					"pathName": "subPackages/pages/transaction/calendar/index",
-					"query": "",
-					"launchMode": "default",
-					"scene": null
-				},
-				{
-					"name": "subPackages/pages/transaction/calendar/index",
-					"pathName": "subPackages/pages/transaction/calendar/index",
-					"query": "",
+					"query": "type=",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
 					"name": "subPackages/pages/budget/add/index",
 					"pathName": "subPackages/pages/budget/add/index",
-					"query": "bookId=1&userId=1",
+					"query": "bookId=4&userId=4",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
-					"name": "subPackages/pages/budget/add/index",
-					"pathName": "subPackages/pages/budget/add/index",
-					"query": "bookId=1&userId=1",
+					"name": "subPackages/pages/transaction/add/index",
+					"pathName": "subPackages/pages/transaction/add/index",
+					"query": "bookId=2",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
-					"name": "pages/home/book/index",
-					"pathName": "pages/home/book/index",
-					"query": "",
-					"launchMode": "default",
-					"scene": null
-				},
-				{
-					"name": "pages/home/book/add/index",
-					"pathName": "pages/home/book/add/index",
-					"query": "",
-					"launchMode": "default",
-					"scene": null
-				},
-				{
-					"name": "pages/home/book/index",
-					"pathName": "pages/home/book/index",
-					"query": "",
-					"launchMode": "default",
-					"scene": null
-				},
-				{
-					"name": "subPackages/pages/transaction/data/index",
-					"pathName": "subPackages/pages/transaction/data/index",
-					"query": "date=2025-12",
-					"launchMode": "default",
-					"scene": null
-				},
-				{
-					"name": "subPackages/pages/transaction/calendar/index",
-					"pathName": "subPackages/pages/transaction/calendar/index",
-					"query": "",
+					"name": "subPackages/pages/transaction/add/index",
+					"pathName": "subPackages/pages/transaction/add/index",
+					"query": "bookId=2",
 					"launchMode": "default",
 					"scene": null
 				}

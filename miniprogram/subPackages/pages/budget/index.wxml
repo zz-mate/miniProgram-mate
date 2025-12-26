@@ -5,16 +5,16 @@
   </view>
 </navigation-bar>
 
-<view class="header-card radius-10">
-  <view class="budget-info fade-animate">
-    <view class="icon-edit" bind:tap="handleSettingBudget">
+<view class="header-card radius-10" hover-class="btn-hover" hover-stay-time='150' bind:tap="handleSettingBudget">
+  <view class="budget-info">
+    <view class="icon-edit" >
 			<image src="/static/icon/icon-edit.png"  mode="widthFix" />
     </view>
     <view class="budget-title" :style="color:{{budgetInfo.remaining_percent>=0?'#000000':'#ff0000'}}">总预算{{budgetInfo.remaining_percent>=0?'剩余':'超支'}}</view>
     <view class="budget-amount num">{{budgetInfo.surplus_amount}}</view>
     <view class="budget-progress-container">
       <view class="progress-bar"
-        style="width: {{100 - budgetInfo.remaining_percent}}%;background-color:{{ budgetInfo.remaining_percent>0?'#e2ab63':budgetInfo.remaining_percent==0?'#e2ab63':'#ff0000'}}">
+        style="width: {{100 - budgetInfo.remaining_percent}}%;background-color:{{ budgetInfo.remaining_percent>0?'#67C23A':budgetInfo.remaining_percent==0?'#67C23A':'#ff0000'}}">
       </view>
     </view>
     <view class="flex flex-center flex-align-items-center flex-space-between num" style="font-size: 22rpx;">
@@ -25,15 +25,17 @@
   </view>
 </view>
 <view class="budget-category-title">分类预算</view>
-<scroll-view type="custom" scroll-y style="height:calc(100% - {{height}}px) ">
+<scroll-view type="custom" scroll-y style="height:calc(100% - {{scrollHeight}}px) ">
   <sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
 
     <view class="budget-list radius-10">
       <view wx:if="{{categoryList.length}}">
-        <view wx:for="{{categoryList}}" wx:key="index">
-          <view class="budget-card radius-10 flex flex-space-between flex-align-items-center">
+        <view wx:for="{{categoryList}}" wx:key="index" data-category_id="{{item.category_id}}"  
+			
+				data-category_name="{{item.category_name}}" bind:tap="handleCategoryBillPage">
+          <view class="budget-card radius-10 flex flex-space-between flex-align-items-center" 	hover-class="btn-hover" hover-stay-time='150'>
             <view class="icon">
-              <image src="{{item.icon}}" mode="" />
+              <image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
             </view>
 
             <view class="card">
@@ -50,7 +52,7 @@
               </view>
 
               <view class="budget-progress-container">
-                <view class="progress-bar"  style="width: {{100 - item.remaining_percent}}%;background-color: {{ item.remaining_percent>0?'#e2ab63':item.remaining_percent==0?'#e2ab63':'#ff0000'}}">
+                <view class="progress-bar"  style="width: {{100 - item.remaining_percent}}%;background-color: {{ item.remaining_percent>0?'#67C23A':item.remaining_percent==0?'#67C23A':'#ff0000'}}">
                 </view>
               </view>
 
@@ -63,6 +65,8 @@
 
         </view>
       </view>
+			<z-divider text="没有更多预算了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{categoryList.length}}">
+		</z-divider>
       <view class="no-data radius-10" wx:else>
         <view class="no-data-icon">
           <image

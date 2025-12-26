@@ -224,3 +224,108 @@ width: 100%;
 		margin-left: 4rpx;
 	}
 }
+
+
+.popup-content{
+	height: 400rpx;
+	font-size: 22rpx;	
+	padding-bottom: constant(safe-area-inset-bottom);
+		/* 兼容iOS<11.2 */
+		padding-bottom: env(safe-area-inset-bottom);
+		/* swiper 容器：固定高度 + 溢出隐藏（关键） */
+	.content{
+	
+swiper {
+  height: 240rpx; 
+  width: 100%;
+  overflow: hidden; /* 防止子元素溢出导致错位 */
+}
+
+/* 年份组容器：Flex 布局 + 宽度溢出隐藏 */
+.year-group {
+  display: flex;
+  flex-wrap: wrap; /* 自动换行 */
+  align-content: center; /* 两行垂直居中 */
+  width: calc(100% + 10rpx); /* 宽度+10rpx，抵消最后一个元素的margin-right */
+  height: 100%;
+  padding:  30rpx;
+  box-sizing: border-box;
+  margin-left: -10rpx; /* 左偏移抵消宽度增加，保持整体居中 */
+}
+
+/* 单个年份样式：固定宽度 + 统一间距 */
+.year-item {
+  /* 核心：每行5个 = 宽度(100% - 4*10rpx)/5 = 20% - 8rpx */
+  width: calc(20% - 8rpx); 
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+  background: #f5f5f5;
+  margin: 0 10rpx 10rpx 0; /* 仅右侧+底部间距，左侧无间距 */
+  color: #333;
+  box-sizing: border-box;
+  touch-action: manipulation;
+  flex-shrink: 0; /* 关键：禁止元素收缩，防止宽度被挤压 */
+}
+
+/* 可选：选中态 */
+.year-item.active {
+  background: $-theme-color;
+  color: #fff;
+}
+
+/* 兜底：解决最后一行不足5个时的布局留白（可选） */
+.year-item:nth-child(5n) {
+  margin-right: 0; /* 每第5个元素（每行最后一个）取消右侧间距 */
+}
+	}
+
+
+
+
+
+
+	/* 保留之前的样式，无需调整 */
+	.header-year{
+		text-align: center;
+		font-size: 24rpx;
+		padding-top: 30rpx;
+	}
+.month-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: flex-start;
+  width: calc(100% + 10rpx);
+  height: 100%;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  margin-left: -10rpx;
+}
+.month-item {
+  width: calc(16.6667% - 8.333rpx);
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+  background: #f8f8f8;
+  margin: 0 10rpx 10rpx 0;
+  color: #333;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  touch-action: manipulation;
+}
+.month-item:nth-child(6n) {
+  margin-right: 0;
+}
+.month-item.active {
+  background: $-theme-color;
+  color: #fff;
+  font-weight: 500;
+}
+.month-item:active {
+  background: #e6e6e6;
+}
+.month-item.active:active {
+	background: $-theme-color;
+}
+}

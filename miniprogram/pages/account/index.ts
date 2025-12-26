@@ -52,15 +52,19 @@ Page({
     })
   },
   // 创建账户
-  handleCreate() {
+  handleAccountAdd() {
     const token = getStorageSync('token')
+		wx.vibrateShort({ type: 'heavy' })
     if (!token) {
       wx.navigateTo({
         url: "/pages/login/index"
       })
     } else {
-      this.setData({
-        show: !this.data.show
+      // this.setData({
+      //   show: !this.data.show
+      // })
+			wx.navigateTo({
+        url: "/subPackages/pages/account/list/index"
       })
     }
   },

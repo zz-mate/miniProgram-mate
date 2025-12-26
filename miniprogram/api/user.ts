@@ -27,8 +27,21 @@ export function getUserById(data:{userId:string}) {
     data,
   });
 }
+export function generateUserQRCode(data:{userId:string}) {
+  return request({
+    url: '/miniProgram/user/qrcode',
+    method: 'POST',
+    data,
+  });
+}
 
-
+export function updateUser(data:any) {
+  return request({
+    url: '/miniProgram/user/update',
+    method: 'POST',
+    data,
+  });
+}
 // 你还可以在这里封装其他用户相关的 API，例如：
 // export function login(data: { username: string; password: string }) {
 //   return request({

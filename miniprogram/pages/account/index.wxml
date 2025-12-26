@@ -76,3 +76,10 @@ background="{{navBgColor}}">
     <view>等它解锁新技能就和您见面</view>
   </view>
 </z-popup>
+
+<!-- 底部功能按钮 -->
+<view class="shortcut" bind:tap="handleAccountAdd">
+	<view class="shortcut_count radius-10 flex flex-center" >
+		添加
+	</view>
+</view>

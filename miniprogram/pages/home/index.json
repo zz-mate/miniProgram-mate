@@ -1,8 +1,0 @@
-{
-  "usingComponents": {
-    "z-tabs":"../../components/z-tabs/z-tabs",
-    "z-divider":"../../components/z-divider/z-divider",
-    "z-back-top":"../../components/z-back-top/z-back-top",
-    "z-calendar": "../../components/z-calendar/z-calendar"
-  }
-}

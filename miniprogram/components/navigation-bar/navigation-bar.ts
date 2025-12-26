@@ -156,6 +156,7 @@ Component({
     
     back() {
       const data = this.data
+			wx.vibrateShort({ type: 'heavy' })
       if (data.delta) {
         wx.navigateBack({
           delta: data.delta
@@ -164,9 +165,10 @@ Component({
       this.triggerEvent('back', { delta: data.delta }, {})
     },
     home() {
+			wx.vibrateShort({ type: 'heavy' })
       setTabBarBadge(0)
       wx.switchTab({
-        url:'/pages/home/index'
+        url:'/pages/index/index'
       })
       this.triggerEvent('home', {}, {})
     }

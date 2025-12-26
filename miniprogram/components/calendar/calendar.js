@@ -183,10 +183,12 @@ Component({
 
       // 遍历日历数组，匹配day赋值金额
       return dateList.map(item => {
+				console.log(item)
         // 统一day格式：转为两位数字符串（如 1 → "01"，18 → "18"）
         const itemDay = item.day.toString().padStart(2, '0');
+				const itemMonth = item.month.toString().padStart(2, '0');
         // 查找dailyList中匹配的day
-        const dailyItem = dailyList.find(d => d.day === itemDay);
+        const dailyItem = dailyList.find(d => d.day === itemDay&&d.month==itemMonth);
         
         return {
           ...item,
@@ -261,7 +263,7 @@ Component({
 
       // 关键：匹配dailyList金额数据
       const dateListWithAmount = this.matchDailyAmount(dateList);
-			console.log(dateListWithAmount,123)
+
       this.setData({ dateList: dateListWithAmount }, () => {
         // this.setSpot(); // 更新红点（包含金额判断）
       });
@@ -275,8 +277,7 @@ Component({
         item.year === parseInt(year) && 
         item.month === parseInt(month) && 
         item.day === parseInt(day)
-      );
-      
+      );	
       const selectDay = {
         year: parseInt(year),
         month: parseInt(month),
@@ -323,7 +324,6 @@ Component({
   // 监听数据变化：dailyList/list/spot变化时更新
   observers: {
     'dailyList': function (newDailyList) {
-      console.log('监听到dailyList更新：', newDailyList);
       this.dateInit(); // 重新渲染日历并匹配金额
     },
     'list': function (newList) {

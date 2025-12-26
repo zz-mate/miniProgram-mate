@@ -82,9 +82,9 @@ Component({
       });
     },
     watchActive(newVal, oldVal){
-    console.log('active 属性值变化了！');
-    console.log('新值:', newVal);
-    console.log('旧值:', oldVal);
+    // console.log('active 属性值变化了！');
+    // console.log('新值:', newVal);
+    // console.log('旧值:', oldVal);
   
       const query = this.createSelectorQuery();
       query.select('.tabsCntainer').boundingClientRect((rect) => {

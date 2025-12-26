@@ -7,7 +7,7 @@
 	right: 0;
 
 	/* 毛玻璃 */
-	background: rgba(255, 255, 255, .9);
+	background: rgba(255, 255, 255, 1);
 	backdrop-filter: blur(6px);
 	display: flex;
 	flex-direction: row;
@@ -21,7 +21,7 @@
 
 .tab-bar-border {
   /* background-color: #808080; */
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgba(126, 131, 136, 0.2) 0px 8px 24px;
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -93,10 +93,12 @@
 	right: 50%;
 	transform: translate(113%, -13%);
 	background: red;
-	height: 16px;
-	line-height: 16px;
-	width: 16px;
+	height: 28rpx;
+	line-height: 28rpx;
+	width: 28rpx;
 	border-radius: 50%;
 	text-align: center;
 	color: #ffffff;
+	font-size: 20rpx;
+	font-weight: normal;
 }

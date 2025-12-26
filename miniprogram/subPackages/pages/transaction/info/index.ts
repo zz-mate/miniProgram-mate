@@ -65,6 +65,7 @@ Page({
       content: "确认删除该账单吗？",
       success(res) {
         if (res.confirm) {
+					wx.vibrateShort({ type: 'heavy' })
           that.handleConfirm()
         }
 

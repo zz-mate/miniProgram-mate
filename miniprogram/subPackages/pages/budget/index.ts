@@ -1,15 +1,18 @@
 // subPackages/pages/budget/index.ts
 import { COLOR } from '../../../utils/color.js';
 const app = getApp()
-
+import SystemConfig from '../../../utils/capsule';
 import { budgetInfo } from '../../../api/budget'
-import { getStorageSync, matchAndSortArrays, calculateRemainingPercentage } from '../../../utils/util'
+import { getStorageSync,getThisDate, matchAndSortArrays, calculateRemainingPercentage } from '../../../utils/util'
 Page({
 
 	/**
 	 * 页面的初始数据
 	 */
 	data: {
+		scrollHeight:0,
+		navBarHeight:0,
+		statusBarHeight:0,
 		navBgColor: COLOR.white,
 		height: app.globalData.systemInfo.autoheight + 120,
 		userId: null,
@@ -66,6 +69,7 @@ Page({
 			budgetInfo: res.data,
 			categoryList: res.data?.categories,
 		})
+		this.getSccollHeight()
 		// console.log(res.data)
 		// let list = res.data?.categories || []
 		// this.getCategoryListFn(list)
@@ -80,6 +84,45 @@ Page({
 			routeType: "wx://upwards"
 		})
 	},
+	handleCategoryBillPage(evt){
+		wx.vibrateShort({ type: 'heavy' })
+		const {category_id,category_name} = evt.currentTarget.dataset
+		let bookInfo = getStorageSync("bookInfo")
+		let userInfo = getStorageSync("userInfo")
+		let url = "/subPackages/pages/transaction/date/index?start_time=" + getThisDate('YY-MM') + '&type=' + 100 + '&bookId=' + bookInfo.id + '&userId=' + userInfo.id + '&categoryId=' + category_id + '&categoryName=' + category_name
+		wx.navigateTo({
+			url
+		})
+	},
+		/**
+	 * 顶部高度
+	 */
+		initSystemConfig() {
+			const capsuleConfig = SystemConfig.getCapsuleConfig();
+			this.setData({
+				navBarHeight: capsuleConfig.navBarHeight,
+				statusBarHeight: capsuleConfig.statusBarHeight,
+			});
+		},
+		/**
+	 * 获取中间区域高度
+	 */
+		getSccollHeight() {
+		
+			const query = wx.createSelectorQuery();
+			query.select('.header-card').boundingClientRect();
+			query.select('.budget-category-title').boundingClientRect();
+			
+			query.exec((res) => {
+				console.log(res)
+				if (res) {
+					this.setData({
+						scrollHeight: res[0].height + res[1].height  + this.data.navBarHeight + this.data.statusBarHeight + 20
+					});
+				}
+			})
+	
+		},
 	/**
 	 * 
 	 * 获取焦点
@@ -91,7 +134,7 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad() {
-
+		this.initSystemConfig()
 
 	},
 

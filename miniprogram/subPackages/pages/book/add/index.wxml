@@ -1,0 +1,22 @@
+<!--subPackages/pages/book/add/index.wxml-->
+<navigation-bar title="添加账本" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+background="{{navBgColor}}">
+
+</navigation-bar>
+
+<view class="book-container">
+	 <view class="book-name radius-10 flex flex-align-items-center flex-space-between">
+	 <view class="label">名称</view>
+	 <view class="input">
+		<input class="book_placeholder num" type="text" placeholder="请输入" maxlength="10"
+				adjust-position="{{false}}" bindinput="bindKeyInput" />
+	 </view>
+	 </view>
+</view>
+
+
+<view class="shortcut" bind:tap="handleBookSave">
+	<view class="shortcut_count radius-10 flex flex-center" >
+	保存
+	</view>
+</view>

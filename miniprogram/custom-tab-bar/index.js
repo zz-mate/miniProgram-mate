@@ -10,16 +10,16 @@ Component({
 		color: "#999999",
 		selectedColor: "#0000000",
 		list: [{
-				pagePath: "/pages/home/index",
-				// iconPath: "https://env-00jxubueh4pn.normal.cloudstatic.cn/%E9%BB%98%E8%AE%A4%E5%8D%A0%E4%BD%8D%E5%9B%BE.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c",
-				// selectedIconPath: "https://env-00jxubueh4pn.normal.cloudstatic.cn/占位图.png?expire_at=1764260519&er_sign=40f5410d993a60cc1533a1f89d5047ab",
+				pagePath: "/pages/index/index",
+				// iconPath: "/static/icon/icon-Placeholder-image.png",
+				// selectedIconPath: "/static/icon/icon-Placeholder-image.png",
 				text: "流水",
 				badge: ''
 			},
 			{
 				pagePath: "/pages/plan/index",
-				// iconPath: "https://env-00jxubueh4pn.normal.cloudstatic.cn/%E9%BB%98%E8%AE%A4%E5%8D%A0%E4%BD%8D%E5%9B%BE.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c",
-				// selectedIconPath: "https://env-00jxubueh4pn.normal.cloudstatic.cn/占位图.png?expire_at=1764260519&er_sign=40f5410d993a60cc1533a1f89d5047ab",
+				// iconPath: "/static/icon/icon-Placeholder-image.png",
+				// selectedIconPath: "/static/icon/icon-Placeholder-image.png",
 				text: "计划",
 				badge: ''
 			},
@@ -32,16 +32,16 @@ Component({
 			},
 			{
 				pagePath: "/pages/statement/index",
-				// iconPath: "https://env-00jxubueh4pn.normal.cloudstatic.cn/%E9%BB%98%E8%AE%A4%E5%8D%A0%E4%BD%8D%E5%9B%BE.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c",
-				// selectedIconPath: "https://env-00jxubueh4pn.normal.cloudstatic.cn/占位图.png?expire_at=1764260519&er_sign=40f5410d993a60cc1533a1f89d5047ab",
+				// iconPath: "/static/icon/icon-Placeholder-image.png",
+				// selectedIconPath: "/static/icon/icon-Placeholder-image.png",
 
 				text: "报表",
 				badge: ''
 			},
 			{
 				pagePath: "/pages/mine/index",
-				// iconPath: "https://env-00jxubueh4pn.normal.cloudstatic.cn/%E9%BB%98%E8%AE%A4%E5%8D%A0%E4%BD%8D%E5%9B%BE.png?expire_at=1764260147&er_sign=65fb2b3aacb3f58524e031a6f1bc6a5c",
-				// selectedIconPath: "https://env-00jxubueh4pn.normal.cloudstatic.cn/占位图.png?expire_at=1764260519&er_sign=40f5410d993a60cc1533a1f89d5047ab",
+				// iconPath: "/static/icon/icon-Placeholder-image.png",
+				// selectedIconPath: "/static/icon/icon-Placeholder-image.png",
 				text: "我的",
 				badge: ''
 			}
@@ -83,10 +83,10 @@ Component({
 						url: "/pages/login/index"
 					})
 				} else {
-					const userInfo = wx.getStorageSync('userInfo') || null
+					const bookInfo = wx.getStorageSync('bookInfo')
 		
 					wx.navigateTo({
-						url: "/subPackages/pages/transaction/add/index?bookId=" + userInfo.default_book_id,
+						url: "/subPackages/pages/transaction/add/index?bookId=" + bookInfo.id,
 						routeType: "wx://upwards"
 					})
 				}
