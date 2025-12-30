@@ -1,14 +1,12 @@
-// components/z-cell-group/z-cell-group.ts
+// subPackagesMine/pages/integrate/index.ts
+import { COLOR } from '../../../utils/color.js';
 Page({
-  options: {
-    // styleIsolation: 'shared'
-    addGlobalClass: true,
-  },
+
   /**
    * 页面的初始数据
    */
   data: {
-
+		navBgColor: COLOR.white,
   },
 
   /**
@@ -29,7 +27,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+		this.getTabBar().setData({ selected: 3 })
   },
 
   /**

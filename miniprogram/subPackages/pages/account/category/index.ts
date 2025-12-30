@@ -2,12 +2,14 @@
 const app = getApp()
 import { getStorageSync } from '../../../../utils/util';
 import { getAccountIndexCategoryList } from '../../../../api/account'
+import { COLOR } from '../../../../utils/color';
 Page({
 
 	/**
 	 * 页面的初始数据
 	 */
 	data: {
+		height: app.globalData.systemInfo.autoheight,
 		title:"",
 		list: [],
 		parentId:0,
@@ -15,6 +17,7 @@ Page({
     scrollViewId: "",
     barTop: 0,
     showLetter: false,
+		navBgColor:COLOR.white
 	},
 	/**
 	 * 账本分类列表

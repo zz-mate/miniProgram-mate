@@ -24,65 +24,121 @@
 		"miniprogram": {
 			"list": [
 				{
-					"name": "pages/plan/index",
-					"pathName": "pages/plan/index",
-					"query": "",
+					"name": "subPackages/pages/transaction/bill/index",
+					"pathName": "subPackages/pages/transaction/bill/index",
+					"query": "date=2025&yearMonthMoreActive=1&type=0",
 					"scene": null,
 					"launchMode": "default"
 				},
 				{
-					"name": "subPackagesMine/pages/userInfo/edit/index",
-					"pathName": "subPackagesMine/pages/userInfo/edit/index",
-					"query": "type=nickname&value=%E5%93%88%E5%93%88",
+					"name": "subPackages/pages/transaction/bill/index",
+					"pathName": "subPackages/pages/transaction/bill/index",
+					"query": "date=2025&categoryId=23&bookId=13&userId=18&type=2&categoryName=%E5%8A%9E%E5%85%AC&yearMonthMoreActive=1",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/bill/index",
+					"pathName": "subPackages/pages/transaction/bill/index",
+					"query": "date=2025&categoryId=undefined&bookId=13&userId=18&type=2&categoryName=undefined&yearMonthMoreActive=1",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/bill/index",
+					"pathName": "subPackages/pages/transaction/bill/index",
+					"query": "date=2025&yearMonthMoreActive=1",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/bill/index",
+					"pathName": "subPackages/pages/transaction/bill/index",
+					"query": "date=2025&categoryId=23&bookId=13&userId=18&type=2&categoryName=%E5%8A%9E%E5%85%AC&yearMonthMoreActive=1",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/bill/index",
+					"pathName": "subPackages/pages/transaction/bill/index",
+					"query": "date=2025&categoryId=23&bookId=13&userId=18&type=2",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/bill/index",
+					"pathName": "subPackages/pages/transaction/bill/index",
+					"query": "date=2025&categoryId=23&bookId=13&userId=18",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/dates/index",
+					"pathName": "subPackages/pages/transaction/dates/index",
+					"query": "start_time=2025&type=2&bookId=13&userId=18&categoryId=undefined&categoryName=undefined&title=2025%E5%B9%B4",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
 					"name": "subPackages/pages/transaction/date/index",
 					"pathName": "subPackages/pages/transaction/date/index",
-					"query": "start_time=2025-12&type=100&bookId=1&userId=1&categoryId=undefined&categoryName=undefined&title=2025%E5%B9%B412%E6%9C%88",
+					"query": "start_time=2025&type=2&bookId=13&userId=18&categoryId=23&categoryName=%E5%8A%9E%E5%85%AC&title=undefined",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
-					"name": "subPackages/pages/transaction/date/index",
-					"pathName": "subPackages/pages/transaction/date/index",
-					"query": "start_time=2025-12&type=100&bookId=1&userId=1&categoryId=undefined&categoryName=undefined",
+					"name": "subPackages/pages/transaction/data/index",
+					"pathName": "subPackages/pages/transaction/data/index",
+					"query": "date=2025-12&typeIndex=0&title=2025%E5%B9%B412%E6%9C%88",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
-					"name": "subPackages/pages/transaction/add/index",
-					"pathName": "subPackages/pages/transaction/add/index",
-					"query": "bookId=1",
+					"name": "pages/statement/index",
+					"pathName": "pages/statement/index",
+					"query": "",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
-					"name": "subPackages/pages/transaction/calendar/index",
-					"pathName": "subPackages/pages/transaction/calendar/index",
-					"query": "type=",
+					"name": "subPackages/pages/transaction/info/index",
+					"pathName": "subPackages/pages/transaction/info/index",
+					"query": "id=116&type=2",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
-					"name": "subPackages/pages/budget/add/index",
-					"pathName": "subPackages/pages/budget/add/index",
-					"query": "bookId=4&userId=4",
+					"name": "pages/mine/index",
+					"pathName": "pages/mine/index",
+					"query": "",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
-					"name": "subPackages/pages/transaction/add/index",
-					"pathName": "subPackages/pages/transaction/add/index",
-					"query": "bookId=2",
+					"name": "subPackages/pages/category/index",
+					"pathName": "subPackages/pages/category/index",
+					"query": "typeIndex=1",
 					"launchMode": "default",
 					"scene": null
 				},
 				{
-					"name": "subPackages/pages/transaction/add/index",
-					"pathName": "subPackages/pages/transaction/add/index",
-					"query": "bookId=2",
+					"name": "subPackages/pages/category/index",
+					"pathName": "subPackages/pages/category/index",
+					"query": "typeIndex=1",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/category/index",
+					"pathName": "subPackages/pages/category/index",
+					"query": "typeIndex=1",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/category/index",
+					"pathName": "subPackages/pages/category/index",
+					"query": "",
 					"launchMode": "default",
 					"scene": null
 				}

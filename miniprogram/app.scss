@@ -1,4 +1,12 @@
 /**app.wxss**/
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  color: transparent;
+  background: transparent;
+}
+
 page {
 	box-sizing: border-box;
 	background-color: #f4f2f7;
@@ -14,7 +22,10 @@ page {
 .num {
 	font-family: 'WeChatSansStd';
 }
-
+.ad-card{
+	margin: 0 20rpx;
+	overflow: hidden;
+}
 .container {
 	height: 100%;
 	width: 100%;
@@ -31,7 +42,7 @@ $z-color-error: #FF4308;
 /** 主题颜色**/
 $-theme-color:#FFD608;
 /* 图表*/
-$-chart-expense-color:#5BC0EB;
+$-chart-expense-color:#FFD608;
 $-chart-income-color:#FF6B6B;
 $-chart-jy-color:#FFB74D;
 /* 文字基本颜色 */
@@ -195,7 +206,7 @@ input {
 	justify-content: center;
 	background-color: #FFF;
 	overflow: hidden;
-
+border-radius: 10rpx;
 	&-icon {
 		width: 240rpx;
 		height: 240rpx;
@@ -250,6 +261,7 @@ input {
 
 /*弹窗样式*/
 .popup-content {
+	position: relative;
 	width: 100vw;
 	background-color: #FFF;
 }
@@ -285,12 +297,15 @@ input {
 		letter-spacing: 2rpx;
 		color: #000;
 		text-align: center;
-		background-color: $z-bg-color;
+		background-color: $-theme-color;
 	}
 }
 
 .btn-hover {
 	background-color: #f4f2f7b6 !important;
+}
+.btn-yellow-hover {
+	background-color: #ffd608b6 !important;
 }
 
 /* scroll-view 容器样式 */
@@ -330,9 +345,7 @@ input {
 
 
 
-
-
-
+/**账单列表*/
 .bill-item {
 
 	&_header {
@@ -348,10 +361,15 @@ input {
 	}
 
 	&_items {
+		position: relative;
+		left: 0;
+		transition: all 0.3s;
 		padding: 0 20rpx;
 		// margin: 4rpx 0;
 		background-color: #FFF;
 		overflow: hidden;
+
+		transition: all 0.3s;
 
 		.left-icon {
 			width: 54rpx;
@@ -400,3 +418,63 @@ input {
 		}
 	}
 }
+
+
+
+
+
+/*****滑动删除***/
+.bill-container {
+	background: #fff;
+	overflow: hidden;
+
+
+	.bill-wrapper {
+		position: relative;
+		top: 0;
+		overflow: hidden;
+	}
+
+	.bill-wrapper .bill-wrapper_item {
+		position: relative;
+		left: 0;
+		height: 100%;
+		transition: all 0.3s;
+	}
+
+	.bill-wrapper .del_button {
+		position: absolute;
+		right: -130rpx;
+		width: 130rpx;
+		height: 100%;
+		// height: 253rpx;
+		background-color: #F64226;
+		color: #fff;
+		top: 0;
+		text-align: center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		transition: all 0.3s;
+		font-size: 22rpx;
+	}
+
+	.active .bill-wrapper_item {
+		height: 100%;
+		left: -130rpx;
+	}
+
+	.active .del_button {
+		right: 0;
+
+	}
+
+}
+
+
+
+
+
+
+
+

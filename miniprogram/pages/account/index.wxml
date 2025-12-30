@@ -23,7 +23,9 @@ background="{{navBgColor}}">
   </view>
 </view>
 
-
+<view class="ad-card radius-10">
+	<ad-custom unit-id="adunit-e73d7688db469ffd" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
+</view>
 
 <view class="account-container" wx:if="{{accountList.length}}">
   <collapse title="{{item.category_name}}" count="{{item.children.length}}" totalMoney="{{eyeIndex==1?item.category_remaining_amount||'0.00':'*******'}}"
@@ -48,7 +50,7 @@ background="{{navBgColor}}">
   <view class="no-data radius-10" style="margin-top:{{token?'':'20rpx'}}">
     <view class="no-data-icon">
       <image
-        src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+			src="/static/async-icon/icon-not-bill.png"
         mode="widthFix" />
     </view>
     <view class="no-data-text">
@@ -69,7 +71,7 @@ background="{{navBgColor}}">
   <view class="develop-tips">
     <view class="develop-tips-icon">
       <image
-        src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+			src="/static/async-icon/icon-not-bill.png"
         mode="widthFix" />
     </view>
     <view>抱歉呀，这个功能还在 “修炼”</view>
@@ -78,8 +80,8 @@ background="{{navBgColor}}">
 </z-popup>
 
 <!-- 底部功能按钮 -->
-<view class="shortcut" bind:tap="handleAccountAdd">
-	<view class="shortcut_count radius-10 flex flex-center" >
+<!-- <view class="shortcut" bind:tap="handleAccountAdd">
+	<view class="shortcut_count radius-10 flex flex-center"  hover-class="btn-yellow-hover" hover-stay-time='50' >
 		添加
 	</view>
-</view>
+</view> -->

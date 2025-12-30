@@ -1,0 +1,20 @@
+<!--subPackagesMine/pages/integrate/index.wxml-->
+<navigation-bar title="我的积分" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="#000"
+	background="{{navBgColor}}">
+</navigation-bar>
+
+<view class="tool-container">
+	<view class="no-data radius-10">
+  <view class="no-data-icon">
+    <image
+		src="/static/async-icon/icon-not-bill.png"
+      mode="widthFix" />
+  </view>
+  <view class="no-data-text">
+    <view>抱歉呀，这个功能还在 “修炼”</view>
+    <view>等它解锁新技能就和您见面</view>
+  </view>
+</view>
+</view>
+
+

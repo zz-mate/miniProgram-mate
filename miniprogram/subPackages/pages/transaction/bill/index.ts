@@ -1,5 +1,6 @@
 // subPackages/pages/transaction/bill/index.ts
 import { COLOR } from '../../../../utils/color.js';
+import { playBtnAudio } from '../../../../utils/audioUtil'
 import { getStorageSync, getThisDate, formatCurrentTime, generateYearGroupList, findYearIndex, generateYearMonthNestedList, findYearMonthInNestedList } from '../../../../utils/util';
 import { getTransactionList } from '../../../../api/transaction'
 // 定义常量，统一管理弹窗类型相关的key前缀
@@ -17,6 +18,7 @@ Page({
 		scrollHeight: 0,
 		navBgColor: COLOR.white,
 		yearMonthMoreActive: 0,
+		categoryId: "", bookId: "", userId: "", categoryName: "",
 		tabsList: [{ id: 1, name: "全部" }, { id: 2, name: "年" }, { id: 3, name: "月" }],
 		queryParams: {
 			start_time: "" as string,
@@ -49,12 +51,17 @@ Page({
 		MonthLen: 0,
 		split_year: '',
 		split_month: '',
-		chooseYearDate:getThisDate('YY')+'-'+getThisDate("M")
+		chooseYearDate: getThisDate('YY') + '-' + getThisDate("M"),
+		// 新增标记：是否跳转到详情页（用于判断是否是返回行为）
+		isJumpToDetail: false,
+		// 新增标记：是否首次进入页面
+		isFirstEnter: true,
 	},
 	/**点击TAB 默认日期 */
 	handleChange(evt) {
 		const { sub } = evt.detail.delta
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		if (sub == 0) {
 			this.setData({
 				'queryParams.start_time': '',
@@ -80,7 +87,9 @@ Page({
 		}
 
 		this.setData({
-			yearMonthMoreActive: sub
+			yearMonthMoreActive: sub,
+			chooseYearDate: getThisDate('YY') + '-' + getThisDate("M")
+
 		})
 		const { typeIndex } = this.data
 		let type_idx = typeIndex == 0 ? '' : typeIndex == 1 ? 2 : 1
@@ -88,11 +97,13 @@ Page({
 
 	},
 	async handleTransactionList(type) {
+		const { categoryId } = this.data
 		let data = {
 			userId: getStorageSync("userInfo").id,
 			bookId: getStorageSync("bookInfo").id,
 			...this.data.queryParams,
-			type
+			type,
+			categoryId
 		}
 
 		let res: any = await getTransactionList(data)
@@ -132,7 +143,8 @@ Page({
 		// }
 	},
 	handleTabType(evt) {
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		const { type } = evt.currentTarget.dataset
 		this.setData({
 			typeIndex: type
@@ -163,38 +175,51 @@ Page({
 
 	},
 	handleBillDataPage(evt) {
-		const { date,name } = evt.currentTarget.dataset
-		const { typeIndex } = this.data
+		const { name } = evt.currentTarget.dataset
+		const { typeIndex, queryParams, categoryId, categoryName } = this.data
 		let bookInfo = getStorageSync("bookInfo")
 		let userInfo = getStorageSync("userInfo")
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+		let that = this
 		wx.showActionSheet({
 			itemList: ['趋势统计', '账单明细'],
-			success (res) {
+			success(res) {
 				wx.vibrateShort({ type: 'heavy' })
-				if(res.tapIndex==0){
-wx.navigateTo({
-			url: `/subPackages/pages/transaction/data/index?date=${date}&typeIndex=${typeIndex}&title=${name}`
-		})
-				}else{
-					let url = "/subPackages/pages/transaction/date/index?start_time=" + date + '&type=' + 100 + '&bookId=' + bookInfo.id + '&userId=' + userInfo.id + '&categoryId=' + undefined + '&categoryName=' + undefined + '&title='+name
+				if (res.tapIndex == 0) {
+					// 跳转前标记：已跳转到详情页
+					playBtnAudio('/static/audio/click.mp3', 1000);
+					that.setData({
+						isJumpToDetail: true
+					})
+					wx.navigateTo({
+						url: `/subPackages/pages/transaction/data/index?date=${queryParams.start_time}&typeIndex=${typeIndex}&title=${name}`
+					})
+				} else {
+					playBtnAudio('/static/audio/click.mp3', 1000);
+					// 跳转前标记：已跳转到详情页
+					that.setData({
+						isJumpToDetail: true
+					})
+					let url = "/subPackages/pages/transaction/date/index?start_time=" + queryParams.start_time + '&type=' + 100 + '&bookId=' + bookInfo.id + '&userId=' + userInfo.id + '&categoryId=' + categoryId + '&categoryName=' + categoryName + '&title=' + name
 					wx.navigateTo({
 						url
 					})
 				}
-			
+
 			},
-			fail (res) {
+			fail(res) {
 				console.log(res.errMsg)
 			}
 		})
-		
-		
+
+
 	},
 
 
 	handleYear(evt) {
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		this.setData({
 			'queryParams.start_time': evt.currentTarget.dataset.year
 		})
@@ -203,18 +228,20 @@ wx.navigateTo({
 	},
 
 	changeMonth(evt) {
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		const { current } = evt.detail
 		this.setData({
 			groupMonthIndex: current,
 			'queryParams.start_time': this.data.monthList[current][0].year,
 			split_year: this.data.monthList[current][0].year,
-			
+
 		})
 	},
 
 	handleMonth(evt) {
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		let split_month = evt.currentTarget.dataset.month
 		let { split_year } = this.data
 		let month = split_month < 10 ? '0' + split_month : split_month
@@ -222,7 +249,7 @@ wx.navigateTo({
 		this.setData({
 			'queryParams.start_time': split_year + '-' + month,
 			split_month: evt.currentTarget.dataset.month,
-			chooseYearDate:split_year+'-'+split_month
+			chooseYearDate: split_year + '-' + split_month
 		})
 		let type_idx = this.data.typeIndex == 0 ? '' : this.data.typeIndex == 1 ? 2 : 1
 		this.handleTransactionList(type_idx)
@@ -242,7 +269,8 @@ wx.navigateTo({
 		this.updatePopupStatus(type, !delta);
 	},
 	handlePopup() {
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		const yearMonthMoreActive = this.data.yearMonthMoreActive
 		let type = ''
 		switch (yearMonthMoreActive) {
@@ -278,7 +306,7 @@ wx.navigateTo({
 				// 'queryParams.start_time':
 				groupMonthIndex: monthIndexInfo.yearGroupIndex,
 				// MonthLen
-				isDataMReady:true
+				isDataMReady: true
 			})
 		}
 		// 封装更新弹窗状态的方法
@@ -308,12 +336,12 @@ wx.navigateTo({
 		};
 
 		if (type == 'month') {
-			let { queryParams, split_year, split_month ,chooseYearDate} = this.data
+			let { queryParams, split_year, split_month, chooseYearDate } = this.data
 
 			if (queryParams.start_time.length == 4) {
 				let yy = chooseYearDate.split('-')[0]
 				let mm = chooseYearDate.split('-')[1]
-				let m = mm<10?'0'+mm:mm
+				let m = mm < 10 ? '0' + mm : mm
 				this.setData({
 					'queryParams.start_time': yy + '-' + m
 				})
@@ -330,21 +358,40 @@ wx.navigateTo({
 
 
 
-
+		// 跳转到账单详情页面
+		handleTransactionInfo(evt) {
+			const { transaction_id, transaction_type } = evt.currentTarget.dataset
+			wx.vibrateShort({ type: 'light' })
+			playBtnAudio('/static/audio/click.mp3', 1000);
+			wx.navigateTo({
+				url: `/subPackages/pages/transaction/info/index?id=${transaction_id}&type=${transaction_type}`
+			})
+		},
 
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad({ date, type }) {
+	onLoad({ date, yearMonthMoreActive, type, categoryId, bookId, userId, categoryName }) {
 		this.getScrollHeight()
-
+		let type_idx = Number(type) == 2 ? 1 :  Number(type)  == 1 ? 2 : 0
 		this.setData({
-			'queryParams.start_time': typeof (date) == 'undefined' ? type : date,
-			yearMonthMoreActive: typeof (date) == 'undefined' ? 1 : 2,
+			'queryParams.start_time': date,
+			yearMonthMoreActive:Number(yearMonthMoreActive),	
+			type,
+			typeIndex:type_idx,
+			categoryId,
+			bookId,
+			userId,
+			categoryName,
+			// 初始化标记
+			isFirstEnter: true,
+			isJumpToDetail: false,
+			// typeIndex: Number(type), 
 			// yearIndex: findYearIndex({ targetYear: type, yearGroupList:this.data.yearList})
 		})
-
-		this.handleTransactionList('')
+		// let type_idx = Number(type) == 2 ? 1 :  Number(type)  == 1 ? 2 : 0
+		// console.log(type_idx)
+		this.handleTransactionList(type)
 	},
 
 	/**
@@ -358,7 +405,23 @@ wx.navigateTo({
 	 * 生命周期函数--监听页面显示
 	 */
 	onShow() {
-
+		// 核心判断逻辑：
+		// 1. 不是首次进入（排除onLoad后的首次onShow）
+		// 2. 是从详情页返回（isJumpToDetail为true）
+		if (!this.data.isFirstEnter && this.data.isJumpToDetail) {
+			console.log("从账单详情页返回，执行刷新")
+			this.handleTransactionList('')
+			// 刷新后重置标记，避免重复刷新
+			this.setData({
+				isJumpToDetail: false
+			})
+		}
+		// 首次进入后，将标记置为false（后续onShow都是非首次）
+		if (this.data.isFirstEnter) {
+			this.setData({
+				isFirstEnter: false
+			})
+		}
 	},
 
 	/**

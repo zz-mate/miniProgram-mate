@@ -1,7 +1,8 @@
 <!--subPackages/pages/transaction/add/index.wxml-->
 <navigation-bar title="" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
-	background="{{navBgColor}}">
-	<view slot="center" class="subsection flex flex-align-items-center" data-type="book" bind:tap="handlePopup">
+	background="{{navBgColor}}"> 
+	<!-- bind:tap="handlePopup" -->
+	<view slot="center" class="subsection flex flex-align-items-center" data-type="book">
 		{{bookInfo.name}}
 		<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"
 			wx:if="{{userInfo.level_exp>=200}}" />
@@ -28,13 +29,13 @@
 			</view>
 			<view class="icon-title">{{categoryList[categoryIndex].name}}</view>
 		</view>
-		<view class="money num {{selectedTab==0?'active':''}}">{{bill.num || '0.00'}}</view>
+		<view class="money num {{selectedTab==0?'active':''}}">{{calcExpression ||'0.00'}}</view>
 		<!-- <view class="money num calc-expression">{{calcExpression || bill.num}}</view> -->
 
 	</view>
 	<!-- <text class="exp-text">{{calcExpression || '0'}}</text>
     <text class="num-text">¥{{bill.num.toFixed(2)}}</text> -->
-	<view class=" num calc-expression" wx:if="{{calcExpression}}">{{calcExpression ||'0.00'}}</view>
+	<!-- <view class=" num calc-expression" wx:if="{{calcExpression}}">{{calcExpression ||'0.00'}}</view> -->
 </view>
 
 </view>
@@ -61,6 +62,13 @@
 								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 							</view>
 							<view class="icon-title">{{item.name}}</view>
+						</view>
+						<view class="item"
+							bind:tap="handleSettingCategory">
+							<view class="icon">
+								<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+							</view>
+							<view class="icon-title">设置</view>
 						</view>
 					</view>
 
@@ -100,7 +108,7 @@
 				</view>
 			</view>
 
-			<scroll-view class="flex category-child-list" scroll-x="{{true}}"
+			<!-- <scroll-view class="flex category-child-list" scroll-x="{{true}}"
 				style="height:40rpx;width:100%;white-space: nowrap" wx:if="{{categoryList[categoryIndex].children.length}}">
 				<block>
 					<view wx:for="{{categoryList[categoryIndex].children}}" wx:key="id" data-category="{{item}}"
@@ -112,8 +120,8 @@
 
 
 
-				<!-- <view class="not-active radius-4">+添加标签</view> -->
-			</scroll-view>
+				<view class="not-active radius-4">+添加标签</view>
+			</scroll-view> -->
 		</view>
 
 
@@ -147,9 +155,9 @@
 				</scroll-view> -->
 			</view>
 			<view class="right">
-				<image class="upload"
+				<!-- <image class="upload"
 					src="https://env-00jxubueh4pn.normal.cloudstatic.cn/相机 (1).png?expire_at=1764470058&er_sign=a35a4a1ac05926913a3c6d243800f5dc"
-					mode="" />
+					mode="" /> -->
 			</view>
 
 		</view>
@@ -165,7 +173,7 @@
         <view class='key dot' hover-class="weui-cell_active" bindtap='tapDel'
 			bindlongpress="longpressDel" bindtouchend="stopInterval">
           <image class="del-image"
-            src="https://env-00jxubueh4pn.normal.cloudstatic.cn/miniProgram/%E7%94%B3%E8%AF%B7%E5%9B%9E%E9%80%80.png"
+            src="/static/icon/icon-backspace.png"
             mode="widthFix"></image>
         </view>
       </view>

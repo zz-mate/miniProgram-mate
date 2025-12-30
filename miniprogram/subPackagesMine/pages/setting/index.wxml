@@ -108,7 +108,7 @@
             </view>
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150' bind:tap="changeBgMode">
 					<view class="icon">
 						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
 					</view>

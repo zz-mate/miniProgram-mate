@@ -1,10 +1,7 @@
 {
   "usingComponents": {
-    "z-popup":"../../components/z-popup/z-popup",
-    "z-tabs":"../../components/z-tabs/z-tabs",
-    "z-divider":"../../components/z-divider/z-divider",
-    "z-back-top":"../../components/z-back-top/z-back-top",
-    "ec-canvas": "../../components/ec-canvas/ec-canvas"
+		"z-tabs":"../../components/z-tabs/z-tabs",
+		"ec-canvas": "../../components/ec-canvas/ec-canvas"
   }
 }
 

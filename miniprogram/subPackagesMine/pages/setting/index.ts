@@ -1,6 +1,7 @@
 // subPackagesMine/pages/setting/index.ts
 import { getStorageSync } from '../../../utils/util';
 import { COLOR } from '../../../utils/color.js';
+import {playBtnAudio} from '../../../utils/audioUtil'
 const app = getApp()
 Page({
 
@@ -33,8 +34,26 @@ Page({
 	},
 	handlePageUrl(evt) {
 		const { url } = evt.currentTarget.dataset
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		wx.navigateTo({ url })
+	},
+	changeBgMode() {
+		wx.showActionSheet({
+			itemList: ['跟随系统', '深色模式', '浅色模式'],
+			success(res) {
+				wx.vibrateShort({ type: 'heavy' })
+				if (res.tapIndex == 0) {
+					playBtnAudio('/static/audio/click.mp3', 1000);
+				} else {
+					playBtnAudio('/static/audio/click.mp3', 1000);
+				}
+
+			},
+			fail(res) {
+				console.log(res.errMsg)
+			}
+		})
 	},
 	/**
 	 * 生命周期函数--监听页面加载

@@ -36,7 +36,7 @@ Page({
 		let userInfo = getStorageSync("userInfo")
 		console.log(userInfo)
 		this.setData({
-			level_exp:userInfo.level_exp
+			level_exp:userInfo.levelInfo.user_level_exp
 		})
   },
 

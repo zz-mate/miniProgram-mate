@@ -15,7 +15,8 @@
         "pages/userInfo/index",
         "pages/userInfo/edit/index",
         "pages/qrcode/index",
-        "pages/setting/index"
+        "pages/setting/index",
+				"pages/integrate/index"
       ]
     },
     {
@@ -24,6 +25,7 @@
         "pages/transaction/add/index",
         "pages/transaction/bill/index",
         "pages/transaction/date/index",
+				"pages/transaction/dates/index",
         "pages/transaction/data/index",
         "pages/transaction/info/index",
         "pages/transaction/import/index",
@@ -37,7 +39,8 @@
         "pages/book/add/index",
         "pages/account/category/index",
         "pages/account/list/index",
-        "pages/account/add/index"
+        "pages/account/add/index",
+				"pages/category/index"
       ]
     }
   ],
@@ -87,5 +90,7 @@
   },
   "componentFramework": "glass-easel",
   "lazyCodeLoading": "requiredComponents",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+	"darkmode": true,
+	"themeLocation": "theme.json"
 }

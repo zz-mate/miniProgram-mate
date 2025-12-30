@@ -4,7 +4,7 @@ import { getBillByMonthChart } from '../../../../api/statement'
 import SystemConfig from '../../../../utils/capsule';
 import { COLOR } from '../../../../utils/color.js';
 import * as echarts from '../../../../components/ec-canvas/echarts';
-
+import {playBtnAudio} from '../../../../utils/audioUtil'
 Page({
 
 	/**
@@ -611,7 +611,8 @@ getLine(xData, yData) {
 * 切换折叠/展开状态 环形图
 */
 	togglePieExpand() {
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		this.setData({
 			isPieExpand: !this.data.isPieExpand,
 		});
@@ -620,7 +621,8 @@ getLine(xData, yData) {
 	 * 跳转到日期账单列表
 	 */
 	handleDatePage(evt) {
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		let { typeIndex } = this.data
 		let bookInfo = getStorageSync("bookInfo")
 		let userInfo = getStorageSync("userInfo")

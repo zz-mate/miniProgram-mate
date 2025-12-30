@@ -1,5 +1,0 @@
-<view class="cellList">
-  <slot ></slot>
-
-
-</view>

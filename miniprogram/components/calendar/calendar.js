@@ -1,3 +1,4 @@
+import {playBtnAudio} from '../../utils/audioUtil'
 Component({
   properties: {
     spot: {
@@ -124,7 +125,8 @@ Component({
 
     // 上月切换按钮点击
     lastMonth() {
-      wx.vibrateShort({ type: 'heavy' })
+			playBtnAudio('/static/audio/click.mp3', 1000);
+			wx.vibrateShort({ type: 'light' })
       const lastMonth = new Date(this.data.selectDay.year, this.data.selectDay.month - 2)
       const year = lastMonth.getFullYear()
       const month = lastMonth.getMonth() + 1
@@ -133,7 +135,8 @@ Component({
 
     // 下月切换按钮点击
     nextMonth() {
-      wx.vibrateShort({ type: 'heavy' })
+			playBtnAudio('/static/audio/click.mp3', 1000);
+			wx.vibrateShort({ type: 'light' })
       const nextMonth = new Date(this.data.selectDay.year, this.data.selectDay.month)
       const year = nextMonth.getFullYear()
       const month = nextMonth.getMonth() + 1
@@ -183,7 +186,7 @@ Component({
 
       // 遍历日历数组，匹配day赋值金额
       return dateList.map(item => {
-				console.log(item)
+				// console.log(item)
         // 统一day格式：转为两位数字符串（如 1 → "01"，18 → "18"）
         const itemDay = item.day.toString().padStart(2, '0');
 				const itemMonth = item.month.toString().padStart(2, '0');

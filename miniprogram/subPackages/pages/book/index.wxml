@@ -71,7 +71,7 @@
 
 <!-- 底部功能按钮 -->
 <view class="shortcut" bind:tap="handleBookAdd">
-	<view class="shortcut_count radius-10 flex flex-center" hover-class="btn-hover" hover-stay-time='10' >
+	<view class="shortcut_count radius-10 flex flex-center" hover-class="btn-yellow-hover" hover-stay-time='10' >
 		添加
 	</view>
 </view>

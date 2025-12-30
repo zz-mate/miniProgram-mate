@@ -2,6 +2,7 @@
 import { transactionInfo,removeTransaction } from "../../../../api/transaction"
 import { COLOR } from '../../../../utils/color.js';
 import { getStorageSync} from '../../../../utils/util';
+import {playBtnAudio} from '../../../../utils/audioUtil'
 Page({
 
   /**
@@ -59,13 +60,14 @@ Page({
    */
   handleRemove(){
     let that = this
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
     wx.showModal({
       title: "温馨提示",
       content: "确认删除该账单吗？",
       success(res) {
         if (res.confirm) {
-					wx.vibrateShort({ type: 'heavy' })
+					playBtnAudio('/static/audio/click.mp3', 1000);
           that.handleConfirm()
         }
 

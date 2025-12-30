@@ -1,0 +1,144 @@
+<!--subPackages/pages/category/index.wxml-->
+<!-- <navigation-bar title="类别设置" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="{{navBgColor}}">
+</navigation-bar> -->
+<navigation-bar class="nav-bar" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="{{navBgColor}}">
+	<view slot="center" class="subsection">
+		<z-tabs bind:change="onTapTab" active="{{selectedTab}}" tabs="{{typeList}}"></z-tabs>
+	</view>
+</navigation-bar>
+<view class="tab-container" style="height: calc(100vh - {{ shortcutTabHeight+height}}px); overflow: hidden;">
+	<!--	<swiper class="scroll-list" current="{{selectedTab}}" bind:change="onTabChanged"
+		worklet:onscrollstart="onTabTransition" worklet:onscrollupdate="onTabTransition"
+		worklet:onscrollend="onTabTransitionEnd" duration="{{400}}" cache-extent="1">
+		 <swiper-item wx:for="{{swiperTabs}}" wx:key="index" class="swiper-{{index}}" >-->
+	<view class="card" style="height: 100%; box-sizing: border-box;">
+		<!-- 核心优化：添加可滚动容器 scroll-view -->
+		<scroll-view class="list-scroll" scroll-y enable-flex scroll-with-animation show-scrollbar="{{true}}"
+			style="height: 100%;">
+
+			<view class="radius-10 bill-container-cate  ">
+				<block wx:for="{{categoryList}}" wx:for-index="i">
+					<view class="bill-wrapper {{item.status ? '':'active'}}">
+						<view class="bill-wrapper_item bill-item_items cart-list flex flex-space-between flex-center"
+							hover-class="btn-hover" hover-stay-time='150' data-transaction_type="{{item.type}}"
+							data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}"
+							bindtouchstart="touchS" bindtouchmove="touchM">
+							<view class="icon-delete" data-i="{{i}}"  bind:tap="handleShowDelete">
+								<image src="/static/icon/icon-delete-category.png" mode="widthFix" />
+							</view>
+							<view class="left-icon">
+								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+							</view>
+							<view class="borde">
+								<view class="center-info">
+									<view class="title">{{item.name}}</view>
+									<view class="date-other num flex flex-align-items-center">
+									</view>
+								</view>
+							</view>
+
+						</view>
+						<view class="del_button" data-i="{{i}}" data-id="{{item.id}}" data-type="single" bindtap='deleteList'>删除
+						</view>
+					</view>
+				</block>
+			</view>
+
+
+			<view class="radius-10 bill-container-cate" style="margin-top:20rpx" wx:if="{{categoryDelList.length}}">
+				<block wx:for="{{categoryDelList}}" wx:for-index="i">
+					<view class="bill-wrapper">
+						<view class="bill-wrapper_item bill-item_items cart-list flex flex-space-between flex-center"
+							hover-class="btn-hover" hover-stay-time='150' data-transaction_type="{{item.type}}"
+							data-transaction_id="{{item.id}}"  data-index="{{index}}" data-i="{{i}}"
+							>
+							<view class="icon-delete" data-id="{{item.mcudId}}" data-category_id="{{item.id}}"  bind:tap="handleAddCate">
+								<image src="/static/icon/icon-add-category.png" mode="widthFix" />
+							</view>
+							<view class="left-icon">
+								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+							</view>
+							<view class="borde">
+								<view class="center-info">
+									<view class="title">{{item.name}}</view>
+									<view class="date-other num flex flex-align-items-center">
+									</view>
+								</view>
+							</view>
+
+						</view>
+				
+					</view>
+				</block>
+			</view>
+			<!-- <view class="list  radius-10" wx:if="{{categoryList.length}}">
+
+				<block wx:for="{{categoryList}}" wx:key="index">
+
+					<view class="bill-wrapper {{item.status ? '':'active'}}">
+						<view class="bill-wrapper_item item cart-list flex flex-space-between flex-align-items-center"
+							bind:tap="handleChooseCategory" data-i="{{index}}" bindtouchstart="touchS" bindtouchmove="touchM">
+							<view class="icon-delet">
+								<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+							</view>
+							<view class="category-info flex flex-align-items-center">
+								<view class="icon">
+									<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+								</view>
+								<view class="icon-title">{{item.name}}</view>
+							</view>
+							<view class="sort">===</view>
+						</view>
+						<view class="del_button" data-index="{{index}}" data-id="{{item.id}}" data-type="single" bindtap='deleteList'>删除
+						</view>
+					</view>
+
+
+				</block>
+			</view> -->
+
+			<!-- <block wx:else>
+				<view class="no-data-1">
+					<view class="no-data-icon">
+						<image
+							src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
+							mode="" />
+					</view>
+					<view class="no-data-text">
+						<view>抱歉呀，这个功能还在 “修炼”</view>
+						<view>等它解锁新技能就和您见面</view>
+					</view>
+				</view>
+			</block> -->
+		</scroll-view>
+	</view>
+	<!-- </swiper-item>
+	</swiper> -->
+</view>
+
+<view class="shortcut" bind:tap="handleAddCategory">
+	<view class="shortcut_count radius-10 flex flex-center">
+		添加类别
+	</view>
+</view>
+
+
+<!--消费类别 -->
+<z-popup bind:popup="handleChildPopup" showTitle="hasBill" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_hasBill}}" closeOnClickOverlay="{{false}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content" style="height:25vh">
+<view class="del-tips">该类别下存在已记录的账单，删除类别将同时删除关联账单，且操作不可恢复。是否确认删除？</view>
+		<view class="edit-del-btn flex flex-align-items-center flex-space-between flex-center">
+	<view class="del btn radius-10" bind:tap="handleRemoveCate">
+			仍然删除
+	</view>
+	<view class="edit btn radius-10" bind:tap="handleUpdate">
+	取消
+	</view>
+</view>
+	</view>
+
+</z-popup>

@@ -1,5 +1,13 @@
 Component({
   properties: {
+		summary:{
+			type:Object,
+			value:{}
+		},
+		categoryName:{
+			type: String,
+      value: ''
+		},
     // 折叠面板标题
     title: {
       type: String,

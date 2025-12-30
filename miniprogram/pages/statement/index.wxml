@@ -2,22 +2,204 @@
 <navigation-bar title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="#000"
 	background="{{navBgColor}}">
 	<view slot="left">
-		报表
+		<view class=" flex flex-align-items-center">
+			<text>{{bookInfo.name|| '未登录'}}</text>
+			<!-- <image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom" /> -->
+		</view>
+	</view>
+	<view slot="center" class="subsection">
+		<z-tabs bind:change="handleChange" active="{{yearMonthMoreActive}}" tabs="{{tabsList}}"></z-tabs>
 	</view>
 </navigation-bar>
-
-<view class="plan-container">
-	<view class="no-data radius-10">
-  <view class="no-data-icon">
-    <image
-      src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
-      mode="widthFix" />
-  </view>
-  <view class="no-data-text">
-    <view>抱歉呀，这个功能还在 “修炼”</view>
-    <view>等它解锁新技能就和您见面</view>
-  </view>
+<view class="filter-date flex flex-space-between  flex-align-items-center">
+	<view class="place-hoder-lt"></view>
+	<view class="date num flex flex-align-items-center" bind:tap="handlePopup">
+		<text>{{queryParams.start_time}}{{queryParams.end_time}}</text>
+		<!-- <text style="padding:0 12rpx" wx:if="{{queryParams.end_time}}">-</text> -->
+		<!-- <text bind:tap="handlePopup" data-type="end_time"> {{queryParams.end_time}}</text> -->
+		<image wx:if="{{queryParams.start_time}}" src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix"
+			class="icon-choose-arrow-bottom" />
+	</view>
+	<view class="ei-tabs flex flex-align-items-center" wx:if="{{yearMonthMoreActive!=0}}">
+		<view class="e-item radius-4 {{typeIndex==0?'e-active':'def'}}" data-type="{{0}}" bind:tap="changeType">支出</view>
+		<view class="i-item radius-4 {{typeIndex==1?'i-active':'def'}}" data-type="{{1}}" bind:tap="changeType">收入</view>
+	</view>
 </view>
-</view>
+<scroll-view style="height:calc(100vh - {{navBarHeight + statusBarHeight+filterHeight}}px) " type="custom" scroll-y>
+
+	<sticky-section push-pinned-header="{{false}}">
+		<view class="tab-container">
+			<view class="scroll-list">
+				<view class="card-echart">
+					<view class="card radius-10">
+						<!-- <view class="title">支出</view> -->
+						<view class="echart disburse">
+							<ec-canvas id="mychart-dom-line" ec="{{ ec }}"></ec-canvas>
+						</view>
 
 
+						<view class="tips-content flex flex-align-items-center flex-space-between  num radius-4"
+							bind:tap="handleDatePage" data-chart="line" 	data-date="{{queryParams.start_time}}" data-title="{{chartData.lineData.summary.timeRange}}">
+							<view>
+								{{chartData.lineData.summary.timeRange}}，{{typeIndex==0?'支出':typeIndex==1?'收入':'结余'}}
+								共计 {{chartData.lineData.summary.totalCount}} 笔
+								{{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
+								{{chartData.lineData.summary.totalAmount}}
+							</view>
+
+						<view class="icon-arrow">
+					<image src="/static/icon/icon-data-right.png" mode="widthFix"/>
+				</view>
+
+						</view>
+						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.lineData.list}}"
+							hover-class="btn-hover" hover-stay-time='10' data-date="{{item.date}}" data-title="{{item.dateStr}}" data-chart="line"
+							wx:if="{{isLineExpand || index < 3}}" bind:tap="handleDatePage">
+							<view class="day  num radius-4 {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">{{item.day}}</view>
+							<view class="info">
+								<view class="date-money flex flex-space-between num">
+									<text class="date">{{item.dateStr}}</text>
+									<text class="money">{{item.amount}}</text>
+								</view>
+								<view class="progress-container">
+									<view class="progress-bar"
+										style="width: {{item.ratioPercent}}%;background-color:{{typeIndex==0? greenClor:typeIndex==1? redClor : yellowClor}}">
+									</view>
+								</view>
+
+								<view class="num" style="color:#999999">{{item.count}}笔</view>
+							</view>
+
+						</view>
+						<!-- 折叠/展开按钮（只有列表条数>3时显示） -->
+						<view wx:if="{{chartData.lineData.list.length > 3}}"
+							class="unfold flex flex-align-items-center flex-center collapse {{isLineExpand ? 'fold' : ''}}"
+							bind:tap="toggleLineExpand">
+							<text> 点击{{isLineExpand ? '收起' : '展开'}} </text>
+							<image src="/static/icon/icon-unfold-{{isLineExpand?'t':'b'}}.png" mode="widthFix" class="icon-unfold" />
+						</view>
+
+					</view>
+					<view class="card radius-10">
+						<view class="echart pie income">
+							<ec-canvas id="mychart-dom-pie" ec="{{ ec }}"></ec-canvas>
+						</view>
+
+
+
+						<view class="tips-content flex flex-align-items-center flex-space-between num radius-4"
+						bind:tap="handleDatePage"	data-date="{{queryParams.start_time}}" data-chart="pie" data-title="{{chartData.PieData.summary.timeRange}}">
+							<view>
+								{{chartData.PieData.summary.timeRange}}，{{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
+								{{chartData.PieData.summary.totalAmount}}
+							</view>
+							<!-- 收入共计 {{chartData.PieData.summary.totalCategory}} 笔分类， -->
+							<view class="icon-arrow">
+					<image src="/static/icon/icon-data-right.png" mode="widthFix"/>
+				</view>
+						</view>
+						<!-- data-date="{{item.date}}" -->
+						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.PieData.list}}"
+							data-category_id="{{item.categoryId}}" data-date="{{queryParams.start_time}}" data-chart="pie" data-category_name="{{item.name}}"
+							hover-class="btn-hover" hover-stay-time='10' wx:if="{{isPieExpand || index < 3}}"
+							bind:tap="handleDatePage">
+							<view class="day radius-4 disburse num {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">
+								<image src="{{item.category_icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" class="icon" />
+
+							</view>
+							<view class="info">
+								<view class="date-money flex flex-space-between num">
+									<text class="date">{{item.name}}</text>
+									<text class="money">{{item.value}}</text>
+								</view>
+								<view class="progress-container">
+									<view class="progress-bar"
+										style="width: {{item.ratioPercent}}%;background-color:{{typeIndex==0? greenClor:typeIndex==1? redClor : yellowClor}}">
+									</view>
+								</view>
+
+								<view class="flex flex-space-between">
+									<view class="num" style="color:#999999">{{item.count}}笔</view>
+									<view class="percentage num" style="color:#999999;font-size: 20rpx;">{{item.ratioPercent}}%</view>
+								</view>
+							</view>
+
+						</view>
+						<!-- 折叠/展开按钮（只有列表条数>3时显示） -->
+						<view wx:if="{{chartData.PieData.list.length > 3}}"
+							class="unfold flex flex-align-items-center flex-center collapse {{isPieExpand ? 'fold' : ''}}"
+							bind:tap="togglePieExpand">
+							<text> 点击{{isPieExpand ? '收起' : '展开'}} </text>
+							<image src="/static/icon/icon-unfold-{{isPieExpand?'t':'b'}}.png" mode="widthFix" class="icon-unfold" />
+						</view>
+					</view>
+
+				</view>
+			</view>
+		</view>
+		<view style="height: 90px;"></view>
+	</sticky-section>
+
+</scroll-view>
+
+
+
+
+<!--年 -->
+<z-popup bind:popup="handleChildPopup" showTitle="year" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_year}}" closeOnClickOverlay="{{false}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content num">
+		<view class="content">
+			<swiper indicator-dots="{{false}}" autoplay="{{false}}" interval="5000" duration="500"
+				current="{{groupYearIndex}}" wx:if="{{isDataYReady}}">
+				<!-- 遍历二维数组yearList，外层循环对应swiper-item -->
+				<block wx:for="{{yearList}}" wx:key="index">
+					<swiper-item>
+						<!-- 内层循环：渲染当前swiper-item中的10个年份 -->
+						<view class="year-group">
+							<block wx:for="{{item}}" wx:for-item="year" wx:key="year">
+								<view class="year-item radius-4 {{year==queryParams.start_time?'active':''}}" data-year="{{year}}"
+									bind:tap="handleYear">{{year}}</view>
+							</block>
+						</view>
+					</swiper-item>
+				</block>
+			</swiper>
+		</view>
+	</view>
+</z-popup>
+<!--月 -->
+<z-popup bind:popup="handleChildPopup" showTitle="month" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_month}}" closeOnClickOverlay="{{false}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content num">
+		<view class="content">
+			<swiper indicator-dots="{{false}}" autoplay="{{false}}" current="{{groupMonthIndex}}" easing-function="default"
+				bindchange="changeMonth" wx:if="{{isDataMReady}}">
+				<!-- 第一层循环：年份分组（对应最外层数组，如 [2025组, 2026组]） -->
+				<block wx:for="{{monthList}}" wx:for-item="yearGroupItem" wx:key="index">
+					<!-- 第二层循环：年份对象（每个年份分组内的单个年份对象） -->
+					<block wx:for="{{yearGroupItem}}" wx:for-item="yearObj" wx:key="yearObj.year">
+						<swiper-item>
+							<!-- 月份组容器：适配一行6个、两行布局 -->
+							<view class="header-year">{{yearObj.year}}</view>
+							<view class="month-group">
+								<!-- 第三层循环：月份行（如 [[1-6], [7-12]] 中的每一行） -->
+								<block wx:for="{{yearObj.monthList}}" wx:for-item="monthRow" wx:key="index">
+									<!-- 第四层循环：单个月份（行内的每个数字） -->
+									<block wx:for="{{monthRow}}" wx:for-item="month" wx:key="month">
+										<view class="month-item radius-4 {{yearObj.year+'-'+month == chooseYearDate ? 'active' : ''}}"
+											data-month="{{month}}" data-="{{yearObj.year}}" bind:tap="handleMonth">
+											{{month}}月
+										</view>
+									</block>
+								</block>
+							</view>
+						</swiper-item>
+					</block>
+				</block>
+			</swiper>
+		</view>
+	</view>
+</z-popup>

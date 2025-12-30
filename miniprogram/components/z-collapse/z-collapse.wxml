@@ -5,7 +5,7 @@
     bindtap="onHeaderTap"
     hover-class="collapse-header-hover"
   >
-    <view class="collapse-title">{{ title }} <text wx:if="{{count}}">（{{count}}）</text> </view>
+    <!-- <view class="collapse-title">{{ items.surplusDirection }} <text wx:if="{{count}}">（{{count}}）</text> </view>
     <view class="right-arrow">  
     <text class="total-money num" style="color: {{ isExpanded ? '#666' : '#000' }};font-size: {{ isExpanded ? '24rpx' : '26rpx' }}; transition: transform 0.3s ease;">{{totalMoney}}</text>
       <view 
@@ -16,8 +16,83 @@
       <text class="iconfont icon-arrow-down">+</text>
     </view>
     </view>
-  
-  
+   -->
+	 <view class="sticky-content  radius-10">
+			<!--  offset-top="{{navBarHeight}}"-->
+		
+			<view class="sticky-card flex flex-space-between  flex-align-items-center radius-10" wx:if="{{categoryName==''}}"
+				bind:tap="handleBillPage">
+				<!-- -->
+				<view class="left radius-4">
+					<view class="month num">{{summary.year}}</view>
+					<view class="year num">{{summary.month}}月</view>
+				</view>
+				<view class="center">
+					<view class="flex flex-align-items-center flex-space-between">
+						<view class="num">收{{summary.incomeMoney}}</view>
+						<view class="num">收{{summary.surplusMoney}}</view>
+					</view>
+					<view class="progress-content">
+						<view class="default">
+							<view class="progress-bar bg-error" style="width: {{summary.incomeProgress}}%">
+							</view>
+						</view>
+						<view class="red">
+							<view class="progress-bar bg-success" style="width: {{summary.expendProgress}}%">
+							</view>
+						</view>
+					</view>
+					<view class="flex flex-align-items-center flex-space-between">
+						<view class="num">支{{summary.expendMoney}}</view>
+						<view class="text">结余</view>
+					</view>
+
+				</view>
+				<view class="right">
+
+
+				</view>
+				<view class="arror">
+					<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+				</view>
+			</view>
+			<view class="sticky-card flex flex-space-between  flex-align-items-center radius-10" wx:else
+				bind:tap="handleBillPage">
+				<!-- -->
+				<view class="left radius-4">
+					<view class="month num">{{summary.year}}</view>
+					<view class="year num">{{summary.month}}月</view>
+				</view>
+				<view class="center">
+					<view class="flex flex-align-items-center flex-space-between">
+						<view class="num">收{{summary.incomeMoney}}</view>
+						<view class="num">收{{summary.surplusMoney}}</view>
+					</view>
+					<view class="progress-content">
+						<view class="default">
+							<view class="progress-bar bg-error" style="width: {{summary.incomeProgress}}%">
+							</view>
+						</view>
+						<view class="red">
+							<view class="progress-bar bg-success" style="width: {{summary.expendProgress}}%">
+							</view>
+						</view>
+					</view>
+					<view class="flex flex-align-items-center flex-space-between">
+						<view class="num">支{{summary.expendMoney}}</view>
+						<view class="text">结余</view>
+					</view>
+
+				</view>
+				<view class="right">
+
+
+				</view>
+				<view class="arror">
+					<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+				</view>
+			</view>
+		</view>
   </view>
   
   <!-- 折叠面板内容 -->

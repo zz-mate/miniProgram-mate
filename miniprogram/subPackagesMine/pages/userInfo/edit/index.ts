@@ -2,7 +2,7 @@
 import { COLOR } from '../../../../utils/color.js';
 import { updateUser } from '../../../../api/user'
 import { getStorageSync } from '../../../../utils/util.js';
-
+import {playBtnAudio} from '../../../../utils/audioUtil'
 Page({
 
 	/**
@@ -22,12 +22,12 @@ Page({
 	},
 	selectGender(e) {
 		const selectGender = e.currentTarget.dataset.gender;
-		console.log(selectGender)
+		playBtnAudio('/static/audio/click.mp3', 1000);
 		this.setData({ gender: selectGender });
 	},
-	async handleBookSave() {
-
-		wx.vibrateShort({ type: 'heavy' })
+	async handleSave() {
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 
 
 

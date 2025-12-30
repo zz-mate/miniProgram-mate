@@ -2,11 +2,12 @@
 <navigation-bar class="nav-bar" title="" back="{{false}}" auto="{{false}}" homeButton="{{false}}" color="black"
 	background="transparent">
 	<view slot="left" wx:if="{{refreshStatus!='松手进入二楼'&&refreshStatus!='进入二楼'}}">
+		<!-- catch:tap="handleBookPage" -->
 		<view class="custom-capsule flex flex-align-items-center"
-			style="height:{{capsuleHeight}}px;border-radius:0  {{capsuleHeight/2}}px {{capsuleHeight/2}}px 0;line-height: {{capsuleHeight}}px;"
-			catch:tap="handleBookPage">{{bookInfo.name||'未登录'}}
-			<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"/>
-			</view>
+			style="height:{{capsuleHeight}}px;border-radius:0  {{capsuleHeight/2}}px {{capsuleHeight/2}}px 0;line-height: {{capsuleHeight}}px;">
+			{{bookInfo.name||'未登录'}}
+			<!-- <image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom" /> -->
+		</view>
 	</view>
 	<!-- <view slot="right">
 		<view class="custom-circle"
@@ -16,7 +17,7 @@
 			</view>
 	</view> -->
 </navigation-bar>
-
+<!-- <login-popup /> -->
 <!-- 滚动内容区域 -->
 <scroll-view id="scrollview" class="scroll-area" type="custom" scroll-y show-scrollbar="{{false}}"
 	scroll-top="{{scrollBackTop}}" scroll-with-animation refresher-enabled="{{true}}" refresher-threshold="{{80}}"
@@ -53,7 +54,8 @@
 			</view>
 			<view class="fast-card radius-10">
 				<view class="list radius-10 flex flex-space-around">
-					<view class="item" data-type="bill" data-url="/subPackages/pages/transaction/bill/index" bind:tap="handlePageUrl">
+					<view class="item" data-type="bill" data-url="/subPackages/pages/transaction/bill/index"
+						bind:tap="handlePageUrl">
 
 						<image src="/static/icon/icon-bill.png" mode="widthFix" />
 						<view class="title">明细</view>
@@ -131,12 +133,15 @@
 				wx:if="{{showCard&&transactionList.length&&refreshStatus!='松手进入二楼'&&refreshStatus!='进入二楼'}}"
 				bind:tap="handleBillPage">
 				<!-- -->
-				<view class="left">
+				<view class="left radius-4">
 					<view class="month num">{{summary.end_month}}月</view>
 					<view class="year num">{{summary.end_year}}</view>
 				</view>
 				<view class="center">
-					<view class="num">收{{summary.totalIncome}}</view>
+					<view class="flex flex-align-items-center flex-space-between">
+						<view class="num">收{{summary.totalIncome}}</view>
+						<view class="num">{{summary.totalSurplus}}</view>
+					</view>
 					<view class="progress-content">
 						<view class="default">
 							<view class="progress-bar bg-error" style="width: {{summary.incomeProgress}}%">
@@ -147,11 +152,15 @@
 							</view>
 						</view>
 					</view>
-					<view class="num">支{{summary.totalExpend}}</view>
+					<view class="flex flex-align-items-center flex-space-between">
+						<view class="num">支{{summary.totalExpend}}</view>
+						<view class="text">结余</view>
+					</view>
+
 				</view>
 				<view class="right">
-					<view class="num">{{summary.totalSurplus}}</view>
-					<view class="text">结余</view>
+
+
 				</view>
 				<view class="arror">
 					<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
@@ -171,44 +180,49 @@
 						<view class="disburse num">支{{item.expendMoney}}</view>
 					</view>
 				</view>
-				<view class="radius-10" style="overflow: hidden;background-color: #FFF;">
-					<view class="bill-item_items   flex flex-space-between flex-center"  hover-class="btn-hover" hover-stay-time='150' wx:for="{{item.list}}" wx:key="index"
-						data-transaction_type="{{item.type}}" data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo">
-						<view class="left-icon">
-							<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
-						</view>
-						<view class="border">
-							<view class="center-info">
-								<view class="title">{{item.category.name}}</view>
-								<!-- <view class="tags flex">
-								<text wx:for="{{item.tags}}">#{{item.name}}</text>
-							</view> -->
-								<!-- <view class="desc">{{item.remark}}</view> -->
-								<view class="date-other num flex flex-align-items-center">
-									<text class="time-text text">{{item.bill_time}} </text>
-									<!-- <text class="account-text text">微信</text>
-								<text class="consume-text text">{{item.consume_user_id==userInfo.user_id?'自己':item.operator.nickname}}</text>
-								<text class="remark-text text">{{item.remark}}</text> -->
-								</view>
-							</view>
-							<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
-								<text>{{item.type==1||item.type==4?'+':'-'}}</text> {{item.amount}}
-							</view>
-						</view>
 
-					</view>
-							<!-- 底部文字提示区域 -->
-		
+				<view class="radius-10 bill-container  ">
+					<block wx:for="{{item.list}}" wx:for-index="i">
+						<view class="bill-wrapper {{item.status ? '':'active'}}">
+							<view class="bill-wrapper_item bill-item_items cart-list flex flex-space-between flex-center"
+								hover-class="btn-hover" hover-stay-time='150' data-transaction_type="{{item.type}}"
+								data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}"
+								bindtouchstart="touchS" bindtouchmove="touchM">
+								<!-- {{item.status}} -->
+								<view class="left-icon">
+									<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+								</view>
+								<view class="border">
+									<view class="center-info">
+										<view class="title">{{item.category.name}}</view>
+										<view class="date-other num flex flex-align-items-center">
+											<text class="time-text text">{{item.bill_time}} </text>
+										</view>
+									</view>
+									<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
+										<text>{{item.type==1||item.type==4?'+':'-'}}</text> {{item.amount}}
+									</view>
+								</view>
+
+							</view>
+							<view class="del_button" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-type="single"
+								bindtap='deleteList'>删除
+							</view>
+						</view>
+					</block>
 				</view>
+
+
+				<!-- 底部文字提示区域 -->
+
+
 
 			</view>
 			<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{transactionList.length}}">
-		</z-divider>
+			</z-divider>
 			<view class="no-data" wx:if="{{!transactionList.length}}">
 				<view class="no-data-icon">
-					<image
-						src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
-						mode="widthFix" />
+					<image src="/static/async-icon/icon-not-bill.png" mode="widthFix" />
 				</view>
 				<view class="no-data-text">
 					<view>记账就是记录生活</view>

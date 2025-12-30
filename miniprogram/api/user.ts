@@ -42,6 +42,20 @@ export function updateUser(data:any) {
     data,
   });
 }
+export function jscode2session(data:any) {
+  return request({
+    url: '/miniProgram/sns/jscode2session',
+    method: 'POST',
+    data,
+  });
+}
+export function saveUser(data:any) {
+  return request({
+    url: '/miniProgram/wx/saveUser',
+    method: 'POST',
+    data,
+  });
+}
 // 你还可以在这里封装其他用户相关的 API，例如：
 // export function login(data: { username: string; password: string }) {
 //   return request({

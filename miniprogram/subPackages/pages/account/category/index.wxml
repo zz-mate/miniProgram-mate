@@ -5,12 +5,12 @@ background="{{navBgColor}}">
 </navigation-bar>
 
 
-<scroll-view  scroll-y="true" class="sy_container scroll-view-container " scroll-into-view="{{scrollViewId}}">
+<scroll-view  scroll-y="true" class="sy_container scroll-view-container " scroll-into-view="{{scrollViewId}}" style="height:calc(100% - {{height}}px) ">
 
   <view class="all_city">
     <view wx:for="{{list}}" wx:key="city_list" wx:if="{{item.data.length>0}}">
       <view class="letter_name" id="{{item.letter}}">{{item.letter}}</view>
-      <view class="city" >
+      <view class="city radius-10" >
         <block wx:for="{{item.data}}" wx:key="data" wx:for-index="index0" wx:for-item="item0">
 				<view class="flex icon-name flex-align-items-center" hover-class="btn-hover" hover-stay-time='10'  >
 					<view class="icon flex-row">
@@ -25,7 +25,8 @@ background="{{navBgColor}}">
 </scroll-view>
 
 <view>
-  <view class="fixed_bar" style="height: {{barHeight}}px;" catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">
+	<!-- style="height: {{barHeight}}px;" -->
+  <view class="fixed_bar" style="top:{{height}}px" catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">
     <view wx:for="{{list}}" wx:key="index" style="height: {{barHeight/22}}px;">
       <view class="bar_item flex-column j_c {{curr==index&&'bar_item_active'}}" style="width: {{barHeight/22*0.75}}px;height: {{barHeight/22*0.75}}px;line-height: {{barHeight/22*0.75}}px;">{{item.letter}}</view>
     </view>
@@ -33,3 +34,11 @@ background="{{navBgColor}}">
   <view wx:if="{{showLetter &&list[curr].letter}}" class="fixed_letter">{{list[curr].letter}}</view>
 </view>
 
+
+
+
+<view class="shortcut" bind:tap="handleBookSave">
+	<view class="shortcut_count radius-10 flex flex-center" >
+	保存
+	</view>
+</view>

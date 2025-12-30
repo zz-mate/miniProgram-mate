@@ -1,103 +1,122 @@
 /* subPackagesMine/pages/setting/index.wxss */
-.mine-container {
-  // margin-top: 20rpx;
-.setting-title{
-	font-size: 24rpx;
-	font-weight: 600;
-padding: 0 20rpx;
+@import '../../../app.scss';
+
+.menu {
+	background-color: var(--bg-color);
+	color: var(--text-color);
+	transition: all 0.2s ease;
 }
-  .menu {
-    margin: 20rpx;
 
-    background-color: #FFF;
+.mine-container {
 
-    .item {
-      // margin-bottom: 30rpx;
-      height: 80rpx;
-      border-bottom: 1rpx solid #efedf188;
-      padding: 20rpx;
+	// margin-top: 20rpx;
+	.setting-title {
+		font-size: 24rpx;
+		font-weight: 600;
+		padding: 0 20rpx;
+	}
 
-      &:last-child {
-        border: 0;
-      }
+	.menu {
+		margin: 20rpx;
 
-      .icon {
-        width: 58rpx;
-        height: 58rpx;
-        margin-right: 20rpx;
-      }
+		background-color: #FFF;
 
-      .title {
+		.item {
+			// margin-bottom: 30rpx;
+			height: 80rpx;
+			border-bottom: 1rpx solid #efedf188;
+			padding: 20rpx;
 
-        font-size: 22rpx;
-      }
+			&:last-child {
+				border: 0;
+			}
 
-      .info {
-        flex: 1;
-        justify-content: flex-end;
+			.icon {
+				width: 58rpx;
+				height: 58rpx;
+				margin-right: 20rpx;
+			}
 
-      }
+			.title {
 
-      .value {
-        margin-right: 10rpx;
-        color: #666666;
 				font-size: 22rpx;
-      }
-			.qrcode{
+			}
+
+			.info {
+				flex: 1;
+				justify-content: flex-end;
+
+			}
+
+			.value {
+				margin-right: 10rpx;
+				color: #666666;
+				font-size: 22rpx;
+			}
+
+			.qrcode {
 				width: 32rpx;
 				height: 32rpx;
 			}
-      .avatar {
-        width: 60rpx;
-        height: 60rpx;
-        margin-right: 0;
+
+			.avatar {
+				width: 60rpx;
+				height: 60rpx;
+				margin-right: 0;
 				border-radius: 50%;
 				overflow: hidden;
-      }
+			}
 
 
 
-      .icon-arrow {
+			.icon-arrow {
 				width: 26rpx;
 				height: 26rpx;
-      }
-    }
-  }
+			}
+		}
+	}
 }
 
 
 .logout {
-  margin: 0 20rpx;
-  padding: 24rpx;
-  background-color: #FFF;
+	margin: 0 20rpx;
+	padding: 24rpx;
+	background-color: #FFF;
 
 
 
-  .title {
-    font-size: 22rpx;
-  }
+	.title {
+		font-size: 22rpx;
+	}
 
 
 }
 
 /* 关键：重置button布局为块级，强制左对齐 */
 .button {
-  background: rgb(255, 255, 255);
-  border: none !important; /* 强制覆盖原生边框 */
-  text-align: left !important; /* 强制左对齐 */
-  font-size: 22rpx;
-  color: #535252;
-  padding: 0 !important; /* 覆盖原生内边距 */
-  margin: 0 !important;
-  display: block !important; /* 改为块级元素，左对齐生效 */
-  width: 100%; /* 可选：占满父容器宽度，左对齐更明显 */
-  line-height: normal; /* 重置行高，避免文字垂直居中干扰 */
-  box-sizing: border-box;
+	background: rgb(255, 255, 255);
+	border: none !important;
+	/* 强制覆盖原生边框 */
+	text-align: left !important;
+	/* 强制左对齐 */
+	font-size: 22rpx;
+	color: #535252;
+	padding: 0 !important;
+	/* 覆盖原生内边距 */
+	margin: 0 !important;
+	display: block !important;
+	/* 改为块级元素，左对齐生效 */
+	width: 100%;
+	/* 可选：占满父容器宽度，左对齐更明显 */
+	line-height: normal;
+	/* 重置行高，避免文字垂直居中干扰 */
+	box-sizing: border-box;
 }
 
 /* 彻底清除button原生点击态/边框 */
 .button::after {
-  border: none !important;
-  border-radius: 0 !important;
-  content: none !important; /* 清除原生伪元素 */
+	border: none !important;
+	border-radius: 0 !important;
+	content: none !important;
+	/* 清除原生伪元素 */
 }

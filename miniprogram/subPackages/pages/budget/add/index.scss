@@ -11,14 +11,9 @@
     .num {
       color: #999999;
     }
-    // .budget-amount {
-    //   text-align: center;
-    //   font-size: 46rpx;
-    //   font-weight: bold;
-    //   padding: 20rpx 0;
-    //   color: #000;
 		.total {
-      font-size: 26rpx;
+      font-size: 24rpx;
+			margin-left: 20rpx;
     }
       .total-total {
         input{
@@ -35,7 +30,7 @@
   font-size: 24rpx;
   font-weight: bold;
   color: #000;
-  margin: 10rpx 20rpx 10rpx 20rpx;
+  margin: 20rpx;
 }
 
 .budget-list {
@@ -82,7 +77,7 @@
 
 
 .budget-card {
-  margin: 20rpx 0;
+  // margin: 20rpx 0;
   padding: 20rpx;
   background-color: #FFF;
 	overflow: hidden;

@@ -2,7 +2,7 @@
 <navigation-bar class="nav-bar'" title="" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
 	background="{{navBgColor}}">
 	<view slot="center">
-	账单日历
+		账单日历
 	</view>
 </navigation-bar>
 
@@ -10,7 +10,8 @@
 <!-- <z-calendar class="calendar" id="calendar" calendarDate="{{calendarDate}}" list="{{dailyList}}" bind:select="select">
 </z-calendar> -->
 <view class="calendar-content radius-10">
-<calendar bind:change="dateChange" defaultTime="" spot="{{spot}}" dailyList="{{dailyList}}" theme_color="#FFD608"></calendar>
+	<calendar bind:change="dateChange" defaultTime="" spot="{{spot}}" dailyList="{{dailyList}}" theme_color="#FFD608">
+	</calendar>
 
 </view>
 
@@ -28,69 +29,47 @@
 
 	<view class="bill-list  radius-10">
 		<view class="bill-item">
-			<view class="radius-10"  style="overflow: hidden;background-color: #FFF;">
-				<view class="bill-item_items  flex flex-space-between flex-center" wx:for="{{transactionList}}" wx:key="index" hover-class="btn-hover" hover-stay-time='10' 
-					data-transaction_type="{{item.type}}" data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo">
-					<view class="left-icon">
-						<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
-					</view>
-					<view class="border">
-						<view class="center-info">
-							<view class="title">{{item.category.name}}</view>
-							<!-- <view class="tags flex">
-								<text wx:for="{{item.tags}}">#{{item.name}}</text>
-							</view> -->
-							<!-- <view class="desc">{{item.remark}}</view> -->
-							<view class="date-other num flex flex-align-items-center">
-								<text class="time-text text">{{item.bill_time}} </text>
-								<!-- <text class="account-text text">微信</text>
-								<text class="consume-text text">{{item.consume_user_id==userInfo.user_id?'自己':item.operator.nickname}}</text>
-								<text class="remark-text text">{{item.remark}}</text> -->
-							</view>
-						</view>
-						<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
-							<text>{{item.type==1||item.type==4?'+':'-'}}</text> {{item.amount}}
-						</view>
-					</view>
 
-				</view>
-				<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{transactionList.length}}"></z-divider>
+
+			<view class="radius-10 bill-container  ">
+				<block wx:for="{{transactionList}}" wx:for-index="i">
+					<view class="bill-wrapper {{item.status ? '':'active'}}">
+						<view class="bill-wrapper_item bill-item_items cart-list flex flex-space-between flex-center"
+							hover-class="btn-hover" hover-stay-time='150' data-transaction_type="{{item.type}}"
+							data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}"
+							bindtouchstart="touchS" bindtouchmove="touchM">
+							<!-- {{item.status}} -->
+							<view class="left-icon">
+								<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+							</view>
+							<view class="border">
+								<view class="center-info">
+									<view class="title">{{item.category.name}}</view>
+									<view class="date-other num flex flex-align-items-center">
+										<text class="time-text text">{{item.bill_time}} </text>
+									</view>
+								</view>
+								<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
+									<text>{{item.type==1||item.type==4?'+':'-'}}</text> {{item.amount}}
+								</view>
+							</view>
+
+						</view>
+						<view class="del_button" data-i="{{i}}" data-id="{{item.id}}" data-type="single" bindtap='deleteList'>删除
+						</view>
+					</view>
+				</block>
 			</view>
-			<!-- <view class="bill-item_items flex flex-space-between flex-center" wx:for="{{transactionList}}" wx:key="index"
-					data-transaction_type="{{item.type}}" data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo">
-					<view class="left-icon">
-						<image src="{{item.category.icon}}" mode="widthFix" />
-					</view>
-					<view class="border">
-						<view class="center-info">
-							<view class="title">{{item.category.name}}</view>
-							<view class="tags flex">
-								<text wx:for="{{item.tags}}">#{{item.name}}</text>
-							</view>
-							<view class="desc">{{item.remark}}</view>
-							<view class="date-other num flex flex-align-items-center">
-								<text class="time-text text">{{item.bill_time}} </text>
-								<text class="account-text text">微信</text>
-								<text class="consume-text text">{{item.consume_user_id==userInfo.user_id?'自己':item.operator.nickname}}</text>
-								<text class="remark-text text">{{item.remark}}</text>
-							</view>
-						</view>
-						<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
-							<text>{{item.type==1||item.type==4?'+':'-'}}</text> {{item.amount}}
-						</view>
-					</view>
 
-				</view> -->
 
 
 
 		</view>
-
+		<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{transactionList.length}}">
+		</z-divider>
 		<view class="no-data" wx:if="{{!transactionList.length}}" style="margin-top:{{token?'':'20rpx'}}">
 			<view class="no-data-icon">
-				<image
-					src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
-					mode="widthFix" />
+				<image src="/static/async-icon/icon-not-bill.png" mode="widthFix" />
 			</view>
 			<view class="no-data-text">
 				<view>记账就是记录生活</view>

@@ -8,7 +8,7 @@
 	<view class="book-name radius-10 flex flex-align-items-center flex-space-between" wx:if="{{type=='nickname'}}">
 		<view class="input">
 			<input class="nickname" type="text" placeholder="请输入" maxlength="10" value="{{nickname}}"
-				adjust-position="{{false}}" bindinput="bindKeyInput" />
+				adjust-position="{{false}}" focus="{{true}}" bindinput="bindKeyInput" />
 		</view>
 	</view>
 	<view class="gender-content radius-10 " wx:if="{{type=='gender'}}">
@@ -27,7 +27,7 @@
 </view>
 
 
-<view class="shortcut" bind:tap="handleBookSave">
+<view class="shortcut" bind:tap="handleSave">
 	<view class="shortcut_count radius-10 flex flex-center">
 		完成
 	</view>

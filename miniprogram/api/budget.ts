@@ -20,3 +20,11 @@ export function createBudget(data:any) {
   });
 }
 
+export function deletBudget(data:any) {
+  return request({
+    url: '/miniProgram/budget/category/delete',
+    method: 'POST',
+    data,
+  });
+}
+

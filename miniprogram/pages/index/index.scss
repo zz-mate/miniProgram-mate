@@ -1,6 +1,7 @@
 /* pages/home/index.wxss */
 @import "../../app.scss"; // 引入全局变量
 
+
 .bg-primary {
 	background-color: $z-color-primary;
 }
@@ -109,6 +110,7 @@ page {
 		background-color: #fff;
 		padding: 20rpx;
 		overflow: hidden;
+
 		.item {
 			.title {
 				font-size: 19rpx;
@@ -275,79 +277,8 @@ page {
 	// padding: 0 20rpx;
 	// margin: 20rpx 0;
 	margin-top: 60rpx;
-margin-bottom: 200rpx;
-	.bill-item {
+	margin-bottom: 200rpx;
 
-		// 
-		&_header {
-			color: #999999;
-			padding: 20rpx 0;
-			font-size: 20rpx;
-
-			.money {
-				.income {
-					margin-right: 10rpx;
-				}
-			}
-		}
-
-		&_items {
-			padding: 0 20rpx;
-			// margin: 4rpx 0;
-			background-color: #FFF;
-			overflow: hidden;
-
-			.left-icon {
-				width: 54rpx;
-				height: 54rpx;
-				margin-right: 14rpx;
-			}
-
-			.border {
-				flex: 1;
-				display: flex;
-				border-bottom: 1rpx solid #f1f1f1;
-				padding: 14rpx 0 14rpx 14rpx;
-				// &:last-child{
-				//   border: none;
-				// }
-			}
-
-			.center-info {
-				flex: 1;
-
-				.title {
-					font-size: 22rpx;
-					color: #000;
-					padding-bottom: 4rpx;
-				}
-
-				.tags {
-					font-size: 18rpx;
-					color: #999999;
-					padding: 4rpx 0;
-
-					text {
-						margin-right: 4rpx;
-					}
-				}
-
-				.date-other {
-					font-size: 18rpx;
-					color: #999999;
-
-					.text {
-						margin-right: 4rpx;
-					}
-				}
-			}
-
-			.right-money {
-				font-size: 24rpx;
-				// margin-top: -40rpx;
-			}
-		}
-	}
 }
 
 

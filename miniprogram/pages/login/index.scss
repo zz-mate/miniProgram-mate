@@ -90,7 +90,17 @@ page {
 
 
 	}
-
+.login_wx_btn{
+	width: 100%;
+	height: 80rpx;
+	line-height: 80rpx;
+	background-color: $z-bg-color;
+	color: #000;
+	text-align: center;
+	letter-spacing: 2px;
+	font-size: 22rpx;
+	margin-top: 20rpx;
+}
 	.login_btn {
 		width: 100%;
 		height: 80rpx;
@@ -108,3 +118,42 @@ page {
 	}
 
 }
+.popup-content{
+	height: 450rpx;
+}
+.login-popup{
+	margin-top: 100rpx;
+}
+.login-btn{
+	
+	  /* 核心：自定义背景颜色（替换成你想要的颜色值） */
+		background-color: $-theme-color !important;  /* 微信蓝（推荐），可改为 #ff4d4f（红色）、#52c41a（绿色）等 */
+  
+		/* 圆角（可选，增强美观） */
+		border-radius: 8rpx !important;
+		
+		/* 按钮尺寸 */
+		width: 90%; /* 宽度占屏幕90% */
+		height: 80rpx; /* 高度（小程序推荐rpx单位） */
+		line-height: 80rpx; /* 文字垂直居中 */
+		
+		/* 文字样式 */
+		color: #000000 !important; /* 文字白色 */
+		font-size: 22rpx; /* 文字大小 */
+
+		letter-spacing: 2px;
+		/* 去除原生按钮的边框（可选） */
+		border: none !important;
+		
+		/* 居中显示（可选） */
+		margin: 0 auto;
+		display: block;
+		
+		/* 阴影（可选，增强立体感） */
+		// box-shadow: 0 4rpx 12rpx rgba(22, 119, 255, 0.2);
+	}
+	.login-btn::after {
+		border: none !important; /* 去除原生点击态边框 */
+		background-color: rgba(0, 0, 0, 0.1) !important; /* 点击时的遮罩色 */
+	}
+	

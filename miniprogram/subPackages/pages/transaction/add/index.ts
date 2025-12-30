@@ -1,4 +1,5 @@
 // subPackages/pages/transaction/add/index.ts
+import { playBtnAudio } from '../../../../utils/audioUtil'
 import { getStorageSync, } from '../../../../utils/util';
 import { getAccountList } from '../../../../api/account'
 import { getCategoryList } from '../../../../api/category'
@@ -68,7 +69,7 @@ Page({
 		},
 
 		keyboardHeight: 0, // 键盘高度，初始为0
-		keyboardHeadHeight:0,//css键盘header
+		keyboardHeadHeight: 0,//css键盘header
 		calculatorHeight: 0,
 		safeAreaBottom: 0,
 		tabMoneyCardHeight: 0,
@@ -114,7 +115,14 @@ Page({
 		operator: '',       // 当前运算符（+/-）
 		calcExpression: '', // 显示的表达式
 		isCalculated: false,// 是否已计算出结果
-		result: ''          // 计算结果（用于连续运算）
+		result: '',         // 计算结果（用于连续运算）
+		//  bill: { num: 0 },   // 账单金额
+		//  doneFlag: false,    // 分类选中标记
+		//  selectedTab: 0,     // 标签选中状态
+		//  categoryList: [],   // 分类列表
+		//  categoryIndex: 0,   // 选中分类索引
+		//  bookInfo: {},       // 账本信息
+		delInterval: null   // 删除长按定时器
 	},
 
 	lifetimes: {
@@ -138,7 +146,6 @@ Page({
 		})
 	},
 
-
 	// 初始化计算状态
 	initCalc() {
 		this.setData({
@@ -151,263 +158,251 @@ Page({
 			'bill.num': 0
 		});
 	},
+
+	// // 获取导航栏高度（保留原有逻辑）
+	// getNavBarHeight() {
+	//   // 你的原有逻辑...
+	// },
+
 	tapKey(e) {
 		const key = e.currentTarget.dataset.key;
-		wx.vibrateShort({ type: 'heavy' })
-		const { firstNum, secondNum, operator, isCalculated, result } = this.data;
-		const MAX_AMOUNT = 100000000; // 1亿
-		this.getNavBarHeight()
-		// ========== 核心工具方法：检查小数点后位数（最多两位） ==========
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		const { firstNum, secondNum, operator, result } = this.data;
+
+		// ========== 核心工具方法 ==========
+		// 检查小数点后位数（最多两位）
 		const checkDecimalLimit = (numStr) => {
-			if (!numStr.includes('.')) return true; // 无小数点，允许输入
+			if (!numStr.includes('.')) return true;
 			const [, decimalPart] = numStr.split('.');
-			return decimalPart.length <= 2; // 小数部分<2位才允许输入
+			return decimalPart.length <= 2;
 		};
-	
-		// ========== 1. 计算完成后的输入处理 ==========
-		if (isCalculated) {
-			if (/[0-9]/.test(key)) {
-				// 场景1：计算后输入数字
-				if (operator) {
-					// 1.1 已有运算符 → 第二个操作数（1亿+两位小数限制）
-					const newSecondNum = secondNum + key;
-					if (checkDecimalLimit(newSecondNum) && Number(newSecondNum) < MAX_AMOUNT) {
-						this.setData({
-							secondNum: newSecondNum,
-							calcExpression: `${result}${operator}${newSecondNum}`,
-							'bill.num': Number(newSecondNum)
-						});
-					} else if (!checkDecimalLimit(newSecondNum)) {
-						wx.showToast({ title: '小数点后最多两位', icon: 'none' });
-					} else {
-						wx.showToast({ title: '金额不能超过1亿', icon: 'none' });
-					}
-				} else {
-					// 1.2 无运算符 → 拼接结果成新数字（1亿+两位小数限制）
-					const newNum = result + key;
-					if (checkDecimalLimit(newNum) && Number(newNum) < MAX_AMOUNT) {
-						this.setData({
-							firstNum: newNum,
-							secondNum: '',
-							calcExpression: newNum,
-							isCalculated: false,
-							'bill.num': Number(newNum)
-						});
-					} else if (!checkDecimalLimit(newNum)) {
-						wx.showToast({ title: '小数点后最多两位', icon: 'none' });
-					} else {
-						wx.showToast({ title: '金额不能超过1亿', icon: 'none' });
-					}
-				}
-			} else if (key === '.') {
-				// 场景2：计算后输入小数点（防重复+1亿限制）
-				if (operator) {
-					if (!secondNum.includes('.') && Number(secondNum + '.') < MAX_AMOUNT) {
-						const newSecondNum = secondNum === '' ? '0.' : secondNum + '.';
-						this.setData({
-							secondNum: newSecondNum,
-							calcExpression: `${result}${operator}${newSecondNum}`,
-							'bill.num': Number(newSecondNum)
-						});
-					} else if (secondNum.includes('.')) {
-						wx.showToast({ title: '一个数字只能有一个小数点', icon: 'none' });
-					} else {
-						wx.showToast({ title: '金额不能超过1亿', icon: 'none' });
-					}
-				} else {
-					if (!result.includes('.') && Number(result + '.') < MAX_AMOUNT) {
-						const newNum = result + '.';
-						this.setData({
-							firstNum: newNum,
-							secondNum: '',
-							calcExpression: newNum,
-							isCalculated: false,
-							'bill.num': Number(newNum)
-						});
-					} else if (result.includes('.')) {
-						wx.showToast({ title: '一个数字只能有一个小数点', icon: 'none' });
-					} else {
-						wx.showToast({ title: '金额不能超过1亿', icon: 'none' });
-					}
-				}
-			} else if (/[+-]/.test(key)) {
-				// 场景3：计算后点击运算符 → 基于结果继续运算
-				if (Number(result) < MAX_AMOUNT) {
+		// 检查字符长度（最多8位）
+		const checkLengthLimit = (numStr) => {
+			return numStr.length <= 8;
+		};
+
+		// ========== 1. 数字键处理（核心连续运算逻辑） ==========
+		if (/[0-9]/.test(key)) {
+			// 有结果（如2）：往第二个操作数追加（如2+3）
+			if (result && operator) {
+				const newSecondNum = secondNum + key;
+				if (checkDecimalLimit(newSecondNum) && checkLengthLimit(newSecondNum)) {
 					this.setData({
-						firstNum: result,
-						secondNum: '',
-						operator: key,
-						calcExpression: `${result}${key}`,
-						isCalculated: false,
-						'bill.num': Number(result)
+						secondNum: newSecondNum,
+						calcExpression: `${result}${operator}${newSecondNum}`,
+						'bill.num': Number(newSecondNum)
 					});
+				} else if (!checkDecimalLimit(newSecondNum)) {
+					// wx.showToast({ title: '小数点后最多两位', icon: 'none' });
 				} else {
-					wx.showToast({ title: '金额不能超过1亿', icon: 'none' });
+					// wx.showToast({ title: '输入不能超过8个字符', icon: 'none' });
 				}
 			}
-			return;
-		}
-	
-		// ========== 2. 常规数字键处理（0-9，1亿+两位小数限制） ==========
-		if (/[0-9]/.test(key)) {
-			if (!operator) {
-				// 无运算符：第一个操作数（1亿+两位小数限制）
-				const newFirstNum = firstNum + key;
-				if (checkDecimalLimit(newFirstNum) && Number(newFirstNum) < MAX_AMOUNT) {
-					this.setData({
-						firstNum: newFirstNum,
-						calcExpression: newFirstNum,
-						'bill.num': Number(newFirstNum)
-					});
-				} else if (!checkDecimalLimit(newFirstNum)) {
-					wx.showToast({ title: '小数点后最多两位', icon: 'none' });
-				} else {
-					wx.showToast({ title: '金额不能超过1亿', icon: 'none' });
-				}
-			} else {
-				// 有运算符：第二个操作数（1亿+两位小数限制）
+			// 无结果，有运算符（如1+）：往第二个操作数追加
+			else if (operator) {
 				const newSecondNum = secondNum + key;
-				if (checkDecimalLimit(newSecondNum) && Number(newSecondNum) < MAX_AMOUNT) {
+				if (checkDecimalLimit(newSecondNum) && checkLengthLimit(newSecondNum)) {
 					this.setData({
 						secondNum: newSecondNum,
 						calcExpression: `${firstNum}${operator}${newSecondNum}`,
 						'bill.num': Number(newSecondNum)
 					});
 				} else if (!checkDecimalLimit(newSecondNum)) {
-					wx.showToast({ title: '小数点后最多两位', icon: 'none' });
+					// wx.showToast({ title: '小数点后最多两位', icon: 'none' });
 				} else {
-					wx.showToast({ title: '金额不能超过1亿', icon: 'none' });
+					// wx.showToast({ title: '输入不能超过8个字符', icon: 'none' });
 				}
 			}
-			return;
-		}
-	
-		// ========== 3. 小数点处理（防重复+1亿限制） ==========
-		if (key === '.') {
-			if (!operator) {
-				// 第一个操作数加小数点
-				if (!firstNum.includes('.') && Number(firstNum + '.') < MAX_AMOUNT) {
-					const newFirstNum = firstNum === '' ? '0.' : firstNum + '.';
+			// 无运算符：往第一个操作数追加（如1）
+			else {
+				const newFirstNum = firstNum + key;
+				if (checkDecimalLimit(newFirstNum) && checkLengthLimit(newFirstNum)) {
 					this.setData({
 						firstNum: newFirstNum,
 						calcExpression: newFirstNum,
 						'bill.num': Number(newFirstNum)
 					});
-				} else if (firstNum.includes('.')) {
-					wx.showToast({ title: '一个数字只能有一个小数点', icon: 'none' });
+				} else if (!checkDecimalLimit(newFirstNum)) {
+					// wx.showToast({ title: '小数点后最多两位', icon: 'none' });
 				} else {
-					wx.showToast({ title: '金额不能超过1亿', icon: 'none' });
-				}
-			} else {
-				// 第二个操作数加小数点
-				if (!secondNum.includes('.') && Number(secondNum + '.') < MAX_AMOUNT) {
-					const newSecondNum = secondNum === '' ? '0.' : secondNum + '.';
-					this.setData({
-						secondNum: newSecondNum,
-						calcExpression: `${firstNum}${operator}${newSecondNum}`,
-						'bill.num': Number(newSecondNum)
-					});
-				} else if (secondNum.includes('.')) {
-					wx.showToast({ title: '一个数字只能有一个小数点', icon: 'none' });
-				} else {
-					wx.showToast({ title: '金额不能超过1亿', icon: 'none' });
+					// wx.showToast({ title: '输入不能超过8个字符', icon: 'none' });
 				}
 			}
 			return;
 		}
-	
-		// ========== 4. 常规运算符处理（+/-） ==========
+
+		// ========== 2. 小数点处理 ==========
+		if (key === '.') {
+			// 有结果（如2）：往第二个操作数加小数点（如2+0.）
+			if (result && operator) {
+				const tempSecondNum = secondNum === '' ? '0.' : secondNum + '.';
+				if (!secondNum.includes('.') && checkLengthLimit(tempSecondNum)) {
+					this.setData({
+						secondNum: tempSecondNum,
+						calcExpression: `${result}${operator}${tempSecondNum}`,
+						'bill.num': Number(tempSecondNum)
+					});
+				} else if (secondNum.includes('.')) {
+					// wx.showToast({ title: '一个数字只能有一个小数点', icon: 'none' });
+				} else {
+					// wx.showToast({ title: '输入不能超过8个字符', icon: 'none' });
+				}
+			}
+			// 无结果，有运算符：往第二个操作数加小数点（如1+0.）
+			else if (operator) {
+				const tempSecondNum = secondNum === '' ? '0.' : secondNum + '.';
+				if (!secondNum.includes('.') && checkLengthLimit(tempSecondNum)) {
+					this.setData({
+						secondNum: tempSecondNum,
+						calcExpression: `${firstNum}${operator}${tempSecondNum}`,
+						'bill.num': Number(tempSecondNum)
+					});
+				} else if (secondNum.includes('.')) {
+					// wx.showToast({ title: '一个数字只能有一个小数点', icon: 'none' });
+				} else {
+					// wx.showToast({ title: '输入不能超过8个字符', icon: 'none' });
+				}
+			}
+			// 无运算符：往第一个操作数加小数点（如1.）
+			else {
+				const tempFirstNum = firstNum === '' ? '0.' : firstNum + '.';
+				if (!firstNum.includes('.') && checkLengthLimit(tempFirstNum)) {
+					this.setData({
+						firstNum: tempFirstNum,
+						calcExpression: tempFirstNum,
+						'bill.num': Number(tempFirstNum)
+					});
+				} else if (firstNum.includes('.')) {
+					// wx.showToast({ title: '一个数字只能有一个小数点', icon: 'none' });
+				} else {
+					// wx.showToast({ title: '输入不能超过8个字符', icon: 'none' });
+				}
+			}
+			return;
+		}
+
+		// ========== 3. 核心：运算符处理（1+1→2+→2+3→5+ 逻辑） ==========
 		if (/[+-]/.test(key)) {
-			// 第一个操作数存在且≤1亿时允许输入运算符
-			if (firstNum && Number(firstNum) < MAX_AMOUNT) {
+			// 场景1：有完整运算式（如1+1、2+3）→ 先计算结果，再拼接新运算符
+			if ((firstNum && operator && secondNum) || (result && operator && secondNum)) {
+				const num1 = Number(result || firstNum) || 0;
+				const num2 = Number(secondNum) || 0;
+				const calcResult = operator === '+' ? num1 + num2 : num1 - num2;
+				const fixedResult = parseFloat(calcResult.toFixed(2));
+
+				// 核心：计算后直接拼接「结果+新运算符」（如2+、5+）
+				this.setData({
+					result: fixedResult.toString(), // 保存结果用于后续运算
+					firstNum: '', // 清空第一个操作数，后续基于result运算
+					secondNum: '', // 清空第二个操作数
+					operator: key, // 新运算符
+					calcExpression: `${fixedResult}${key}`, // 2+ / 5+
+					'bill.num': fixedResult
+				});
+				return;
+			}
+
+			// 场景2：只有结果（如2）→ 直接拼接「结果+新运算符」（2+）
+			if (result) {
+				this.setData({
+					operator: key,
+					calcExpression: `${result}${key}`,
+					secondNum: '',
+					'bill.num': Number(result)
+				});
+				return;
+			}
+
+			// 场景3：只有第一个操作数（如1）→ 拼接「第一个操作数+运算符」（1+）
+			if (firstNum) {
 				this.setData({
 					operator: key,
 					calcExpression: `${firstNum}${key}`,
 					secondNum: '',
 					'bill.num': Number(firstNum)
 				});
-			} else {
-				wx.showToast({ title: '金额不能超过1亿', icon: 'none' });
+				return;
 			}
+
+			// 场景4：无任何输入 → 提示
+			// wx.showToast({ title: '请先输入数字', icon: 'none' });
 		}
 	},
-	// ========== 核心方法：检查小数点后位数（最多两位） ==========
-	// checkDecimalLimit(numStr) {
-	// 	// 无小数点：允许输入
-	// 	if (!numStr.includes('.')) {
-	// 		return true;
-	// 	}
-	// 	// 有小数点：拆分整数和小数部分
-	// 	const [integerPart, decimalPart] = numStr.split('.');
-	// 	// 小数部分长度 < 2：允许输入；否则禁止
-	// 	return decimalPart.length <= 2;
-	// },
 
-	// 等于/完成按钮点击
+	// ========== 4. 核心改造：等于按钮点击直接显示纯结果（1+1=→2） ==========
 	async tapSubmit(evt) {
-		const flag = evt.currentTarget.dataset.again; // 1=再记 2=等于/完成
-		const { firstNum, secondNum, operator, isCalculated, result } = this.data;
+		const flag = evt.currentTarget.dataset.again; // 1=再记 2=等于
+		const { firstNum, secondNum, operator, result } = this.data;
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		// 等于按钮核心逻辑：计算后直接显示纯结果
+		if (flag === 2 && operator && secondNum) {
 
-		// ========== 1. 显示"="的场景（运算符后有第二个操作数） ==========
-		if (operator && secondNum) {
-			// 执行计算（支持小数点）
-			const num1 = Number(firstNum) || 0;
+			const num1 = Number(result || firstNum) || 0;
 			const num2 = Number(secondNum) || 0;
-			let calcResult = 0;
+			const calcResult = operator === '+' ? num1 + num2 : num1 - num2;
+			const fixedResult = parseFloat(calcResult.toFixed(2));
 
-			if (operator === '+') calcResult = num1 + num2;
-			if (operator === '-') calcResult = num1 - num2;
-
-			// 强制保留两位小数（金额场景）
-			calcResult = parseFloat(calcResult.toFixed(2));
-
-			// 更新状态
+			// 核心：直接显示纯结果（如2），而非「1+1=2」
 			this.setData({
-				calcExpression: `${firstNum}${operator}${secondNum}=${calcResult}`,
-				result: calcResult.toString(),
-				firstNum: calcResult.toString(),
+				calcExpression: fixedResult.toString(), // 显示2
+				result: fixedResult.toString(), // 保存结果用于后续运算
+				firstNum: '',
 				secondNum: '',
 				operator: '',
-				isCalculated: true,
-				'bill.num': calcResult
+				'bill.num': fixedResult
 			});
-			// 仅计算，不提交
-			if (flag === 2) return;
+			return;
 		}
 
-		// ========== 2. 显示"完成"的场景（无运算符/运算符后无数字） ==========
-		let submitAmount = Number(firstNum) || 0;
-		// 保留两位小数
+		// 记账提交逻辑（再记/完成）
+		let submitAmount = Number(result || firstNum) || 0;
 		submitAmount = parseFloat(submitAmount.toFixed(2));
 		this.setData({ 'bill.num': submitAmount });
 
-		// 金额验证
-		if (submitAmount== 0) {
-			wx.showToast({ title: '请输入金额', icon: 'none' });
+		if (submitAmount === 0) {
+
+			wx.showToast({ title: '请先输入金额', icon: 'none' });
 			return;
 		}
 
-		// ========== 3. 提交逻辑（再记/完成） ==========
 		if (flag === 1) {
-			// 再记：保留计算器状态，仅提交
 			await this.submitBill(false);
+
 		} else if (flag === 2) {
-			// 完成：提交并重置
 			await this.submitBill(true);
+			wx.showToast({ title: '记账成功', icon: 'none' });	
 		}
 	},
 
-	// 删除键逻辑（适配小数点）
+	// ========== 5. 删除键逻辑 ==========
 	tapDel() {
-		const { firstNum, secondNum, operator, isCalculated, calcExpression } = this.data;
+		const { firstNum, secondNum, operator, result, calcExpression } = this.data;
 
-		if (isCalculated) {
+		// 有结果（如2）→ 清空所有
+		if (result && !operator && !secondNum) {
 			this.initCalc();
 			return;
 		}
-
-		if (secondNum) {
-			// 有第二个操作数：删除最后一位（支持小数点）
+		// 有结果且有运算符和第二个操作数（如2+3）→ 删除第二个操作数最后一位
+		else if (result && operator && secondNum) {
+			const newSecondNum = secondNum.slice(0, -1);
+			const newExp = newSecondNum ? `${result}${operator}${newSecondNum}` : `${result}${operator}`;
+			this.setData({
+				secondNum: newSecondNum,
+				calcExpression: newExp,
+				'bill.num': newSecondNum ? Number(newSecondNum) : Number(result)
+			});
+		}
+		// 有结果且有运算符（如2+）→ 清空运算符，显示结果
+		else if (result && operator) {
+			this.setData({
+				operator: '',
+				calcExpression: result,
+				'bill.num': Number(result)
+			});
+		}
+		// 无结果，有运算符和第二个操作数（如1+1）→ 删除第二个操作数最后一位
+		else if (operator && secondNum) {
 			const newSecondNum = secondNum.slice(0, -1);
 			const newExp = newSecondNum ? `${firstNum}${operator}${newSecondNum}` : `${firstNum}${operator}`;
 			this.setData({
@@ -415,32 +410,34 @@ Page({
 				calcExpression: newExp,
 				'bill.num': newSecondNum ? Number(newSecondNum) : Number(firstNum)
 			});
-		} else if (operator) {
-			// 有运算符无第二个操作数：删除运算符
+		}
+		// 无结果，有运算符（如1+）→ 清空运算符，显示第一个操作数
+		else if (operator) {
 			this.setData({
 				operator: '',
 				calcExpression: firstNum,
 				'bill.num': Number(firstNum)
 			});
-		} else if (firstNum) {
-			// 只有第一个操作数：删除最后一位（支持小数点）
+		}
+		// 只有第一个操作数（如1）→ 删除最后一位
+		else if (firstNum) {
 			const newFirstNum = firstNum.slice(0, -1);
 			this.setData({
 				firstNum: newFirstNum,
-				calcExpression: newFirstNum,
+				calcExpression: newFirstNum || '',
 				'bill.num': newFirstNum ? Number(newFirstNum) : 0
 			});
 		}
 	},
 
-	// 长按删除：清空所有
+	// ========== 6. 长按删除 ==========
 	longpressDel() {
 		this.initCalc();
 		if (this.delInterval) clearInterval(this.delInterval);
 		this.delInterval = setInterval(() => this.tapDel(), 100);
 	},
 
-	// 停止长按删除
+	// ========== 7. 停止长按删除 ==========
 	stopInterval() {
 		if (this.delInterval) {
 			clearInterval(this.delInterval);
@@ -448,23 +445,16 @@ Page({
 		}
 	},
 
-	// 提交账单核心方法
+	// ========== 8. 提交账单 ==========
 	async submitBill(resetCalc = true) {
 		const { bill } = this.data;
 
-		// 分类验证
-		if (!this.data.doneFlag) {
-			wx.showToast({
-				title: '没有分类你点什么😠',
-				icon: "none"
-			});
-			return;
-		}
+		// if (!this.data.doneFlag) {
+		// 	wx.showToast({ title: '没有分类你点什么😠', icon: 'none' });
+		// 	return;
+		// }
 
-
-
-		// 构造提交数据
-		let data = {
+		const data = {
 			"user_id": getStorageSync("userInfo").id,
 			"consume_user_id": getStorageSync("userInfo").id,
 			"account_id": bill.account_id,
@@ -479,39 +469,21 @@ Page({
 		};
 
 		try {
-			// 调用保存接口
-			let res = await createTransaction(data);
-
-			if (res.code == 200) {
-				wx.showToast({
-					title: '记账成功',
-					icon: "none"
-				});	// 完成：重置计算器
+			const res = await createTransaction(data);
+			if (res.code === 200) {
+				playBtnAudio('/static/audio/save_bill.mp3', 1000);
+				if (resetCalc) setTimeout(() => {
+				
+					wx.navigateBack({ delta: 1 })
+				}, 1500);
+				else this.setData({ 'bill.remark': '', 'bill.tags': [] });
 				this.initCalc();
-				if (resetCalc) {
-
-
-					setTimeout(() => wx.navigateBack({ delta: 1 }), 600);
-				} else {
-					// 再记：仅重置账单数据，保留计算器状态
-					// this.initCalc();
-					// this.setData({
-					// 	'bill.remark': '',
-					// 	'bill.tags': []
-					// });
-				}
 			} else {
-				wx.showToast({
-					title: res.msg || '记账失败',
-					icon: "none"
-				});
+				wx.showToast({ title: res.msg || '记账失败', icon: 'none' });
 			}
 		} catch (error) {
 			console.error('提交失败:', error);
-			wx.showToast({
-				title: '网络异常，请重试',
-				icon: "none"
-			});
+			wx.showToast({ title: '网络异常，请重试', icon: 'none' });
 		}
 	},
 
@@ -551,7 +523,7 @@ Page({
 		query.select('.keyboard-container').boundingClientRect();
 		query.select('.money-content').boundingClientRect();
 		query.select('.keyboard-head').boundingClientRect();
-		
+
 		query.exec((res) => {
 			if (res) {
 				this.setData({
@@ -760,7 +732,7 @@ Page({
 	 * 选择类别  服饰 日用 交通 
 	 */
 	handleChooseCategory(e) {
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
 		let { index } = e.currentTarget.dataset
 
 		this.setData({
@@ -880,7 +852,6 @@ Page({
 	 */
 
 	onLoad(options) {
-		console.log(options)
 		this.getNavBarHeight()
 		let bookList = getStorageSync("bookList")
 		const bookIndex = bookList.findIndex(ele => ele.id == options.bookId)
@@ -909,11 +880,31 @@ Page({
 	 */
 	onTabChanged(evt: any) {
 		const index = evt.detail.current
+		playBtnAudio('/static/audio/click.mp3', 1000);
 		this.setData({
 			selectedTab: index,
 			'bill.transaction_type': this.data.swiperTabs[index].id
 		})
 		this.getCategoryListFn()
+	},
+	onTapTab(evt) {
+		console.log(evt)
+		const { sub } = evt.detail.delta
+		// playBtnAudio('/static/audio/click.mp3', 1000);
+		this.setData({
+			selectedTab: sub,
+			'bill.transaction_type': this.data.swiperTabs[sub].id
+		})
+		this.getCategoryListFn()
+	},
+	// 设置类别页面
+	handleSettingCategory(){
+
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.navigateTo({
+			url: "/subPackages/pages/category/index?typeIndex="+this.data.selectedTab ,
+			routeType: "wx://upwards"
+		})
 	},
 	/**
 	 * 生命周期函数--监听页面初次渲染完成

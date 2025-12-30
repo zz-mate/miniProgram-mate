@@ -1,6 +1,7 @@
 // pages/mine/index.ts
-import { getStorageSync, setStorageSync } from '../../utils/util';
+import { getStorageSync, setStorageSync, getThisDate } from '../../utils/util';
 import { getUserById } from '../../api/user';
+import { playBtnAudio } from '../../utils/audioUtil'
 import SystemConfig from '../../utils/capsule';
 import { COLOR } from '../../utils/color.js';
 const app = getApp()
@@ -46,7 +47,8 @@ Page({
 
 	},
 	handleUserInfo() {
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		let token = getStorageSync("token")
 		if (token) {
 			wx.navigateTo({
@@ -71,16 +73,24 @@ Page({
 		});
 	},
 	handlePageUrl(evt) {
-		const { url, type } = evt.currentTarget.dataset
-		wx.vibrateShort({ type: 'heavy' })
-		console.log(url,type)
+		const { url, type, only, friend } = evt.currentTarget.dataset
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+		console.log(url, type)
 		if (type == 'page') {
-			wx.navigateTo({ url })
+			wx.navigateTo({ url: url + '?date=' + getThisDate('YY-MM') })
 		} else {
-			this.handlePopup()
+			let data = {
+				from: 'button',
+				target: {
+					only, friend
+				}
+			}
+			this.onShareAppMessage(data)
 		}
 
 	},
+
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
@@ -148,7 +158,36 @@ Page({
 	/**
 	 * 用户点击右上角分享
 	 */
-	onShareAppMessage() {
+	onShareAppMessage(obj) {
+		let { from, target } = obj
+		console.log(obj)
+		let shareObj = {
+			title: "简约记账，认准掌账 Mate",
+			imageUrl: "/static/icon/icon-Placeholder-image.png",
+			path: '/pages/index/index?userId='+ getStorageSync("userInfo").id,
+		}
+		if (from == 'menu') {//来自
+			// shareObj.title = 'menu'
+		} else if (from == 'button') {
+			// shareObj.title = target.title
+			let { id, dataset } = target
+			if (id == 's1') {
+				// ...
+			}
 
+			let { only, friend } = dataset
+			if (only == 'friend') {
+				// ...
+			}
+			if (only == 's2') {
+				// ...
+			}
+			if (friend) {
+				// ...
+			}
+
+		}
+		return shareObj
 	}
+
 })

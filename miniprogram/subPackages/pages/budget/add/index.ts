@@ -1,6 +1,7 @@
 // subPackages/pages/budget/add/index.ts
 const app = getApp()
 import { getCategoryList } from '../../../../api/category'
+import {playBtnAudio} from '../../../../utils/audioUtil'
 import { budgetInfo, createBudget } from '../../../../api/budget'
 import { getStorageSync, matchAndSortArrays, getThisDate, getCurrentMonthDays } from '../../../../utils/util'
 import SystemConfig from '../../../../utils/capsule';
@@ -27,6 +28,7 @@ Page({
 			budget_total_amount: "0.00",
 			category_amount: "0.00",
 		},
+		category_total_amount:0,
 		totalBudgetOriginal: "0.00",
 		originalBudgets: {} // 存储每个输入框的原始预算值（key: 索引, value: 原始值）
 	},
@@ -49,7 +51,7 @@ Page({
 		})
 		this.getSccollHeight()
 		// 如果分类下有 预算分类 就计算分类的总预算
-		if (list.length && flag) {
+		if (list&&list.length && flag) {
 			this.calculateTotalBudget()
 		}
 
@@ -198,12 +200,14 @@ Page({
 	 * 保存预算
 	 */
 	async save() {
-		wx.vibrateShort({ type: 'heavy' })
-		const { categoryList, userId, bookId } = this.data
+		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+		const { categoryList, userId, bookId, budgetInfo } = this.data
+		// if (budgetInfo.category_amount <= 0) return wx.showToast({ title: "请添加总预算金额", icon: "none" })
 		let data = {
 			"user_id": userId, // 用户ID
 			"book_id": bookId,
-			"amount": this.data.budgetInfo.category_amount,
+			"amount": budgetInfo.category_amount,
 			"cycle_type": "month", // 月预算
 			"cycle_start": `${getThisDate('YY-MM')}-01`,
 			// "warning_rate": 0.8, // 80%预警
@@ -238,7 +242,7 @@ Page({
 		const formattedTotal = total.toFixed(2);
 		// 判断 分类的总预算金额 小于 之前设置现有的总预算 就不计入总预算
 		// console.log(total, Number(this.data.budgetInfo.category_amount), Number(this.data.budgetInfo.budget_total_amount))
-
+console.log(total,123)
 		// console.log(total > Number(this.data.budgetInfo.budget_total_amount))
 		if (total > Number(this.data.budgetInfo.budget_total_amount)) {
 			this.setData({ 'budgetInfo.category_amount': formattedTotal });
@@ -249,7 +253,7 @@ Page({
 		}
 		// return
 		// // 更新总金额到页面 
-		// this.setData({ 'budgetInfo.category_amount': formattedTotal });
+		this.setData({ category_total_amount: total });
 	},
 	getValidBudgetArray() {
 		const { categoryList } = this.data;
@@ -262,7 +266,7 @@ Page({
 		}).map(item => {
 			// 格式化每一项为目标结构（category_amount 转为整数）
 			return {
-				category_id: item.category_id, // 必须确保原数据有 category_id 字段
+				category_id: item.id, // 必须确保原数据有 category_id 字段
 				category_name: item.name,
 				category_amount: item.category_amount // 转为整数
 			};
@@ -372,19 +376,19 @@ Page({
 		formattedAmount = Math.round(parseFloat(finalVal));
 
 		// 3. 有效性校验：金额必须大于0（和循环表单校验逻辑一致）
-		if (formattedAmount <= 0) {
-			wx.showToast({ title: '总预算必须大于0', icon: 'none', duration: 1500 });
-			// 校验不通过，恢复原始值（可选，按业务需求）
-			formattedAmount = originalVal ? Math.round(parseFloat(originalVal)) : '';
-		}
+		// if (formattedAmount <= 0) {
+		// 	wx.showToast({ title: '总预算必须大于0', icon: 'none', duration: 1500 });
+		// 	// 校验不通过，恢复原始值（可选，按业务需求）
+		// 	formattedAmount = originalVal ? Math.round(parseFloat(originalVal)) : '';
+		// }
 
 
 		this.calculateTotalBudget()
 
 		let { category_amount, budget_total_amount } = this.data.budgetInfo
-		console.log(category_amount, budget_total_amount)
+		console.log(parseInt(formattedAmount),parseInt(category_amount),budget_total_amount)
 		let that = this
-		if (formattedAmount < Number(category_amount)) {
+		if (parseInt(formattedAmount) < parseInt(category_amount)&&this.data.category_total_amount>0) {
 			wx.showModal({
 				title: "温馨提示",
 				content: `当前输入的总预算小于分类预算的总和${category_amount}，是否更新为总预算`,

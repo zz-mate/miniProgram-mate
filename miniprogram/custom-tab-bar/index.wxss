@@ -20,8 +20,8 @@
 }
 
 .tab-bar-border {
-  /* background-color: #808080; */
-  box-shadow: rgba(126, 131, 136, 0.2) 0px 8px 24px;
+  background-color: rgba(126, 131, 136, 0.2);
+  /* box-shadow: rgba(126, 131, 136, 0.2) 0px 8px 24px; */
 	position: absolute;
 	left: 0;
 	top: 0;

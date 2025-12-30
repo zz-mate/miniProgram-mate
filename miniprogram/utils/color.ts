@@ -1,12 +1,12 @@
 export const COLOR = {
-	theme:'#FFD608',
-  white:'#FFFFFF',
-  primary: '#237EFA',   // $z-color-primary
-  success: '#67C23A',   // $z-color-success
-  warning: '#FF8C08',   // $z-color-warning
-  error: '#FF4308',      // $z-color-error
+	theme: '#FFD608',
+	white: '#FFFFFF',
+	primary: '#237EFA',   // $z-color-primary
+	success: '#67C23A',   // $z-color-success
+	warning: '#FF8C08',   // $z-color-warning
+	error: '#FF4308',      // $z-color-error
 
-expenseColor:'#5BC0EB',
-incomeColor:'#FF6B6B',
-jyColor:'#FFB74D'
+	expenseColor: '#FFD608',
+	incomeColor: '#FF6B6B',
+	jyColor: '#FFB74D'
 };

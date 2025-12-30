@@ -1,0 +1,79 @@
+<!--subPackages/pages/transaction/dates/index.wxml-->
+<!--subPackages/pages/transaction/date/index.wxml-->
+<navigation-bar title="{{title}}" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="rgba(255,255,255,0.9);">
+
+</navigation-bar>
+<scroll-view type="custom" scroll-y style="height:calc(100% - {{height}}px) ">
+	<!-- 备忘录内容 -->
+	<sticky-section push-pinned-header="{{false}}" padding="{{[10,10,10,10]}}">
+		<!-- 流水列表 & 数据为空 区域 -->
+		<view class="bill-list">
+			<view class="bill-item " wx:for="{{transactionList}}" wx:key="index">
+				<view class="bill-item_header flex flex-space-between">
+					<view class="date num">{{item.month}}-{{item.day}} {{item.weekday }}</view>
+					<view class="money flex">
+						<view class="income num">收{{item.incomeMoney}}</view>
+						<view class="disburse num">支{{item.expendMoney}}</view>
+					</view>
+				</view>
+
+				<view class="radius-10 bill-container  ">
+					<block wx:for="{{item.list}}" wx:for-index="i">
+						<view class="bill-wrapper {{item.status ? '':'active'}}">
+							<view class="bill-wrapper_item bill-item_items cart-list flex flex-space-between flex-center"
+								hover-class="btn-hover" hover-stay-time='150' data-transaction_type="{{item.type}}"
+								data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}"
+								bindtouchstart="touchS" bindtouchmove="touchM">
+								<!-- {{item.status}} -->
+								<view class="left-icon">
+									<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+								</view>
+								<view class="border">
+									<view class="center-info">
+										<view class="title">{{item.category.name}}</view>
+										<view class="date-other num flex flex-align-items-center">
+											<text class="time-text text">{{item.bill_time}} </text>
+										</view>
+									</view>
+									<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
+										<text>{{item.type==1||item.type==4?'+':'-'}}</text> {{item.amount}}
+									</view>
+								</view>
+
+							</view>
+							<view class="del_button" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-type="single"
+								bindtap='deleteList'>删除
+							</view>
+						</view>
+					</block>
+				</view>
+
+
+				<!-- 底部文字提示区域 -->
+
+
+
+			</view>
+			<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{transactionList.length}}">
+			</z-divider>
+			<view class="no-data" wx:if="{{!transactionList.length}}">
+				<view class="no-data-icon">
+					<image
+					src="/static/async-icon/icon-not-bill.png"
+						mode="widthFix" />
+				</view>
+				<view class="no-data-text">
+					<view>记账就是记录生活</view>
+					<view>财务自由，从记第一笔开始</view>
+				</view>
+			</view>
+		</view>
+</sticky-section>
+
+<!-- <block wx:for="{{9}}">
+	<view style="height: 300px;width: 100%;"></view>
+</block> -->
+
+
+</scroll-view>

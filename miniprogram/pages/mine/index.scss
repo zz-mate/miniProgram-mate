@@ -1,9 +1,10 @@
 /* pages/mine/index.wxss */
 @import '../../app.scss';
 
-.bg-error{
+.bg-error {
 	background-color: $-chart-income-color;
 }
+
 .navbar-title {
 	font-size: 22rpx;
 	font-weight: normal;
@@ -14,8 +15,9 @@
 
 	.header {
 		position: relative;
-		height: 300rpx;
+		height: 400rpx;
 		overflow: hidden;
+
 		.cover {
 			position: absolute;
 			top: 0;
@@ -53,30 +55,39 @@
 					font-weight: 550;
 					// padding: 30rpx 0;
 				}
-				.tipss{
+
+				.tipss {
 					font-size: 20rpx;
 					padding: 8rpx 0;
 				}
+
 				.tips {
 					width: 120rpx;
-					font-size: 20rpx;
+					font-size: 18rpx;
 					padding: 8rpx 0 4rpx;
-					.level-icon{
-						width: 20rpx;
-						height:20rpx;
-						margin-right: 6rpx;
+					color: #666666;
+
+					.level-icon {
+						width: 40rpx;
+						// height:30rpx;
+						// margin-right: 6rpx;
 					}
-					.exp{
+
+					.exp {
+
 						color: #666666;
 					}
 				}
+
 				.progress-content {
 					width: 120rpx;
+
 					.default {
 						height: 4rpx;
 						border-radius: 2rpx;
 						overflow: hidden;
 						background-color: $z-bg-color;
+
 						.progress-bar {
 							height: 100%;
 							transition: width .3s ease;
@@ -104,7 +115,7 @@
 
 	.count-content {
 		position: absolute;
-		bottom: 20rpx;
+		bottom: 120rpx;
 		left: 0;
 		right: 0;
 
@@ -122,22 +133,81 @@
 		}
 	}
 
+	.vip-content {
+		position: absolute;
+		bottom: 0;
+		left: 20rpx;
+		right: 20rpx;
+		height: 100rpx;
+		background-color: rgb(73, 73, 68);
+		border-radius: 10rpx 10rpx 0 0;
+		padding: 0 30rpx;
+
+		.vip-left {
+			.title {
+				font-size: 22rpx;
+				color: #fff;
+			}
+
+			.tips {
+				font-size: 18rpx;
+				color: #ffffff88;
+			}
+		}
+
+		.vip-right {
+			.buy {
+				font-size: 20rpx;
+				background-color: #fff;
+				color: #000;
+				padding: 6rpx 14rpx;
+			}
+		}
+	}
+
 	.ribbon-content {
 
+		margin: 20rpx;
+		background-color: #FFF;
 
 		.list {
 			display: flex;
 			justify-content: center;
 			overflow: hidden;
-			padding: 20rpx;
+			justify-content: space-between;
+			// padding: 20rpx;
+
+
 			.item {
 				flex: 1;
 				background-color: #FFF;
 				padding: 20rpx;
 
+				/* 重置button默认样式 */
+				.share-btn {
+					/* 清除默认样式 */
+					border: none;
+					padding: 0;
+					margin: 0;
+					background: transparent;
+					/* 继承父元素宽高 */
+					width: 100%;
+					// height: 100%;
+					/* 布局 */
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					/* 点击反馈 */
+					-webkit-tap-highlight-color: transparent;
+					.title{
+						margin-top: -12rpx;
+					}
+				}
+
+
 				.icon {
-					width: 44rpx;
-					height: 44rpx;
+					width: 56rpx;
+					height: 56rpx;
 					margin: 0 auto 4rpx;
 				}
 
@@ -149,17 +219,24 @@
 				}
 			}
 		}
+
+		.ribbon-title {
+			font-size: 22rpx;
+			font-weight: 550;
+			padding: 20rpx 0 0 20rpx;
+		}
 	}
 
 	.menu {
-		margin: 0 20rpx 20rpx 20rpx;
-	
+		margin: 20rpx;
+
 		background-color: #FFF;
 
 		.item {
 			// margin-bottom: 20rpx;
 			height: 80rpx;
-	padding: 20rpx;
+			padding: 20rpx;
+
 			.icon {
 				width: 42rpx;
 				height: 42rpx;
@@ -180,24 +257,32 @@
 		}
 	}
 }
+
 /* 关键：重置button布局为块级，强制左对齐 */
 .button {
-  background: transparent;
-  border: none !important; /* 强制覆盖原生边框 */
-  text-align: left !important; /* 强制左对齐 */
-  font-size: 22rpx;
-  color: #535252;
-  padding: 0 !important; /* 覆盖原生内边距 */
-  margin: 0 !important;
-  display: block !important; /* 改为块级元素，左对齐生效 */
-  width: 100%; /* 可选：占满父容器宽度，左对齐更明显 */
-  line-height: normal; /* 重置行高，避免文字垂直居中干扰 */
-  box-sizing: border-box;
+	background: transparent;
+	border: none !important;
+	/* 强制覆盖原生边框 */
+	text-align: left !important;
+	/* 强制左对齐 */
+	font-size: 22rpx;
+	color: #535252;
+	padding: 0 !important;
+	/* 覆盖原生内边距 */
+	margin: 0 !important;
+	display: block !important;
+	/* 改为块级元素，左对齐生效 */
+	width: 100%;
+	/* 可选：占满父容器宽度，左对齐更明显 */
+	line-height: normal;
+	/* 重置行高，避免文字垂直居中干扰 */
+	box-sizing: border-box;
 }
 
 /* 彻底清除button原生点击态/边框 */
 .button::after {
-  border: none !important;
-  border-radius: 0 !important;
-  content: none !important; /* 清除原生伪元素 */
+	border: none !important;
+	border-radius: 0 !important;
+	content: none !important;
+	/* 清除原生伪元素 */
 }

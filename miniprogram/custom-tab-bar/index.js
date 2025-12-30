@@ -1,7 +1,4 @@
-import {
-	COLOR
-} from '../utils/color.js';
-
+import { playBtnAudio } from '../utils/audioUtil'; // 引入音频工具
 Component({
 	data: {
 		height: '80px',
@@ -66,16 +63,20 @@ Component({
 
 
 	},
-
+ detached() {
+    audioPlayer.destroy();
+  },
 	methods: {
 		switchTab(e) {
 			const data = e.currentTarget.dataset
 			const url = data.path
-			wx.vibrateShort({ type: 'heavy' })
+			wx.vibrateShort({ type:'light' })
+			playBtnAudio('/static/audio/click.mp3', 1000);
 			//防止重复点击
 			if (data.index == this.data.selected) {
 				return false
 			}
+			
 			if(data.index==2){
 				const token = wx.getStorageSync('token') || null
 				if (!token) {

@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-		"z-tabs":"../../../../components/z-tabs/z-tabs"
+		"z-tabs":"../../../../components/z-tabs/z-tabs",
+		"collapse": "../../../../components/z-collapse/z-collapse"
 	}
 }

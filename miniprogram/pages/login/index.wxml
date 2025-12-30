@@ -5,11 +5,9 @@
 <view class="z_position">
 	<!-- <image class="top_img z_absolute"
 		src="https://env-00jxubueh4pn.normal.cloudstatic.cn/生成创意插画.jpg?expire_at=1764303325&er_sign=f919dee56e1848086ac79303073dbc30" /> -->
-<view class="top_img">
-	<image
-			class="icon-copperplate"
-				src="/static/imgs/icon-copperplate.png"
-				mode="widthFix" /></view>
+	<view class="top_img">
+		<image class="icon-copperplate" src="/static/imgs/icon-copperplate.png" mode="widthFix" />
+	</view>
 
 	<view class="z_absolute login_container">
 
@@ -22,7 +20,7 @@
 				adjust-position="{{false}}" bindinput="bindKeyInput" />
 			<!-- <text class=" login_phone_placeholder">{{phone || '请授权手机号'}}</text> -->
 
-			<view class="login_phone_open" bind:tap="handlePopup">请选择授权手机号</view>
+			<!-- <view class="login_phone_open" bind:tap="handlePopup">请选择授权手机号</view> -->
 		</view>
 
 		<!-- 
@@ -48,25 +46,26 @@
 			</label>
 		</view>
 
-		<view class="login_btn radius-10 {{!privacy||phone.length!==11?'login_btn_d':''}} " bind:tap="handleLogin">确定授权绑定会员
+		<view class="login_btn radius-10 {{!privacy||phone.length!==11?'login_btn_d':''}} " hover-class="btn-yellow-hover"
+			hover-stay-time='10' bind:tap="handleLogin">登录
 		</view>
 
+		<view class="login_wx_btn radius-10 " hover-class="btn-hover" hover-stay-time='10' bind:tap="handlePopup">微信快捷登录
+		</view>
+		
+</view>
 
-	</view>
 </view>
 
 
-
 <z-popup bind:popup="handlePopup" bind:closeOnClickOverlay="handleCloseOverlay" show="{{show}}"
-	closeOnClickOverlay="{{false}}" mode="{{'center'}}">
+	closeOnClickOverlay="{{false}}" mode="{{'bottom'}}">
 
-	<view class="develop-tips">
-		<view class="develop-tips-icon">
-			<image
-				src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
-				mode="widthFix" />
+	<view class="popup-content">
+		<view class="login-popup">
+			<button class="login-btn " wx:if="{{!hasUserInfo}}" open-type="getUserProfile" bindtap="getUserProfile" type="primary">
+			授权登录
+		</button>
 		</view>
-		<view>抱歉呀，这个功能还在 “修炼”</view>
-		<view>等它解锁新技能就和您见面</view>
 	</view>
 </z-popup>

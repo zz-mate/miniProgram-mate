@@ -11,15 +11,19 @@
 		<view class="mine-container">
 
 			<view class="menu radius-10">
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover"
+					hover-stay-time='150'>
 					<view class="title">
 						头像
 					</view>
 					<view class="info flex flex-align-items-center">
 						<view class="value avatar">
-							<image
-								src="{{userInfo.avatar||'/static/icon/icon-Placeholder-image.png'}}"
-								mode="widthFix" />
+							<button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+<image src="{{userInfo.avatar || '/static/icon/icon-Placeholder-image.png'}}" class="avatar-img"
+								mode="widthFix">
+							</image>
+							</button>
+							
 						</view>
 						<!-- <view class="icon-arrow">
               <image
@@ -29,7 +33,8 @@
 					</view>
 
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover"
+					hover-stay-time='150'>
 
 					<view class="title">
 						ID
@@ -43,7 +48,9 @@
 						</view>
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'  data-type="nickname" data-value="{{userInfo.nickname}}" bind:tap="handlePageUrl" data-url="/subPackagesMine/pages/userInfo/edit/index">
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
+					data-type="nickname" data-value="{{userInfo.nickname}}" bind:tap="handlePageUrl"
+					data-url="/subPackagesMine/pages/userInfo/edit/index">
 
 					<view class="title">
 						昵称
@@ -57,7 +64,9 @@
 						</view>
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'  data-type="gender" data-value="{{userInfo.gender}}" bind:tap="handlePageUrl" data-url="/subPackagesMine/pages/userInfo/edit/index">
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
+					data-type="gender" data-value="{{userInfo.gender}}" bind:tap="handlePageUrl"
+					data-url="/subPackagesMine/pages/userInfo/edit/index">
 
 					<view class="title">
 						性别
@@ -71,7 +80,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
+				<!-- <view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
 
 					<view class="title">
 						生日
@@ -84,7 +93,7 @@
 							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
-				</view>
+				</view> -->
 			</view>
 
 
@@ -103,22 +112,22 @@
 						</view>
 					</view>
 				</view> -->
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
+				<!-- <view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
 
 					<view class="title">
 						手机号
 					</view>
 					<view class="info flex flex-align-items-center">
 						<view class="value num">
-							{{userInfo.phone}}
+							{{userInfo.phone||'未绑定'}}
 						</view>
 						<view class="icon-arrow">
 							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
-				</view>
+				</view> -->
 
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
+				<!-- <view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
 
 					<view class="title">
 						邮箱
@@ -131,8 +140,8 @@
 							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
-				</view>
-				<view class="item flex flex-align-items-center flex-space-between" data-url="/subPackagesMine/pages/qrcode/index" hover-class="btn-hover" hover-stay-time='150'  data-type="page" bind:tap="handlePageUrl">
+				</view> -->
+				<!-- <view class="item flex flex-align-items-center flex-space-between" data-url="/subPackagesMine/pages/qrcode/index" hover-class="btn-hover" hover-stay-time='150'  data-type="page" bind:tap="handlePageUrl">
 
 					<view class="title">
 						我的二维码
@@ -145,22 +154,24 @@
 							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 						</view>
 					</view>
-				</view>
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
+				</view> -->
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover"
+					hover-stay-time='150'>
 
 					<view class="title">
 						版本号
 					</view>
 					<view class="info flex flex-align-items-center">
 						<view class="value">
-
+							{{version|| '1.0.0'}}
 						</view>
 						<view class="icon-arrow">
-							<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+
+							<!-- <image src="/static/imgs/icon-arrow_right.png" mode="widthFix" /> -->
 						</view>
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
+				<!-- <view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'>
 
 					<view class="title">
 						注销账号
@@ -168,10 +179,10 @@
 					<view class="icon-arrow">
 						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 					</view>
-				</view>
+				</view> -->
 			</view>
 
-
+			<!-- 
 			<view class="logout radius-10" bind:tap="logout" hover-class="btn-hover" hover-stay-time='150'>
 				<view class="item flex flex-align-items-center flex-center">
 
@@ -180,7 +191,7 @@
 					</view>
 
 				</view>
-			</view>
+			</view> -->
 
 		</view>
 
