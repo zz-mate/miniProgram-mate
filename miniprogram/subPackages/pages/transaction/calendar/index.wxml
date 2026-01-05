@@ -23,7 +23,7 @@
 		<view class="disburse num">支{{totalExpense}}</view>
 	</view>
 </view>
-<scroll-view type="custom" scroll-y style="height:calc(100% - {{billContentHeight}}px);padding:20rpx; ">
+<scroll-view type="custom" scroll-y style="height:calc(100% - {{billContentHeight}}px);padding:0 20rpx; ">
 
 	<!-- 流水列表 & 数据为空 区域 -->
 
@@ -67,7 +67,7 @@
 		</view>
 		<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{transactionList.length}}">
 		</z-divider>
-		<view class="no-data" wx:if="{{!transactionList.length}}" style="margin-top:{{token?'':'20rpx'}}">
+		<view class="no-data" wx:if="{{!transactionList.length}}" style="margin-top:'20rpx">
 			<view class="no-data-icon">
 				<image src="/static/async-icon/icon-not-bill.png" mode="widthFix" />
 			</view>

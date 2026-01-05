@@ -16,6 +16,8 @@ Page({
 	 */
 	data: {
 		scrollHeight: 0,
+		advHeight:0,
+		type:"",
 		navBgColor: COLOR.white,
 		yearMonthMoreActive: 0,
 		categoryId: "", bookId: "", userId: "", categoryName: "",
@@ -165,10 +167,15 @@ Page({
 		query.select('.filter-date').boundingClientRect();
 		query.select('.bill-card').boundingClientRect();
 		query.select('.bill-item_header').boundingClientRect();
+		query.select('.ad-card').boundingClientRect();
+		
 		query.exec((res) => {
 			if (res) {
+				console.log(res)
+				let filterHeightPx = 0 || res[1].height
 				this.setData({
-					scrollHeight: res[0].height + res[1].height + res[2].height + res[3].height,
+					scrollHeight: res[0].height + filterHeightPx + res[2].height + res[3].height,
+					advHeight:res[4].height+100
 				});
 			}
 		})
@@ -363,6 +370,9 @@ Page({
 			const { transaction_id, transaction_type } = evt.currentTarget.dataset
 			wx.vibrateShort({ type: 'light' })
 			playBtnAudio('/static/audio/click.mp3', 1000);
+			this.setData({
+				isJumpToDetail: true
+			})
 			wx.navigateTo({
 				url: `/subPackages/pages/transaction/info/index?id=${transaction_id}&type=${transaction_type}`
 			})
@@ -410,7 +420,7 @@ Page({
 		// 2. 是从详情页返回（isJumpToDetail为true）
 		if (!this.data.isFirstEnter && this.data.isJumpToDetail) {
 			console.log("从账单详情页返回，执行刷新")
-			this.handleTransactionList('')
+			this.handleTransactionList(this.data.type)
 			// 刷新后重置标记，避免重复刷新
 			this.setData({
 				isJumpToDetail: false

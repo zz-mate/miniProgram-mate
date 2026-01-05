@@ -1,8 +1,8 @@
 // subPackages/pages/budget/add/index.ts
 const app = getApp()
 import { getCategoryList } from '../../../../api/category'
-import {playBtnAudio} from '../../../../utils/audioUtil'
-import { budgetInfo, createBudget } from '../../../../api/budget'
+import { playBtnAudio } from '../../../../utils/audioUtil'
+import { budgetInfo, createBudget, removebudget } from '../../../../api/budget'
 import { getStorageSync, matchAndSortArrays, getThisDate, getCurrentMonthDays } from '../../../../utils/util'
 import SystemConfig from '../../../../utils/capsule';
 
@@ -28,7 +28,7 @@ Page({
 			budget_total_amount: "0.00",
 			category_amount: "0.00",
 		},
-		category_total_amount:0,
+		category_total_amount: 0,
 		totalBudgetOriginal: "0.00",
 		originalBudgets: {} // 存储每个输入框的原始预算值（key: 索引, value: 原始值）
 	},
@@ -40,18 +40,35 @@ Page({
 	async getCategoryListFn(list, flag) {
 		let userId = getStorageSync("userInfo").id
 		let res = await getCategoryList({ userId, type: 2, ...this.data.queryParams })
+		console.log(JSON.stringify(res.list))
+		console.log(JSON.stringify(list))
+		// const resultList = matchAndSortArrays({
+		// 	targetList: res.list,
+		// 	sourceList: list,
+		// 	// showOnlyMatched:false,
+		// 	assignKeys: ['category_amount', 'category_actual_amount']
+		// });
+
 		const resultList = matchAndSortArrays({
-			targetList: res.list,
-			sourceList: list,
-			// showOnlyMatched:false,
-			assignKeys: ['category_amount', 'category_actual_amount', 'remaining_percent'] // 新增 remark 字段
+			targetList: res.list, // 基础分类列表（目标）
+			sourceList: list, // 预算数据（源）
+			matchKey: 'category_id', // 源数据的匹配键（budgetCategoryData 的 category_id）
+			targetMatchKey: 'id', // 目标列表的匹配键（baseCategoryList 的 id）
+			assignKeys: ['category_amount', 'category_actual_amount'], // 要合并的字段
+			showOnlyMatched: false, // 显示所有分类
+			fieldDefaults: {
+				category_amount: "0.00",
+				category_actual_amount: "0.00"
+			},
+			sortUnmatchedBySortOrder: true // 未匹配项按sort_order升序（默认true，可省略）
 		});
+		console.log(resultList)
 		this.setData({
 			categoryList: resultList,
 		})
 		this.getSccollHeight()
 		// 如果分类下有 预算分类 就计算分类的总预算
-		if (list&&list.length && flag) {
+		if (list && list.length && flag) {
 			this.calculateTotalBudget()
 		}
 
@@ -73,6 +90,7 @@ Page({
 			"budgetInfo.category_amount": res.data == null ? '0.00' : res.data.amount
 		})
 		let list = res.data == null ? [] : res.data.categories
+		console.log(list)
 		this.getCategoryListFn(list, false)
 	},
 	/**
@@ -217,6 +235,9 @@ Page({
 		// return
 		let res = await createBudget(data)
 		if (res.code == 200) {
+			wx.showToast({
+				title: "添加预算成功", icon: "none"
+			})
 			wx.navigateBack({ delta: 1 })
 		}
 		// console.log(data)
@@ -242,7 +263,7 @@ Page({
 		const formattedTotal = total.toFixed(2);
 		// 判断 分类的总预算金额 小于 之前设置现有的总预算 就不计入总预算
 		// console.log(total, Number(this.data.budgetInfo.category_amount), Number(this.data.budgetInfo.budget_total_amount))
-console.log(total,123)
+		console.log(total, 123)
 		// console.log(total > Number(this.data.budgetInfo.budget_total_amount))
 		if (total > Number(this.data.budgetInfo.budget_total_amount)) {
 			this.setData({ 'budgetInfo.category_amount': formattedTotal });
@@ -386,9 +407,9 @@ console.log(total,123)
 		this.calculateTotalBudget()
 
 		let { category_amount, budget_total_amount } = this.data.budgetInfo
-		console.log(parseInt(formattedAmount),parseInt(category_amount),budget_total_amount)
+		console.log(parseInt(formattedAmount), parseInt(category_amount), budget_total_amount)
 		let that = this
-		if (parseInt(formattedAmount) < parseInt(category_amount)&&this.data.category_total_amount>0) {
+		if (parseInt(formattedAmount) < parseInt(category_amount) && this.data.category_total_amount > 0) {
 			wx.showModal({
 				title: "温馨提示",
 				content: `当前输入的总预算小于分类预算的总和${category_amount}，是否更新为总预算`,
@@ -417,6 +438,61 @@ console.log(total,123)
 		}
 		console.log('总预算失焦，最终值（整数）：', formattedAmount);
 
+	},
+	handleClear() {
+		const that = this; // 保存this指向（也可改用箭头函数）
+
+		// 显示操作菜单
+		wx.showActionSheet({
+			itemList: ['确认清空'],
+			success: async (res) => { // 关键：回调声明为async
+				if (res.tapIndex === 0) { // 点击了“确认清空”
+					try {
+						// 显示加载提示
+						wx.showLoading({ title: '清空中...', mask: true });
+
+						// 调用删除预算方法（await 需在async函数内）
+						const result = await that.removebudgetFn();
+						console.log('清空结果：', result);
+
+						// 关闭加载提示
+						wx.hideLoading();
+
+						// 根据结果反馈
+						if (result.success) {
+							wx.showToast({ title: '清空成功', icon: 'none' });
+							// 可选：清空后刷新页面数据
+							// that.loadBudgetList(); 
+							wx.navigateBack({ delta: 1 })
+						} else {
+							wx.showToast({ title: result.message || '清空失败', icon: 'none' });
+						}
+					} catch (error) {
+						wx.hideLoading();
+						wx.showToast({ title: '清空异常，请重试', icon: 'none' });
+						console.error('清空预算失败：', error);
+					}
+				}
+			},
+			fail(res) {
+				console.log('取消清空：', res.errMsg);
+				// 可选：取消操作的提示
+				// wx.showToast({ title: '已取消', icon: 'none' });
+			}
+		});
+	},
+
+
+	async removebudgetFn() {
+		let data = {
+			userId: getStorageSync("userInfo").id,
+			bookId: getStorageSync("bookInfo").id,
+			budgetId: this.data.budgetInfo.id
+		}
+		if (!data.budgetId) {
+			return { success: true }
+		}
+		return await removebudget(data)
 	},
 	/**
 	 * 生命周期函数--监听页面加载

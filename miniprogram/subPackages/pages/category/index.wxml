@@ -8,15 +8,14 @@
 		<z-tabs bind:change="onTapTab" active="{{selectedTab}}" tabs="{{typeList}}"></z-tabs>
 	</view>
 </navigation-bar>
-<view class="tab-container" style="height: calc(100vh - {{ shortcutTabHeight+height}}px); overflow: hidden;">
+<view class="tab-container" style="height: calc(100vh - {{ shortcutTabHeight+height-28}}px); overflow: hidden;">
 	<!--	<swiper class="scroll-list" current="{{selectedTab}}" bind:change="onTabChanged"
 		worklet:onscrollstart="onTabTransition" worklet:onscrollupdate="onTabTransition"
 		worklet:onscrollend="onTabTransitionEnd" duration="{{400}}" cache-extent="1">
 		 <swiper-item wx:for="{{swiperTabs}}" wx:key="index" class="swiper-{{index}}" >-->
 	<view class="card" style="height: 100%; box-sizing: border-box;">
 		<!-- 核心优化：添加可滚动容器 scroll-view -->
-		<scroll-view class="list-scroll" scroll-y enable-flex scroll-with-animation show-scrollbar="{{true}}"
-			style="height: 100%;">
+		<scroll-view class="list-scroll" scroll-y enable-flex show-scrollbar="{{false}}" style="height:100%">
 
 			<view class="radius-10 bill-container-cate  ">
 				<block wx:for="{{categoryList}}" wx:for-index="i">

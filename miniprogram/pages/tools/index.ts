@@ -12,8 +12,16 @@ Page({
    */
   data: {
     navBgColor: COLOR.white,
-  },
+		list:[
+			{icon:"https://wx.qlogo.cn/mmhead/Q3auHgzwzM78kb18hfKQjuPG3mRAQfQ84DEA9iaNzMZVKx9rYmWyQNA/0",name:"快递跟踪",url:"plugin://kdPlugin/index?num=19525492954&appName=掌账 Mate"},
+			{icon:"https://wx.qlogo.cn/mmhead/Q3auHgzwzM6sVlBP2DuDo1P9ELuZLgkMSqRrV9w6zqLwb2lfT985sw/0",name:"趣GO票l省钱外卖",url:"plugin-private://wxb2acc21c4f786d08/pages/index/index?userid=1&color=#1cbbb4&frontcolor=#ffffff"},
 
+		]
+  },
+	handlePageUrl(evt){
+		const {url} = evt.currentTarget.dataset
+		wx.navigateTo({url})
+	},
 
   onRouteDone() {
     console.info('@@@ goods page routeDone ')

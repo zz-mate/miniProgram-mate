@@ -30,7 +30,7 @@
 	<sticky-section push-pinned-header="{{false}}">
 		<view class="tab-container">
 			<view class="scroll-list">
-				<view class="card-echart">
+				<view class="card-echart" wx:if="{{yearMonthMoreActive!=0}}">
 					<view class="card radius-10">
 						<!-- <view class="title">支出</view> -->
 						<view class="echart disburse">
@@ -39,7 +39,8 @@
 
 
 						<view class="tips-content flex flex-align-items-center flex-space-between  num radius-4"
-							bind:tap="handleDatePage" data-chart="line" 	data-date="{{queryParams.start_time}}" data-title="{{chartData.lineData.summary.timeRange}}">
+							bind:tap="handleDatePage" data-chart="line" data-date="{{queryParams.start_time}}"
+							data-title="{{chartData.lineData.summary.timeRange}}">
 							<view>
 								{{chartData.lineData.summary.timeRange}}，{{typeIndex==0?'支出':typeIndex==1?'收入':'结余'}}
 								共计 {{chartData.lineData.summary.totalCount}} 笔
@@ -47,15 +48,15 @@
 								{{chartData.lineData.summary.totalAmount}}
 							</view>
 
-						<view class="icon-arrow">
-					<image src="/static/icon/icon-data-right.png" mode="widthFix"/>
-				</view>
+							<view class="icon-arrow">
+								<image src="/static/icon/icon-data-right.png" mode="widthFix" />
+							</view>
 
 						</view>
 						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.lineData.list}}"
-							hover-class="btn-hover" hover-stay-time='10' data-date="{{item.date}}" data-title="{{item.dateStr}}" data-chart="line"
-							wx:if="{{isLineExpand || index < 3}}" bind:tap="handleDatePage">
-							<view class="day  num radius-4 {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">{{item.day}}</view>
+							hover-class="btn-hover" hover-stay-time='10' data-date="{{item.date}}" data-title="{{item.dateStr}}"
+							data-chart="line" wx:if="{{isLineExpand || index < 3}}" bind:tap="handleDatePage">
+							<view class="day  num radius {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">{{item.day}}</view>
 							<view class="info">
 								<view class="date-money flex flex-space-between num">
 									<text class="date">{{item.dateStr}}</text>
@@ -88,23 +89,24 @@
 
 
 						<view class="tips-content flex flex-align-items-center flex-space-between num radius-4"
-						bind:tap="handleDatePage"	data-date="{{queryParams.start_time}}" data-chart="pie" data-title="{{chartData.PieData.summary.timeRange}}">
+							bind:tap="handleDatePage" data-date="{{queryParams.start_time}}" data-chart="pie"
+							data-title="{{chartData.PieData.summary.timeRange}}">
 							<view>
 								{{chartData.PieData.summary.timeRange}}，{{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
 								{{chartData.PieData.summary.totalAmount}}
 							</view>
 							<!-- 收入共计 {{chartData.PieData.summary.totalCategory}} 笔分类， -->
 							<view class="icon-arrow">
-					<image src="/static/icon/icon-data-right.png" mode="widthFix"/>
-				</view>
+								<image src="/static/icon/icon-data-right.png" mode="widthFix" />
+							</view>
 						</view>
 						<!-- data-date="{{item.date}}" -->
 						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.PieData.list}}"
-							data-category_id="{{item.categoryId}}" data-date="{{queryParams.start_time}}" data-chart="pie" data-category_name="{{item.name}}"
-							hover-class="btn-hover" hover-stay-time='10' wx:if="{{isPieExpand || index < 3}}"
-							bind:tap="handleDatePage">
-							<view class="day radius-4 disburse num {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">
-								<image src="{{item.category_icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" class="icon" />
+							data-category_id="{{item.categoryId}}" data-date="{{queryParams.start_time}}" data-chart="pie"
+							data-category_name="{{item.name}}" hover-class="btn-hover" hover-stay-time='10'
+							wx:if="{{isPieExpand || index < 3}}" bind:tap="handleDatePage">
+							<view class="day radius disburse num {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">
+								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" class="icon" />
 
 							</view>
 							<view class="info">
@@ -134,6 +136,16 @@
 						</view>
 					</view>
 
+				</view>
+
+				<view class="no-data radius-10"  wx:if="{{yearMonthMoreActive==0}}">
+					<view class="no-data-icon">
+						<image src="/static/async-icon/icon-not-bill.png" mode="widthFix" />
+					</view>
+					<view class="no-data-text">
+						<view>抱歉呀，这个功能还在 “修炼”</view>
+						<view>等它解锁新技能就和您见面</view>
+					</view>
 				</view>
 			</view>
 		</view>

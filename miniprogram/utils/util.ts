@@ -117,13 +117,15 @@ export const validatePhoneNumber = (phoneNumber: string): boolean => {
 export function matchAndSortArrays({
 	targetList = [],
 	sourceList = [],
-	matchKey = 'category_id',
+	matchKey = 'category_id', // 源数据的匹配键
+	targetMatchKey = matchKey, // 目标列表的匹配键（新增：解决源/目标键名不一致问题）
 	assignKeys = [],
 	showOnlyMatched = false,
-	// 三个默认字段的默认值配置（支持自定义覆盖）
 	fieldDefaults = {
-		category_amount: "0.00",    // 金额默认 0
-	}
+		category_amount: "0.00",
+		category_actual_amount: "0.00"
+	},
+	sortUnmatchedBySortOrder = true
 } = {}) {
 	// 1. 参数合法性校验
 	if (!Array.isArray(targetList) || !Array.isArray(sourceList)) {
@@ -132,6 +134,10 @@ export function matchAndSortArrays({
 	}
 	if (typeof matchKey !== 'string' || matchKey.trim() === '') {
 		console.warn('matchKey 必须是非空字符串');
+		return targetList;
+	}
+	if (typeof targetMatchKey !== 'string' || targetMatchKey.trim() === '') {
+		console.warn('targetMatchKey 必须是非空字符串');
 		return targetList;
 	}
 	if (!Array.isArray(assignKeys) || assignKeys.length === 0) {
@@ -144,66 +150,70 @@ export function matchAndSortArrays({
 	}
 	if (typeof fieldDefaults !== 'object' || fieldDefaults === null) {
 		console.warn('fieldDefaults 必须是对象，已使用默认配置');
-		fieldDefaults = { category_amount: "0.00" };
+		fieldDefaults = { category_amount: "0.00", category_actual_amount: "0.00" };
+	}
+	if (typeof sortUnmatchedBySortOrder !== 'boolean') {
+		sortUnmatchedBySortOrder = true;
 	}
 
-	// 2. 源数组转 Map（匹配用，保持原有逻辑）
+	// 2. 源数组转 Map（关键：用源数据的 matchKey）
 	const sourceMap = new Map();
 	sourceList.forEach(sourceItem => {
-		const key = sourceItem?.[matchKey] != null ? String(sourceItem[matchKey]) : '';
-		if (key) {
-			const assignData = {};
+		if (!sourceItem) return;
+		// 源数据的匹配键值（如 budgetCategoryData 的 category_id）
+		const sourceKey = sourceItem[matchKey] != null ? String(sourceItem[matchKey]) : '';
+		if (!sourceKey) return;
+
+		const assignData = {};
+		assignKeys.forEach(field => {
+			const hasDefault = Object.prototype.hasOwnProperty.call(fieldDefaults, field);
+			// 保留源数据的真实值，而非直接用默认值
+			if (sourceItem[field] !== undefined && sourceItem[field] !== null) {
+				assignData[field] = sourceItem[field];
+			} else if (hasDefault) {
+				assignData[field] = fieldDefaults[field];
+			}
+		});
+		sourceMap.set(sourceKey, assignData);
+	});
+
+	// 3. 核心匹配逻辑（关键：目标列表用 targetMatchKey 匹配）
+	const processedList = targetList.map(targetItem => {
+		if (!targetItem) return { isMatched: false };
+		// 目标列表的匹配键值（如 baseCategoryList 的 id）
+		const targetKey = targetItem[targetMatchKey] != null ? String(targetItem[targetMatchKey]) : '';
+		const matchedData = sourceMap.get(targetKey);
+
+		if (matchedData) {
+			// 匹配成功：合并源数据的真实值
+			return { ...targetItem, ...matchedData, isMatched: true };
+		} else {
+			// 匹配失败：填充默认值
+			const defaultData = {};
 			assignKeys.forEach(field => {
-				const hasDefault = Object.prototype.hasOwnProperty.call(fieldDefaults, field);
-				if (hasDefault) {
-					// 有默认值的字段：为空则用配置的默认值
-					assignData[field] = sourceItem[field] !== undefined && sourceItem[field] !== null
-						? sourceItem[field]
-						: fieldDefaults[field];
-				} else {
-					// 无默认值的自定义字段：有值则保留
-					if (sourceItem[field] !== undefined && sourceItem[field] !== null) {
-						assignData[field] = sourceItem[field];
-					}
-				}
+				defaultData[field] = fieldDefaults[field] || undefined;
 			});
-			sourceMap.set(key, assignData);
+			return { ...targetItem, ...defaultData, isMatched: false };
 		}
 	});
 
-	// 3. 核心匹配逻辑：标记匹配状态 + 给匹配项赋值
-	const processedList = targetList.map(targetItem => {
-		const key = targetItem?.[matchKey] != null ? String(targetItem[matchKey]) : '';
-		const matchedData = sourceMap.get(key);
-
-		return matchedData
-			? { ...targetItem, ...matchedData, isMatched: true } // 匹配成功：合并源数据
-			: { ...targetItem, isMatched: false }; // 匹配失败：仅标记状态
+	// 4. 排序：isMatched 优先 + sort_order 升序
+	processedList.sort((a, b) => {
+		if (a.isMatched && !b.isMatched) return -1;
+		if (!a.isMatched && b.isMatched) return 1;
+		if (sortUnmatchedBySortOrder) {
+			const aSort = Number(a.sort_order) || 0;
+			const bSort = Number(b.sort_order) || 0;
+			return aSort - bSort;
+		}
+		return 0;
 	});
 
-	// -------------- 核心新增：全量字段补全（关键步骤）--------------
-	const filledList = processedList.map(item => {
-		const filledItem = { ...item }; // 拷贝原数据，避免修改源对象
-		assignKeys.forEach(field => {
-			const hasDefault = Object.prototype.hasOwnProperty.call(fieldDefaults, field);
-			// 规则：字段不存在 / 为 null/undefined → 填充默认值
-			if (filledItem[field] === undefined || filledItem[field] === null) {
-				filledItem[field] = hasDefault ? fieldDefaults[field] : undefined;
-			}
-		});
-		return filledItem;
-	});
-
-	// 4. 排序：匹配项排在前面
-	filledList.sort((a, b) => (a.isMatched ? 0 : 1) - (b.isMatched ? 0 : 1));
-
-	// 5. 根据 showOnlyMatched 筛选结果
+	// 5. 筛选 + 移除标记
 	const finalList = showOnlyMatched
-		? filledList.filter(item => item.isMatched)
-		: filledList;
-
-	// 可选：移除 isMatched 标记
-	// finalList.forEach(item => delete item.isMatched);
+		? processedList.filter(item => item.isMatched)
+		: processedList;
+	finalList.forEach(item => delete item.isMatched);
 
 	return finalList;
 }

@@ -20,17 +20,18 @@
 	 <view class="sticky-content  radius-10">
 			<!--  offset-top="{{navBarHeight}}"-->
 		
-			<view class="sticky-card flex flex-space-between  flex-align-items-center radius-10" wx:if="{{categoryName==''}}"
+			<view class="sticky-card flex flex-space-between  flex-align-items-center radius-10" wx:if="{{type=='bill'}}"
 				bind:tap="handleBillPage">
 				<!-- -->
 				<view class="left radius-4">
-					<view class="month num">{{summary.year}}</view>
-					<view class="year num">{{summary.month}}月</view>
+				
+					<view class="month num">{{summary.month}}月</view>	
+					<view class="year num">{{summary.year}}</view>
 				</view>
 				<view class="center">
 					<view class="flex flex-align-items-center flex-space-between">
 						<view class="num">收{{summary.incomeMoney}}</view>
-						<view class="num">收{{summary.surplusMoney}}</view>
+						<view class="num">{{summary.surplusMoney}}</view>
 					</view>
 					<view class="progress-content">
 						<view class="default">
@@ -59,27 +60,26 @@
 			<view class="sticky-card flex flex-space-between  flex-align-items-center radius-10" wx:else
 				bind:tap="handleBillPage">
 				<!-- -->
-				<view class="left radius-4">
-					<view class="month num">{{summary.year}}</view>
-					<view class="year num">{{summary.month}}月</view>
+				<view class="left radius">
+					<image src="{{summary.category_icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 				</view>
 				<view class="center">
 					<view class="flex flex-align-items-center flex-space-between">
-						<view class="num">收{{summary.incomeMoney}}</view>
-						<view class="num">收{{summary.surplusMoney}}</view>
+						<view class="num">{{summary.category_name}}</view>
+						<view class="num">{{summary.surplus_amount}}</view>
 					</view>
 					<view class="progress-content">
 						<view class="default">
-							<view class="progress-bar bg-error" style="width: {{summary.incomeProgress}}%">
+							<view class="progress-bar bg-error" style="width: {{summary.income_progress}}%">
 							</view>
 						</view>
 						<view class="red">
-							<view class="progress-bar bg-success" style="width: {{summary.expendProgress}}%">
+							<view class="progress-bar bg-success" style="width: {{summary.expend_progress}}%">
 							</view>
 						</view>
 					</view>
 					<view class="flex flex-align-items-center flex-space-between">
-						<view class="num">支{{summary.expendMoney}}</view>
+						<view class="num" style="color:#666;font-size: 18rpx;">{{summary.bill_count}}笔</view>
 						<view class="text">结余</view>
 					</view>
 

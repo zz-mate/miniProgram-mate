@@ -1,96 +1,107 @@
 {
-  "pages": [
-    "pages/index/index",
-    "pages/plan/index",
-    "pages/mine/index",
-    "pages/login/index",
-    "pages/account/index",
-    "pages/statement/index",
-    "pages/tools/index"
-  ],
-  "subPackages": [
-    {
-      "root": "subPackagesMine",
-      "pages": [
-        "pages/userInfo/index",
-        "pages/userInfo/edit/index",
-        "pages/qrcode/index",
-        "pages/setting/index",
+	"pages": [
+		"pages/index/index",
+		"pages/plan/index",
+		"pages/mine/index",
+		"pages/login/index",
+		"pages/account/index",
+		"pages/statement/index",
+		"pages/tools/index"
+	],
+	"subPackages": [
+		{
+			"root": "subPackagesMine",
+			"pages": [
+				"pages/userInfo/index",
+				"pages/userInfo/edit/index",
+				"pages/qrcode/index",
+				"pages/setting/index",
 				"pages/integrate/index"
-      ]
-    },
-    {
-      "root": "subPackages",
-      "pages": [
-        "pages/transaction/add/index",
-        "pages/transaction/bill/index",
-        "pages/transaction/date/index",
+			]
+		},
+		{
+			"root": "subPackages",
+			"pages": [
+				"pages/transaction/add/index",
+				"pages/transaction/bill/index",
+				"pages/transaction/cate-bill/index",
+				"pages/transaction/date/index",
 				"pages/transaction/dates/index",
-        "pages/transaction/data/index",
-        "pages/transaction/info/index",
-        "pages/transaction/import/index",
-        "pages/transaction/export/index",
-        "pages/budget/index",
-        "pages/budget/add/index",
-        "pages/transaction/calendar/index",
-        "pages/book/index",
-        "pages/book/list/index",
-        "pages/book/category/index",
-        "pages/book/add/index",
-        "pages/account/category/index",
-        "pages/account/list/index",
-        "pages/account/add/index",
+				"pages/transaction/data/index",
+				"pages/transaction/info/index",
+				"pages/transaction/import/index",
+				"pages/transaction/export/index",
+				"pages/budget/index",
+				"pages/budget/add/index",
+				"pages/transaction/calendar/index",
+				"pages/book/index",
+				"pages/book/list/index",
+				"pages/book/category/index",
+				"pages/book/add/index",
+				"pages/account/category/index",
+				"pages/account/list/index",
+				"pages/account/add/index",
 				"pages/category/index"
-      ]
-    }
-  ],
-  "window": {
-    "navigationStyle": "custom",
-    "navigationBarTextStyle": "black"
-  },
-  "usingComponents": {
-    "navigation-bar": "./components/navigation-bar/navigation-bar",
-    "z-popup": "./components/z-popup/z-popup",
-    "z-divider": "./components/z-divider/z-divider"
-  },
-  "tabBar": {
-    "custom": true,
-    "color": "#7A7E83",
-    "selectedColor": "#3cc51f",
-    "borderStyle": "black",
-    "backgroundColor": "#ffffff",
-    "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": ""
-      },
-      {
-        "pagePath": "pages/plan/index",
-        "text": ""
-      },
-      {
-        "pagePath": "pages/statement/index",
-        "text": ""
-      },
-      {
-        "pagePath": "pages/mine/index",
-        "text": ""
-      }
-    ]
-  },
-  "renderer": "skyline",
-  "appBar": {},
-  "rendererOptions": {
-    "skyline": {
-      "defaultDisplayBlock": true,
-      "disableABTest": true,
-      "sdkVersionBegin": "3.0.0",
-      "sdkVersionEnd": "15.255.255"
-    }
-  },
-  "componentFramework": "glass-easel",
-  "lazyCodeLoading": "requiredComponents",
-  "sitemapLocation": "sitemap.json",
+			]
+		}
+	],
+	"window": {
+		"navigationStyle": "custom",
+		"navigationBarTextStyle": "black"
+	},
+	"usingComponents": {
+		"navigation-bar": "./components/navigation-bar/navigation-bar",
+		"z-popup": "./components/z-popup/z-popup",
+		"z-divider": "./components/z-divider/z-divider"
+	},
+	"tabBar": {
+		"custom": true,
+		"color": "#7A7E83",
+		"selectedColor": "#3cc51f",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": ""
+			},
+			{
+				"pagePath": "pages/plan/index",
+				"text": ""
+			},
+			{
+				"pagePath": "pages/statement/index",
+				"text": ""
+			},
+			{
+				"pagePath": "pages/mine/index",
+				"text": ""
+			}
+		]
+	},
+	"renderer": "skyline",
+	"appBar": {},
+	"rendererOptions": {
+		"skyline": {
+			"defaultDisplayBlock": true,
+			"disableABTest": true,
+			"sdkVersionBegin": "3.0.0",
+			"sdkVersionEnd": "15.255.255"
+		}
+	},
+	"componentFramework": "glass-easel",
+	"lazyCodeLoading": "requiredComponents",
+	"sitemapLocation": "sitemap.json",
 	"darkmode": true,
-	"themeLocation": "theme.json"
+	"themeLocation": "theme.json",
+	"plugins": {
+		"kdPlugin": {
+			"version": "1.1.2",
+			"provider": "wx6885acbedba59c14"
+		},
+		"takeoutPlugin": {
+			"version": "1.0.0",
+			"provider": "wxb2acc21c4f786d08"
+		}
+	}
 }

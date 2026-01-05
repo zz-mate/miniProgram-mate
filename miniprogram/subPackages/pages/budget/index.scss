@@ -28,7 +28,8 @@
       text-align: center;
       padding-top: 10rpx;
       color: #000;
-      font-size: 24rpx;
+			font-weight: 550;
+      font-size: 20rpx;
 			z-index: -1;
     }
 
@@ -62,9 +63,9 @@
 
 
 .budget-category-title {
-  font-size: 24rpx;
+  font-size: 20rpx;
   font-weight: bold;
-  color: #000;
+  color: #333;
   margin: 20rpx;
 }
 
@@ -80,7 +81,9 @@
   .icon {
     width: 54rpx;
     height: 54rpx;
-    
+		background-color: #ffd60878;
+		border-radius: 50%;
+		overflow: hidden;
   }
 
   .card {

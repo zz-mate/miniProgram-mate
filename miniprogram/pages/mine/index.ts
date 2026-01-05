@@ -78,7 +78,7 @@ Page({
 		wx.vibrateShort({ type: 'light' })
 		console.log(url, type)
 		if (type == 'page') {
-			wx.navigateTo({ url: url + '?date=' + getThisDate('YY-MM') })
+			wx.navigateTo({ url: url + '?date=' + getThisDate('YY')+ '&yearMonthMoreActive=1&type=0' })
 		} else {
 			let data = {
 				from: 'button',

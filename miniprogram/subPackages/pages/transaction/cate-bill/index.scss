@@ -1,0 +1,366 @@
+/* subPackages/pages/transaction/cate-bill/index.wxss */
+/* subPackages/pages/transaction/bill/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
+
+
+
+.bg-success {
+	background-color: $z-color-success;
+}
+
+
+.bg-error {
+	background-color: $z-color-error;
+}
+
+.text-success {
+	color: $z-color-success;
+}
+
+
+.text-error {
+	color: $z-color-error;
+}
+
+.subsection {
+	width: 320rpx;
+	font-size: 22rpx;
+}
+
+.filter-date {
+	background-color: #FFF;
+	height: 60rpx;
+}
+
+.bill-card {
+	padding: 20rpx;
+
+	.item {
+		flex: 0 0 calc((100% - 24rpx) / 3);
+
+		padding: 20rpx;
+		background-color: #FFF;
+		border: 1rpx solid transparent;
+		box-sizing: border-box;
+		overflow: hidden;
+
+		text {
+			font-size: 20rpx;
+			color: #666;
+		}
+	}
+
+	.active-yellow {
+		border: 1rpx solid $-theme-color;
+	}
+
+	.active-green {
+		border: 1rpx solid $z-color-success;
+	}
+
+	.active-red {
+		border: 1rpx solid $z-color-error;
+	}
+
+	.money {
+		padding-top: 4rpx;
+		font-size: 24rpx;
+	}
+}
+
+.bill-item_header {
+	padding: 20rpx;
+
+	.bill-title {
+		font-weight: 550;
+
+	}
+
+	.money {
+		view {
+			margin-left: 20rpx;
+		}
+	}
+
+}
+
+.collapse-wrap {
+	padding: 0 20rpx 20rpx 20rpx;
+}
+
+.bill-list {
+	// background-color: #FFF;
+	// padding: 0 20rpx;
+	// margin: 20rpx 0;
+	width: 100%;
+
+	.bill-item {
+
+		// 
+		&_header {
+			color: #999999;
+			padding: 20rpx 0;
+			font-size: 20rpx;
+
+			.money {
+				.income {
+					margin-right: 10rpx;
+				}
+			}
+		}
+
+		&_items {
+			padding: 0 20rpx;
+			// margin: 4rpx 0;
+			background-color: #FFF;
+			overflow: hidden;
+
+			.left-icon {
+				// width: 46rpx;
+				// height: 46rpx;
+				margin-right: 10rpx;
+			}
+
+			.border {
+				flex: 1;
+				display: flex;
+				border-bottom: 1rpx solid #f1f1f1;
+				padding: 14rpx 0 14rpx 14rpx;
+				// &:last-child{
+				//   border: none;
+				// }
+			}
+
+			.center-info {
+				flex: 1;
+
+				.title {
+					font-size: 22rpx;
+					color: #000;
+					// font-weight: 550;
+				}
+
+				.tags {
+					font-size: 16rpx;
+					color: #999999;
+					padding: 3rpx 0;
+
+					text {
+						margin-right: 4rpx;
+					}
+				}
+
+				.date-other {
+					font-size: 20rpx;
+					color: #999999;
+
+					.text {
+						margin-right: 4rpx;
+					}
+				}
+			}
+
+			.right-money {
+				font-size: 24rpx;
+				// margin-top: -40rpx;
+			}
+		}
+	}
+}
+
+
+
+
+
+
+.sticky-card {
+	background-color: #FFF;
+	padding: 20rpx;
+	margin-bottom: 20rpx;
+	border-bottom: 1rpx solid #f4f2f7;
+	overflow: hidden;
+
+	.left {
+		text-align: center;
+		width: 60rpx;
+		height: 60rpx;
+		background-color: #f4f2f7;
+		padding-top: 2rpx;
+
+		.month {
+			font-size: 22rpx;
+		}
+
+		.year {
+			color: #999999;
+			font-size: 20rpx;
+		}
+	}
+
+	.center {
+		flex: 1;
+		margin-left: 20rpx;
+		font-size: 20rpx;
+
+		.progress-content {
+			.default {
+				margin-bottom: 4rpx;
+			}
+
+			.red,
+			.default {
+				height: 4rpx;
+				border-radius: 2rpx;
+				overflow: hidden;
+				background-color: #f4f2f758;
+
+				.progress-bar {
+					height: 100%;
+
+					transition: width .3s ease;
+				}
+			}
+		}
+
+
+	}
+
+	.right {
+		text-align: right;
+
+		.num {
+			font-size: 22rpx;
+		}
+
+		.text {
+			color: #999999;
+			font-size: 20rpx;
+		}
+	}
+
+	.arror {
+		width: 24rpx;
+		height: 24rpx;
+		margin-left: 4rpx;
+	}
+}
+
+
+.popup-content {
+	height: 400rpx;
+	font-size: 22rpx;
+	padding-bottom: constant(safe-area-inset-bottom);
+	/* 兼容iOS<11.2 */
+	padding-bottom: env(safe-area-inset-bottom);
+
+	/* swiper 容器：固定高度 + 溢出隐藏（关键） */
+	.content {
+
+		swiper {
+			height: 240rpx;
+			width: 100%;
+			overflow: hidden;
+			/* 防止子元素溢出导致错位 */
+		}
+
+		/* 年份组容器：Flex 布局 + 宽度溢出隐藏 */
+		.year-group {
+			display: flex;
+			flex-wrap: wrap;
+			/* 自动换行 */
+			align-content: center;
+			/* 两行垂直居中 */
+			width: calc(100% + 10rpx);
+			/* 宽度+10rpx，抵消最后一个元素的margin-right */
+			height: 100%;
+			padding: 30rpx;
+			box-sizing: border-box;
+			margin-left: -10rpx;
+			/* 左偏移抵消宽度增加，保持整体居中 */
+		}
+
+		/* 单个年份样式：固定宽度 + 统一间距 */
+		.year-item {
+			/* 核心：每行5个 = 宽度(100% - 4*10rpx)/5 = 20% - 8rpx */
+			width: calc(20% - 8rpx);
+			height: 60rpx;
+			line-height: 60rpx;
+			text-align: center;
+			background: #f5f5f5;
+			margin: 0 10rpx 10rpx 0;
+			/* 仅右侧+底部间距，左侧无间距 */
+			color: #333;
+			box-sizing: border-box;
+			touch-action: manipulation;
+			flex-shrink: 0;
+			/* 关键：禁止元素收缩，防止宽度被挤压 */
+		}
+
+		/* 可选：选中态 */
+		.year-item.active {
+			background: $-theme-color;
+			color: #fff;
+		}
+
+		/* 兜底：解决最后一行不足5个时的布局留白（可选） */
+		.year-item:nth-child(5n) {
+			margin-right: 0;
+			/* 每第5个元素（每行最后一个）取消右侧间距 */
+		}
+	}
+
+
+
+
+
+
+	/* 保留之前的样式，无需调整 */
+	.header-year {
+		text-align: center;
+		font-size: 24rpx;
+		padding-top: 30rpx;
+	}
+
+	.month-group {
+		display: flex;
+		flex-wrap: wrap;
+		align-content: center;
+		justify-content: flex-start;
+		width: calc(100% + 10rpx);
+		height: 100%;
+		padding: 0 30rpx;
+		box-sizing: border-box;
+		margin-left: -10rpx;
+	}
+
+	.month-item {
+		width: calc(16.6667% - 8.333rpx);
+		height: 60rpx;
+		line-height: 60rpx;
+		text-align: center;
+		background: #f8f8f8;
+		margin: 0 10rpx 10rpx 0;
+		color: #333;
+		box-sizing: border-box;
+		flex-shrink: 0;
+		touch-action: manipulation;
+	}
+
+	.month-item:nth-child(6n) {
+		margin-right: 0;
+	}
+
+	.month-item.active {
+		background: $-theme-color;
+		color: #fff;
+		font-weight: 500;
+	}
+
+	.month-item:active {
+		background: #e6e6e6;
+	}
+
+	.month-item.active:active {
+		background: $-theme-color;
+	}
+}

@@ -52,13 +52,13 @@
 		<swiper-item wx:for="{{swiperTabs}}" wx:key="index" class="swiper-{{index}}" >
 			<view class="card" style="height: 100%; box-sizing: border-box;">
 				<!-- 核心优化：添加可滚动容器 scroll-view -->
-				<scroll-view class="list-scroll" scroll-y enable-flex scroll-with-animation show-scrollbar="{{true}}"
+				<scroll-view class="list-scroll" scroll-y enable-flex  scroll-with-animation show-scrollbar="{{false}}"
 					style="height: 100%;">
 
 					<view class="list" wx:if="{{categoryList.length}}">
 						<view class="item" wx:for="{{categoryList}}" wx:key="index" data-index="{{index}}"
 							bind:tap="handleChooseCategory">
-							<view class="icon {{ categoryIndex==index?'active':''}}">
+							<view class="icon {{ categoryIndex==index?'active':'not-active'}}">
 								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 							</view>
 							<view class="icon-title">{{item.name}}</view>
@@ -66,7 +66,7 @@
 						<view class="item"
 							bind:tap="handleSettingCategory">
 							<view class="icon">
-								<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+								<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/%E8%AE%BE%E7%BD%AE.png" mode="widthFix" />
 							</view>
 							<view class="icon-title">设置</view>
 						</view>

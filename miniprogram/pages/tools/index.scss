@@ -1,4 +1,35 @@
 /* pages/secondFloor/secondFloor.wxss */
-.tool-container{
+.tool-container {
 	padding: 20rpx;
+}
+
+.tool-list {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	padding: 20rpx 0;
+	box-sizing: border-box;
+	background-color: #fff
+}
+
+.tool-item {
+	flex: 0 0 calc(25% - 2rpx);
+	height: 120rpx;
+	text-align: center;
+	box-sizing: border-box;
+}
+
+.tool-icon {
+	width: 60rpx;
+	height: 60rpx;
+	margin: 0 auto;
+	border-radius: 50%;
+	overflow: hidden;
+	
+}
+
+.tool-name {
+	padding-top: 4rpx;
+	font-size: 20rpx;
+	color: #666666;
 }

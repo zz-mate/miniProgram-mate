@@ -1,8 +1,8 @@
 // utils/config.ts
 
-// export const BASE_URL = 'http://192.168.1.57:9876/api/v1';
+export const BASE_URL = 'http://192.168.1.61:9876/api/v1';
 // export const BASE_URL = 'https://api.zz-mate.cn/api/v1';
-export const BASE_URL = 'https://api-dev.zz-mate.cn/api/v1';
+// export const BASE_URL = 'https://api-dev.zz-mate.cn/api/v1';
 export const DEFAULT_HEADER = {
   'Content-Type': 'application/json',
 	'Accept': 'application/json' // 可选，增强兼容性

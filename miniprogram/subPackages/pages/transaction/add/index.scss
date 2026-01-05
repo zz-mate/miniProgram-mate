@@ -119,7 +119,7 @@ page {
 			border-radius: 50%;
 			overflow: hidden;
 			flex-shrink: 0;
-
+			background: $-theme-color;
 		}
 
 		.icon-title {
@@ -194,8 +194,8 @@ page {
 				}
 
 				.icon-title {
-					padding-top: 8rpx;
-					font-size: 20rpx;
+					padding-top: 4rpx;
+					font-size: 18rpx;
 					color: #666666;
 				}
 			}
@@ -203,8 +203,10 @@ page {
 
 	}
 
-
-	.icon.active {
+	.not-active{
+		background-color: #e8e8e8d5;
+	}
+	.active {
 		background: $-theme-color;
 		/* 选中态背景色 */
 	}

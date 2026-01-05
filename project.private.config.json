@@ -24,11 +24,151 @@
 		"miniprogram": {
 			"list": [
 				{
+					"name": "subPackages/pages/category/index",
+					"pathName": "subPackages/pages/category/index",
+					"query": "typeIndex=1",
+					"scene": null,
+					"launchMode": "default"
+				},
+				{
+					"name": "subPackages/pages/category/index",
+					"pathName": "subPackages/pages/category/index",
+					"query": "typeIndex=1",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/budget/add/index",
+					"pathName": "subPackages/pages/budget/add/index",
+					"query": "bookId=15&userId=20",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/tools/index",
+					"pathName": "pages/tools/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/bill/index",
+					"pathName": "subPackages/pages/transaction/bill/index",
+					"query": "date=2026&yearMonthMoreActive=1&type=0",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/budget/index",
+					"pathName": "subPackages/pages/budget/index",
+					"query": "date=",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "pages/mine/index",
+					"pathName": "pages/mine/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/budget/add/index",
+					"pathName": "subPackages/pages/budget/add/index",
+					"query": "bookId=1&userId=1",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/cate-bill/index",
+					"pathName": "subPackages/pages/transaction/cate-bill/index",
+					"query": "date=2025&bookId=1&userId=1&type=2&yearMonthMoreActive=1&categoryId=undefined",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/cate-bill/index",
+					"pathName": "subPackages/pages/transaction/cate-bill/index",
+					"query": "date=2025&bookId=15&userId=20&type=2&yearMonthMoreActive=1&categoryId=undefined",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/cate-bill/index",
+					"pathName": "subPackages/pages/transaction/cate-bill/index",
+					"query": "date=2025&bookId=15&userId=20&type=2&yearMonthMoreActive=1&categoryId=25",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/cate-bill/index",
+					"pathName": "subPackages/pages/transaction/cate-bill/index",
+					"query": "date=2025&bookId=1&userId=1&type=2&yearMonthMoreActive=1&categoryId=19",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/info/index",
+					"pathName": "subPackages/pages/transaction/info/index",
+					"query": "id=20&type=2",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/add/index",
+					"pathName": "subPackages/pages/transaction/add/index",
+					"query": "bookId=1",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/cate-bill/index",
+					"pathName": "subPackages/pages/transaction/cate-bill/index",
+					"query": "date=2025&bookId=15&userId=20&type=2&yearMonthMoreActive=1&categoryId=undefined",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/cate-bill/index",
+					"pathName": "subPackages/pages/transaction/cate-bill/index",
+					"query": "date=2025&bookId=15&userId=20&type=2&yearMonthMoreActive=1&categoryId=29",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/cate-bill/index",
+					"pathName": "subPackages/pages/transaction/cate-bill/index",
+					"query": "date=2025&bookId=15&userId=20&type=2&yearMonthMoreActive=1&categoryId=29",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/date/index",
+					"pathName": "subPackages/pages/transaction/date/index",
+					"query": "start_time=2025-12&type=2&bookId=15&userId=20&categoryId=29&categoryName=%E6%97%85%E8%A1%8C&title=undefined&yearMonthMoreActive=2",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/cate-bill/index",
+					"pathName": "subPackages/pages/transaction/cate-bill/index",
+					"query": "date=2025&bookId=15&userId=20&type=2&yearMonthMoreActive=1",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
 					"name": "subPackages/pages/transaction/bill/index",
 					"pathName": "subPackages/pages/transaction/bill/index",
 					"query": "date=2025&yearMonthMoreActive=1&type=0",
-					"scene": null,
-					"launchMode": "default"
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/bill/index",
+					"pathName": "subPackages/pages/transaction/bill/index",
+					"query": "date=2025&yearMonthMoreActive=1&type=0",
+					"launchMode": "default",
+					"scene": null
 				},
 				{
 					"name": "subPackages/pages/transaction/bill/index",

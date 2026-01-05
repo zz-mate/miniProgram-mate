@@ -41,3 +41,10 @@ export function removeListCategoryList(data:any) {
     data,
   });
 }
+export function categoryBillList(data:any) {
+  return request({
+    url: '/miniProgram/category/cateBillList',
+    method: 'POST',
+    data,
+  });
+}

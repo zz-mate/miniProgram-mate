@@ -1,10 +1,11 @@
+import { playBtnAudio } from '../../utils/audioUtil'
 Component({
   properties: {
 		summary:{
 			type:Object,
 			value:{}
 		},
-		categoryName:{
+		type:{
 			type: String,
       value: ''
 		},
@@ -63,6 +64,8 @@ Component({
      * 标题栏点击事件
      */
     onHeaderTap() {
+			wx.vibrateShort({ type: 'light' })
+			playBtnAudio('/static/audio/click.mp3', 1000);
       // 如果是手风琴模式，通知父组件处理
       if (this.properties.accordionGroup) {
         this.triggerEvent('accordionChange', {

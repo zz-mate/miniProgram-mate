@@ -166,7 +166,8 @@ Page({
 
 	tapKey(e) {
 		const key = e.currentTarget.dataset.key;
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+			playBtnAudio('/static/audio/click.mp3', 1000);
 		const { firstNum, secondNum, operator, result } = this.data;
 
 		// ========== 核心工具方法 ==========
@@ -333,6 +334,7 @@ Page({
 	async tapSubmit(evt) {
 		const flag = evt.currentTarget.dataset.again; // 1=再记 2=等于
 		const { firstNum, secondNum, operator, result } = this.data;
+		wx.vibrateShort({ type: 'light' })
 		playBtnAudio('/static/audio/click.mp3', 1000);
 		// 等于按钮核心逻辑：计算后直接显示纯结果
 		if (flag === 2 && operator && secondNum) {
@@ -370,14 +372,15 @@ Page({
 
 		} else if (flag === 2) {
 			await this.submitBill(true);
-			wx.showToast({ title: '记账成功', icon: 'none' });	
+			wx.showToast({ title: '记账成功', icon: 'none' });
 		}
 	},
 
 	// ========== 5. 删除键逻辑 ==========
 	tapDel() {
 		const { firstNum, secondNum, operator, result, calcExpression } = this.data;
-
+		wx.vibrateShort({ type: 'light' })
+		playBtnAudio('/static/audio/click.mp3', 1000);
 		// 有结果（如2）→ 清空所有
 		if (result && !operator && !secondNum) {
 			this.initCalc();
@@ -471,11 +474,11 @@ Page({
 		try {
 			const res = await createTransaction(data);
 			if (res.code === 200) {
-				playBtnAudio('/static/audio/save_bill.mp3', 1000);
-				if (resetCalc) setTimeout(() => {
-				
+				// playBtnAudio('/static/audio/save_bill.mp3', 1000);
+				if (resetCalc) {
 					wx.navigateBack({ delta: 1 })
-				}, 1500);
+				}
+
 				else this.setData({ 'bill.remark': '', 'bill.tags': [] });
 				this.initCalc();
 			} else {
@@ -721,7 +724,7 @@ Page({
 	async getCategoryListFn() {
 		let { userInfo, selectedTab, queryParams, bookList, bookIndex } = this.data
 		// console.log(bookList, bookIndex, 123)
-		let res = await getCategoryList({ userId: userInfo.id, type: selectedTab + 1, ...queryParams, bookCategoryId: bookList[bookIndex].book_category_id })
+		let res = await getCategoryList({ userId: userInfo.id, type: selectedTab + 1, ...queryParams, bookCategoryId: bookList[bookIndex].id })
 		this.setData({
 			categoryList: res.list,
 			categoryIndex: 0,
@@ -898,11 +901,11 @@ Page({
 		this.getCategoryListFn()
 	},
 	// 设置类别页面
-	handleSettingCategory(){
+	handleSettingCategory() {
 
 		playBtnAudio('/static/audio/click.mp3', 1000);
 		wx.navigateTo({
-			url: "/subPackages/pages/category/index?typeIndex="+this.data.selectedTab ,
+			url: "/subPackages/pages/category/index?typeIndex=" + this.data.selectedTab,
 			routeType: "wx://upwards"
 		})
 	},

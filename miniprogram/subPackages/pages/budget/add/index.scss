@@ -1,7 +1,23 @@
 /* subPackages/pages/budget/add/index.wxss */
 @import "../../../../app.scss"; // 引入全局变量
 
-
+.subsection{
+	.icon{
+		width: 40rpx;
+		height: 40rpx;
+		background-color: #f4f2f7;
+		border-radius: 50%;
+		margin-left: 6rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.icon-clear{
+			width: 28rpx;
+			height: 28rpx;
+			// margin: 6rpx;
+		}
+	}
+}
 .header-card {
   position: relative;
   margin: 20rpx;
@@ -27,9 +43,9 @@
 
 
 .budget-category-title {
-  font-size: 24rpx;
-  font-weight: bold;
-  color: #000;
+  font-size: 20rpx;
+  font-weight: 550;
+  color: #333;
   margin: 20rpx;
 }
 
@@ -40,8 +56,11 @@
     // padding: 20rpx;
 		overflow: hidden;
     .icon {
-      width: 54rpx;
-      height: 54rpx;
+      width: 60rpx;
+      height: 60rpx;
+			background-color: #ffd60878;
+			border-radius: 50%;
+			overflow: hidden;
     }
 
     .budget-title {

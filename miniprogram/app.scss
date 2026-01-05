@@ -156,21 +156,28 @@ image {
 input {
 	font-weight: normal;
 }
-
+.radius{
+	border-radius: 50%;
+	overflow: hidden;
+}
 .radius-2 {
 	border-radius: 2rpx;
+	overflow: hidden;
 }
 
 .radius-4 {
 	border-radius: 4rpx;
+	overflow: hidden;
 }
 
 .radius-6 {
 	border-radius: 6rpx;
+	overflow: hidden;
 }
 
 .radius-10 {
 	border-radius: 10rpx;
+	overflow: hidden;
 }
 
 .fade-animate {
@@ -352,7 +359,9 @@ border-radius: 10rpx;
 		color: #999999;
 		padding: 20rpx 0;
 		font-size: 20rpx;
-
+		.bill-title{
+			color: #333;
+		}
 		.money {
 			.income {
 				margin-right: 10rpx;
@@ -375,6 +384,8 @@ border-radius: 10rpx;
 			width: 54rpx;
 			height: 54rpx;
 			margin-right: 14rpx;
+			background: #ffd60878;
+			border-radius: 50%;
 		}
 
 		.border {

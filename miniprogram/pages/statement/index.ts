@@ -574,7 +574,7 @@ Page({
 			// ===== 调整grid边距：为标题预留空间 =====
 			grid: {
 				left: 10,
-				top: 40, // 顶部边距从5调整为40，给标题预留空间
+				top: '20%',
 				bottom: 20,
 				right: 10,
 				containLabel: false
@@ -742,13 +742,13 @@ Page({
 		}] : data;
 
 		// 生成饼图标题
-		const typeText = typeIndex === 0 ? '支出' : '收入';
-		const timeRangeText = this.data.queryParams.start_time ?
-			(this.data.queryParams.start_time.length === 4 ?
-				`${this.data.queryParams.start_time}年` :
-				`${this.data.queryParams.start_time.replace('-', '年')}月`) :
-			`${getThisDate('YYYY')}年${getThisDate('MM')}月`;
-		const pieTitle = `${timeRangeText}分类占比图`;
+		// const typeText = typeIndex === 0 ? '支出' : '收入';
+		// const timeRangeText = this.data.queryParams.start_time ?
+		// 	(this.data.queryParams.start_time.length === 4 ?
+		// 		`${this.data.queryParams.start_time}年` :
+		// 		`${this.data.queryParams.start_time.replace('-', '年')}月`) :
+		// 	`${getThisDate('YYYY')}年${getThisDate('MM')}月`;
+		// const pieTitle = `${timeRangeText}分类占比图`;
 
 		// 数据量判断
 		const dataLength = renderData.length;
@@ -829,18 +829,22 @@ Page({
 					length2: timeDimension === 'month' ? 25 : 20,
 					smooth: 0.2,
 					showAbove: true,
-					lineStyle: { width: 1, color: '#ccc' }
+					lineStyle: { width: 1, color:  '#ccc'}
+
+					// color: (params) => params.data.color || '#ccc'
 				},
 				type: "pie",
-				radius: timeDimension === 'month' ? [45, 75] : [50, 80],
-				center: ["50%", "55%"], // 饼图向下偏移5%，避开标题
-				itemStyle: { borderRadius: 0, borderColor: '#fff', borderWidth: 0 },
+				radius: [50, 80],
+				center: ["50%", "60%"], // 饼图向下偏移10%，避开标题
+				itemStyle: { borderRadius: 0, borderColor: '#fff', borderWidth: 0 ,},
+				// color: (params) => params.data.color || '#ccc',
 				label: {
 					show: !isEmptyData,
 					position: "outside",
 					formatter: '{b}: {c} ({d}%)',
 					color: '#999999',
 					fontSize: 10,
+					fontFamily: 'WeChatSansStd',
 					distance: 25,
 					rotate: 0,
 					alignTo: 'labelLine',
@@ -897,15 +901,15 @@ Page({
 
 		console.log(chart, date);
 
-		if (date.length <= 4 && chart == 'line') {
+		if (date.toString().length <= 4 && chart == 'line') {
 			wx.navigateTo({
 				url: `/subPackages/pages/transaction/bill/index?date=${date}&bookId=${bookInfo.id}&userId=${userInfo.id}&type=${transactionType}&yearMonthMoreActive=${transactionType == 2 ? 1 : 2}`,
 				routeType: "wx://upwards"
 			})
-		} else if (date.length <= 4 && chart == 'pie') {
-			wx.showToast({
-				title: "别急",
-				icon: "none"
+		} else if (date.toString().length <= 4 && chart == 'pie') {
+			wx.navigateTo({
+				url: `/subPackages/pages/transaction/cate-bill/index?date=${date}&bookId=${bookInfo.id}&userId=${userInfo.id}&type=${transactionType}&yearMonthMoreActive=${transactionType == 2 ? 1 : 2}&categoryId=${category_id}`,
+				routeType: "wx://upwards"
 			})
 		} else {
 			wx.navigateTo({ url, routeType: "wx://upwards" });

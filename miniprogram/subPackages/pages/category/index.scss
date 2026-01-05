@@ -202,3 +202,36 @@ line-height: 30rpx;
 		background-color: $-theme-color;
 	}
 }
+
+.sort-order{
+	width: 50rpx;
+	height: 50rpx;
+}
+
+
+
+
+/* 拖拽相关样式 */
+.bill-wrapper {
+  transition: all 0.2s ease;
+  transform: translateZ(0); /* 开启硬件加速，兼容Skyline */
+}
+
+/* 拖拽中的分类项样式 */
+.bill-wrapper[style*="z-index: 999"] {
+  background: #fff;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  opacity: 0.95 !important;
+}
+
+/* 拖拽手柄样式优化 */
+.sort-order {
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}

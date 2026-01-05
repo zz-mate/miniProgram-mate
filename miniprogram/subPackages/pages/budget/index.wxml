@@ -32,7 +32,7 @@
 </view>
 
 <view class="budget-category-title">分类预算</view>
-<scroll-view type="custom" scroll-y style="height:calc(100% - {{scrollHeight}}px) ">
+<scroll-view type="custom"  show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{scrollHeight}}px) ">
 	<sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
 
 		<view class="budget-list radius-10 bill-container">
@@ -46,7 +46,7 @@
 								bindtouchstart="touchS" bindtouchmove="touchM" data-category_id="{{item.category_id}}"
 					data-category_name="{{item.category_name}}" bind:tap="handleCategoryBillPage">
 							<view class="icon">
-								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
+								<image src="{{item.category_icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
 							</view>
 
 							<view class="card">

@@ -5,12 +5,13 @@
 		<z-tabs bind:change="handleChange" active="{{yearMonthMoreActive}}" tabs="{{tabsList}}"></z-tabs>
 	</view>
 </navigation-bar>
-<view class="filter-date flex flex-space-between  flex-align-items-center">
+<view class="filter-date flex flex-space-between  flex-align-items-center" wx:if="{{yearMonthMoreActive!=0}}">
 	<view></view>
 	<view class="date num flex flex-align-items-center">
 		<text bind:tap="handlePopup">{{queryParams.start_time}}</text>
 		<text style="padding:0 12rpx" wx:if="{{queryParams.end_time}}">-</text>
 		<text bind:tap="handlePopup" data-type="end_time"> {{queryParams.end_time}}</text>
+		<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"/>
 	</view>
 	<view></view>
 </view>
@@ -44,7 +45,7 @@
 		<view class="disburse num">支{{}}</view>
 	</view> -->
 </view>
-<scroll-view type="custom" scroll-y style="height:calc(100% - {{scrollHeight}}px) ">
+<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{scrollHeight+advHeight}}px) ">
 	<view class="collapse-wrap">
 		<!-- <collapse title="{{item.year+'-'+item.month}}"
 	totalMoney="{{item.surplusMoney}}" expanded="{{false}}"
@@ -100,7 +101,7 @@
 		<view class="sticky-content  radius-10" style="top:{{navBarHeight +'px'}}">
 		<collapse 
     expanded="{{false}}" wx:for="{{transactionList}}" wx:for-index="index" wx:for-item="item" 
-		summary="{{item}}" categoryName="{{categoryName}}"
+		summary="{{item}}" type="bill"
 		>
 
     <view class="content-item flex flex-space-between flex-align-items-center">

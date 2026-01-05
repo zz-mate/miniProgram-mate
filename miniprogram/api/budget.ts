@@ -27,4 +27,11 @@ export function deletBudget(data:any) {
     data,
   });
 }
+export function removebudget(data:any) {
+  return request({
+    url: '/miniProgram/budget/remove',
+    method: 'POST',
+    data,
+  });
+}
 

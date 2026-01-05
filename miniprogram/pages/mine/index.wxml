@@ -29,7 +29,7 @@
 								<image src="{{'/static/async-icon/lv'+userInfo.levelInfo.user_level+'.png'}}" mode="widthFix" />
 							</view> -->
 							{{userInfo.levelInfo.level_name}}
-							<!-- <view class="exp">{{userInfo.levelInfo.user_level_exp+'/'+userInfo.levelInfo.min_exp}}</view> -->
+							<view class="exp">{{userInfo.levelInfo.user_level_exp+'/'+userInfo.levelInfo.min_exp}}</view>
 						</view>
 						<view class="progress-content" wx:if="{{userInfo.nickname}}">
 							<view class="default">
@@ -41,7 +41,6 @@
 					</view>
 
 					<view class="icon-arrow">
-						<!-- <image src="/static/imgs/icon-arrow_right.png" mode="widthFix"/> -->
 					</view>
 
 				</view>
@@ -59,7 +58,7 @@
 						<view class="title">我的积分</view>
 					</view>
 				</view>
-				<view class="vip-content flex flex-space-between flex-align-items-center">
+				<!-- <view class="vip-content flex flex-space-between flex-align-items-center">
 					<view class="vip-left">
 						<view class="title">专业版</view>
 						<view class="tips">开通即可解锁十大权益</view>
@@ -67,35 +66,35 @@
 					<view class="vip-right">
 						<text class="buy radius-4">去开通</text>
 					</view>
-				</view>
+				</view> -->
 			</view>
 			<view class="ribbon-content radius-10">
-				<view class="ribbon-title">快捷服务</view>
+				<!-- <view class="ribbon-title">快捷服务</view> -->
 				<view class="list ">
 					<view class="item" data-url="/subPackages/pages/transaction/bill/index" data-type="page"
 						bind:tap="handlePageUrl">
 						<view class="icon">
-							<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+							<image src="/static/icon/icon-bil.png" mode="widthFix" />
 						</view>
 						<view class="title">明细</view>
 					</view>
 					<view class="item " data-url="/subPackages/pages/budget/index" data-type="page" bind:tap="handlePageUrl">
 						<view class="icon">
-							<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+							<image src="/static/icon/icon-budget-.png" mode="widthFix" />
 						</view>
 						<view class="title">预算</view>
 					</view>
 					<view class="item" data-url="/subPackages/pages/transaction/import/index" data-type="page"
 						bind:tap="handlePageUrl">
 						<view class="icon">
-							<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+							<image src="/static/icon/icon-import.png" mode="widthFix" />
 						</view>
 						<view class="title">导入</view>
 					</view>
 					<view class="item" data-type="page" data-url="/subPackages/pages/transaction/export/index"
 						bind:tap="handlePageUrl">
 						<view class="icon">
-							<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+							<image src="/static/icon/icon-export.png" mode="widthFix" />
 						</view>
 						<view class="title">导出</view>
 					</view>
@@ -104,7 +103,7 @@
 						<button class="share-btn" open-type="share" data-only="friend" data-friend="friend">
 							<view class="share-btn__content">
 								<view class="icon">
-									<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+									<image src="/static/icon/icon-share.png" mode="widthFix" />
 								</view>
 								<view class="title">分享</view>
 							</view>
@@ -116,7 +115,7 @@
 
 
 			<view class="menu  radius-10">
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover"
+				<!-- <view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover"
 					hover-stay-time='150'>
 					<view class="icon">
 						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
@@ -127,11 +126,11 @@
 					<view class="icon-arrow">
 						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 					</view>
-				</view>
+				</view> -->
 				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
 					data-url="/subPackages/pages/transaction/export/index" data-type="share" bind:tap="handlePageUrl">
 					<view class="icon">
-						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+						<image src="/static/icon/icon-feedback.png" mode="widthFix" />
 					</view>
 					<view class="title">
 						<button class='button' open-type="feedback">意见反馈</button>
@@ -143,7 +142,7 @@
 				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
 					data-url="/subPackages/pages/transaction/export/index" data-type="share" bind:tap="handlePageUrl">
 					<view class="icon">
-						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+						<image src="/static/icon/icon-kf.png" mode="widthFix" />
 					</view>
 					<view class="title">
 						<button class='button' open-type="contact">联系我们</button>
@@ -155,7 +154,7 @@
 				</view>
 
 
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
+				<!-- <view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
 					data-url="/subPackagesMine/pages/setting/index" data-type="page" bind:tap="handlePageUrl">
 					<view class="icon">
 						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
@@ -166,12 +165,12 @@
 					<view class="icon-arrow">
 						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 					</view>
-				</view>
+				</view> -->
 			</view>
 
 
 
-			<view class="menu  radius-10">
+			<!-- <view class="menu  radius-10">
 				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
 					data-url="/subPackages/pages/transaction/export/index" data-type="share" bind:tap="handlePageUrl">
 					<view class="icon">
@@ -199,7 +198,7 @@
 						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 					</view>
 				</view>
-			</view>
+			</view> -->
 		</view>
 
 
