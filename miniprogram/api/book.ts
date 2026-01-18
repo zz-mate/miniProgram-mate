@@ -41,3 +41,26 @@ export function getBookCagetgoryList(data?:any) {
     data,
   });
 }
+export function getBookUserList(data?:any) {
+  return request({
+    url: '/miniProgram/book/userList',
+    method: 'POST',
+    data,
+  });
+}
+
+export function bindJoinBook(data?:any) {
+  return request({
+    url: '/miniProgram/book/bindJoinBook',
+    method: 'POST',
+    data,
+  });
+}
+
+export function shareBook(data?:any) {
+  return request({
+    url: '/miniProgram/book/shareBook',
+    method: 'POST',
+    data,
+  });
+}

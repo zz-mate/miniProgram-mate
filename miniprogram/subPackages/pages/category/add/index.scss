@@ -1,0 +1,145 @@
+/* subPackages/pages/category/add/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
+
+.category-container {
+	padding: 20rpx;
+}
+.jelly-animate {
+  animation: jelly 0.5s ease;
+}
+/* 关键帧动画：模拟果冻的拉伸-回弹效果 */
+@keyframes jelly {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.2, 0.8); /* 横向拉伸，纵向压缩 */
+  }
+  50% {
+    transform: scale(0.8, 1.2); /* 纵向拉伸，横向压缩 */
+  }
+  70% {
+    transform: scale(1.1, 0.9); /* 轻微回弹 */
+  }
+  100% {
+    transform: scale(1); /* 恢复原状 */
+  }
+}
+
+
+.choose-icon {
+	width: 100rpx;
+	height: 100rpx;
+	// border-radius: 50%;
+	overflow: hidden;
+	margin: 40rpx auto;
+	transform-origin: center center;
+	transition: all 0.2s ease;
+}
+
+.form {
+
+	.item {
+		padding: 0 20rpx;
+		background-color: #fff;
+
+		.category-name {
+			background-color: #fff;
+			height: 80rpx;
+
+		}
+
+		.label {
+			font-size: 22rpx;
+		}
+
+		.input {
+			width: 200rpx;
+			text-align: right;
+		}
+	}
+
+
+}
+
+.category-list {
+	background-color: #fff;
+	padding: 20rpx 0;
+
+	.category-item {
+		.title {
+			text-align: center;
+			font-size: 22rpx;
+			font-weight: 550;
+			color: #333;
+			padding-top:  30rpx ;
+		}
+	}
+}
+
+// 容器：完全重置 + 精准控制
+.category-sub-list {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	justify-content: flex-start;
+	align-content: flex-start;
+	// 容器左右内边距：抵消子项外层左右间距，边缘对齐
+	padding-left: 10rpx;
+	padding-right: 10rpx;
+	// 容器上下内边距：保证列表整体和外部的间距（与子项行间距一致）
+	padding-top: 10rpx;
+	padding-bottom: 10rpx;
+
+	.category-sub-item {
+		// 精准宽度计算：保证一行6个无误差
+		flex: 0 0 calc((100% / 6) - 20rpx);
+		flex-grow: 0;
+		flex-shrink: 0;
+		// height: 90rpx;
+		text-align: center;
+		box-sizing: border-box;
+		// background-color: antiquewhite;
+		// 核心：上下左右边距均为10rpx → 上下边距完全一致
+		margin: 10rpx;
+		// 文字垂直居中，避免内容偏移影响视觉
+		// line-height: 90rpx;
+		// 可选：文字溢出处理，防止子项变形
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	// 最后一行不足6个时左对齐，视觉更整洁
+	&:after {
+		content: "";
+		flex: 0 0 calc((100% / 6) - 20rpx);
+		height: 0;
+		margin: 10rpx;
+		visibility: hidden;
+	}
+
+
+	.icon {
+		width: 60rpx;
+		height: 60rpx;
+		// border-radius: 50%;
+		overflow: hidden;
+		margin: 0 auto;
+		.icon-cate {
+			width: 60rpx;
+			height: 60rpx;
+
+		}
+	}
+}
+.active{
+	background: $-theme-color;
+}
+.no-active{
+	background-color: #e8e8e8d5;
+}

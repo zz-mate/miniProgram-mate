@@ -8,7 +8,7 @@
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
-border-radius: 6rpx;
+// border-radius: 6rpx;
   .tabsItem {
     height: 50px;
     line-height: 50px;
@@ -27,7 +27,7 @@ border-radius: 6rpx;
     z-index: 0;
     top: 50%;
     transform: translateY(-50%);
-		border-radius: 4rpx;
+		// border-radius: 4rpx;
   }
 }
 // .tabsItemActive{

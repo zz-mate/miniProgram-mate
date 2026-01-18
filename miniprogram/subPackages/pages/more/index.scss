@@ -1,0 +1,35 @@
+/* subPackages/pages/more/index.wxss */
+@import "../../../app.scss"; // 引入全局变量
+.plan-container{
+	padding: 20rpx;
+}
+
+.tool-list {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	padding: 20rpx 0;
+	box-sizing: border-box;
+	background-color: #fff
+}
+
+.tool-item {
+	flex: 0 0 calc(20% - 2rpx);
+	// height: 120rpx;
+	text-align: center;
+	box-sizing: border-box;
+}
+
+.tool-icon {
+	width: 56rpx;
+	height: 56rpx;
+	margin: 0 auto;
+	
+}
+
+.tool-name {
+	font-size: $z-font-size-18;
+	text-align: center;
+	padding-top: 4rpx;
+	color: $z-text-color;
+}

@@ -11,7 +11,7 @@ background="{{navBgColor}}">
     <view class="current-title">净资产</view>
 		<view class="current-money num flex flex-align-items-center">
 				<view class="money">{{eyeIndex==1?net_asset||'0.00':'*******'}}</view>
-				<image class="icon-eye" src="/static/imgs/icon-eye_{{eyeIndex}}.png" data-eye="{{eyeIndex}}" mode="widthFix" bind:tap="handleEye"/>
+				<image class="icon-eye" src="{{eyeIndex==1?'http://oss-api.zz-mate.cn/uploads/2026/01/1768534338794-a7a2d59b-1c53-4635-91bb-1e9535d581dc.png':'http://oss-api.zz-mate.cn/uploads/2026/01/1768534318353-86912c5e-422e-4f12-aa1c-c09e2020b178.png'}}" data-eye="{{eyeIndex}}" mode="widthFix" bind:tap="handleEye"/>
 				</view>
 
 
@@ -23,21 +23,21 @@ background="{{navBgColor}}">
   </view>
 </view>
 
-<view class="ad-card radius-10">
+<!-- <view class="ad-card radius-10">
 	<ad-custom unit-id="adunit-e73d7688db469ffd" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
-</view>
-
+</view> -->
+<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{scrollHeight+navBarHeight}}px) ">
 <view class="account-container" wx:if="{{accountList.length}}">
-  <collapse title="{{item.category_name}}" count="{{item.children.length}}" totalMoney="{{eyeIndex==1?item.category_remaining_amount||'0.00':'*******'}}"
-    expanded="{{false}}" wx:for="{{accountList}}" wx:for-index="index" wx:for-item="item">
+  <collapse title="{{item.category_name}}" count="{{item.children.length}}" totalMoney="{{eyeIndex==1?item.category_total_money||'0.00':'*******'}}"
+    expanded="{{false}}" wx:for="{{accountList}}" wx:for-index="index" wx:for-item="item" type="account">
 
-    <view class="content-item flex flex-space-between flex-align-items-center" wx:for="{{item.children}}" wx:for-index="i"
+    <view class="content-item radius-10 flex flex-space-between flex-align-items-center" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" wx:for="{{item.children}}" wx:for-index="i"
       wx:for-item="v">
       <view class="icon">
         <image src="{{v.icon}}" mode="widthFix" />
       </view>
       <view class="book-name">{{v.bank_name|| v.name}}</view>
-      <view class="num money">{{eyeIndex==1?v.remaining_amount||'0.00':'*******'}}</view>
+      <view class="num money">{{eyeIndex==1?v.amount||'0.00':'*******'}}</view>
 
 
     </view>
@@ -50,7 +50,7 @@ background="{{navBgColor}}">
   <view class="no-data radius-10" style="margin-top:{{token?'':'20rpx'}}">
     <view class="no-data-icon">
       <image
-			src="/static/async-icon/icon-not-bill.png"
+			src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png"
         mode="widthFix" />
     </view>
     <view class="no-data-text">
@@ -62,7 +62,7 @@ background="{{navBgColor}}">
     </view>
   </view>
 </view>
-
+</scroll-view>
 
 
 <z-popup bind:popup="handlePopup" bind:closeOnClickOverlay="handleCloseOverlay" show="{{show}}"
@@ -71,7 +71,7 @@ background="{{navBgColor}}">
   <view class="develop-tips">
     <view class="develop-tips-icon">
       <image
-			src="/static/async-icon/icon-not-bill.png"
+			src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png"
         mode="widthFix" />
     </view>
     <view>抱歉呀，这个功能还在 “修炼”</view>
@@ -80,8 +80,8 @@ background="{{navBgColor}}">
 </z-popup>
 
 <!-- 底部功能按钮 -->
-<!-- <view class="shortcut" bind:tap="handleAccountAdd">
-	<view class="shortcut_count radius-10 flex flex-center"  hover-class="btn-yellow-hover" hover-stay-time='50' >
+<view class="shortcut" bind:tap="handleAccountAdd">
+	<view class="shortcut_count radius-10 flex flex-center"  hover-class="btn-yellow-hover" hover-stay-time="50" hover-start-time="0" >
 		添加
 	</view>
-</view> -->
+</view>

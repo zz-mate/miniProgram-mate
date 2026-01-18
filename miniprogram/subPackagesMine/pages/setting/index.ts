@@ -34,7 +34,7 @@ Page({
 	},
 	handlePageUrl(evt) {
 		const { url } = evt.currentTarget.dataset
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		wx.navigateTo({ url })
 	},
@@ -44,9 +44,9 @@ Page({
 			success(res) {
 				wx.vibrateShort({ type: 'heavy' })
 				if (res.tapIndex == 0) {
-					playBtnAudio('/static/audio/click.mp3', 1000);
+					playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 				} else {
-					playBtnAudio('/static/audio/click.mp3', 1000);
+					playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 				}
 
 			},

@@ -1,19 +1,14 @@
-
-
 import { getTransactionList, removeTransaction } from '../../api/transaction'
-import { getBookList, getBookInfo } from '../../api/book'
+import { getBookList, getBookInfo, getBookUserList, bindJoinBook, shareBook } from '../../api/book'
+import { budgetInfo } from '../../api/budget'
 import { playBtnAudio } from '../../utils/audioUtil'
 import { getThisDate } from '../../utils/util'
-
-
 import { getStorageSync, setStorageSync } from '../../utils/util';
-
-
 import { showHideTabBar } from '../../utils/tabbar'
 import SystemConfig from '../../utils/capsule';
 
 const token = getStorageSync('token') || null
-
+const POPUP_SHOW_KEY_PREFIX = 'showPopup_';
 export enum RefreshStatus {
 	Idle,
 	CanRefresh,
@@ -43,13 +38,11 @@ const clamp = function (cur, lowerBound, upperBound) {
 }
 
 const secondFloorCover = 'https://env-00jxubueh4pn.normal.cloudstatic.cn/5c9cda3274fc0 (1).jpg?expire_at=1766918614&er_sign=a8af17568ab72553fe83ada3c78d4d3a'
-// 'https://res.wx.qq.com/op_res/6Wt8f05P0Icnti4PBLtxfxza5VkItUCF1dQ6clDNr6c9KJxvxQMzWmJdkKXqHjOFjLp2fQAPV0JG1X6DwqGjyg'
-
 
 Component({
+	// 关键1：启用页面级生命周期，才能监听 onLoad 接收分享参数
 	pageLifetimes: {
 		show: function () {
-			// 页面被展示
 			this.getTabBar().setData({ selected: 0 })
 			this.setData({
 				userInfo: getStorageSync("userInfo"),
@@ -59,11 +52,25 @@ Component({
 				this.handleBookList();
 			});
 		},
-		hide: function () {
-			// 页面被隐藏
-		},
-		resize: function (size) {
-			// 页面尺寸变化
+		hide: function () { },
+		resize: function (size) { },
+		// 新增：页面加载时接收分享参数（核心）
+		load: function (options) {
+			// 捕获分享链接中的 userId 和 bookId
+			const { userId: shareUserId, bookId: shareBookId, type } = options || {};
+			if (shareUserId && shareBookId && type) {
+				console.log('接收的分享参数：', { shareUserId, shareBookId });
+				// 1. 存入组件 data，供后续使用
+				this.setData({
+					shareUserId,
+					shareBookId
+				});
+				// 2. 可选：存入缓存，防止数据丢失
+				setStorageSync('shareParams', { shareUserId, shareBookId });
+				// 3. 可选：执行业务逻辑（比如加入该账本）
+
+				this.handleBindJoinSharedBook(shareUserId, shareBookId);
+			}
 		}
 	},
 	data: {
@@ -92,7 +99,6 @@ Component({
 		scrollBackTop: 0,
 
 		capsuleHeight: 0,
-		// fakNavBarHeight: 0,
 		navBarHeight: 0,
 		statusBarHeight: 0,
 		deviceType: '',
@@ -126,14 +132,17 @@ Component({
 
 		budgetInfo: null,
 		startX: '',
-		startY: ''
+		startY: '',
+		showPopup_together: false,
+		popupType: '',
+		bookUserList: [],
+		// 关键2：新增字段存储分享参数
+		shareUserId: '', // 分享者ID
+		shareBookId: ''  // 分享的账本ID
 	},
 
 	lifetimes: {
-
-		ready() {
-
-		},
+		ready() { },
 		created() {
 			this.initSystemConfig();
 			this.navBarOpactiy = shared(1)
@@ -146,12 +155,10 @@ Component({
 			this.getNavBarHeight()
 			this.setData({ categoryItemWidth, paddingTop: systemInfo.statusBarHeight, renderer: this.renderer })
 
-
-
 			this.applyAnimatedStyle('.nav-bar', () => {
 				'worklet'
 				return {
-					backgroundColor: (this.navBarOpactiy.value > 0 && this.renderer == 'skyline') ? 'transparent;' : 'rgba(255,255,255,1)',//'rgba(255,255,255,1);',
+					backgroundColor: (this.navBarOpactiy.value > 0 && this.renderer == 'skyline') ? 'transparent;' : 'rgba(255,255,255,1)',
 					backdropFilter: (this.navBarOpactiy.value > 0 && this.renderer == 'skyline') ? ' blur(0px);' : '  blur(6px);'
 				}
 			})
@@ -172,11 +179,8 @@ Component({
 				.exec((res) => {
 					this.scrollContext = res[0].node;
 				})
-
 		},
 	},
-
-
 
 	created() {
 		let token = getStorageSync("token")
@@ -184,38 +188,53 @@ Component({
 		this.handleBookList()
 	},
 	methods: {
-		// 方案2：async 版本（推荐）
-		async handleLoginAndFetch() {
+		// 关键3：新增方法 - 处理加入分享账本的业务逻辑
+		async handleBindJoinSharedBook(shareBookId: string) {
+			try {
+				const currentUserId = getStorageSync("userInfo")?.id;
+				if (!currentUserId) {
+					wx.showToast({ title: '请先登录', icon: 'none' });
+					return;
+				}
+				// 示例：调用加入账本接口（根据你的实际接口调整）
+				const res = await bindJoinBook({
+					userId: currentUserId,
+					shareBookId
+				});
+				if (res.code === 200 && !res.data.hasRecord) {
+
+					wx.showToast({ title: '成功加入分享的账本', icon: "none" });
+					// // 重新拉取账本列表和当前账本信息
+					this.handleBookList();
+				}
+			} catch (err) {
+
+				wx.showToast({ title: '网络异常', icon: 'none' });
+			}
+		},
+
+		// 原有方法保持不变...
+		handleLoginAndFetch() {
 			try {
 				app.onLoginSuccess(() => {
 					this.handleBookList();
 				});
-				await app.login(); // 等待登录完成
+				app.login();
 			} catch (err) {
 				console.error('登录失败：', err);
 			}
 		},
+
 		touchS(e) {
 			console.log(e)
-			// 1. 解构数据，避免直接操作 this.data 原数据
 			let { transactionList, startX, startY } = this.data
-
-			// 2. 安全获取 dataset 中的 index 和 i，防止未定义报错
 			let { index, i } = e.currentTarget.dataset || {};
-
-			// 3. 安全访问嵌套数据，打印指定项的 status
 			if (transactionList[index] && transactionList[index].list[i]) {
 				console.log('当前触摸项的status：', transactionList[index].list[i].status)
 			}
-
-			// 4. 批量将 transactionList 中所有 list 项的 status 设为 true（核心新增逻辑）
-			// 深拷贝原数组，避免直接修改 this.data 里的原数据
 			const newTransactionList = JSON.parse(JSON.stringify(transactionList));
-			// 遍历外层数组
 			newTransactionList.forEach((item) => {
-				// 检查内层 list 是否为有效数组
 				if (item.list && Array.isArray(item.list)) {
-					// 遍历内层 list，修改所有项的 status 为 true
 					item.list.forEach((subItem) => {
 						if (typeof subItem === 'object' && subItem !== null) {
 							subItem.status = true;
@@ -223,140 +242,90 @@ Component({
 					});
 				}
 			});
-
-			// 5. 统一通过 setData 响应式更新所有数据（坐标 + 列表）
 			this.setData({
-				startX: e.touches[0].clientX,  // 触摸起始X坐标
-				startY: e.touches[0].clientY,  // 触摸起始Y坐标
-				transactionList: newTransactionList  // 更新后的列表数据
+				startX: e.touches[0].clientX,
+				startY: e.touches[0].clientY,
+				transactionList: newTransactionList
 			}, () => {
-				// 可选：回调验证更新结果
 				console.log('响应式更新完成：');
 				console.log('触摸坐标：', this.data.startX, this.data.startY);
 				console.log('指定项status（更新后）：', transactionList[index]?.list[i]?.status);
 			});
 		},
 		touchM(e) {
-		
-			// 1. 安全获取当前触摸坐标，做容错处理
 			if (!e.touches || e.touches.length === 0) return;
 			var currentX = e.touches[0].clientX;
 			var currentY = e.touches[0].clientY;
-
-			// 2. 计算滑动距离（横向/纵向）
-			const x = this.data.startX - currentX; // 横向移动距离（x>0 向左滑，x<0 向右滑）
-			const y = Math.abs(this.data.startY - currentY); // 纵向移动距离
-
-			// 3. 安全获取 dataset 中的索引（适配 transactionList 的 index/i）
+			const x = this.data.startX - currentX;
+			const y = Math.abs(this.data.startY - currentY);
 			let { index, i } = e.currentTarget.dataset || {};
-			// 兼容原代码的 id 逻辑（如果仍需要 id 可保留）
-			// var id = e.currentTarget.dataset.index;
-
-			// 4. 深拷贝原数据，避免直接修改 this.data
 			const newTransactionList = JSON.parse(JSON.stringify(this.data.transactionList));
-
-			// 5. 滑动逻辑判断 + 响应式修改 status
-			// 适配 transactionList 嵌套结构：修改指定 index 下 list[i] 的 status
 			if (newTransactionList[index] && newTransactionList[index].list[i]) {
 				if (x > 35 && y < 110) {
-					// 向左滑：显示删除 → status 设为 false
 					newTransactionList[index].list[i].status = false;
 				} else if (x < -35 && y < 110) {
-					// 向右滑：隐藏删除 → status 设为 true
 					newTransactionList[index].list[i].status = true;
 				}
 			}
-
-			// 7. 响应式更新数据（核心：用新数据替换原数据）
 			this.setData({
 				transactionList: newTransactionList,
-				// effective_carts: newEffectiveCarts, // 如需保留原逻辑可启用
 			}, () => {
-				// 可选：验证更新结果
 				console.log('滑动后 status：', newTransactionList[index]?.list[i]?.status);
 			});
 		},
 		async deleteList(e) {
+			const notify = this.selectComponent('#customNotify');
 			try {
 				wx.vibrateShort({ type: 'light' })
-				playBtnAudio('/static/audio/click.mp3', 1000);
-				// 1. 安全获取要删除的 id 和 dataset 中的索引（关键：需要 index/i 定位列表项）
+				playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 				let { id } = e.currentTarget.dataset || {};
 				if (!id) {
 					wx.showToast({ title: "删除失败：缺少账单ID", icon: "none" });
 					return;
 				}
-
-				// 2. 构造请求参数
 				let data = {
-					userId: getStorageSync("userInfo")?.id || "", // 加容错，防止 userInfo 不存在
+					userId: getStorageSync("userInfo")?.id || "",
+					bookId: getStorageSync("bookInfo")?.id || "",
 					billId: id
 				};
-				// 容错：检查 userId 是否存在
 				if (!data.userId) {
 					wx.showToast({ title: "用户信息异常，请重新登录", icon: "none" });
 					return;
 				}
-
-				// 3. 调用删除接口
 				let res = await removeTransaction(data);
 				if (res.code === 200) {
-					wx.showToast({ title: "删除成功", icon: "none" });
+
+					this.getBudgetInfo(data.bookId, data.userId)
 					this.handleTransactionList()
-					// 4. 核心：更新本地 transactionList 数据，触发页面刷新
-					// 深拷贝原列表，避免直接修改 this.data
-					// const newTransactionList = JSON.parse(JSON.stringify(this.data.transactionList));
-
-					// // 方式1：如果是删除外层数组的项（根据 index）
-					// // newTransactionList.splice(index, 1);
-
-					// // 方式2：如果是删除内层 list 的项（根据 index + i，适配你的嵌套结构）
-					// if (newTransactionList[index] && newTransactionList[index].list) {
-					// 	newTransactionList[index].list.splice(i, 1); // 从内层 list 中删除第 i 项
-					// }
-
-					// // 5. 响应式更新数据，触发页面渲染
-					// this.setData({
-					// 	transactionList: newTransactionList
-					// }, () => {
-					// 	console.log("列表已刷新，当前列表长度：", this.data.transactionList.length);
-					// });
+					notify.showNotify({
+						message: '删除成功',
+						type: 'success',
+						duration: 1500,
+						position: 'bottom'
+					});
 				} else {
 					wx.showToast({ title: res.msg || "删除失败", icon: "none" });
 				}
 			} catch (error) {
-				// 捕获异常，避免代码崩溃
 				console.error("删除接口调用异常：", error);
 				wx.showToast({ title: "网络异常，删除失败", icon: "none" });
 			}
 		},
-		/**
-		 * 切换眼睛展示金额
-		 */
 		handleEye(evt) {
 			const { eye } = evt.currentTarget.dataset
-			// const { summary } = this.data
 			this.setData({
 				eyeIndex: eye == 1 ? 2 : 1,
-				// 'summary.expendTotalMoney': eye == 1 ? '****' :'0.00'|| summary.expendTotalMoney,
-				// 'summary.incomeTotalMoney': eye == 1 ? '****' : '0.00'|| summary.incomeTotalMoney,
-				// 'summary.surplusTotalMoney': eye == 1 ? '****' :'0.00'||  summary.surplusTotalMoney
 			})
-
 		},
-		/**
-		 * 账本列表
-		 */
 		async handleBookList() {
 			let token = getStorageSync("token")
 			if (!token) return
 			let data = {
 				userId: getStorageSync("userInfo").id,
-
 			}
 			let res = await getBookList(data)
-			let list = res.list
-
+			console.log(res)
+			let list = res.data.singleBookList
 			if (list.length == 0) return
 			let bookInfo = list.find(ele => {
 				return ele.is_default == 1
@@ -365,12 +334,10 @@ Component({
 				bookInfo,
 				bookList: list
 			})
-			setStorageSync("bookList", res.list)
+			setStorageSync("bookList", res.data.singleBookList)
+			setStorageSync("multiBookList", res.data.multiBookList)
 			this.handleBookInfo()
 		},
-		/**
-		 * 默认选中当前账本
-		 */
 		async handleBookInfo() {
 			let data = {
 				userId: getStorageSync("userInfo").id,
@@ -379,31 +346,22 @@ Component({
 			}
 			let res = await getBookInfo(data)
 			setStorageSync("bookInfo", res.data)
-			// this.getBudgetInfo(data.bookId, data.userId)
+			this.getBudgetInfo(data.bookId, data.userId)
 			this.setData({
-				bookInfo: res.data
+				bookInfo: res.data,
 			})
 			this.handleTransactionList()
 		},
-		/**
-		 * 预算详情
-		 */
-		// async getBudgetInfo(bookId, userId) {
-		// 	// const { start_time } = this.data.queryParams
-		// 	let data = {
-		// 		bookId, userId,
-		// 		// "year": 2025,
-		// 		// "month": 12
-		// 	}
-		// 	let res = await budgetInfo(data)
-		// 	this.setData({
-		// 		budgetInfo: res.data
-		// 	})
-		// 	this.handleTransactionList()
-		// },
-		/**
-		 * 流水列表
-		 */
+		async getBudgetInfo(bookId, userId) {
+			let data = {
+				bookId, userId,
+			}
+			let res = await budgetInfo(data)
+			this.setData({
+				budgetInfo: res.data,
+			})
+			this.handleTransactionList()
+		},
 		async handleTransactionList() {
 			let data = {
 				userId: getStorageSync("userInfo").id,
@@ -411,7 +369,6 @@ Component({
 				...this.data.queryParams,
 				start_time: getThisDate('YY-MM')
 			}
-
 			let res: any = await getTransactionList(data)
 			this.setData({
 				transactionList: res.list.dataList[0]?.children,
@@ -424,36 +381,24 @@ Component({
 				total: res.pagination.total,
 				totalPages: res.pagination.totalPages
 			})
-			// const calendar = this.selectComponent('#calendar');
-			// if (calendar) {
-			// 	calendar.createDays(2025, 12);
-			// }
 		},
-
-
-		// 获取导航栏高度		
 		getNavBarHeight() {
 			const query = wx.createSelectorQuery();
 			query.select('.nav-bar').boundingClientRect();
 			query.select('.fake-nav-bar').boundingClientRect();
 			query.select('.bill-list').boundingClientRect();
-
 			query.select('.budget-card').boundingClientRect();
 			query.exec((res) => {
 				if (res) {
 					const navBarHeight = res[0].height;
 					const fakNavBarHeight = res[1].height
 					this.fakNavBarHeight.value = res[1].height
-
 					this.setData({
 						navBarHeight: navBarHeight,
 					});
-					// sticky-content
 				}
 			})
-
 		},
-		//  初始化系统配置
 		initSystemConfig() {
 			const capsuleConfig = SystemConfig.getCapsuleConfig();
 			const safeAreaInset = SystemConfig.getSafeAreaInset();
@@ -465,18 +410,14 @@ Component({
 				safeAreaInset
 			});
 		},
-		// 刷新系统信息
 		refreshSystemInfo() {
 			SystemConfig.refreshSystemInfo();
 			this.initSystemConfig();
-
 			wx.showToast({
 				title: '系统信息已刷新',
 				icon: 'success'
 			});
 		},
-
-		// 返回顶部
 		handleBackTop() {
 			this.setData({
 				scrollBackTop: 0
@@ -484,13 +425,12 @@ Component({
 		},
 		handleSetting() {
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			wx.navigateTo({
 				url: "/subPackages/pages/budget/index?bookId=" + this.data.bookInfo.id,
 				routeType: "wx://upwards"
 			})
 		},
-		/************************************* */
 		handleScrollStart(evt) {
 			'worklet'
 		},
@@ -499,25 +439,17 @@ Component({
 		},
 		handleScrollUpdate(evt) {
 			'worklet'
-			const maxDistance = 50  //search 距离顶部过渡距离
+			const maxDistance = 50
 			const scrollTop = clamp(evt.detail.scrollTop, 0, maxDistance)
 			const progress = EasingFn(scrollTop / maxDistance)
-			// console.log(this.fakNavBarHeight.value, evt.detail.scrollTop)
 			const shouldShowCard = evt.detail.scrollTop >= this.fakNavBarHeight.value
 			runOnJS(this.updateShowCard.bind(this))(shouldShowCard)
-
-
 			this.navBarOpactiy.value = lerp(1, 0, progress)
 		},
-
 		handleScrollEnd(evt) {
 			'worklet'
 		},
-
-		onPulling(e) {
-
-		},
-		/************************************* */
+		onPulling(e) { },
 		updateShowCard(show) {
 			this.setData({
 				showCard: show
@@ -526,40 +458,23 @@ Component({
 		onRefresh() {
 			if (this._freshing) return
 			this._freshing = true
-
 			let token = getStorageSync("token")
 			if (!token) return
 			this.handleBookList()
-
-
-
-
 			this.setData({
 				triggered: false,
 			})
 			this._freshing = false
-			// setTimeout(() => {
-			//   this.setData({
-			//     triggered: false,
-			//   })
-			//   this._freshing = false
-			// }, 2000)
 		},
-
-		onRestore(e) {
-
-		},
-
+		onRestore(e) { },
 		onAbort(e) {
 			console.log('onAbort', e)
 		},
-
 		closeTwoLevel() {
 			this.setData({
 				twoLevelTriggered: false,
 			})
 		},
-
 		onStatusChange(e) {
 			const status: RefreshStatus = e.detail.status
 			const twoLevelModes = [RefreshStatus.TwoLevelOpening, RefreshStatus.TwoLeveling, RefreshStatus.TwoLevelClosing]
@@ -572,8 +487,6 @@ Component({
 			if (status === RefreshStatus.TwoLevelOpening) {
 				showHideTabBar();
 			}
-
-
 			if (status === RefreshStatus.TwoLeveling) {
 				const that = this
 				wx.navigateTo({
@@ -590,7 +503,6 @@ Component({
 				})
 			}
 		},
-
 		buildText(status: RefreshStatus) {
 			switch (status) {
 				case RefreshStatus.Idle:
@@ -609,11 +521,12 @@ Component({
 					return '进入二楼'
 			}
 		},
-		// 进入账本页面
 		handleBookPage() {
 			const token = wx.getStorageSync('token') || null
+			// const userInfo = getStorageSync("userInfo")
+			// if(userInfo.levelInfo.user_level<=3) return
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			if (!token) {
 				wx.navigateTo({
 					url: "/pages/login/index"
@@ -625,13 +538,11 @@ Component({
 					routeType: "wx://upwards"
 				})
 			}
-
 		},
-		// 记一笔
 		handleCreate() {
 			let { bookInfo, bookList } = this.data
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			let bookIndex = bookList.findIndex(ele => ele.book_id == bookInfo.book_id)
 			const token = wx.getStorageSync('token') || null
 			if (!token) {
@@ -645,38 +556,34 @@ Component({
 				})
 			}
 		},
-		// 跳转到账单详情页面
 		handleTransactionInfo(evt) {
 			const { transaction_id, transaction_type } = evt.currentTarget.dataset
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			wx.navigateTo({
 				url: `/subPackages/pages/transaction/info/index?id=${transaction_id}&type=${transaction_type}`
 			})
 		},
-		// 跳转到日历账单页面
 		handleCalenderPage() {
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			wx.navigateTo({
 				url: `/subPackages/pages/transaction/calendar/index`
 			})
 		},
-		// 跳转明细页面
 		handleBillPage() {
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			wx.navigateTo({
-				url: `/subPackages/pages/transaction/bill/index?date=` + getThisDate('YY-MM')+'&yearMonthMoreActive=2'+'&type=0'
+				url: `/subPackages/pages/transaction/bill/index?date=` + getThisDate('YY-MM') + '&yearMonthMoreActive=2' + '&type=0'
 			})
 		},
-		//组件监听事件 跳转到添加账单
 		select(e) {
 			let { bookInfo, bookList } = this.data
 			let bookIndex = bookList.findIndex(ele => ele.book_id == bookInfo.book_id)
 			const token = wx.getStorageSync('token') || null
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			if (!token) {
 				wx.navigateTo({
 					url: "/pages/login/index"
@@ -688,18 +595,85 @@ Component({
 				})
 			}
 		},
-		// 金刚区 跳转
 		handlePageUrl(evt) {
 			const { url, type } = evt.currentTarget.dataset
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			let param: string | number = ""
 			if (type == 'bill') {
-				param = getThisDate("YY")+'&yearMonthMoreActive=1&type=0'
+				param = getThisDate("YY") + '&yearMonthMoreActive=1&type=0&bookId=' + getStorageSync("bookInfo").id
 			}
 			wx.navigateTo({ url: url + '?date=' + param })
 		},
-		onShareAppMessage() { }
-	},
+		async getBookUserListFn() {
+			let data = {
+				userId: getStorageSync("userInfo").id,
+				bookId: getStorageSync("bookInfo").id
+			}
+			let res = await getBookUserList(data)
+			console.log(res)
+			this.setData({
+				bookUserList: res.list
+			})
+		},
+		handleChildPopup(data: any) {
+			let { delta, type } = data.detail
+			if (!type) return;
+			this.updatePopupStatus(type, !delta);
+		},
+		handlePopup(evt) {
+			wx.vibrateShort({ type: 'light' })
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+			const { type } = evt.currentTarget.dataset;
+			if (!type) return;
+			this.getBookUserListFn()
+			this.updatePopupStatus(type, true);
+		},
+		handleCloseOverlay() {
+			wx.vibrateShort({ type: 'light' })
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+			const { popupType } = this.data;
+			if (!popupType) return;
+			this.updatePopupStatus(popupType, false);
+		},
+		updatePopupStatus(type, show) {
+			const key = `${POPUP_SHOW_KEY_PREFIX}${type}`;
+			const data = {
+				[key]: show
+			};
+			if (show) {
+				data.popupType = type;
+			}
+			this.setData(data);
+		},
+		async handleInvite() {
+			wx.vibrateShort({ type: 'light' })
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 
+			let userId = getStorageSync("userInfo").id
+
+			let bookId = getStorageSync("bookInfo").id
+			let data = {
+				shareUserId: userId,
+				shareBookId: bookId,
+				inviteeId: 0,
+
+			}
+			await shareBook(data)
+			this.onShareAppMessage()
+		},
+		onShareAppMessage() {
+			let nickname = getStorageSync("userInfo").nickname
+			let userId = getStorageSync("userInfo").id
+			let bookname = getStorageSync("bookInfo").name
+			let bookId = getStorageSync("bookInfo").id
+			console.log(nickname)
+			let shareObj = {
+				title: `${nickname}邀请您加入账本「${bookname}」`,
+				imageUrl: "https://picsum.photos/200/200?random=1",
+				path: '/pages/index/index?userId=' + userId + '&bookId=' + bookId + '&type=invite_book',
+			}
+			return shareObj
+		}
+	}
 })

@@ -1,0 +1,71 @@
+<!--subPackages/pages/category/add/index.wxml-->
+<navigation-bar title="新增类别" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="#000"
+	background="{{navBgColor}}">
+</navigation-bar>
+
+<view class="category-container">
+	<view class="choose-icon radius {{isAnimate ? 'jelly-animate' : ''}} {{selectedCategory.childIcon?'active':'no-active'}} ">
+		<image src="{{selectedCategory.childIcon||'/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+	</view>
+	<view class="form">
+		<view class="item radius-10">
+			<view class="category-name  flex flex-align-items-center flex-space-between">
+				<view class="label">名称</view>
+				<view class="input">
+					<input class="category_placeholder" type="text" placeholder="请输入" maxlength="10" adjust-position="{{false}}"
+						bindinput="bindKeyInput" />
+				</view>
+			</view>
+		</view>
+	</view>
+
+</view>
+
+<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{scrollHeight+height}}px) ">
+	<view class="category-container">
+		<view class="category-list radius-10">
+  <view class="category-item" wx:for="{{list}}" wx:for-index="index" wx:for-item="parentItem">
+    <view class="title">{{parentItem.name}}</view>
+    <view class="category-sub-list flex">
+      <!-- 子项：绑定点击事件 + 动态选中样式 -->
+      <view 
+        class="category-sub-item" 
+        wx:for="{{parentItem.child}}" 
+        wx:key="id" 
+        wx:for-item="childItem"
+				wx:for-index="childIndex"
+        bind:tap="selectCategory"
+        data-parent-index="{{index}}" 
+        data-child-id="{{childItem.id}}" 
+       
+      >
+        <view class="icon radius {{childItem.isSelected ? 'active' : 'no-active'}}">
+          <image 
+            src="{{childItem.icon|| '/static/icon/icon-Placeholder-image.png'}}" 
+            mode="widthFix" 
+            class="icon-cate"
+            
+          />
+        </view>
+        <!-- 可选：显示子项名称，选中时文字变白 -->
+        <!-- <view class="name" style="{{childItem.isSelected ? 'color: #fff;' : ''}}">{{childItem.name}}</view> -->
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 可选：显示当前选中的分类 -->
+<!-- <view class="selected-tip" wx:if="{{selectedCategory}}">
+  当前选中：{{selectedCategory.parentName}} - {{selectedCategory.childName}}（ID：{{selectedCategory.childId}}）
+</view> -->
+
+
+
+	</view>
+</scroll-view>
+<view class="shortcut" bind:tap="handleCategorySave">
+	<view class="shortcut_count radius-10 flex flex-center">
+		保存
+	</view>
+</view>
+<z-notify id="customNotify" bind:close="onNotifyClose"/>

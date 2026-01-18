@@ -40,7 +40,11 @@ Page({
 		startY: '',
 		showPopup_hasBill: false,
 		popupType: '',
-		categoryId: ''
+		categoryId: '',
+		// 新增标记：是否跳转到详情页（用于判断是否是返回行为）
+		isJumpToDetail: false,
+		// 新增标记：是否首次进入页面
+		isFirstEnter: true,
 	},
 	/**
  * 类别列表
@@ -48,13 +52,14 @@ Page({
 	async getCategoryListFn() {
 		let { queryParams, selectedTab } = this.data
 		let userInfo = getStorageSync("userInfo")
+		let bookInfo = getStorageSync("bookInfo")
 		// console.log(bookList, bookIndex, 123)
-		let res = await getCategoryList({ userId: userInfo.id, type: selectedTab == 0 ? 1 : 2, ...queryParams, bookCategoryId: 1 })
+		let res = await getCategoryList({ userId: userInfo.id, type: selectedTab == 0 ? 1 : 2, ...queryParams, bookCategoryId: bookInfo.book_category_id })
 		this.setData({
 			categoryList: res.list,
 			categoryIndex: 0
 		})
-		let ret = await getDeleteListCategoryList({ userId: userInfo.id, type: selectedTab == 0 ? 1 : 2, ...queryParams, bookCategoryId: 1 })
+		let ret = await getDeleteListCategoryList({ userId: userInfo.id, type: selectedTab == 0 ? 1 : 2, ...queryParams, bookCategoryId: bookInfo.book_category_id })
 		this.setData({
 			categoryDelList: ret.list,
 			categoryDelIndex: 0
@@ -88,7 +93,7 @@ Page({
 		if (newCategoryList[i]) {
 			newCategoryList[i].status = false;
 		}
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		// 更新数据
 		this.setData({
 			categoryList: newCategoryList
@@ -149,8 +154,9 @@ Page({
 	},
 
 	async deleteList(e) {
+		const notify = this.selectComponent('#customNotify');
 		try {
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			wx.vibrateShort({ type: 'light' })
 			// 1. 安全获取要删除的 id 和 dataset 中的索引（关键：需要 index/i 定位列表项）
 			let { id } = e.currentTarget.dataset || {};
@@ -161,91 +167,136 @@ Page({
 			let data = {
 				currentUserId: getStorageSync("userInfo")?.id || "", // 加容错，防止 userInfo 不存在
 				categoryId: id,
+				bookId:getStorageSync("bookInfo").id
 			};
 			// 容错：检查 userId 是否存在
 			if (!data.currentUserId) {
-				wx.showToast({ title: "用户信息异常，请重新登录", icon: "none" });
-				return;
+			return	notify.showNotify({
+					message:'用户信息异常，请重新登录',
+					type: 'error',
+					duration: 1500
+				});
 			}
 
 			// 3. 调用删除接口
 			let res = await cateBindBill(data);
-			console.log(res)
 			if (res.code === 200 && res.hasBill) {
 				this.setData({
 					showPopup_hasBill: res.hasBill,
 				})
 			} else {
-				// let data = {
-				// 	categoryId: this.data.categoryId,
-				// 	currentUserId: getStorageSync("userInfo")?.id || "",
-				// 	deleteBill: true
-				// }
-			let res = 	await deleteCate({...data,deleteBill: true})
-			if(res.code==200){
-				wx.showToast({
-					title:"移除成功",icon:'none'
-				})
-				this.getCategoryListFn()
-			}
+				let res = await deleteCate({ ...data, deleteBill: true })
+				if (res.code == 200) {
+						this.setData({
+						showPopup_hasBill:false,
+						popupType:""
+					})
+					notify.showNotify({
+						message: res.message,
+						type: 'success',
+						duration: 1500
+					});
+					this.getCategoryListFn()
+				
+				}
 			}
 		} catch (error) {
 			// 捕获异常，避免代码崩溃
-			console.error("删除接口调用异常：", error);
 			wx.showToast({ title: "网络异常，删除失败", icon: "none" });
 		}
 	},
 	async handleRemoveCate() {
-		playBtnAudio('/static/audio/click.mp3', 1000);
-			wx.vibrateShort({ type: 'light' })
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+		const notify = this.selectComponent('#customNotify');
 		let data = {
 			categoryId: this.data.categoryId,
 			currentUserId: getStorageSync("userInfo")?.id || "",
 			deleteBill: true
 		}
-	let res = 	await deleteCate(data)
-	if(res.code==200){
-		wx.showToast({
-			title:res.message,icon:'none'
-		})
-		this.getCategoryListFn()
-	}
+		let res = await deleteCate(data)
+		if (res.code == 200) {
+			notify.showNotify({
+				message: res.message,
+				type: 'success',
+				duration: 1500
+			});
+			this.setData({
+				showPopup_hasBill:false,
+				popupType:""
+			})
+			this.getCategoryListFn()
+		}
 	},
 	onTapTab(evt) {
 		const { sub } = evt.detail.delta
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		this.setData({
-			selectedTab: sub,
-			// : this.data.swiperTabs[sub].id
+			selectedTab: sub
 		})
 		this.getCategoryListFn()
 	},
 	// 添加类别
 	async handleAddCate(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
-		// wx.vibrateShort({ type: 'light' })
+		const notify = this.selectComponent('#customNotify');
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		let userInfo = getStorageSync("userInfo")
 		let data = {
 			categoryDeleteId: evt.currentTarget.dataset.id, currentUserId: userInfo.id, categoryId: evt.currentTarget.dataset.category_id
 		}
 		let res = await removeListCategoryList(data)
 		if (res.code == 200) {
-			wx.showToast({
-				title: "添加成功",
-				icon: "none"
+			notify.showNotify({
+				message: res.message,
+				type: 'success',
+				duration: 1500
+			});
+			this.setData({
+				showPopup_hasBill: false,
+				popupType: ""
 			})
 			this.getCategoryListFn()
 		}
 
 	},
+	handleAddCategory() {
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+		let { selectedTab } = this.data
+		let type = selectedTab == 0 ? 1 : 2
+		this.setData({
+			isJumpToDetail: true
+		})
+		wx.navigateTo({
+			url: "/subPackages/pages/category/add/index?type=" + type
+		})
+	},
 
 
 
 
-
-
-
+	handleUpdate() {
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+		this.setData({
+			showPopup_hasBill: false,
+			popupType: ""
+		})
+	},
+	handleView(){
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+		let {categoryId}  = this.data
+		wx.navigateTo({
+			url:"/subPackages/pages/category/bill/index?categoryId="+categoryId
+		})
+		this.setData({
+			showPopup_hasBill: false,
+			popupType: ""
+		})
+	},
 
 
 	/**
@@ -319,6 +370,25 @@ Page({
 		this.setData({
 			userInfo: getStorageSync("userInfo")
 		})
+		// 核心判断逻辑：
+		// 1. 不是首次进入（排除onLoad后的首次onShow）
+		// 2. 是从详情页返回（isJumpToDetail为true）
+		if (!this.data.isFirstEnter && this.data.isJumpToDetail) {
+			console.log("从账单详情页返回，执行刷新")
+			// this.handleTransactionList(this.data.type)
+
+			this.getCategoryListFn()
+			// 刷新后重置标记，避免重复刷新
+			this.setData({
+				isJumpToDetail: false
+			})
+		}
+		// 首次进入后，将标记置为false（后续onShow都是非首次）
+		if (this.data.isFirstEnter) {
+			this.setData({
+				isFirstEnter: false
+			})
+		}
 	},
 
 	/**

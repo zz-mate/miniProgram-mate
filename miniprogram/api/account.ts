@@ -1,7 +1,13 @@
 
 import { request } from '../utils/request';
 
-
+export function createAccount(data:any) {
+  return request({
+    url: '/miniProgram/account/create',
+    method: 'POST',
+    data,
+  });
+}
 export function getAccountList(data:any) {
   return request({
     url: '/miniProgram/account/list',
@@ -24,3 +30,4 @@ export function getAccountIndexCategoryList(data:any) {
     data,
   });
 }
+

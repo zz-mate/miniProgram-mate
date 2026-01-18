@@ -2,20 +2,21 @@
 <navigation-bar class="nav-bar" title="" back="{{false}}" auto="{{false}}" homeButton="{{false}}" color="black"
 	background="transparent">
 	<view slot="left" wx:if="{{refreshStatus!='松手进入二楼'&&refreshStatus!='进入二楼'}}">
-		<!-- catch:tap="handleBookPage" -->
-		<view class="custom-capsule flex flex-align-items-center"
-			style="height:{{capsuleHeight}}px;border-radius:0  {{capsuleHeight/2}}px {{capsuleHeight/2}}px 0;line-height: {{capsuleHeight}}px;">
+		<!-- catch:tap="handleBookPage"border-radius:0  {{capsuleHeight/2}}px {{capsuleHeight/2}}px 0 -->
+		<view class="custom-capsule flex flex-align-items-center" catch:tap="handleBookPage"
+		
+			style="height:{{capsuleHeight}}px;line-height: {{capsuleHeight}}px;">
 			{{bookInfo.name||'未登录'}}
-			<!-- <image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom" /> -->
+			<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"/>
 		</view>
 	</view>
-	<!-- <view slot="right">
+	<view slot="right">
 		<view class="custom-circle"
-			style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius: {{capsuleHeight/2}}px"
+			style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
 			catch:tap="handleCalenderPage">
-			<image class="icon-calendar" src="/static/imgs/calendar_black.png" mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;"/>
+			<image class="icon-calendar" src="http://oss-api.zz-mate.cn/uploads/2026/01/1768538636228-c75e736c-449d-4260-84b7-e8072302895c.png" mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;"/>
 			</view>
-	</view> -->
+	</view>
 </navigation-bar>
 <!-- <login-popup /> -->
 <!-- 滚动内容区域 -->
@@ -40,66 +41,84 @@
 	<sticky-section push-pinned-header="{{false}}">
 		<!-- 本月支出 收入 结余 卡片 -->
 		<view class="fake-nav-bar">
-			<image class="icon-copperplate" src="/static/imgs/icon-copperplate.png" mode="widthFix" />
-			<view class="bill-card">
-				<view class="current-title">本月支出</view>
-				<view class="current-money num flex flex-align-items-center">
-					<view class="money">{{eyeIndex==1?summary.totalExpend||'0.00':'*******'}}</view>
-					<!-- <image class="icon-eye" src="/static/imgs/icon-eye_{{eyeIndex}}.png" data-eye="{{eyeIndex}}" mode="widthFix" bind:tap="handleEye"/> -->
-				</view>
-				<view class="current-title flex num">
-					<text>本月收入 {{eyeIndex==1?summary.totalIncome||'0.00':'****'}}</text>
-					<text>本月结余 {{eyeIndex==1?summary.totalSurplus||'0.00':'****'}}</text>
-				</view>
-			</view>
-			<view class="fast-card radius-10">
-				<view class="list radius-10 flex flex-space-around">
-					<view class="item" data-type="bill" data-url="/subPackages/pages/transaction/bill/index"
-						bind:tap="handlePageUrl">
+			<view class="fake-card">
+				<image class="icon-book" src="{{bookInfo.icon}}" mode="scaleToFill" lazy-load="true"/>
+				<!-- <view class="user-together" catch:tap="handlePopup" data-type="together">
+					<view class="together-icon">
+						<image class="icon-together" src="/static/together.png" mode="widthFix" />
+					</view>
+					<view class="together-text">一起记</view>
+				</view> -->
+				<view class="bill-card">
+					<view class="current-title">本月支出</view>
+					<view class="current-money num flex flex-align-items-center flex-space-between">
+						<view class="money">{{eyeIndex==1?summary.totalExpend||'0.00':'*******'}}</view>
 
-						<image src="/static/icon/icon-bill.png" mode="widthFix" />
-						<view class="title">明细</view>
 					</view>
-					<view class="item" data-url="/subPackages/pages/budget/index" bind:tap="handlePageUrl">
-						<image src="/static/icon/icon-budget.png" mode="widthFix" />
-						<view class="title">预算</view>
-					</view>
-					<view class="item" data-url="/pages/account/index" bind:tap="handlePageUrl">
-						<image src="/static/icon/icon-account.png" mode="widthFix" />
-						<view class="title">资产</view>
-					</view>
-					<view class="item" data-url="/subPackages/pages/transaction/calendar/index" bind:tap="handlePageUrl">
-						<image src="/static/icon/icon-calendar.png" mode="widthFix" />
-						<view class="title">日历</view>
-					</view>
-					<view class="item" bind:tap="handlePageUrl">
-						<image src="/static/icon/icon-more.png" mode="widthFix" />
-						<view class="title">更多</view>
+					<view class="current-title flex num">
+						<text>本月收入 {{eyeIndex==1?summary.totalIncome||'0.00':'****'}}</text>
+						<text>本月结余 {{eyeIndex==1?summary.totalSurplus||'0.00':'****'}}</text>
 					</view>
 				</view>
 			</view>
+			<view class="fake-plac">
+				<view class="fast-card shadow radius-10">
+					<view class="list radius-10 flex flex-space-around">
+						<view class="item" data-type="bill" data-url="/subPackages/pages/transaction/bill/index"
+						catch:tap="handlePageUrl">
+
+							<image src="/static/icon/icon-bill.png" mode="widthFix" />
+							<view class="title">明细</view>
+						</view>
+						<view class="item" data-url="/subPackages/pages/budget/index" catch:tap="handlePageUrl">
+							<image src="/static/icon/icon-budget.png" mode="widthFix" />
+							<view class="title">预算</view>
+						</view>
+						<view class="item" data-url="/pages/account/index" catch:tap="handlePageUrl">
+							<image src="/static/icon/icon-account.png" mode="widthFix" />
+							<view class="title">资产</view>
+						</view>
+						<view class="item" data-url="/subPackages/pages/transaction/calendar/index" catch:tap="handlePageUrl">
+							<image src="/static/icon/icon-calendar.png" mode="widthFix" />
+							<view class="title">日历</view>
+						</view>
+						<view class="item" data-url="/subPackages/pages/transaction/prepayment/index"  catch:tap="handlePageUrl">
+							<image src="/static/icon/icon-prepayment.png" mode="widthFix" />
+							<view class="title">预约</view>
+						</view>
+						<!-- <view class="item" data-url="/subPackages/pages/more/index" catch:tap="handlePageUrl">
+							<image src="/static/icon/icon-more.png" mode="widthFix" />
+							<view class="title">全部</view>
+						</view> -->
+					</view>
+				</view>
+			</view>
+
 		</view>
-
+		<!-- <view style="padding-top:90rpx;z-index: -1; pointer-events: none;"></view> -->
 
 		<!-- 预算 -->
-		<!-- <view class="budget-card" style="padding: 0 20rpx;" wx:if="{{token&&budgetInfo}}">
-			<view class="card num radius-10" bind:tap="handleSetting">
+		<view class="budget-card shadow"   style="padding: 0 20rpx;"
+			wx:if="{{token&&budgetInfo}}">
+			<view class="card num radius-10" 	hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"  hover-stop-propagation="true" bind:tap="handleSetting" >
 				<view class="budget-title flex flex-space-between flex-align-items-center">
 					<text class="title">支出月预算</text>
-					<text class="text" wx:if="{{budgetInfo.remaining_amount!=0}}" style="color: {{budgetInfo.remaining_percent<0?'#ff0000':budgetInfo.remaining_percent==0?'#e6a23c':'#999999'}};">{{budgetInfo.remaining_percent<0?'超支':'剩余'}}<text class="num">{{budgetInfo.surplus_amount}}</text></text>
+					<text class="text" wx:if="{{budgetInfo.remaining_amount!=0}}"
+						style="color: {{budgetInfo.remaining_percent<0?'#ff0000':budgetInfo.remaining_percent==0?'#e6a23c':'#999999'}};">{{budgetInfo.remaining_percent<0?'超支':'剩余'}}<text
+							class="num">{{budgetInfo.surplus_amount}}</text></text>
 					<view class="text flex flex-align-items-center" wx:else>
 
 						<text>去设置</text>
-						<image
-							src="https://env-00jxubueh4pn.normal.cloudstatic.cn/更多.png?expire_at=1764261154&er_sign=e26817fde04cdac42398774d7c99f71f"
-							mode="widthFix" style="width: 24rpx;height: 24rpx;margin-left: 8rpx;" />
+						
+						<!-- <image
+							src="http://oss-api.zz-mate.cn/uploads/2026/01/1768479483027-ee4fdf4a-2d0f-4685-9430-369f662fb714.png"
+							mode="widthFix" style="width: 24rpx;height: 24rpx;margin-left: 4rpx;" /> -->
 					</view>
 				</view>
-
 				<view class="progress-container">
 					<view
-						class="progress-bar {{ budgetInfo.remaining_percent>0?'bg-warning':budgetInfo.remaining_percent==0?'bg-warning':'bg-error'}}"
-						style="width: {{ 100 - budgetInfo.remaining_percent}}%">
+						class="progress-bar {{ budgetInfo.remaining_percent>0?'bg-success':budgetInfo.remaining_percent==0?'bg-success':'bg-error'}}"
+						style="width: {{100 -  budgetInfo.remaining_percent}}%">
 					</view>
 				</view>
 
@@ -107,7 +126,7 @@
 					<view class="flex flex-align-items-center">
 						<text wx:if="{{budgetInfo.amount!='0.00'}}">总{{budgetInfo.amount}} <text style="margin-left: 8rpx;"
 								wx:if="{{budgetInfo.daily_available>0}}">剩余日均{{budgetInfo.daily_available}}</text> </text>
-						<text wx:else style="font-size: 20rpx;">节制使我更富足</text>
+						<text wx:else>节制使我更富足</text>
 
 					</view>
 					<view wx:if="{{budgetInfo.amount>0}}" class="percent">
@@ -117,7 +136,7 @@
 					</view>
 				</view>
 			</view>
-		</view> -->
+		</view>
 
 	</sticky-section>
 
@@ -126,13 +145,11 @@
 
 		<!-- 吸顶 本月支出 收入 结余 进度条区域 -->
 		<view class="sticky-content  radius-10" style="top:{{navBarHeight +'px'}}">
-			<!--  offset-top="{{navBarHeight}}"-->
 			<view style="background-color: #f4f2f7;height: 20rpx;width:100%"
 				wx:if="{{showCard&&transactionList.length&&refreshStatus!='松手进入二楼'&&refreshStatus!='进入二楼'}}"></view>
 			<view class="sticky-card flex flex-space-between  flex-align-items-center radius-10"
 				wx:if="{{showCard&&transactionList.length&&refreshStatus!='松手进入二楼'&&refreshStatus!='进入二楼'}}"
 				bind:tap="handleBillPage">
-				<!-- -->
 				<view class="left radius-4">
 					<view class="month num">{{summary.end_month}}月</view>
 					<view class="year num">{{summary.end_year}}</view>
@@ -184,11 +201,10 @@
 				<view class="radius-10 bill-container  ">
 					<block wx:for="{{item.list}}" wx:for-index="i">
 						<view class="bill-wrapper {{item.status ? '':'active'}}">
-							<view class="bill-wrapper_item bill-item_items cart-list flex flex-space-between flex-center"
-								hover-class="btn-hover" hover-stay-time='150' data-transaction_type="{{item.type}}"
+							<view class="bill-wrapper_item shadow bill-item_items cart-list flex flex-space-between flex-center"
+								hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-transaction_type="{{item.type}}"
 								data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}"
 								bindtouchstart="touchS" bindtouchmove="touchM">
-								<!-- {{item.status}} -->
 								<view class="left-icon">
 									<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 								</view>
@@ -211,18 +227,12 @@
 						</view>
 					</block>
 				</view>
-
-
-				<!-- 底部文字提示区域 -->
-
-
-
 			</view>
 			<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{transactionList.length}}">
 			</z-divider>
-			<view class="no-data" wx:if="{{!transactionList.length}}">
+			<view class="no-data radius-10" wx:if="{{!transactionList.length}}">
 				<view class="no-data-icon">
-					<image src="/static/async-icon/icon-not-bill.png" mode="widthFix" />
+					<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png" mode="widthFix" />
 				</view>
 				<view class="no-data-text">
 					<view>记账就是记录生活</view>
@@ -235,3 +245,37 @@
 	</sticky-section>
 
 </scroll-view>
+
+
+
+
+
+<z-popup bind:popup="handleChildPopup" showTitle="together" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_together}}" closeOnClickOverlay="{{true}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content" style="height:500rpx">
+		<view class="invite-book" style="height:500rpx">
+			<view class="avatar-container">
+    <!-- 循环渲染头像列表 -->
+    <view class="avatar-item" wx:for="{{bookUserList}}" wx:key="index">
+      <image 
+        class="avatar-img" 
+        src="{{item.avatar}}" 
+        alt=""
+        mode="aspectFill" 
+      ></image>
+    </view>
+  </view>
+			<button class="invite-btn" open-type="share" data-invite="friend" data-friend="friend" bind:tap="handleInvite">
+				<view class="radius-10 flex flex-center" hover-class="btn-yellow-hover" hover-stay-time='10'>
+					邀请加入账本
+				</view>
+			</button>
+
+		</view>
+
+	</view>
+
+</z-popup>
+
+<z-notify id="customNotify" bind:close="onNotifyClose"/>

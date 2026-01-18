@@ -1,66 +1,37 @@
 /* pages/home/index.wxss */
 @import "../../app.scss"; // 引入全局变量
 
-
-.bg-primary {
-	background-color: $z-color-primary;
-}
-
 .bg-success {
 	background-color: $z-color-success;
-}
-
-.bg-warning {
-	background-color: $z-color-warning;
 }
 
 .bg-error {
 	background-color: $z-color-error;
 }
 
-.text-primary {
-	color: $z-color-primary;
-}
-
-.text-success {
-	color: $z-color-success;
-}
-
-.text-warning {
-	color: $z-color-warning;
+.bg-warning {
+	background-color: $z-color-warning;
 }
 
 .text-error {
 	color: $z-color-error;
 }
 
-page {
-	// height: 100vh;
-	// display: flex;
-	// flex-direction: column;
-	// padding: 0 40rpx;
-	// background-image:url('../../static/componentImg/bg.png') ;
-}
-
+/***自定义胶囊样式***/
 .custom-capsule {
 	position: relative;
 	left: -16px;
-	// background-color: rgba(0, 0, 0, .15);
-
-	// border: 2rpx solid rgba(225, 225, 225, .25);	
 	background-color: rgba(255, 255, 255, .6);
-	border: 2rpx solid rgba(0, 0, 0, .1);
-	padding: 0 25rpx;
-	color: #000;
+	border: 1rpx solid rgba(0, 0, 0, 0.05);
+	padding: 0 20rpx;
+	color: $z-text-color;
 	font-weight: 600;
 }
 
 .custom-circle {
 	position: relative;
-	// background-color: rgba(0, 0, 0, .15);
-	// border: 2rpx solid rgba(225, 225, 225, .25);
 	background-color: rgba(255, 255, 255, .6);
-	border: 2rpx solid rgba(0, 0, 0, .1);
+	border: 1rpx solid rgba(0, 0, 0, 0.05);
 	margin-right: 20rpx;
 
 	.icon-calendar {
@@ -68,44 +39,59 @@ page {
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
-		// margin: 14rpx;
 	}
 }
 
+/**顶部区域***/
 .fake-nav-bar {
 	position: relative;
-	height: 460rpx;
-	background-color: $-theme-color;
-	margin-bottom: 20rpx;
-	color: #000;
+	color: $z-text-color;
 	z-index: 1;
+	height: 530rpx;
 
-	.icon-copperplate {
+	.fake-card {
+		height: 440rpx;
+		// background-color: $-theme-color;
+		background-repeat: no-repeat;
+		background-size: cover;
+
+		.icon-book {
+			height: 440rpx;
+		}
+
+		.current-title {
+			font-size: 22rpx;
+			color: $z-text-color;
+		}
+	}
+
+	.fake-plac {
 		position: absolute;
-		right: -40rpx;
-		top: -40rpx;
-		width: 360rpx;
-		height: 360rpx;
+		left: 20rpx;
+		right: 20rpx;
+		bottom: 30rpx;
+		height: 120rpx;
 	}
 
-	.current-title {
-		font-size: 22rpx;
-		color: #000;
+	.user-together {
+		position: absolute;
+		right: 60rpx;
+		bottom: 130rpx;
+
+		.together-icon {
+			height: 65rpx;
+			width: 65rpx;
+		}
+
+		.together-text {
+			font-size: $z-font-size-20;
+			color: $z-text-color;
+		}
 	}
+
 }
 
 .fast-card {
-	position: absolute;
-	left: 20rpx;
-	right: 20rpx;
-	bottom: -60rpx;
-	// margin-top: -80rpx;
-	// padding: 0 20rpx;
-	// margin-bottom: 20rpx;
-	// position: relative; 
-	// z-index: 999;
-	margin-bottom: 80rpx;
-
 	.list {
 		background-color: #fff;
 		padding: 20rpx;
@@ -113,15 +99,16 @@ page {
 
 		.item {
 			.title {
-				font-size: 19rpx;
+				font-size: $z-font-size-18;
 				text-align: center;
 				padding-top: 4rpx;
-				color: #333;
+				color: $z-text-color;
 			}
 
 			image {
 				width: 56rpx;
 				height: 56rpx;
+				margin: 0 auto;
 			}
 		}
 	}
@@ -132,6 +119,7 @@ page {
 	position: absolute;
 	bottom: 100rpx;
 	left: 25rpx;
+	// right: 25rpx;
 }
 
 .bill-card .current-title text {
@@ -155,20 +143,22 @@ page {
 
 	.card {
 		padding: 20rpx;
-		background-color: #FFF;
-
+		background-color: $z-bg-color;
+		&.btn-hover {
+			background-color: $z-btn-white-hover;
+		}
 		.budget-title {
 			.title {
-				font-size: 22rpx;
+				font-size: $z-font-size-22;
 				font-weight: 600;
 			}
 
 			.text {
-				font-size: 20rpx;
+				font-size: $z-font-size-20;
 
 				text {
-					font-size: 24rpx;
-					color: #000;
+					font-size: $z-font-size-20;
+					color: $z-text-color;
 				}
 			}
 
@@ -177,8 +167,7 @@ page {
 		.progress-container {
 			margin: 6rpx 0;
 			height: 6rpx;
-			background-color: #faf8fd;
-			border-radius: 2rpx;
+			background-color: $z-bg-color-progress;
 			overflow: hidden;
 		}
 
@@ -188,13 +177,13 @@ page {
 		}
 
 		.budget-money {
-			font-size: 19rpx;
-			color: #999999;
+			font-size: $z-font-size-20;
+			color: $z-text-color-40;
 		}
 	}
 }
 
-
+/***吸顶****/
 .sticky-content {
 	position: fixed;
 	left: 18rpx;
@@ -202,36 +191,38 @@ page {
 }
 
 .sticky-card {
-	background-color: #FFF;
+	background-color: $z-bg-color;
 	padding: 20rpx;
-	margin-bottom: 20rpx;
-	border-bottom: 1rpx solid #f4f2f7;
+	// margin-bottom: 20rpx;
+	border-bottom: 1rpx solid $z-border-color;
 	overflow: hidden;
 
 	.left {
 		text-align: center;
 		width: 60rpx;
 		height: 60rpx;
-		background-color: #f4f2f7;
+		background-color: $z-bg-color-grey;
 		padding-top: 2rpx;
 
 		.month {
 			font-weight: 600;
-			font-size: 22rpx;
+			font-size: $z-font-size-22;
+			color: $z-text-color;
 		}
 
 		.year {
-			color: #999999;
-			font-size: 20rpx;
+			color: $z-text-color-60;
+			font-size: $z-font-size-20;
 		}
 	}
 
 	.center {
 		flex: 1;
 		margin-left: 20rpx;
-		font-size: 20rpx;
+		font-size: $z-font-size-20;
 
 		.progress-content {
+
 			.default {
 				margin-bottom: 4rpx;
 			}
@@ -239,8 +230,9 @@ page {
 			.red,
 			.default {
 				height: 4rpx;
-				border-radius: 2rpx;
+				background-color: $z-bg-color-progress;
 				overflow: hidden;
+
 
 				.progress-bar {
 					height: 100%;
@@ -256,12 +248,12 @@ page {
 		text-align: right;
 
 		.num {
-			font-size: 22rpx;
+			font-size: $z-font-size-22;
 		}
 
 		.text {
-			color: #999999;
-			font-size: 20rpx;
+			color: $z-text-color-60;
+			font-size: $z-font-size-20;
 		}
 	}
 
@@ -273,12 +265,7 @@ page {
 }
 
 .bill-list {
-	// background-color: #FFF;
-	// padding: 0 20rpx;
-	// margin: 20rpx 0;
-	margin-top: 60rpx;
 	margin-bottom: 200rpx;
-
 }
 
 
@@ -289,14 +276,13 @@ page {
 	position: absolute;
 	width: 100%;
 	z-index: 1;
-	// pointer-events: none;
 }
 
 
 .nav-title {
 	margin-left: 2px;
 	font-size: 20px;
-	color: #3f3e3e;
+	color: $z-text-color;
 }
 
 .scroll-area {
@@ -304,21 +290,17 @@ page {
 }
 
 .category-wrp {
-	// width: 100%;
 	flex: 1;
 	height: 200px;
 
-	border-radius: 13rpx;
+	// border-radius: 13rpx;
 	overflow: hidden;
 
-	// height: 220px;
-	// padding: 10px 0;
-	// background-color: #FFF;
 	.img {
 		width: 100%;
 		flex: 1;
 		height: 100%;
-		border-radius: 8px;
+		// border-radius: 8px;
 	}
 }
 
@@ -326,7 +308,7 @@ page {
 	width: 50px;
 	height: 50px;
 	margin-bottom: 10px;
-	border-radius: 50%;
+	// border-radius: 50%;
 	// background: $-theme-color;
 }
 
@@ -343,7 +325,7 @@ page {
 
 .good-icon {
 	width: 100%;
-	border-radius: 6px;
+	// border-radius: 6px;
 }
 
 .good-title {
@@ -498,23 +480,61 @@ page {
 	}
 }
 
+.invite-book {
+	position: relative;
+	padding: 30rpx 20rpx;
+	background-color: $z-bg-color-grey;
 
-.bill_add {
-	position: fixed;
-	bottom: 300rpx;
-	right: 20rpx;
-	width: 80rpx;
-	height: 80rpx;
-	border-radius: 50%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background: $z-color-primary;
-	box-shadow: 0px 8rpx 12rpx -8rpx rgba(0, 0, 0, 0.1), 0px 10px 15px -3px rgba(41, 176, 253, 0.1);
-	font-weight: 600;
-	color: #fff;
-	// .bill_add_img {
-	//   width: 15.31px;
-	//   height: 24.5px;
-	// }
+
+	/* 头像容器：flex 实现一行排列 */
+	.avatar-container {
+		display: flex;
+		/* 小程序推荐用 rpx 单位，适配不同屏幕 */
+		gap: 32rpx;
+		align-items: center;
+		/* 超出一行自动换行 */
+		flex-wrap: wrap;
+	}
+
+	/* 单个头像样式 */
+	.avatar-item {
+		/* 头像尺寸：160rpx 约等于 80px（750rpx = 屏幕宽度） */
+		width: 60rpx;
+		height: 60rpx;
+		/* 白色边框：2px 宽度，可按需调整 */
+		border: 4rpx solid $z-bg-color;
+		/* 圆形头像（去掉则为方形） */
+		// border-radius: 50%;
+		/* 溢出隐藏（配合圆角） */
+		overflow: hidden;
+		/* 阴影让边框更突出 */
+		box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
+	}
+
+	/* 头像图片样式 */
+	.avatar-img {
+		width: 100%;
+		height: 100%;
+	}
+
+	.invite-btn {
+		position: absolute;
+		left: 20rpx;
+		right: 20rpx;
+		bottom: 200rpx;
+		height: 80rpx;
+		line-height: 80rpx;
+		font-size: $z-font-size-22;
+		font-weight: normal;
+		letter-spacing: 2rpx;
+		color: $z-text-color;
+		text-align: center;
+		background-color: $-theme-color;
+		border: none;
+		border-radius: 0;
+		padding: 0;
+		margin: 0;
+		-webkit-tap-highlight-color: transparent;
+	}
+
 }

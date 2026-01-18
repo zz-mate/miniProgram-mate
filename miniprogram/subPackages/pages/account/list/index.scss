@@ -1,4 +1,5 @@
 /* subPackages/pages/book/category/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
 .book-container {
 	padding: 20rpx;
 
@@ -11,7 +12,9 @@
 
 		padding: 20rpx;
 		// margin-bottom: 10rpx;
-
+		&.btn-hover {
+			background-color: $z-btn-white-hover;
+		}
 		&:last-child {
 			margin-bottom: 0;
 		}

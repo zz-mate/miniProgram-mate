@@ -8,7 +8,8 @@
 
 			<view class="card">
 				<view class="icon-category">
-					<image src="{{transactionInfo.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" class="icon" />
+					<image src="{{transactionInfo.category.icon|| '/static/icon/icon-Placeholder-image.png'}}"
+						class="icon radius" />
 
 				</view>
 				<view class="category-name">{{transactionInfo.category.name}}</view>
@@ -18,13 +19,15 @@
 			</view>
 
 			<view class="border"></view>
-			<view class="radius-10" style="overflow: hidden;">
+			<view  style="overflow: hidden;">
 				<view class=" item  flex flex-align-items-center flex-center flex-space-between">
 					<view class="icon-category ">
 
 						<text>付款账户</text>
 					</view>
-					<view class="right-text">{{transactionInfo.account_id?transactionInfo.accountInfo.account_name:'--'}}</view>
+					<view class="right-text  {{transactionInfo.account.id?'':'not-text'}} ">
+						{{transactionInfo.account?transactionInfo.account.name:'--'}}
+					</view>
 				</view>
 				<view class=" item flex flex-align-items-center flex-center flex-space-between">
 					<view class="icon-category ">
@@ -39,17 +42,17 @@
 					</view>
 					<view class="right-text num">{{transactionInfo.bill_time}}</view>
 				</view>
-				<view class=" item flex flex-align-items-center flex-center flex-space-between">
+				<!-- <view class=" item flex flex-align-items-center flex-center flex-space-between">
 					<view class="icon-category ">
 						<text>标签</text>
 					</view>
 					<view class="right-text flex" wx:if="{{transactionInfo.tags.length}}">
 						<text wx:for="{{transactionInfo.tags}}" style="margin-right: 6rpx;color: #666;">#{{item.name}}</text>
 					</view>
-					<view class="right-text" wx:else>
+					<view class="right-text not-text" wx:else>
 						<text>--</text>
 					</view>
-				</view>
+				</view> -->
 				<view class=" item  flex flex-align-items-center flex-center flex-space-between">
 					<view class="icon-category ">
 						<text>账本</text>
@@ -60,20 +63,38 @@
 					<view class="icon-category ">
 						<text>备注</text>
 					</view>
-					<view class="right-text ">{{transactionInfo.remark|| '--'}}</view>
+					<view class="right-text {{transactionInfo.remark==''?'not-text':''}} ">{{transactionInfo.remark|| '--'}}
+					</view>
 				</view>
 				<view class=" item flex flex-align-items-center flex-center flex-space-between">
 					<view class="icon-category ">
-						<text>附件</text>
+						<text>凭证</text>
 					</view>
-					<view class="right-text ">{{ '--'}}</view>
+					<view class="right-text imgs" wx:if="{{transactionInfo.image_list}}">
+						<image src="{{transactionInfo.image_list}}" mode="" bindtap="previewImage"></image>
+					</view>
+					<view class="right-text not-text" wx:else>
+						--
+					</view>
 				</view>
 			</view>
+		<view class="map-card" wx:if="{{transactionInfo.longitude}}">
+			<map id="myMap" 
+     style="width:100%;height:200px;" 
+     longitude="{{transactionInfo.longitude}}" 
+     latitude="{{transactionInfo.latitude}}" 
+     markers="{{transactionInfo.markers}}" 
+		 enable-scroll="{{true}}"
+		 show-compass="{{true}}"
+		 enable-building="{{true}}"
+		 enable-zoom="{{false}}"
+     show-location>
+</map>
 
-		</view>
-		<view class="ad-card radius-10">
-	<ad-custom unit-id="adunit-0123ed6c3a1117b1" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
+	<!-- <ad-custom unit-id="adunit-0123ed6c3a1117b1" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom> -->
 </view>
+		</view>
+
 	</sticky-section>
 </scroll-view>
 
@@ -81,7 +102,7 @@
 	<view class="del btn radius-10" bind:tap="handleRemove">
 		删除
 	</view>
-	<!-- <view class="edit btn radius-10" bind:tap="handleUpdate">
+	<view class="edit btn radius-10" bind:tap="handleUpdate">
 		编辑
-	</view> -->
+	</view>
 </view>

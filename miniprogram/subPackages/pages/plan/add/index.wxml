@@ -1,0 +1,160 @@
+<!--subPackages/pages/plan/add/index.wxml-->
+<navigation-bar title="{{title}}" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="#000"
+	background="{{navBgColor}}">
+	<view slot="right">
+		<view class="custom-circle" style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
+			catch:tap="handleCalenderPage">
+			<image class="icon-calendar"
+				src="http://oss-api.zz-mate.cn/uploads/2026/01/1768569299579-3c6f1fcf-a73a-4b80-ba90-b12ff0750479.png"
+				mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
+		</view>
+	</view>
+</navigation-bar>
+<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{height}}px) ">
+	<view class="plan-container">
+		<!-- 计划名称 -->
+		<view class="plan-name radius-10 flex flex-align-items-center flex-space-between">
+			<view class="label">计划名称</view>
+			<view class="input">
+				<input class="plan_placeholder num" type="text" maxlength="10" placeholder="请输入名称"
+					adjust-position="{{false}}" bindinput="bindKeyInputName" value="{{params.name}}" />
+			</view>
+		</view>
+
+		<!-- 描述内容 -->
+		<!-- <view class="plan-name radius-10 flex flex-align-items-center flex-space-between">
+			<view class="label">描述内容</view>
+			<view class="input">
+				<input class="plan_placeholder num" type="text" maxlength="40" placeholder="请输入内容"
+					adjust-position="{{false}}" bindinput="bindKeyInputDesc" value="{{params.desc}}" />
+			</view>
+		</view> -->
+		<view class="plan-name radius-10 flex flex-align-items-center flex-space-between">
+			<view class="label">提醒时间</view>
+			<view class="input" bind:tap="handlePopup" data-type="date">
+
+				<view class="plan_placeholder" style="text-align: right;">{{planTime}}</view>
+				<!-- <input class="plan_placeholder num" type="text" maxlength="40" placeholder="{{params.desc}}"
+					adjust-position="{{false}}" bindinput="bindKeyInputDesc" value="{{params.desc}}" /> -->
+			</view>
+		</view>
+		<!-- 计划清单（支持动态编辑） -->
+		<view class="plan-content radius-10">
+			<view class="content-header flex flex-space-between flex-align-items-center">
+				<view class="content-title">计划清单</view>
+				<!-- 添加分类按钮 -->
+				<view class="add-btn add-category-btn" bindtap="addNewCategory">
+					<image src="/static/icon/icon-add-category.png" mode="widthFix" />
+				</view>
+			</view>
+
+			<!-- 循环渲染分类 -->
+			<view class="category-item" wx:for="{{params.content}}" wx:key="id">
+				<!-- 分类头部（可编辑） -->
+				<view class="category-header flex flex-align-items-center">
+					<!-- 分类勾选框 -->
+					<!-- <checkbox 
+          class="category-checkbox" 
+          checked="{{item.checked}}" 
+          bindchange="toggleCategoryCheck" 
+          data-id="{{item.id}}"
+        /> -->
+					<view class="check" data-id="{{item.id}}" bind:tap="toggleCategoryCheck">
+						<image wx:if="{{item.checked==true?'active':''}}"
+							src="http://oss-api.zz-mate.cn/uploads/2026/01/1768559268931-e674568b-b030-420b-912f-d72799c2a0bc.png"
+							mode="" class="icon-choose" />
+					</view>
+					<!-- 分类标题 + 优先级 + 操作 -->
+					<view class="category-info flex-1">
+						<!-- 分类标题输入框 -->
+						<input class="category-title-input" type="text" value="{{item.title}}" bindinput="editCategoryTitle"
+							data-id="{{item.id}}" placeholder="请输入" />
+
+						<!-- 优先级选择 -->
+						<!-- 优先级选择器：简化参数传递，确保id能正确被获取 -->
+						<!-- <view class="priority-selector flex align-items-center">
+							<text class="priority-label">优先级：</text>
+							<picker mode="selector" range="{{['高', '中', '低']}}" value="{{(item.priority || 2) - 1 + ''}}"
+								bindchange="changePriority" data-category-id="{{item.id + ''}}" class="priority-picker">
+								<view class="priority-tag priority-{{item.priority || 2}}">
+									{{item.priority === 1 ? '高' : item.priority === 2 ? '中' : '低'}}
+								</view>
+							</picker>
+						</view> -->
+					</view>
+
+					<!-- 操作按钮 -->
+					<view class="category-actions flex flex-align-items-center flex-align-items-center">
+						<!-- <view class="weight-text">{{(item.weight * 100).toFixed(0)}}%</view> -->
+						<!-- 删除分类 -->
+						<view class="del-btn" bindtap="deleteCategory" data-id="{{item.id}}">
+							<image src="/static/icon/icon-delete-category.png" mode="widthFix" />
+						</view>
+					</view>
+				</view>
+
+				<!-- 分类备注（可编辑） -->
+				<!-- <view class="category-note-edit" wx:if="{{item.note}}">
+					<input class="note-input" type="text" value="{{item.note}}" bindinput="editCategoryNote" data-id="{{item.id}}"
+						placeholder="请输入备注信息" />
+				</view> wx:else-->
+				<!-- <view class="category-note-edit" >
+					<input class="note-input placeholder-style" type="text" bindinput="editCategoryNote" data-id="{{item.id}}"
+						placeholder="💡 点击输入备注信息" />
+				</view> -->
+
+				<!-- 子项列表 + 添加子项按钮 -->
+				<view class="items-wrap">
+					<view class="items-header flex flex-space-between flex-align-items-center">
+						<view class="items-title"></view>
+						<!-- 添加子项按钮 -->
+						<view class="add-btn add-item-btn" bindtap="addNewItem" data-id="{{item.id}}">
+							<image src="/static/icon/icon-add-category.png" mode="widthFix" />
+						</view>
+					</view>
+
+					<view class="items-list">
+						<view class="item-row flex flex-align-items-center" wx:for="{{item.items}}" wx:for-item="subItem"
+							wx:key="index">
+							<view class="check" data-category-id="{{item.id}}" data-item-index="{{index}}"
+								bind:tap="toggleItemCompleted">
+								<image wx:if="{{subItem.completed==true?'active':''}}"
+									src="http://oss-api.zz-mate.cn/uploads/2026/01/1768559268931-e674568b-b030-420b-912f-d72799c2a0bc.png"
+									mode="" class="icon-choose" />
+							</view>
+							<!-- <checkbox class="item-checkbox" checked="{{subItem.completed}}" bindchange="toggleItemCompleted"
+								data-category-id="{{item.id}}" data-item-index="{{index}}" /> -->
+							<input class="item-name-input {{subItem.completed ? 'item-completed' : ''}}" type="text"
+								value="{{subItem.name}}" bindinput="editItemName" data-category-id="{{item.id}}"
+								data-item-index="{{index}}" placeholder="请输入" />
+							<!-- 删除子项 -->
+							<view class="del-btn item-del-btn" bindtap="deleteItem" data-category-id="{{item.id}}"
+								data-item-index="{{index}}">
+								<image src="/static/icon/icon-delete-category.png" mode="widthFix" />
+								</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+
+	</view>
+</scroll-view>
+
+<view class="shortcut" bind:tap="savePlan">
+	<view class="shortcut_count color-primary save-disabled radius-10 flex flex-center">
+		保存
+	</view>
+</view>
+
+
+<z-popup bind:popup="handleChildPopup" showTitle="date" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_date}}" closeOnClickOverlay="{{true}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content" style="height:35vh">
+		<date-picker bind:onCancel="handleCloseOverlay" bind:onConfirm="onConfirmDate" mode="YMDhm"
+			forceInitFirstDay="false" initType="normal" date="{{date}}"></date-picker>
+	</view>
+</z-popup>
+<!-- 自定义 Notify 组件 -->
+<z-notify id="customNotify" bind:close="onNotifyClose" />

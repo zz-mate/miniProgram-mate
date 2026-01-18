@@ -1,0 +1,230 @@
+<!--pages/plan/index.wxml-->
+<!--subPackages/pages/account/add/index.wxml-->
+<navigation-bar title="添加计划" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="{{navBgColor}}">
+
+</navigation-bar>
+
+<view class="book-container">
+	<view class="account-category flex flex-align-items-center flex-space-between">
+		<view class="account-left radius-10" bind:tap="handlePopup" data-type="account">
+			<view class="flex-tips red">
+				{{backParams.type==2?'付款':"收益"}}账户
+			</view>
+			<view class="info flex flex-align-items-center" wx:if="{{params.accountId}}">
+				<view class="cover">
+					<image src="{{accountList[selectedParentIndex].children[selectedChildIndex].icon}}" mode="aspectFill" />
+				</view>
+				<view class="name">
+					{{accountList[selectedParentIndex].children[selectedChildIndex].name}}
+				</view>
+
+			</view>
+			<view wx:else class="choose">
+				<view class="cover">
+					<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768299165579-561d89bd-040a-405b-8d11-b6483ab20e8f.png"
+						mode="aspectFill" />
+				</view>
+				<view class="name">
+					选择账户 </view>
+			</view>
+		</view>
+		<view class="icon-center">
+			<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768211574017-d2d52e8e-7c38-4158-9ccb-d41104e94a27.png" wx:if="{{backParams.type==2}}"
+				mode="" />
+				<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768448680063-6da0516e-fab5-4c6b-9ca1-3e38db4c3a18.png" wx:else
+				mode="" />
+		</view>
+		<view class="category-right radius-10" bind:tap="handlePageUrl">
+			<view class="flex-tips green">
+			{{backParams.type==2?'消费':"收益"}}分类
+			</view>
+			<view class="info flex flex-align-items-center" wx:if="{{backParams.categoryId}}">
+				<view class="cover">
+					<image src="{{backParams.categoryIcon||'/static/icon/icon-Placeholder-image.png'}}" mode="aspectFill" />
+				</view>
+				<view class="name">
+					{{backParams.categoryName}}
+				</view>
+
+			</view>
+			<view wx:else class="choose">
+				<view class="cover">
+					<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768298463793-614e7f08-ce09-4e11-ad77-8f98405e728b.png"
+						mode="aspectFill" />
+				</view>
+				<view class="name">
+					选择分类
+				</view>
+			</view>
+		</view>
+	</view>
+	<view class="input-remark">
+		<input class="book_placeholder" disabled type="text" maxlength="14" placeholder="转账说明" adjust-position="{{false}}"
+			value="{{params.remark}}" bindinput="bindKeyInputRemark" />
+	</view>
+	<view class="date-content">
+		<view class="book-name radius-10 flex flex-align-items-center flex-space-between" bind:tap="showCycleStartPopup">
+			<view class="label">转账日期</view>
+			<view class="input">
+				{{cycleStartInfo.activeIndex==0?'': cycleStartInfo.selectedName}} {{cycleStartInfo.displayDate}}
+
+			</view>
+		</view>
+
+		<view class="book-name radius-10 flex flex-align-items-center flex-space-between" bind:tap="showCycleEndPopup"
+			wx:if="{{cycleStartInfo.activeIndex!==0}}">
+			<view class="label">截止日期</view>
+			<view class="input" bind:tap="showCycleEndPopup">
+
+				{{cycleEndInfo.displayDate }}
+			</view>
+		</view>
+	</view>
+	<view class="book-name radius-10 flex flex-align-items-center flex-space-between">
+		<view class="label">开启转账提醒</view>
+		<view class="inputs">
+			<!-- <input class="book_placeholder" type="text" maxlength="10" placeholder="备注(选填)" adjust-position="{{false}}"
+				bindinput="bindKeyInputRemark" /> -->
+				<z-switch-wiew height="40" width="80"  bgColor="{{switchOpenColor}}" unBgColor="#f4f2f7" bind:change="changeCheck" checked="{{checked}}"> </z-switch-wiew>
+		</view>
+	</view>
+	<view class="book-name radius-10 flex flex-align-items-center flex-space-between">
+		<view class="label">金额</view>
+		<view class="input amount">
+			<input class="book_placeholder num" type="digit" maxlength="10" placeholder="{{params.amount}}"
+				adjust-position="{{false}}" bindinput="bindKeyInputMoney" />
+		</view>
+	</view>
+
+
+
+</view>
+
+
+<view class="shortcut" bind:tap="handleAppointmentSave">
+	<view class="shortcut_count color-primary radius-10 flex flex-center {{isSaveBtnDisabled ? 'btn-disabled' : ''}}">
+		保存
+	</view>
+</view>
+
+<!-- 账本 -->
+<z-popup bind:popup="handleChildPopup" showTitle="book" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_book}}" closeOnClickOverlay="{{true}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content">
+		<scroll-view scroll-y style="height:60vh">
+			<block wx:if="{{bookList.length>0}}">
+				<block wx:for="{{bookList}}" wx:key="index">
+					<view class="book-list {{index==bookIndex?'book-list_active':''}}" style="width: 100%;height: 100rpx;"
+						data-index="{{index}}" bind:tap="handleBookSelected">
+						<view class="book-item flex flex-align-items-center flex-space-between">
+							<view class="cover">
+								<image src="{{item.icon}}" mode="" />
+							</view>
+							<view class="info">
+								<view class="book-name">{{item.name}}</view>
+
+							</view>
+							<view class="icon" wx:if="{{bookIndex==index}}">
+								<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
+							</view>
+						</view>
+					</view>
+				</block>
+			</block>
+
+			<view class="no-data" wx:else>
+				<view class="no-data-icon">
+					<image
+						src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+						mode="widthFix" />
+				</view>
+				<view class="no-data-text">
+					<view>记账就是记录生活</view>
+					<view>财务自由，从记第一笔开始</view>
+				</view>
+			</view>
+		</scroll-view>
+
+	</view>
+
+</z-popup>
+
+<!-- 账户 -->
+<z-popup bind:popup="handleChildPopup" showTitle="account" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_account}}" closeOnClickOverlay="{{true}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content" style="height:50vh">
+		<view class="account-list list">
+			<!-- <view class="default flex flex-align-items-center flex-space-between" bind:tap="handleAccountDefault">
+				<view class="account-name">
+					不使用账户
+				</view>
+				<view class=" icon" wx:if="{{ selectedParentIndex==-1 &&selectedChildIndex==-1}}">
+					<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
+				</view>
+			</view> -->
+			<scroll-view class="account-scroll" scroll-y="{{true}}" style="height:50vh">
+				<view wx:if="{{accountList.length}}">
+					<view class="item" wx:for="{{accountList}}" wx:key="index">
+						<view class="item-header">{{item.category_name}}</view>
+						<view class="item-items  flex flex-space-between flex-align-items-center" wx:for="{{item.children}}"
+							wx:for-index="i" wx:for-item="v" bind:tap="handleChooseAccount" data-parent-index="{{index}}"
+							data-child-index="{{i}}">
+							<view class="account-icon">
+								<image src="{{v.icon}}" mode="widthFix" />
+							</view>
+							<view class="account-name">
+								<view class="name">{{v.name}}</view>
+								<view class="account-amount">{{v.amount}}</view>
+							</view>
+							<view class="icon">
+								<!-- <image wx:if="{{index === selectedParentIndex && i === selectedChildIndex}}"
+									src="https://env-00jxubueh4pn.normal.cloudstatic.cn/选中.png?expire_at=1764261862&er_sign=70a70d791e41e1880e6ea64c4c61fd8b"
+									mode="widthFix" /> -->
+								<image wx:if="{{index === selectedParentIndex && i === selectedChildIndex}}"
+									src="/static/icon/icon-book-choose.png" mode="widthFix" />
+							</view>
+						</view>
+					</view>
+				</view>
+
+				<view class="no-data" wx:else>
+					<view class="no-data-icon">
+						<image
+							src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+							mode="widthFix" />
+					</view>
+					<view class="no-data-text">
+						<view>暂无资产记录</view>
+						<view>添加你的第一笔资产，开启财富管理</view>
+					</view>
+					<view class="no-data-btn" bind:tap="handleAddAsset">
+						立即添加资产
+					</view>
+				</view>
+			</scroll-view>
+		</view>
+	</view>
+
+</z-popup>
+
+
+
+
+
+<date-filter-popup show="{{showCycleStartPopupFlag}}" mode="bottom" contentHeight="40vh"
+	filterList="{{cycleStartFilterList}}" defaultActiveIndex="{{cycleStartInfo.activeIndex}}"
+	showPickerWhen="{{['YMD', 'WEEK', 'D', 'MD']}}" defaultDate="{{cycleStartInfo.defaultDate}}"
+	closeOnClickOverlay="{{false}}" pickerMode="{{cycleStartPickerMode}}" startDateLimit="{{startDateLimit}}"
+	endDateLimit="2100-01-31" bind:close="closeCycleStartPopup" bind:confirm="onCycleStartConfirm"
+	bind:filterTap="onStartFilterTap" />
+<!--周期结束弹窗  -->
+<date-filter-popup show="{{showCycleEndPopupFlag}}" mode="bottom" contentHeight="20vh"
+	filterList="{{cycleEndFilterList}}" defaultActiveIndex="{{cycleEndInfo.activeIndex}}" closeOnClickOverlay="{{false}}"
+	showPickerWhen="{{['year', 'latterYear', 'default']}}" defaultDate="{{cycleEndInfo.defaultDate}}" pickerMode="date"
+	startDateLimit="2026-01-01" endDateLimit="2100-01-31" bind:close="closeCycleEndPopup" bind:confirm="onCycleEndConfirm"
+	bind:filterTap="onEndFilterTap" />
+
+	<z-notify id="customNotify" bind:close="onNotifyClose"/>

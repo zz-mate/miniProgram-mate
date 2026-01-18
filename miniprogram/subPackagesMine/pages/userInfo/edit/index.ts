@@ -22,11 +22,11 @@ Page({
 	},
 	selectGender(e) {
 		const selectGender = e.currentTarget.dataset.gender;
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		this.setData({ gender: selectGender });
 	},
 	async handleSave() {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 
 

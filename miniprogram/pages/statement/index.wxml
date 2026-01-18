@@ -2,9 +2,10 @@
 <navigation-bar title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="#000"
 	background="{{navBgColor}}">
 	<view slot="left">
-		<view class=" flex flex-align-items-center">
+		<view class=" flex flex-align-items-center"    bind:tap="handleBookPopup"
+		data-type="book">
 			<text>{{bookInfo.name|| '未登录'}}</text>
-			<!-- <image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom" /> -->
+			<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"/>
 		</view>
 	</view>
 	<view slot="center" class="subsection">
@@ -25,7 +26,7 @@
 		<view class="i-item radius-4 {{typeIndex==1?'i-active':'def'}}" data-type="{{1}}" bind:tap="changeType">收入</view>
 	</view>
 </view>
-<scroll-view style="height:calc(100vh - {{navBarHeight + statusBarHeight+filterHeight}}px) " type="custom" scroll-y>
+<scroll-view  show-scrollbar="{{false}}" style="height:calc(100vh - {{navBarHeight + statusBarHeight+filterHeight}}px) " type="custom" scroll-y>
 
 	<sticky-section push-pinned-header="{{false}}">
 		<view class="tab-container">
@@ -38,7 +39,7 @@
 						</view>
 
 
-						<view class="tips-content flex flex-align-items-center flex-space-between  num radius-4"
+						<view class="tips-content flex flex-align-items-center flex-space-between  num "
 							bind:tap="handleDatePage" data-chart="line" data-date="{{queryParams.start_time}}"
 							data-title="{{chartData.lineData.summary.timeRange}}">
 							<view>
@@ -88,7 +89,7 @@
 
 
 
-						<view class="tips-content flex flex-align-items-center flex-space-between num radius-4"
+						<view class="tips-content flex flex-align-items-center flex-space-between num "
 							bind:tap="handleDatePage" data-date="{{queryParams.start_time}}" data-chart="pie"
 							data-title="{{chartData.PieData.summary.timeRange}}">
 							<view>
@@ -140,7 +141,7 @@
 
 				<view class="no-data radius-10"  wx:if="{{yearMonthMoreActive==0}}">
 					<view class="no-data-icon">
-						<image src="/static/async-icon/icon-not-bill.png" mode="widthFix" />
+						<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png" mode="widthFix" />
 					</view>
 					<view class="no-data-text">
 						<view>抱歉呀，这个功能还在 “修炼”</view>
@@ -159,9 +160,9 @@
 
 <!--年 -->
 <z-popup bind:popup="handleChildPopup" showTitle="year" bind:tap="handlePopup"
-	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_year}}" closeOnClickOverlay="{{false}}"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_year}}" closeOnClickOverlay="{{true}}"
 	mode="{{'bottom'}}">
-	<view class="popup-content num">
+	<view class="popup-content num" style="	height: 400rpx;">
 		<view class="content">
 			<swiper indicator-dots="{{false}}" autoplay="{{false}}" interval="5000" duration="500"
 				current="{{groupYearIndex}}" wx:if="{{isDataYReady}}">
@@ -171,7 +172,7 @@
 						<!-- 内层循环：渲染当前swiper-item中的10个年份 -->
 						<view class="year-group">
 							<block wx:for="{{item}}" wx:for-item="year" wx:key="year">
-								<view class="year-item radius-4 {{year==queryParams.start_time?'active':''}}" data-year="{{year}}"
+								<view class="year-item {{year==queryParams.start_time?'active':''}}" data-year="{{year}}"
 									bind:tap="handleYear">{{year}}</view>
 							</block>
 						</view>
@@ -183,9 +184,9 @@
 </z-popup>
 <!--月 -->
 <z-popup bind:popup="handleChildPopup" showTitle="month" bind:tap="handlePopup"
-	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_month}}" closeOnClickOverlay="{{false}}"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_month}}" closeOnClickOverlay="{{true}}"
 	mode="{{'bottom'}}">
-	<view class="popup-content num">
+	<view class="popup-content num"  style="	height: 400rpx;">
 		<view class="content">
 			<swiper indicator-dots="{{false}}" autoplay="{{false}}" current="{{groupMonthIndex}}" easing-function="default"
 				bindchange="changeMonth" wx:if="{{isDataMReady}}">
@@ -201,7 +202,7 @@
 								<block wx:for="{{yearObj.monthList}}" wx:for-item="monthRow" wx:key="index">
 									<!-- 第四层循环：单个月份（行内的每个数字） -->
 									<block wx:for="{{monthRow}}" wx:for-item="month" wx:key="month">
-										<view class="month-item radius-4 {{yearObj.year+'-'+month == chooseYearDate ? 'active' : ''}}"
+										<view class="month-item {{yearObj.year+'-'+month == chooseYearDate ? 'active' : ''}}"
 											data-month="{{month}}" data-="{{yearObj.year}}" bind:tap="handleMonth">
 											{{month}}月
 										</view>
@@ -214,4 +215,48 @@
 			</swiper>
 		</view>
 	</view>
+</z-popup>
+
+
+
+
+<z-popup bind:popup="handleChildPopup" showTitle="book" bind:tap="handlePopup"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_book}}" closeOnClickOverlay="{{true}}"
+	mode="{{'bottom'}}">
+	<view class="popup-content">
+		<scroll-view scroll-y style="height:50vh">
+			<block wx:if="{{bookList.length>0}}">
+				<block wx:for="{{bookList}}" wx:key="index">
+					<view class="book-list {{index==bookIndex?'book-list_active':''}}" style="width: 100%;height: 100rpx;"
+						data-index="{{index}}" bind:tap="handleBookSelected">
+						<view class="book-item flex flex-align-items-center flex-space-between">
+							<view class="cover">
+								<image src="{{item.icon}}" mode="" />
+							</view>
+							<view class="info">
+								<view class="book-name">{{item.name}}</view>
+
+							</view>
+							<view class="icon" wx:if="{{bookIndex==index}}">
+								<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
+							</view>
+						</view>
+					</view>
+				</block>
+			</block>
+			<view class="no-data" wx:else>
+					<view class="no-data-icon">
+						<image
+							src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+							mode="widthFix" />
+					</view>
+					<view class="no-data-text">
+						<view>记账就是记录生活</view>
+						<view>财务自由，从记第一笔开始</view>
+					</view>
+				</view>
+		</scroll-view>
+
+	</view>
+
 </z-popup>

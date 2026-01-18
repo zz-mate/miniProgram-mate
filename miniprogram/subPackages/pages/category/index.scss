@@ -32,17 +32,17 @@
 		.bill-wrapper {
 			position: relative;
 			top: 0;
-			height: 70rpx;
-			// margin: 12rpx 0;
+			height: 80rpx;
+			// padding: 20rpx;
 			overflow: hidden;
-			// background-color: #999999;
+			// background: #fff;
 			margin-bottom: 20rpx;
 		}
 
 		.bill-wrapper .bill-wrapper_item {
 			position: relative;
 			left: 0;
-			height: 70rpx;
+			height: 80rpx;
 			transition: all 0.3s;
 		}
 
@@ -200,6 +200,10 @@ line-height: 30rpx;
 	.edit {
 		color: #000;
 		background-color: $-theme-color;
+	}
+	.view{
+		color: #fff;
+		background-color: $z-color-primary;
 	}
 }
 

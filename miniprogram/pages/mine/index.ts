@@ -1,5 +1,6 @@
 // pages/mine/index.ts
 import { getStorageSync, setStorageSync, getThisDate } from '../../utils/util';
+// import { subscribeSendMessage } from '../../api/subscribe';
 import { getUserById } from '../../api/user';
 import { playBtnAudio } from '../../utils/audioUtil'
 import SystemConfig from '../../utils/capsule';
@@ -19,8 +20,45 @@ Page({
 		show: false,
 		userInfo: null,
 		height: app.globalData.systemInfo.autoheight + 70,
+		switchChecked: false
 	},
 
+	// async switchChange(e) {
+	// 	playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+	// 	wx.vibrateShort({ type: 'light' });
+	// 	const templateId = 'dLQDrV7hacck4chBIQqkMYOfvRfx_63MHAvThVlBgGU';
+	// 	const isOpen = e.detail.value;
+	
+	// 	if (!isOpen) {
+	// 		this.setData({ switchChecked: false });
+	// 		wx.showToast({ title: '已关闭喝水提醒', icon: 'none' });
+	// 		return;
+	// 	}
+	
+	// 	try {
+	// 		// 1. 授权
+	// 		const subscribeRes = await wx.requestSubscribeMessage({ tmplIds: [templateId] });
+	// 		if (subscribeRes[templateId] !== 'accept') throw new Error('用户拒绝授权');
+	
+	// 		// 2. 调用后端（await 等待结果）
+	// 		const apiRes = await subscribeSendMessage({
+	// 			openid: wx.getStorageSync('userInfo').openid,
+	// 			subscribeType:"drinkWater",
+	// 			params:{"username":getStorageSync("userInfo").nickname}
+	// 		});
+	
+	// 		// 3. 结果判断
+	// 		if (apiRes.code === 200) {
+	// 			this.setData({ switchChecked: true });
+	// 			wx.showToast({ title: '订阅成功', icon: 'none' });
+	// 		} else {
+	// 			throw new Error(apiRes.msg);
+	// 		}
+	// 	} catch (error) {
+	// 		this.setData({ switchChecked: false });
+	// 		wx.showToast({ title: `失败：${error.message}`, icon: 'none' });
+	// 	}
+	// },
 	handlePopup() {
 		console.log(1);
 
@@ -47,7 +85,7 @@ Page({
 
 	},
 	handleUserInfo() {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		let token = getStorageSync("token")
 		if (token) {
@@ -74,11 +112,11 @@ Page({
 	},
 	handlePageUrl(evt) {
 		const { url, type, only, friend } = evt.currentTarget.dataset
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		console.log(url, type)
 		if (type == 'page') {
-			wx.navigateTo({ url: url + '?date=' + getThisDate('YY')+ '&yearMonthMoreActive=1&type=0' })
+			wx.navigateTo({ url: url + '?date=' + getThisDate('YY') + '&yearMonthMoreActive=1&type=0&bookId='+getStorageSync("bookInfo").id })
 		} else {
 			let data = {
 				from: 'button',
@@ -90,7 +128,14 @@ Page({
 		}
 
 	},
-
+	// async isSubscribedBind(){
+	// 	let data = {
+	// 		openid: getStorageSync("userInfo").openid,
+	// 		subscribeType:"DRINK_WATER"
+	// 	}
+	// 	let res = await isSubscribed(data)
+	// 	console.log(res)
+	// },
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
@@ -117,6 +162,7 @@ Page({
 			})
 			return
 		}
+		// this.isSubscribedBind()
 		let userInfo = getStorageSync("userInfo")
 
 		getUserById({ userId: userInfo.id }).then((res) => {
@@ -161,10 +207,11 @@ Page({
 	onShareAppMessage(obj) {
 		let { from, target } = obj
 		console.log(obj)
+		let bookInfo = getStorageSync("bookInfo")
 		let shareObj = {
 			title: "简约记账，认准掌账 Mate",
-			imageUrl: "/static/icon/icon-Placeholder-image.png",
-			path: '/pages/index/index?userId='+ getStorageSync("userInfo").id,
+			imageUrl: bookInfo.icon,
+			path: '/pages/index/index?userId=' + getStorageSync("userInfo").id,
 		}
 		if (from == 'menu') {//来自
 			// shareObj.title = 'menu'

@@ -5,7 +5,10 @@ page {
 	height: 100vh;
 	background: #f4f2f7;
 }
-
+.z-icon{
+	width: 46rpx;
+	height: 46rpx;
+}
 
 .no-data-1 {
 	height: 300rpx;
@@ -116,10 +119,12 @@ page {
 		.icon {
 			width: 60rpx;
 			height: 60rpx;
-			border-radius: 50%;
+			// border-radius: 50%;
 			overflow: hidden;
 			flex-shrink: 0;
 			background: $-theme-color;
+			transform-origin: center center;
+			transition: all 0.2s ease;
 		}
 
 		.icon-title {
@@ -145,7 +150,36 @@ page {
 	}
 }
 
+.jelly-animate {
+	animation: jelly 0.5s ease;
+}
 
+/* 关键帧动画：模拟果冻的拉伸-回弹效果 */
+@keyframes jelly {
+	0% {
+		transform: scale(1);
+	}
+
+	30% {
+		transform: scale(1.2, 0.8);
+		/* 横向拉伸，纵向压缩 */
+	}
+
+	50% {
+		transform: scale(0.8, 1.2);
+		/* 纵向拉伸，横向压缩 */
+	}
+
+	70% {
+		transform: scale(1.1, 0.9);
+		/* 轻微回弹 */
+	}
+
+	100% {
+		transform: scale(1);
+		/* 恢复原状 */
+	}
+}
 
 
 
@@ -189,7 +223,7 @@ page {
 					width: 54rpx;
 					height: 54rpx;
 					margin: 0 auto;
-					border-radius: 50%;
+					// border-radius: 0%;
 					overflow: hidden;
 				}
 
@@ -203,9 +237,10 @@ page {
 
 	}
 
-	.not-active{
+	.not-active {
 		background-color: #e8e8e8d5;
 	}
+
 	.active {
 		background: $-theme-color;
 		/* 选中态背景色 */
@@ -213,8 +248,33 @@ page {
 
 }
 
+.image-list {
+  width: 100%;
 
+}
 
+.image-list .imgs {
+  position: relative;
+  height: 100rpx;   /* 固定高度 */
+  width: 100rpx;    /* 固定宽度 */
+  margin-right: 20rpx;  margin-bottom: 10rpx;
+
+}
+
+.image-list .imgs .imgs-list {
+  width: 100%;      /* 用100%继承容器宽高，避免重复数值 */
+  height: 100%;
+  object-fit: cover; /* 兜底：兼容部分场景，和mode配合 */
+}
+
+.image-list .imgs .delete-image {
+  position: absolute;
+  width: 30rpx;
+  height: 30rpx;
+  right: 0rpx;
+  top: 0rpx;
+  z-index: 1;
+}
 
 
 
@@ -244,21 +304,40 @@ page {
 
 // 通用按键样式
 .key {
-	width: calc((100% - 30rpx)/4);
-	box-sizing: border-box;
-	line-height: 90rpx;
-	color: #000;
-	font-size: 28rpx;
-	margin: 0 0 10rpx;
-	background-color: #fff;
-	border-radius: 8rpx;
-	position: relative;
-	// box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
+  width: calc((100% - 30rpx)/4);
+  box-sizing: border-box;
+  line-height: 90rpx;
+  color: #000;
+  font-size: 32rpx;
+  margin: 0 0 10rpx;
+  background-color: #fff;
+  // border-radius: 0rpx;
+  position: relative;
+  // box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
+  // ========== 核心优化：解决:active无效+点击延迟 ==========
+  // 1. 激活小程序view的:active伪类（关键）
+  cursor: pointer;
+  // 2. 去掉微信默认点击高亮，避免干扰视觉
+  -webkit-tap-highlight-color: transparent;
+  // 3. 硬件加速，减少缩放动画卡顿
+  transform: translateZ(0);
+  // 4. 缩短过渡时长，实现“瞬时回弹”（无延迟）
+  transition: all 0.05s ease;
 
+  &:active {
+    background: #eee; /* 点击态背景 */
+    transform: scale(0.98); /* 轻微缩放，模拟按压 */
+    // 可选：增加样式优先级，防止被覆盖
+    background-color: #eee !important;
+  }
+}
+.submit,.again{
+	font-size: 28rpx;
+}
 // 底部键盘容器
 .keyboard-bottom3 {
 	display: flex;
@@ -334,10 +413,10 @@ page {
 }
 
 // 悬浮效果
-.weui-cell_active {
-	background-color: #f0f0f0 !important;
-	opacity: 0.9;
-}
+// .weui-cell_active {
+// 	background-color: #f0f0f0 !important;
+// 	opacity: 0.9;
+// }
 
 
 .keyboard-head {
@@ -441,13 +520,30 @@ page {
 
 		.right {
 			position: absolute;
-			right: 20rpx;
+			right: 0rpx;
 			top: 0;
+
+			.imgs {
+				position: relative;
+				height: 50rpx;
+				width: 50rpx;
+				margin-right: 20rpx;
+
+				.delete-image {
+					position: absolute;
+					width: 30rpx;
+					height: 30rpx;
+					background-color: #fff;
+					right: -10rpx;
+					top: -10rpx;
+					z-index: 1;
+				}
+			}
 
 			.upload {
 
-				height: 50rpx;
-				width: 50rpx;
+				height: 46rpx;
+				width: 46rpx;
 				margin: 0 auto 0;
 			}
 		}
@@ -485,26 +581,29 @@ page {
 }
 
 .account-list {
-
-	// .account-scroll{
-	//   height: calc(100% -  env(safe-area-inset-bottom));
-	// }
 	.default {
 		padding: 20rpx;
 		line-height: 76rpx;
 		font-size: 24rpx;
 		font-weight: 550;
-		color: #000;
+		color: $z-text-color;
 		border-bottom: 20rpx solid #f4f2f7;
-
 		.account-name {
 			flex: 1;
 			margin-left: 20rpx;
+			.name{
+				font-size: $z-font-size-22;
+				color: $z-text-color;
+			}
+			.account-amount{
+				font-size: $z-font-size-18;
+				color: $z-text-color-60;
+			}
 		}
 
 		.icon {
-			width: 32rpx;
-			height: 32rpx;
+			width: 34rpx;
+			height: 34rpx;
 		}
 	}
 
@@ -519,26 +618,34 @@ page {
 		}
 
 		.item-items {
-			color: #000;
 			margin-bottom: 20rpx;
-
+padding: 20rpx 0;
 			&:last-child {
 				margin: 0;
 			}
 
 			.account-icon {
-				width: 76rpx;
-				height: 76rpx;
+				width: 60rpx;
+				height: 60rpx;
 			}
 
 			.account-name {
 				flex: 1;
 				margin-left: 20rpx;
+				.name{
+					font-size: $z-font-size-22;
+					color: $z-text-color;
+				}
+				.account-amount{
+					font-size: $z-font-size-18;
+					color: $z-text-color-60;
+				}
 			}
+	
 
 			.icon {
-				width: 32rpx;
-				height: 32rpx;
+				width: 34rpx;
+				height: 34rpx;
 			}
 		}
 	}

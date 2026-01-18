@@ -16,12 +16,14 @@
 				"pages/userInfo/edit/index",
 				"pages/qrcode/index",
 				"pages/setting/index",
-				"pages/integrate/index"
+				"pages/integrate/index",
+				"pages/vip/index"
 			]
 		},
 		{
 			"root": "subPackages",
 			"pages": [
+				"pages/more/index",
 				"pages/transaction/add/index",
 				"pages/transaction/bill/index",
 				"pages/transaction/cate-bill/index",
@@ -29,9 +31,15 @@
 				"pages/transaction/dates/index",
 				"pages/transaction/data/index",
 				"pages/transaction/info/index",
+				"pages/transaction/prepayment/index",
+				"pages/transaction/prepayment/add/index",
+				"pages/transaction/prepayment/info/index",
+				"pages/transaction/prepayment/bookCate/index",
 				"pages/transaction/import/index",
 				"pages/transaction/export/index",
 				"pages/budget/index",
+				"pages/plan/info/index",
+				"pages/plan/add/index",
 				"pages/budget/add/index",
 				"pages/transaction/calendar/index",
 				"pages/book/index",
@@ -41,7 +49,9 @@
 				"pages/account/category/index",
 				"pages/account/list/index",
 				"pages/account/add/index",
-				"pages/category/index"
+				"pages/category/index",
+				"pages/category/add/index",
+				"pages/category/bill/index"
 			]
 		}
 	],
@@ -94,14 +104,14 @@
 	"sitemapLocation": "sitemap.json",
 	"darkmode": true,
 	"themeLocation": "theme.json",
-	"plugins": {
-		"kdPlugin": {
-			"version": "1.1.2",
-			"provider": "wx6885acbedba59c14"
-		},
-		"takeoutPlugin": {
-			"version": "1.0.0",
-			"provider": "wxb2acc21c4f786d08"
+	"plugins": {},
+	"permission": {
+		"scope.userLocation": {
+			"desc": "用于展示附近服务或导航"
 		}
-	}
+	},
+	"requiredPrivateInfos": [
+		"getLocation",
+		"chooseLocation"
+	]
 }

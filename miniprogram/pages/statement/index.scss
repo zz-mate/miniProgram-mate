@@ -76,7 +76,6 @@
 
 
 .popup-content {
-	height: 400rpx;
 	font-size: 22rpx;
 	padding-bottom: constant(safe-area-inset-bottom);
 	/* 兼容iOS<11.2 */
@@ -299,7 +298,7 @@
 				margin: 6rpx 0;
 				height: 4rpx;
 				background-color: #faf8fd;
-				border-radius: 2rpx;
+				// border-radius: 2rpx;
 				overflow: hidden;
 			}
 
@@ -336,4 +335,52 @@
 
 	}
 
+}
+
+
+
+// 账本
+.book-list {
+	overflow: hidden;
+
+
+	.book-item {
+		background-color: $z-bg-color;
+		padding: 20rpx;
+		margin-bottom: 10rpx;
+
+		&.btn-hover {
+			background-color: $z-btn-white-hover;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		.cover {
+			width: 80rpx;
+			height: 100rpx;
+			margin-right: 20rpx;
+		}
+
+
+		.info {
+			flex: 1;
+
+			.book-name {
+				color: $z-text-color;
+				font-size: $z-font-size-22;
+			}
+
+			.num {
+				font-size: $z-font-size-20;
+				color: $z-text-color-80;
+			}
+		}
+
+		.icon {
+			width: 34rpx;
+			height: 34rpx;
+		}
+	}
 }

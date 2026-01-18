@@ -7,11 +7,6 @@
   background: transparent;
 }
 
-page {
-	box-sizing: border-box;
-	background-color: #f4f2f7;
-	font-size: 24rpx;
-}
 
 /* font.wxss */
 @font-face {
@@ -34,39 +29,54 @@ page {
 }
 
 
+/** 主题颜色**/
+$-theme-color:#FFD608;
+/* 文字基本颜色 */
+$z-text-color:#303030; // 基本色
+$z-text-color-80:#646464; 
+$z-text-color-60:#9c9c9c;
+$z-text-color-40:#bcbcbc;
+$z-text-color-20:#dcdcdc;
+// b2b2b2
+/* 背景颜色 */
+$z-bg-color:#ffffff;
+$z-bg-color-grey:#f8f8f8;
+$z-bg-color-progress:#efefef;
+$z-bg-color-hover:#ecebeb; //点击状态颜色
+$z-bg-color-mask:rgba(0, 0, 0, 0.4); //遮罩颜色
+
 /* 行为相关颜色 */
 $z-color-primary: #237EFA;
 $z-color-success: #67C23A;
 $z-color-warning: #FF8C08;
 $z-color-error: #FF4308;
-/** 主题颜色**/
-$-theme-color:#FFD608;
+
 /* 图表*/
 $-chart-expense-color:#FFD608;
 $-chart-income-color:#FF6B6B;
 $-chart-jy-color:#FFB74D;
-/* 文字基本颜色 */
-$z-text-color:#333; //基本色
+
+
+
 $z-text-color-inverse:#fff; //反色
 $z-text-color-grey:#6B7280; //辅助灰色，如加载更多的提示信息
 $z-text-color-placeholder: #808080;
 $z-text-color-disable:#c0c0c0;
 
-/* 背景颜色 */
-$z-bg-color:#ffffff;
-$z-bg-color-grey:#f8f8f8;
-$z-bg-color-hover:#f1f1f1; //点击状态颜色
-$z-bg-color-mask:rgba(0, 0, 0, 0.4); //遮罩颜色
+/**点击背景颜色**/
+$z-btn-white-hover: #f4f2f7b6;
+$z-btn-yellow-hover: #ffd608b6;
 
 /* 边框颜色 */
-$z-border-color:#c8c7cc;
+$z-border-color:#f1f1f1;
 
 /* 尺寸变量 */
 
 /* 文字尺寸 */
-$z-font-size-sm:12px;
-$z-font-size-base:14px;
-$z-font-size-lg:16px;
+$z-font-size-18:18rpx;
+$z-font-size-20:20rpx;
+$z-font-size-22:22rpx;
+$z-font-size-24:24rpx;
 
 /* 图片尺寸 */
 $z-img-size-sm:20px;
@@ -100,6 +110,15 @@ $z-font-size-subtitle:26px;
 $z-color-paragraph: #3F536E; // 文章段落颜色
 $z-color-paragraph: #3F536E; // 文章段落颜色
 $z-font-size-paragraph:15px;
+
+
+page {
+	box-sizing: border-box;
+	background-color: #f4f2f7;
+	font-size: $z-font-size-24;
+}
+
+
 
 .p-fixed {
 	position: fixed;
@@ -157,27 +176,32 @@ input {
 	font-weight: normal;
 }
 .radius{
-	border-radius: 50%;
+	border-radius: 0%;
 	overflow: hidden;
+	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
 }
 .radius-2 {
-	border-radius: 2rpx;
+	border-radius: 0rpx;
 	overflow: hidden;
+	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
 }
 
 .radius-4 {
-	border-radius: 4rpx;
+	border-radius: 0rpx;
 	overflow: hidden;
+	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
 }
 
 .radius-6 {
-	border-radius: 6rpx;
+	border-radius: 0rpx;
 	overflow: hidden;
+	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
 }
 
 .radius-10 {
-	border-radius: 10rpx;
+	border-radius: 0rpx;
 	overflow: hidden;
+	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
 }
 
 .fade-animate {
@@ -211,9 +235,9 @@ input {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	background-color: #FFF;
+	background-color: $z-bg-color;
 	overflow: hidden;
-border-radius: 10rpx;
+// border-radius: 10rpx;
 	&-icon {
 		width: 240rpx;
 		height: 240rpx;
@@ -221,38 +245,53 @@ border-radius: 10rpx;
 	}
 
 	&-text {
-		font-size: 20rpx;
+		font-size:$z-font-size-20;
 		text-align: center;
 		color: #666;
-
-		view {
-			// padding-bottom: 6rpx;
-		}
-
-		.add {
-			font-size: 24rpx;
-			width: 200rpx;
-			margin: 30rpx auto 0;
-			height: 50rpx;
-			line-height: 50rpx;
-			color: #fff;
-			font-weight: 550;
-			background-color: $z-color-error;
-			letter-spacing: 2px;
-			border-radius: 6rpx;
-		}
 	}
+	&-btn {
+		font-size: $z-font-size-24;
+		width: 200rpx;
+		margin: 30rpx auto 0;
+		height: 50rpx;
+		line-height: 50rpx;
+		color: $z-bg-color;
+		// font-weight: 550;
+		background-color: $-theme-color;
+		letter-spacing: 2px;
+		text-align: center;
+		// border-radius: 6rpx;
+	}
+	&-btn-plan {
+		font-size: $z-font-size-20;
+		width: 180rpx;
+		margin: 30rpx auto 0;
+		height: 50rpx;
+		line-height: 50rpx;
+		color: $z-bg-color;
+		// font-weight: 550;
+		background-color: $z-color-primary;
+		letter-spacing: 2px;
+		text-align: center;
+		// border-radius: 6rpx;
+	}
+}
+.btn-disabled {
+  background-color: #cccccc !important;
+  color: #999999 !important;
+  pointer-events: none; /* 禁止点击事件 */
+  opacity: 0.7;
 }
 
 .develop-tips {
-	background-color: #FFF;
+	background-color: $z-bg-color;
 	width: 560rpx;
 	padding: 40rpx 0;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	border-radius: 10rpx;
+	// border-radius: 10rpx;
 
 	&-icon {
 		width: 200rpx;
@@ -262,7 +301,7 @@ border-radius: 10rpx;
 
 	view {
 		padding-bottom: 14rpx;
-		font-size: 20rpx;
+		font-size: $z-font-size-20;
 	}
 }
 
@@ -270,7 +309,7 @@ border-radius: 10rpx;
 .popup-content {
 	position: relative;
 	width: 100vw;
-	background-color: #FFF;
+	background-color: $z-bg-color;
 }
 
 /**选择三角箭头**/
@@ -278,12 +317,11 @@ border-radius: 10rpx;
 	width: 32rpx;
 	height: 32rpx;
 }
-
+/**公共底部按钮样式**/
 .shortcut {
 	position: fixed;
 	bottom: 0;
 	height: 140rpx;
-	// background-color: #FFFFFF;
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
@@ -299,52 +337,25 @@ border-radius: 10rpx;
 	.shortcut_count {
 		width: 100%;
 		height: 80rpx;
-		font-size: 22rpx;
+		font-size: $z-font-size-22;
 		font-weight: normal;
 		letter-spacing: 2rpx;
-		color: #000;
+		color: $z-text-color;
 		text-align: center;
 		background-color: $-theme-color;
+	}
+	.color-primary{	
+		color: $z-text-color-inverse !important;
+		background-color: $z-color-primary !important;
 	}
 }
 
 .btn-hover {
-	background-color: #f4f2f7b6 !important;
+	background-color: $z-btn-white-hover;
 }
 .btn-yellow-hover {
-	background-color: #ffd608b6 !important;
-}
+	background-color: $z-btn-yellow-hover;
 
-/* scroll-view 容器样式 */
-.scroll-view-container {
-	width: 100%;
-	height: 100%;
-	/* 核心：隐藏滚动条 */
-	scrollbar-width: none;
-	/* 兼容 Firefox */
-	-ms-overflow-style: none;
-	/* 兼容 IE/Edge */
-	/* 溢出隐藏（避免滚动条占位） */
-	overflow: hidden;
-	/* 强制隐藏滚动条 */
-	-webkit-mask: linear-gradient(180deg, #000, transparent);
-	/* 遮罩滚动条 */
-}
-
-/* 隐藏 webkit 内核滚动条（微信/Chrome/Safari） */
-.scroll-view-container::-webkit-scrollbar {
-	width: 0;
-	/* 竖滚动条宽度设为0 */
-	height: 0;
-	/* 横滚动条高度设为0 */
-	display: none;
-	/* 彻底隐藏 */
-}
-
-/* 可选：隐藏滚动条轨道/滑块（兜底） */
-.scroll-view-container::-webkit-scrollbar-track,
-.scroll-view-container::-webkit-scrollbar-thumb {
-	display: none;
 }
 
 
@@ -352,15 +363,15 @@ border-radius: 10rpx;
 
 
 
-/**账单列表*/
+
+/**公共账单列表*/
 .bill-item {
-
 	&_header {
-		color: #999999;
+		color: $z-text-color-60;
 		padding: 20rpx 0;
-		font-size: 20rpx;
+		font-size: $z-font-size-20;
 		.bill-title{
-			color: #333;
+			color: $z-text-color;
 		}
 		.money {
 			.income {
@@ -374,8 +385,6 @@ border-radius: 10rpx;
 		left: 0;
 		transition: all 0.3s;
 		padding: 0 20rpx;
-		// margin: 4rpx 0;
-		background-color: #FFF;
 		overflow: hidden;
 
 		transition: all 0.3s;
@@ -384,14 +393,13 @@ border-radius: 10rpx;
 			width: 54rpx;
 			height: 54rpx;
 			margin-right: 14rpx;
-			background: #ffd60878;
-			border-radius: 50%;
+			background: $z-bg-color-grey;
 		}
 
 		.border {
 			flex: 1;
 			display: flex;
-			border-bottom: 1rpx solid #f1f1f1;
+			border-bottom: 1rpx solid $z-border-color;
 			padding: 14rpx 0 14rpx 14rpx;
 		}
 
@@ -399,14 +407,14 @@ border-radius: 10rpx;
 			flex: 1;
 
 			.title {
-				font-size: 22rpx;
-				color: #000;
+				font-size: $z-font-size-22;;
+				color: $z-text-color;
 				padding-bottom: 4rpx;
 			}
 
 			.tags {
-				font-size: 18rpx;
-				color: #999999;
+				font-size: $z-font-size-18;;
+				color: $z-text-color-60;
 				padding: 4rpx 0;
 
 				text {
@@ -415,8 +423,8 @@ border-radius: 10rpx;
 			}
 
 			.date-other {
-				font-size: 18rpx;
-				color: #999999;
+				font-size: $z-font-size-18;
+				color: $z-text-color-60;
 
 				.text {
 					margin-right: 4rpx;
@@ -425,7 +433,7 @@ border-radius: 10rpx;
 		}
 
 		.right-money {
-			font-size: 24rpx;
+			font-size: $z-font-size-24;
 		}
 	}
 }
@@ -436,7 +444,7 @@ border-radius: 10rpx;
 
 /*****滑动删除***/
 .bill-container {
-	background: #fff;
+	// background:$z-bg-color;
 	overflow: hidden;
 
 
@@ -444,30 +452,34 @@ border-radius: 10rpx;
 		position: relative;
 		top: 0;
 		overflow: hidden;
+		background:$z-bg-color;
+		&.btn-hover {
+			background-color: $z-btn-white-hover;
+		}
 	}
 
-	.bill-wrapper .bill-wrapper_item {
+.bill-wrapper_item {
 		position: relative;
 		left: 0;
 		height: 100%;
 		transition: all 0.3s;
 	}
 
-	.bill-wrapper .del_button {
+ .del_button {
 		position: absolute;
 		right: -130rpx;
 		width: 130rpx;
 		height: 100%;
 		// height: 253rpx;
-		background-color: #F64226;
-		color: #fff;
+		background-color: $z-color-error;
+		color: $z-bg-color;
 		top: 0;
 		text-align: center;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		transition: all 0.3s;
-		font-size: 22rpx;
+		font-size: $z-font-size-22;
 	}
 
 	.active .bill-wrapper_item {
@@ -481,8 +493,6 @@ border-radius: 10rpx;
 	}
 
 }
-
-
 
 
 

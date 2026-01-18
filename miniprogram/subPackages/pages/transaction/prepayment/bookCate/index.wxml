@@ -1,0 +1,42 @@
+<!--subPackages/pages/transaction/prepayment/bookCate/index.wxml-->
+<navigation-bar title="选择消费类别" back="{{false}}" homeButton="{{false}}" color="black" background="#fff"></navigation-bar>
+
+<view class="head_swiper">
+    <swiper class="swiper_box" indicator-dots="{{true}}" autoplay="{{false}}" interval="{{5000}}" duration="{{1000}}"  current="{{swiperCurrent}}"
+      circular="true" bindchange="handleChange">
+      <swiper-item wx:for="{{bookList}}" wx:key="index">
+        <image bindtap="clickImg" src="{{item.icon}}" mode="aspectFill"></image>
+      </swiper-item>
+    </swiper>
+  </view>
+
+<view  class="subsection">
+	<z-tabs bind:change="onTapTab" active="{{typeIndex}}" tabs="{{typeList}}"></z-tabs>
+	</view>
+
+	<view class="tab-container"
+	style="height: calc(100vh - {{swiperHpx+navBarHeight+statusBarHeight}}px); overflow: hidden;">
+
+	<swiper class="scroll-list" current="{{typeIndex}}" bind:change="onTabChanged"
+		worklet:onscrollstart="onTabTransition" worklet:onscrollupdate="onTabTransition"
+		worklet:onscrollend="onTabTransitionEnd" duration="{{400}}" cache-extent="1">
+		<swiper-item wx:for="{{typeList}}" wx:key="index" class="swiper-{{index}}">
+			<view class="card" style="height: 100%; box-sizing: border-box;">
+				<!-- 核心优化：添加可滚动容器 scroll-view -->
+				<scroll-view class="list-scroll" scroll-y enable-flex scroll-with-animation show-scrollbar="{{false}}"
+					style="height: 100%;">
+
+					<view class="list" wx:if="{{categoryList.length}}">
+						<view class="item" wx:for="{{categoryList}}" wx:key="index" data-index="{{index}}" data-id="{{item.id}}" data-icon="{{item.icon}}" data-name="{{item.name}}"
+							bind:tap="handleChooseCategory">
+							<view class="icon radius {{ categoryIndex==index?'active':'not-active'}}">
+								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+							</view>
+							<view class="icon-title">{{item.name}}</view>
+						</view>
+					</view>
+				</scroll-view>
+			</view>
+		</swiper-item>
+	</swiper>
+</view>

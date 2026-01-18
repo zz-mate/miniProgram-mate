@@ -2,33 +2,6 @@
 
 @import "../../../../app.scss"; // 引入全局变量
 
-.bg-primary {
-	background-color: $z-color-primary;
-}
-
-.bg-success {
-	background-color: $z-color-success;
-}
-
-.bg-warning {
-	background-color: $z-color-warning;
-}
-
-.bg-error {
-	background-color: $z-color-error;
-}
-
-.text-primary {
-	color: $z-color-primary;
-}
-
-.text-success {
-	color: $z-color-success;
-}
-
-.text-warning {
-	color: $z-color-warning;
-}
 
 .text-error {
 	color: $z-color-error;
@@ -36,27 +9,24 @@
 
 .transaction-info {
 	margin: 20rpx;
-	padding: 40rpx 0 0 0;
-	background: #FFF;
+	padding: 20rpx 0 0 0;
+	background: $z-bg-color;
 
 	.card {
 
 
 		// height: 100rpx;
-		padding: 20rpx 20rpx 40rpx 20rpx;
+		padding:  20rpx;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-	
+
 		.icon-category {
 			.icon {
-				width: 100rpx;
-				height: 100rpx;
-				background: #ffd60878;
-				border-radius: 50%;
-				// margin-right: 20rpx;
-				// background-color: #ff0000;
+				width: 120rpx;
+				height: 120rpx;
+				background: $z-bg-color-grey;
 			}
 
 		}
@@ -71,14 +41,16 @@
 			font-weight: 600;
 		}
 	}
-.border{
-	margin: 20rpx;
-	border-bottom: 2rpx dashed #f4f2f7;
 
-}
+	.border {
+		margin: 20rpx;
+		border-bottom: 2rpx dashed $z-border-color;
+
+	}
+
 	.item {
 		padding: 20rpx;
-		background: #FFF;
+		// background: #FFF;
 		height: 80rpx;
 
 		// margin-bottom: 20rpx;
@@ -93,7 +65,14 @@
 
 		}
 
+		.not-text {
+			color: $z-text-color-60;
+		}
 
+		.imgs {
+			width: 50rpx;
+			height: 50rpx;
+		}
 	}
 }
 
@@ -133,12 +112,18 @@
 	}
 
 	.del {
-		color: #ff0000;
-		background-color: #FFF;
+		color: $z-color-error;
+		background-color: $z-bg-color;
 	}
 
 	.edit {
-		color: #fff;
+		color: $z-text-color;
 		background-color: $-theme-color;
 	}
+}
+
+.map-card {
+	// background-color: #fff;
+	padding:20rpx;
+	// padding: 20rpx;
 }

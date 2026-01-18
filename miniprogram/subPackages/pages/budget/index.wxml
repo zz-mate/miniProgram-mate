@@ -6,33 +6,40 @@
 	</view>
 </navigation-bar>
 
-<view class="header-card radius-10" hover-class="btn-hover" hover-stay-time='150' bind:tap="handleSettingBudget">
+<view class="header-card radius-10" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
+	bind:tap="handleSettingBudget">
 	<view class="budget-info">
 		<view class="icon-edit">
-			<image src="/static/icon/icon-edit.png" mode="widthFix" />
+			<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768534128062-c4b96a2b-7484-44b1-8358-bb38f0330ab7.png" mode="widthFix" />
 		</view>
-		<view class="budget-title" :style="color:{{budgetInfo.remaining_percent>=0?'#000000':'#ff0000'}}">
+		<view class="budget-title" style="color:{{budgetInfo.remaining_percent>=0?'#000000':'#ff0000'}}">
 			总预算{{budgetInfo.remaining_percent>=0?'剩余':'超支'}}</view>
 		<view class="budget-amount num">{{budgetInfo.surplus_amount}}</view>
 		<view class="budget-progress-container">
-			<view class="progress-bar"
-				style="width: {{100 - budgetInfo.remaining_percent}}%;background-color:{{ budgetInfo.remaining_percent>0?'#67C23A':budgetInfo.remaining_percent==0?'#67C23A':'#ff0000'}}">
+			<view
+				class="progress-bar {{ budgetInfo.remaining_percent>0?'bg-success':budgetInfo.remaining_percent==0?'bg-success':'bg-error'}}"
+				style="width: {{budgetInfo.remaining_percent_}}%">
 			</view>
 		</view>
-		<view class="flex flex-center flex-align-items-center flex-space-between num" style="font-size: 22rpx;">
-			<text wx:if="{{budgetInfo.remaining_amount!=='0.00'}}">预算 {{budgetInfo.amount}}支出{{budgetInfo.actual_amount}}</text>
-			<text wx:else>预算 未设置</text>
-			<text wx:if="{{budgetInfo.amount>0}}">{{budgetInfo.remaining_percent>=0?'剩余 '+budgetInfo.remaining_percent:''+ budgetInfo.remaining_percent}}%</text>
+		<view class="flex flex-center flex-align-items-center flex-space-between num" style="font-size: 20rpx;">
+			<view class="flex flex-center flex-align-items-center">
+				<text wx:if="{{budgetInfo.remaining_amount!=='0.00'}}">预算{{budgetInfo.amount}}</text>
+				<text style="margin-left:10rpx"
+					wx:if="{{budgetInfo.remaining_amount!=='0.00'}}">支出{{budgetInfo.actual_amount}}</text>
+				<text wx:else>预算 未设置</text>
+			</view>
+			<text
+				wx:if="{{budgetInfo.amount>0}}">{{budgetInfo.remaining_percent>=0?'剩余 '+budgetInfo.remaining_percent:''+ budgetInfo.remaining_percent}}%</text>
 		</view>
 	</view>
 </view>
 
-<view class="ad-card radius-10">
+<!-- <view class="ad-card radius-10">
 	<ad-custom unit-id="adunit-b7cedea0f57c6e43" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
-</view>
+</view> -->
 
 <view class="budget-category-title">分类预算</view>
-<scroll-view type="custom"  show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{scrollHeight}}px) ">
+<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{scrollHeight}}px) ">
 	<sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
 
 		<view class="budget-list radius-10 bill-container">
@@ -42,9 +49,9 @@
 					<view class="bill-wrapper {{item.status ? '':'active'}}">
 						<view
 							class="budget-card bill-wrapper_item cart-list  radius-10 flex flex-space-between flex-align-items-center"
-							hover-class="btn-hover" hover-stay-time='150' data-i="{{i}}"
-								bindtouchstart="touchS" bindtouchmove="touchM" data-category_id="{{item.category_id}}"
-					data-category_name="{{item.category_name}}" bind:tap="handleCategoryBillPage">
+							hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-i="{{i}}" bindtouchstart="touchS"
+							bindtouchmove="touchM" data-category_id="{{item.category_id}}" data-category_name="{{item.category_name}}"
+							bind:tap="handleCategoryBillPage">
 							<view class="icon">
 								<image src="{{item.category_icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
 							</view>
@@ -71,7 +78,8 @@
 								</view>
 							</view>
 						</view>
-						<view class="del_button" data-i="{{i}}" data-id="{{item.id}}" data-type="single"  data-budget_category_id="{{item.id}}" data-category_id="{{item.category_id}}" bindtap='deleteList'>删除
+						<view class="del_button" data-i="{{i}}" data-id="{{item.id}}" data-type="single"
+							data-budget_category_id="{{item.id}}" data-category_id="{{item.category_id}}" bindtap='deleteList'>删除
 						</view>
 					</view>
 
@@ -81,9 +89,7 @@
 
 			<view class="no-data radius-10" wx:else>
 				<view class="no-data-icon">
-					<image
-					src="/static/async-icon/icon-not-bill.png"
-						mode="widthFix" />
+					<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png" mode="widthFix" />
 				</view>
 				<view class="no-data-text">
 					<view>暂无分类预算</view>
@@ -95,3 +101,6 @@
 		</z-divider>
 	</sticky-section>
 </scroll-view>
+
+
+<z-notify id="customNotify" bind:close="onNotifyClose"/>

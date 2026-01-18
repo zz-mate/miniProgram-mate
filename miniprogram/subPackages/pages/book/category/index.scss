@@ -1,24 +1,28 @@
 /* subPackages/pages/book/category/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
+
 .book-container {
 	padding: 20rpx;
 
 }
 
 .book-list {
-		background-color: #fff;
+
 	overflow: hidden;
 	.book-item {
-
+		background-color: #fff;
 		padding: 20rpx;
-		// margin-bottom: 10rpx;
-
+		margin-bottom: 10rpx;
+		&.btn-hover {
+			background-color: $z-btn-white-hover;
+		}
 		&:last-child {
 			margin-bottom: 0;
 		}
 
 		.cover {
-			width: 50rpx;
-			height: 60rpx;
+			width: 80rpx;
+			height: 100rpx;
 			margin-right: 20rpx;
 		}
 
@@ -26,18 +30,18 @@
 			flex: 1;
 
 			.book-name {
-				color: #000000;
-				font-size: 22rpx;
+				color: $z-text-color;
+				font-size: $z-font-size-22;
 			}
 
 			.book-desc {
-				font-size: 18rpx;
-				color: #666666;
+				font-size: $z-font-size-18;
+				color: $z-text-color-80;
 			}
 
 			.num {
-				font-size: 20rpx;
-				color: #666666;
+				font-size: $z-font-size-20;
+				color: $z-text-color-80;
 			}
 		}
 

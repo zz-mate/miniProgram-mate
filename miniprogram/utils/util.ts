@@ -19,43 +19,46 @@ const formatNumber = (n: number) => {
 }
 
 
-export const getThisDate = (format = 'YY-MM-DD') => {
-	let date = new Date(),
-		year = date.getFullYear(),
-		month = date.getMonth() + 1,
-		day = date.getDate(),
-		h = date.getHours(),
-		m = date.getMinutes();
+export const getThisDate = (format = 'YY-MM-DD', dayOffset = 0) => {
+	let date = new Date();
+	// 处理日期偏移：dayOffset为偏移天数（正数+、负数-）
+	date.setDate(date.getDate() + dayOffset);
+	
+	let year = date.getFullYear(),
+			month = date.getMonth() + 1,
+			day = date.getDate(),
+			h = date.getHours(),
+			m = date.getMinutes();
 
-	//数值补0方法
+	// 数值补0方法
 	const zero = (value) => {
-		if (value < 10) return '0' + value;
-		return value;
+			if (value < 10) return '0' + value;
+			return value;
 	}
 
 	switch (format) {
-		case 'YY':
-			return year;
+			case 'YY':
+					return year;
 			case 'M':
-				return month;
-		case 'MM':
-			return zero(month);
-		case 'YY-MM':
-			return year + '-' + zero(month);
-		case 'YY.MM.DD':
-			return year + '.' + zero(month) + '.' + zero(day);
-		case 'YY-MM-DD':
-			return year + '-' + zero(month) + '-' + zero(day);
-		case 'YY.MM.DD HH:MM':
-			return year + '.' + zero(month) + '.' + zero(day) + ' ' + zero(h) + ':' + zero(m);
-		case 'YY/MM/DD HH:MM':
-			return year + '/' + zero(month) + '/' + zero(day) + ' ' + zero(h) + ':' + zero(m);
-		case 'YY/MM/DD':
-			return year + '/' + zero(month) + '/' + zero(day);
-		case 'YY-MM-DD HH:MM':
-			return year + '-' + zero(month) + '-' + zero(day) + ' ' + zero(h) + ':' + zero(m);
-		default:
-			return year + '/' + zero(month) + '/' + zero(day);
+					return month;
+			case 'MM':
+					return zero(month);
+			case 'YY-MM':
+					return year + '-' + zero(month);
+			case 'YY.MM.DD':
+					return year + '.' + zero(month) + '.' + zero(day);
+			case 'YY-MM-DD':
+					return year + '-' + zero(month) + '-' + zero(day);
+			case 'YY.MM.DD HH:MM':
+					return year + '.' + zero(month) + '.' + zero(day) + ' ' + zero(h) + ':' + zero(m);
+			case 'YY/MM/DD HH:MM':
+					return year + '/' + zero(month) + '/' + zero(day) + ' ' + zero(h) + ':' + zero(m);
+			case 'YY/MM/DD':
+					return year + '/' + zero(month) + '/' + zero(day);
+			case 'YY-MM-DD HH:MM':
+					return year + '-' + zero(month) + '-' + zero(day) + ' ' + zero(h) + ':' + zero(m);
+			default:
+					return year + '/' + zero(month) + '/' + zero(day);
 	}
 }
 /**
@@ -568,4 +571,142 @@ export function findYearMonthInNestedList({
 
 	// 未找到年份
 	return { yearGroupIndex: -1, yearInnerIndex: -1, monthInnerIndex: { row: -1, col: -1 } };
+}
+
+
+
+/**
+ * 查找账户在分类数组中的父/子索引（无接口简化版）
+ * @param accountCategories 账户分类数组（原始结构）
+ * @param targetAccountId 目标账户ID
+ * @returns 包含索引和匹配数据的结果对象
+ */
+export function findAccountIndexes(
+  accountCategories: Array<{
+    category_id: number;
+    children: Array<{ id: number; [key: string]: any }>;
+    [key: string]: any;
+  }>,
+  targetAccountId: number
+) {
+  // 初始化默认结果
+  const result = {
+    parentIndex: -1, // 父分类索引（-1表示未找到）
+    childIndex: -1,  // 子账户索引（-1表示未找到）
+    category: null as any, // 匹配的父分类
+    account: null as any   // 匹配的子账户
+  };
+
+  // 空数组直接返回默认结果
+  if (!accountCategories.length) return result;
+
+  // 遍历父分类 + 子账户
+  for (let parentIdx = 0; parentIdx < accountCategories.length; parentIdx++) {
+    const currentCategory = accountCategories[parentIdx];
+    const children = currentCategory.children || [];
+
+    for (let childIdx = 0; childIdx < children.length; childIdx++) {
+      const currentAccount = children[childIdx];
+      // 匹配目标账户ID
+      if (currentAccount.id === targetAccountId) {
+        result.parentIndex = parentIdx;
+        result.childIndex = childIdx;
+        result.category = currentCategory;
+        result.account = currentAccount;
+        return result; // 找到后立即返回，提升性能
+      }
+    }
+  }
+
+  return result;
+}
+
+
+// /utils/util.js
+/**
+ * 日期字符串转时间戳（兼容 YYYY-MM-DD 格式）
+ * @param {string} dateStr - 日期字符串（如 2026-01-13）
+ * @returns {number} 时间戳
+ */
+export function dateStrToTimestamp(dateStr) {
+  if (!dateStr) return new Date().getTime();
+  // 处理 YYYY-MM-DD 格式转时间戳
+  const date = new Date(dateStr);
+  return isNaN(date.getTime()) ? new Date().getTime() : date.getTime();
+}
+
+/**
+ * 获取周期结束日期（优化：异步封装，避免同步耗时）
+ * @param {string} type - 周期类型（0/year/latterYear/default）
+ * @returns {Promise<string>} 日期字符串（YYYY-MM-DD）
+ */
+export function getCycleEndDate(type) {
+  return new Promise((resolve) => {
+    // 异步执行，避免阻塞主线程
+    setTimeout(() => {
+      let result = '';
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      const day = now.getDate();
+
+      switch (type) {
+        case '0': // 长期有效
+          result = '';
+          break;
+        case 'year': // 一年后
+          result = `${year + 1}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+          break;
+        case 'latterYear': // 半年后
+          const halfYearLater = new Date(now);
+          halfYearLater.setMonth(halfYearLater.getMonth() + 6);
+          result = `${halfYearLater.getFullYear()}-${(halfYearLater.getMonth() + 1).toString().padStart(2, '0')}-${halfYearLater.getDate().toString().padStart(2, '0')}`;
+          break;
+        case 'default': // 自定义
+          result = getThisDate("YY-MM-DD"); // 复用原有方法
+          break;
+        default:
+          result = getThisDate("YY-MM-DD");
+      }
+      resolve(result);
+    }, 0); // 微任务异步执行，不阻塞UI
+  });
+}
+
+/**
+ * 获取周期开始日期（根据类型返回默认值）
+ * @param {string} type - 类型（YMD/WEEK/D/MD）
+ * @returns {Promise<string>} 日期字符串
+ */
+export function getCycleStartDate(type) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+      const day = now.getDate();
+      const formatDate = (d) => `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+
+      let result = '';
+      switch (type) {
+        case 'YMD': // 按年月，默认当月1号
+          result = `${year}-${month.toString().padStart(2, '0')}-01`;
+          break;
+        case 'WEEK': // 按周，默认本周一
+          const monday = new Date(now);
+          monday.setDate(now.getDate() - (now.getDay() || 7) + 1);
+          result = formatDate(monday);
+          break;
+        case 'D': // 按日，默认当天
+          result = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+          break;
+        case 'MD': // 按月日，默认当月当天
+          result = `${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+          break;
+        default:
+          result = getThisDate("YY-MM-DD");
+      }
+      resolve(result);
+    }, 0);
+  });
 }

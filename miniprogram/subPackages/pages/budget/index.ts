@@ -26,8 +26,9 @@ Page({
 		budgetInfo: {
 			budget_amount: "0.00",
 			remaining_amount: "0.00",
-			remaining_percent: 100,
-			surplus_amount: "0.00"
+			remaining_percent: 0,
+			surplus_amount: "0.00",
+			remaining_percent_:0
 		},
 		startX: '',
 		startY: ''
@@ -71,6 +72,7 @@ Page({
 		
 		this.setData({
 			budgetInfo: res.data,
+			'budgetInfo.remaining_percent_':100 - Number(res.data.remaining_percent),
 			categoryList: res.data?.categories,
 		})
 		this.getSccollHeight()
@@ -82,7 +84,7 @@ Page({
 	 * 设置预算
 	 */
 	handleSettingBudget() {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		wx.navigateTo({
 			url: "/subPackages/pages/budget/add/index?bookId=" + this.data.bookId + '&userId=' + this.data.userId,
@@ -90,7 +92,7 @@ Page({
 		})
 	},
 	handleCategoryBillPage(evt){
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		const {category_id,category_name} = evt.currentTarget.dataset
 		let bookInfo = getStorageSync("bookInfo")
@@ -138,29 +140,11 @@ Page({
 	},
 
 	touchS(e) {
-		console.log(e)
-		// 1. 解构数据，避免直接操作 this.data 原数据
-		let { categoryList, startX, startY } = this.data
-
-		// 2. 安全获取 dataset 中的 index 和 i，防止未定义报错
-		let { i } = e.currentTarget.dataset || {};
-
-
-
-		// 4. 批量将 transactionList 中所有 list 项的 status 设为 true（核心新增逻辑）
-		// 深拷贝原数组，避免直接修改 this.data 里的原数据
+		let { categoryList} = this.data
 		const newTransactionList = JSON.parse(JSON.stringify(categoryList));
-		// 遍历外层数组
 		newTransactionList.forEach((item) => {
-
-
 			item.status = true;
-					
-				
-	
 		});
-
-		// 5. 统一通过 setData 响应式更新所有数据（坐标 + 列表）
 		this.setData({
 			startX: e.touches[0].clientX,  // 触摸起始X坐标
 			startY: e.touches[0].clientY,  // 触摸起始Y坐标
@@ -180,7 +164,7 @@ Page({
 		const y = Math.abs(this.data.startY - currentY); // 纵向移动距离
 
 		// 3. 安全获取 dataset 中的索引（适配 transactionList 的 index/i）
-		let { index, i } = e.currentTarget.dataset || {};
+		let {i } = e.currentTarget.dataset || {};
 		// 兼容原代码的 id 逻辑（如果仍需要 id 可保留）
 		// var id = e.currentTarget.dataset.index;
 
@@ -202,15 +186,15 @@ Page({
 		// 7. 响应式更新数据（核心：用新数据替换原数据）
 		this.setData({
 			categoryList: newTransactionList,
-			// effective_carts: newEffectiveCarts, // 如需保留原逻辑可启用
 		}, () => {
 			// 可选：验证更新结果
 
 		});
 	},
 	async deleteList(e) {
+		const notify = this.selectComponent('#customNotify');
 		try {
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			wx.vibrateShort({ type: 'light' })
 			// 1. 安全获取要删除的 id 和 dataset 中的索引（关键：需要 index/i 定位列表项）
 			let { budget_category_id,category_id} = e.currentTarget.dataset || {};
@@ -223,23 +207,36 @@ Page({
 			};
 			// 容错：检查 userId 是否存在
 			if (!data.userId) {
-				wx.showToast({ title: "用户信息异常，请重新登录", icon: "none" });
-				return;
+
+				return	notify.showNotify({
+					message: '用户信息异常，请重新登录',
+					type: 'error',
+					duration: 1500
+				});
 			}
-	
 			// 3. 调用删除接口
 			let res = await deletBudget(data);
 			if (res.code === 200) {
-				wx.showToast({ title: "删除成功", icon: "none" });
+				notify.showNotify({
+					message: res.message,
+					type: 'success',
+					duration: 1500
+				});
 				this.getBudgetInfo(bookId, userId)
-				// });
 			} else {
-				wx.showToast({ title: res.msg || "删除失败", icon: "none" });
+				notify.showNotify({
+					message: res.message,
+					type: 'success',
+					duration: 1500
+				});
 			}
 		} catch (error) {
 			// 捕获异常，避免代码崩溃
-			console.error("删除接口调用异常：", error);
-			wx.showToast({ title: "网络异常，删除失败", icon: "none" });
+			notify.showNotify({
+				message: error.message,
+				type: 'error',
+				duration: 1500
+			});
 		}
 	},
 	/**
@@ -247,7 +244,6 @@ Page({
 	 */
 	onLoad() {
 		this.initSystemConfig()
-
 	},
 
 	/**

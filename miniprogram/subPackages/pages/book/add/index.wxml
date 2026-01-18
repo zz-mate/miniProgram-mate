@@ -8,7 +8,7 @@ background="{{navBgColor}}">
 	 <view class="book-name radius-10 flex flex-align-items-center flex-space-between">
 	 <view class="label">名称</view>
 	 <view class="input">
-		<input class="book_placeholder num" type="text" placeholder="请输入" maxlength="10"
+		<input class="placeholder num" type="text" placeholder="请输入" maxlength="6" value="{{params.name}}"
 				adjust-position="{{false}}" bindinput="bindKeyInput" />
 	 </view>
 	 </view>
@@ -20,3 +20,5 @@ background="{{navBgColor}}">
 	保存
 	</view>
 </view>
+  <!-- 自定义 Notify 组件 -->
+  <z-notify id="customNotify" bind:close="onNotifyClose"/>

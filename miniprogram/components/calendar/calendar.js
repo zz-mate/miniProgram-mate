@@ -5,7 +5,6 @@ Component({
       type: Array,
       value: []
     },
-    // 新增：接收父组件传递的dailyList数组
     dailyList: {
       type: Array,
       value: []
@@ -22,6 +21,10 @@ Component({
       type: Array,
       value: []
     },
+		dailyType:{
+			type:String,
+			value:""
+		},
     theme_color: {
       type: String,
       value: '#FFD608'
@@ -29,15 +32,15 @@ Component({
   },
 
   data: {
-    dateList: [], //日历主体渲染数组（新增income/expense字段）
-    selectDay: {}, //选中时间
-    open: true, //展开
-    color1: '', // 主题色渐变1
-    color2: ''  // 主题色渐变2
+    dateList: [], 
+    selectDay: {}, 
+    open: true, 
+    color1: '', 
+    color2: ''  
   },
 
   methods: {
-    // 颜色转换
+    // 颜色转换（保留）
     hexToRgb(hex) {
       var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
       return result ? {
@@ -47,7 +50,7 @@ Component({
       } : null;
     },
 
-    // 时间格式化（保留原有逻辑）
+    // 时间格式化（保留）
     formatTime(time, format) {
       function formatNumber(n) {
         n = n.toString()
@@ -115,36 +118,39 @@ Component({
       }
     },
 
-    // picker设置月份
+    // picker设置月份（保留）
     editMonth(e) {
       const arr = e.detail.value.split("-")
       const year = parseInt(arr[0])
       const month = parseInt(arr[1])
-      this.setMonth(year, month)
+      // 手动操作：开启事件触发
+      this.setMonth(year, month, undefined, true)
     },
 
-    // 上月切换按钮点击
+    // 上月切换按钮点击（保留）
     lastMonth() {
-			playBtnAudio('/static/audio/click.mp3', 1000);
-			wx.vibrateShort({ type: 'light' })
+			// playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+			// wx.vibrateShort({ type: 'light' })
       const lastMonth = new Date(this.data.selectDay.year, this.data.selectDay.month - 2)
       const year = lastMonth.getFullYear()
       const month = lastMonth.getMonth() + 1
-      this.setMonth(year, month)
+      // 手动操作：开启事件触发
+      this.setMonth(year, month, undefined, true)
     },
 
-    // 下月切换按钮点击
+    // 下月切换按钮点击（保留）
     nextMonth() {
-			playBtnAudio('/static/audio/click.mp3', 1000);
-			wx.vibrateShort({ type: 'light' })
+			// playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+			// wx.vibrateShort({ type: 'light' })
       const nextMonth = new Date(this.data.selectDay.year, this.data.selectDay.month)
       const year = nextMonth.getFullYear()
       const month = nextMonth.getMonth() + 1
-      this.setMonth(year, month)
+      // 手动操作：开启事件触发
+      this.setMonth(year, month, undefined, true)
     },
 
-    // 设置月份
-    setMonth(setYear, setMonth, setDay) {
+    // 核心修改：增加triggerEvent开关参数（默认false）
+    setMonth(setYear, setMonth, setDay, triggerEvent = false) {
       if (this.data.selectDay.year !== setYear || this.data.selectDay.month !== setMonth) {
         const day = Math.min(new Date(setYear, setMonth, 0).getDate(), this.data.selectDay.day)
         const time = new Date(setYear, setMonth - 1, setDay ? setDay : day)
@@ -161,56 +167,46 @@ Component({
         }
         this.setData(data)
         this.dateInit(setYear, setMonth)
-        // this.setSpot()
-        this.triggerEvent("change",this.data.selectDay )
+        // 关键：只有triggerEvent为true时才触发change事件
+        if (triggerEvent) {
+          this.triggerEvent("change", this.data.selectDay)
+        }
       }
     },
 
-    // 展开收起
+    // 展开收起（保留）
     openChange() {
       this.setData({
         open: !this.data.open
       })
       this.triggerEvent("aaa", { a: 0 })
       this.dateInit()
-      // this.setSpot()
     },
 
-    /**
-     * 匹配dailyList金额数据到dateList
-     * @returns {Array} 带金额的dateList
-     */
+    // 匹配dailyList金额数据（保留）
     matchDailyAmount(dateList) {
       const { dailyList } = this.properties;
       if (!dailyList.length) return dateList;
 
-      // 遍历日历数组，匹配day赋值金额
       return dateList.map(item => {
-				// console.log(item)
-        // 统一day格式：转为两位数字符串（如 1 → "01"，18 → "18"）
         const itemDay = item.day.toString().padStart(2, '0');
 				const itemMonth = item.month.toString().padStart(2, '0');
-        // 查找dailyList中匹配的day
         const dailyItem = dailyList.find(d => d.day === itemDay&&d.month==itemMonth);
         
         return {
           ...item,
-          // 赋值收入/支出，默认0.00
           income: dailyItem?.income || "0.00",
           expense: dailyItem?.expense || "0.00",
-          // 有金额则显示红点（可选）
           hasAmount: (dailyItem?.income && dailyItem.income !== "0.00") || (dailyItem?.expense && dailyItem.expense !== "0.00")
         };
       });
     },
 
-    // 设置日历底下是否展示小圆点（整合金额判断）
+    // 设置日历底下小圆点（保留）
     setSpot() {
       if (!this.data.dateList.length) return;
 
-      // 1. 处理原有spot数组
       const spotTimeArr = this.data.spot.map(item => this.formatTime(item, "Y-M-D"));
-      // 2. 处理list数组
       const listTimeArr = this.properties.list.map(item => {
         if (item.dateString) return item.dateString;
         if (item.year && item.month && item.day) {
@@ -218,28 +214,25 @@ Component({
         }
         return this.formatTime(item, "Y-M-D");
       });
-      // 3. 合并红点条件：原有spot + list + 有金额的日期
       const allSpotDates = [...new Set([...spotTimeArr, ...listTimeArr])];
 
       const newDateList = this.data.dateList.map(item => ({
         ...item,
-        // 红点显示条件：匹配spot/list 或 有金额
         spot: allSpotDates.includes(item.dateString) || item.hasAmount
       }));
 
       this.setData({ dateList: newDateList });
     },
 
-    // 日历主体的渲染方法（核心：调用matchDailyAmount匹配金额）
+    // 日历主体渲染（保留）
     dateInit(setYear = this.data.selectDay.year, setMonth = this.data.selectDay.month) {
       let dateList = [];
-      let now = new Date(setYear, setMonth - 1) // 当前月份的1号
-      let startWeek = now.getDay(); // 目标月1号对应的星期
-      let dayNum = new Date(setYear, setMonth, 0).getDate() // 当前月有多少天
-      let forNum = Math.ceil((startWeek + dayNum) / 7) * 7 // 当前月跨越的周数
+      let now = new Date(setYear, setMonth - 1) 
+      let startWeek = now.getDay(); 
+      let dayNum = new Date(setYear, setMonth, 0).getDate() 
+      let forNum = Math.ceil((startWeek + dayNum) / 7) * 7 
 
       if (this.data.open) {
-        // 展开状态，渲染完整月份
         for (let i = 0; i < forNum; i++) {
           const now2 = new Date(now)
           now2.setDate(i - startWeek + 1)
@@ -251,7 +244,6 @@ Component({
           });
         }
       } else {
-        // 非展开状态，只渲染当前周
         for (let i = 0; i < 7; i++) {
           const now2 = new Date(now)
           now2.setDate(Math.ceil((this.data.selectDay.day + startWeek) / 7) * 7 - 6 - startWeek + i)
@@ -264,18 +256,15 @@ Component({
         }
       }
 
-      // 关键：匹配dailyList金额数据
       const dateListWithAmount = this.matchDailyAmount(dateList);
-
       this.setData({ dateList: dateListWithAmount }, () => {
-        // this.setSpot(); // 更新红点（包含金额判断）
+        // this.setSpot();
       });
     },
 
-    // 日期点击事件（可传递金额数据）
+    // 日期点击事件（核心修改：手动触发事件）
     selectChange(e) {
       const { year, month, day, dateString } = e.currentTarget.dataset;
-      // 查找当前日期的金额数据
       const currentDateItem = this.data.dateList.find(item => 
         item.year === parseInt(year) && 
         item.month === parseInt(month) && 
@@ -286,16 +275,16 @@ Component({
         month: parseInt(month),
         day: parseInt(day),
         dateString,
-        // 携带金额数据到父组件
         income: currentDateItem?.income || "0.00",
         expense: currentDateItem?.expense || "0.00"
       };
 
       if (this.data.selectDay.year !== selectDay.year || this.data.selectDay.month !== selectDay.month) {
-        this.setMonth(selectDay.year, selectDay.month, selectDay.day);
+        // 日期跨月：调用setMonth并开启事件触发
+        this.setMonth(selectDay.year, selectDay.month, selectDay.day, true);
       } else if (this.data.selectDay.day !== selectDay.day) {
         this.setData({ selectDay });
-        // 触发事件时携带金额数据
+        // 日期同月份：直接触发change事件
         this.triggerEvent("change", selectDay);
       }
     }
@@ -311,9 +300,10 @@ Component({
         day: now.getDate(),
         dateString: this.formatTime(now, "Y-M-D")
       }
+      // 核心：初始化调用setMonth时，关闭事件触发（最后一个参数为false，默认值）
       this.setMonth(selectDay.year, selectDay.month, selectDay.day);
 
-      // 初始化主题色
+      // 初始化主题色（保留）
       let color = this.hexToRgb(this.data.theme_color)
       if (color) {
         this.setData({
@@ -324,10 +314,10 @@ Component({
     }
   },
 
-  // 监听数据变化：dailyList/list/spot变化时更新
+  // 监听数据变化（保留）
   observers: {
     'dailyList': function (newDailyList) {
-      this.dateInit(); // 重新渲染日历并匹配金额
+      this.dateInit();
     },
     'list': function (newList) {
       // this.setSpot();

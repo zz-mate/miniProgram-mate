@@ -49,7 +49,7 @@ Page({
 
 	// 跳转到账单详情页面
 	handleTransactionInfo(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		const { transaction_id, transaction_type } = evt.currentTarget.dataset
 		// 跳转前标记：已跳转到详情页
@@ -143,7 +143,7 @@ Page({
 	async deleteList(e) {
 		try {
 			// 1. 安全获取要删除的 id 和 dataset 中的索引（关键：需要 index/i 定位列表项）
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 			let { id, index, i } = e.currentTarget.dataset || {};
 			if (!id) {

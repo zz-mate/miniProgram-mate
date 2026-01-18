@@ -1,7 +1,8 @@
 
 import { getAccountList } from '../../api/account'
-import { getStorageSync, setStorageSync } from '../../utils/util';
+import { getStorageSync } from '../../utils/util';
 import { COLOR } from '../../utils/color.js';
+import { playBtnAudio } from '../../utils/audioUtil'
 import SystemConfig from '../../utils/capsule';
 Page({
 
@@ -16,21 +17,19 @@ Page({
     accountList: [],
     navBgColor: COLOR.white,
     show: false,
-			// fakNavBarHeight: 0,
+			scrollHeight: 0,
 			navBarHeight: 0,
 			statusBarHeight: 0,
 			deviceType: '',
 
   },
 	handleEye(evt) {
-		console.log(evt)
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		const { eye } = evt.currentTarget.dataset
 		// const { summary } = this.data
 		this.setData({
 			eyeIndex: eye == 1 ? 2 : 1,
-			// 'summary.expendTotalMoney': eye == 1 ? '****' :'0.00'|| summary.expendTotalMoney,
-			// 'summary.incomeTotalMoney': eye == 1 ? '****' : '0.00'|| summary.incomeTotalMoney,
-			// 'summary.surplusTotalMoney': eye == 1 ? '****' :'0.00'||  summary.surplusTotalMoney
 		})
 
 	},
@@ -54,7 +53,8 @@ Page({
   // 创建账户
   handleAccountAdd() {
     const token = getStorageSync('token')
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
     if (!token) {
       wx.navigateTo({
         url: "/pages/login/index"
@@ -99,11 +99,30 @@ Page({
 				
 				});
 			},
+					// 获取导航栏高度
+		getScrollHeight() {
+			const query = wx.createSelectorQuery();
+			query.select('.fake-nav-bar').boundingClientRect();
+			query.select('.shortcut').boundingClientRect();
+	
+			query.exec((res) => {
+				if (res) {
+					console.log(res)
+		
+					this.setData({
+						scrollHeight: res[0].height+ res[1].height+70,
+						// advHeight: res[4].height + 120
+					});
+				}
+			})
+	
+		},
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad() {
 		this.initSystemConfig();
+		this.getScrollHeight()
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

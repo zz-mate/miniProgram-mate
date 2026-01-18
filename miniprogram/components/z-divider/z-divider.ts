@@ -15,11 +15,11 @@ Component({
     },
     textColor:{
       type:String,
-      value:'#8b8b8b'
+      value:'#bcbcbc'
     },
     lineColor:{
       type:String,
-      value:'#b8b8b8'
+      value:'#bcbcbc'
     },
 
   },

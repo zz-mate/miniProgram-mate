@@ -1,7 +1,7 @@
 // subPackages/pages/book/add/index.ts
 import { COLOR } from '../../../../utils/color.js';
-import { createBook,updateBook } from '../../../../api/book'
-
+import { createBook, updateBook } from '../../../../api/book'
+import { playBtnAudio } from '../../../../utils/audioUtil'
 Page({
 
 	/**
@@ -19,31 +19,35 @@ Page({
 		})
 	},
 	async handleBookSave() {
+		wx.vibrateShort({ type: 'light' })
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 
-		wx.vibrateShort({ type: 'heavy' })
-
-		
-
+		const notify = this.selectComponent('#customNotify');
 		let { params } = this.data
 
-		if(params.name==''||params.name.trim()==""){
+		if (params.name == '' || params.name.trim() == "") {
 			return wx.showToast({
-				title:"请输入名称",
-				icon:"none"
+				title: "请输入名称",
+				icon: "none"
 			})
 		}
 		let res = await createBook(params)
-		console.log(res.data)
-		if(res.code==200){
-			let obj={
+		if (res.code == 200) {
+			let obj = {
 				bookId: res.data.id,
 				userId: params.userId,
 				is_default: 1
 			}
-	 await updateBook(obj)
+			await updateBook(obj)
 			wx.switchTab({
-				url:"/pages/index/index"
+				url: "/pages/index/index"
 			})
+		}else{
+			notify.showNotify({
+				message: res.message,
+				type: 'warning',
+				duration: 1500
+			});
 		}
 
 
@@ -57,12 +61,12 @@ Page({
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad({ userId, bookCategoryId, icon = '', description }) {
+	onLoad({ userId, bookCategoryId, icon = '', name }) {
 		this.setData({
 			'params.userId': userId,
 			'params.bookCategoryId': bookCategoryId,
 			'params.icon': icon,
-			'params.description': description,
+			'params.name': name,
 		})
 
 	},

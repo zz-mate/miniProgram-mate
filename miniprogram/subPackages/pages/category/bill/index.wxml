@@ -1,0 +1,25 @@
+<!--subPackages/pages/category/bill/index.wxml-->
+<navigation-bar title="账单列表" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="#000"
+	background="{{navBgColor}}">
+</navigation-bar>
+<button bindtap="showSuccessNotify">显示成功提示</button>
+  <button bindtap="showErrorNotify">显示错误提示</button>
+  <button bindtap="showCustomNotify">显示自定义提示</button>
+
+<view class="plan-container">
+	<view class="no-data radius-10">
+  <view class="no-data-icon">
+		<image
+					src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+					mode="widthFix" />
+  </view>
+  <view class="no-data-text" bind:tap="handleNotify">
+    <view>抱歉呀，这个功能还在 “修炼”</view>
+    <view>等它解锁新技能就和您见面</view>
+  </view>
+</view>
+</view>
+
+
+  <!-- 自定义 Notify 组件 -->
+  <z-notify id="customNotify" bind:close="onNotifyClose"/>

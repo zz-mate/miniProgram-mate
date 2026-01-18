@@ -7,7 +7,7 @@
 	<view class="no-data radius-10">
   <view class="no-data-icon">
     <image
-		src="/static/async-icon/icon-not-bill.png"
+		src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png"
       mode="widthFix" />
   </view>
   <view class="no-data-text">

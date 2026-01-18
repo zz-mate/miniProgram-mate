@@ -1,23 +1,97 @@
 <!--pages/plan/index.wxml-->
-<navigation-bar title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="#000"
-	background="{{navBgColor}}">
+<navigation-bar back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="#000" background="{{navBgColor}}">
 	<view slot="left">
 		计划
 	</view>
+	<view slot="right">
+		<view class="custom-circle" style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
+			catch:tap="handleCalenderPage">
+			<image class="icon-calendar"
+				src="http://oss-api.zz-mate.cn/uploads/2026/01/1768569299579-3c6f1fcf-a73a-4b80-ba90-b12ff0750479.png"
+				mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
+		</view>
+	</view>
 </navigation-bar>
+<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{height}}px) ">
+	<view class="plan-container">
+		<view class="plan-list-header ">
+			<view class="plan-box flex flex-align-items-center flex-space-between">
+				<view
+					class="plan-box-item flex flex-align-items-center flex flex-center radius-10    {{index==planHeaderIndex ? (planHeaderIndex==0 ? 'plan-header-primary' : (planHeaderIndex==1 ? 'plan-header-theme' : 'plan-header-default')) : ''}}"
+					wx:for="{{planHeaderlist}}" data-index="{{index}}" bind:tap="handlePlanHeaderTap">
+					<view class="icon">
+						<image class="icon-plan" src="{{item.icon}}" alt="" mode=""></image>
+					</view>
+					<view class="name">{{item.name}}</view>
+				</view>
+			</view>
 
-<view class="plan-container">
-	<view class="no-data radius-10">
-  <view class="no-data-icon">
-    <image
-		src="/static/async-icon/icon-not-bill.png"
-      mode="widthFix" />
-  </view>
-  <view class="no-data-text">
-    <view>抱歉呀，这个功能还在 “修炼”</view>
-    <view>等它解锁新技能就和您见面</view>
-  </view>
-</view>
-</view>
+		</view>
+
+		<view class="calendar-content" wx:if="{{dailyList.length}}">
+			<calendar bind:change="dateChange" dailyType='plan' defaultTime="" spot="{{spot}}" dailyList="{{dailyList}}" theme_color="#FFD608">
+			</calendar>
+			<!-- <view class="plan-title">
+
+	{{planHeaderIndex==0?'备忘录':'存计划'}}
+</view> -->
+			<view class="plan-list radius-10 bill-container">
+				<view wx:if="{{planList.length}}">
+					<view wx:for="{{planList}}" wx:for-index="i">
+
+						<view class="bill-wrapper {{item.statu ? '':'active'}}">
+						
+							<view
+								class="plan-card bill-wrapper_item cart-list  radius-10 flex flex-space-between flex-align-items-center"
+								hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-i="{{i}}" bindtouchstart="touchS"
+								bindtouchmove="touchM" data-id="{{item.id}}" data-name="{{item.name}}" bind:tap="handlePlanPage">
+
+								<view class="progress-container">
+									<view class="progress-bar {{ planHeaderIndex==1? 'bg-theme':'bg-primary'}}"
+										style="width: {{item.completion_rate}}%">
+									</view>
+								</view>
+							
+								<view class="done {{item.completion_rate==100&&planHeaderIndex==0?'plan-1':item.completion_rate==100&&planHeaderIndex==1?'plan-2':'plan-0'}}">
+									  {{ item.completion_rate==100?'完成' :'未完成'}}
+								</view>
+								<view class="square {{planHeaderIndex==1? 'theme':'primary'}}">
+									{{i+1}}
+								</view>
+		
+								<view class="plan-item">
+									{{item.name}}
+								</view>
+					
+							<view class="date">{{item.plan_time}}</view>
+						</view>
+
+						<view class="del_button" data-i="{{i}}" data-id="{{item.id}}" data-type="single" bindtap='deleteList'>删除
+						</view>
+
+					</view>
 
 
+				</view>
+			</view>
+
+			<view class="no-data radius-10" wx:else>
+				<view class="no-data-icon">
+					<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png" mode="widthFix" />
+				</view>
+				<view class="no-data-text">
+					<view>暂无{{planHeaderIndex==0?'备忘录':'计划'}}</view>
+					<!-- <view>去添加</view> -->
+				</view>
+			</view>
+		</view>
+		<z-divider text="没有更多{{planHeaderIndex==0?'备忘录':'计划'}}了" style="margin-bottom: 80px;" textSize="{{11}}px"
+			wx:if="{{planList.length}}">
+		</z-divider>
+
+	</view>
+	</view>
+
+</scroll-view>
+<!-- 自定义 Notify 组件 -->
+<z-notify id="customNotify" bind:close="onNotifyClose" />

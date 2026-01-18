@@ -1,0 +1,18 @@
+<!--pages/plan/index.wxml-->
+<navigation-bar title="全部服务" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="#000"
+	background="{{navBgColor}}">
+
+</navigation-bar>
+
+<view class="plan-container">
+	<view class="tool-list">
+<view class="tool-item" wx:for="{{list}}" data-url="{{item.url}}" bind:tap="handlePageUrl">
+<view class="tool-icon">
+	<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
+</view>
+<view class="tool-name">{{item.name||'xxx'}}</view>
+</view>
+</view>
+</view>
+
+

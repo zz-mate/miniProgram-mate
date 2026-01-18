@@ -1,0 +1,85 @@
+<!--pages/plan/index.wxml-->
+<!--subPackages/pages/account/add/index.wxml-->
+<navigation-bar title="预约" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+	background="{{navBgColor}}">
+
+</navigation-bar>
+
+<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{height}}px) ">
+	<!-- 备忘录内容 -->
+	<sticky-section push-pinned-header="{{false}}" padding="{{[10,10,10,10]}}">
+		<block wx:if="{{list.length>0}}">
+
+			<view class="book-list bill-container radius-10">
+	
+					<view class="bill-wrapper book-item  {{item.stat ? '':'active'}}" wx:for="{{list}}" wx:for-index="i" hover-class="btn-hover" hover-stay-time="50"
+							hover-start-time="0">
+						<view class="bill-wrapper_item cart-list"  data-i="{{i}}" bindtouchstart="touchS" bindtouchmove="touchM"
+							bind:tap="handlePageUrl">
+							<view class="status">{{item.status_text}}</view>
+							<view class="version" wx:if="{{item.cycle_text!=='一次性'}}">已转{{item.version}}次</view>
+							<view class="title flex flex-align-items-center">
+								<image class="icon-aw"
+									src="http://oss-api.zz-mate.cn/uploads/2026/01/1768398547211-dc1b2f87-7666-428e-bdcc-faecbc5e65c3.png"
+									mode="" />
+								<view class="remark">{{item.remark}}</view>
+							</view>
+							<view class="content flex flex-align-items-center">
+								<view class="left-box">
+									<view class="account-info">
+										<view class="book-name">资产账户</view>
+										<view class="name">{{item.account_info.name}}</view>
+									</view>
+								</view>
+								<view class="icon-center">
+									<image wx:if="{{item.category_info.type==2}}"
+										src="http://oss-api.zz-mate.cn/uploads/2026/01/1768211574017-d2d52e8e-7c38-4158-9ccb-d41104e94a27.png"
+										mode="" />
+										<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768448680063-6da0516e-fab5-4c6b-9ca1-3e38db4c3a18.png" wx:else
+				mode="" />
+								</view>
+								<view class="right-box">
+									<view class="account-info">
+										<view class="book-name">{{item.book_info.name}} 账本</view>
+										<view class="name">{{item.category_info.name}}</view>
+									</view>
+								</view>
+							</view>
+							<view class="start-date flex flex-align-items-center">
+								<view class="date-border" style="margin-right:10rpx">
+									{{item.cycle_text}}
+									<image class="icon-border-bottom"
+										src="http://oss-api.zz-mate.cn/uploads/2026/01/1768306755743-86ceb004-89e4-400f-87eb-4c6273f1a79f.png" />
+								</view>
+								<text>自动转 <text class="num">{{item.expense_amount}}</text> 元</text>
+							</view>
+						</view>
+						<view class="del_button" data-i="{{i}}"  data-version="{{item.version}}" data-id="{{item.id}}" data-type="single"
+							bindtap='deleteList'>删除
+						</view>
+					</view>
+			
+			</view>
+
+		</block>
+		<view class="no-data radius-10" wx:else>
+			<view class="no-data-icon">
+				<image
+					src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+					mode="widthFix" />
+			</view>
+			<view class="no-data-text">
+				<view>暂无预约计划</view>
+				<view>添加计划，自动记账更省心</view>
+			</view>
+		</view>
+	</sticky-section>
+
+
+
+</scroll-view>
+<view class="shortcut" bind:tap="handleAdd">
+	<view class="shortcut_count color-primary radius-10 flex flex-center">
+		添加
+	</view>
+</view>

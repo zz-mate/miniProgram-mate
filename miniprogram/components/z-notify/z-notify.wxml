@@ -1,0 +1,7 @@
+<!-- components/z-notify/z-notify.wxml -->
+<view 
+  class="notify {{ type ? 'notify-' + type : '' }} {{ show ? 'notify-show' : '' }}"
+  style="{{ position === 'top' ? 'top:' + top + 'px;' : '' }}{{ position === 'bottom' ?'bottom:' + bottom + 'px;' : '' }}"
+>
+  <text class="notify-text">{{ message }}</text>
+</view>

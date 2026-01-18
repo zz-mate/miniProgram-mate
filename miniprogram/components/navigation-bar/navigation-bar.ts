@@ -156,7 +156,7 @@ Component({
 		back() {
 			const data = this.data
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			if (data.delta) {
 				wx.navigateBack({
 					delta: data.delta
@@ -166,7 +166,7 @@ Component({
 		},
 		home() {
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			setTabBarBadge(0)
 			wx.switchTab({
 				url: '/pages/index/index'

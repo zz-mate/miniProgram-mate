@@ -1,6 +1,6 @@
 <!--subPackages/pages/transaction/add/index.wxml-->
 <navigation-bar title="" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
-	background="{{navBgColor}}"> 
+	background="{{navBgColor}}">
 	<!-- bind:tap="handlePopup" -->
 	<view slot="center" class="subsection flex flex-align-items-center" data-type="book">
 		{{bookInfo.name}}
@@ -21,22 +21,22 @@
 </view> -->
 
 <view class="money-content ">
-<view class="conent radius-10">
-	<view class=" flex flex-align-items-center flex-space-between">
-		<view class="lt flex flex-align-items-center">
-			<view class="icon">
-				<image src="{{categoryList[categoryIndex].icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
+	<view class="conent radius-10">
+		<view class=" flex flex-align-items-center flex-space-between">
+			<view class="lt flex flex-align-items-center">
+				<view class="icon  {{isAnimate ? 'jelly-animate' : ''}}">
+					<image src="{{categoryList[categoryIndex].icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
+				</view>
+				<view class="icon-title">{{categoryList[categoryIndex].name}}</view>
 			</view>
-			<view class="icon-title">{{categoryList[categoryIndex].name}}</view>
-		</view>
-		<view class="money num {{selectedTab==0?'active':''}}">{{calcExpression ||'0.00'}}</view>
-		<!-- <view class="money num calc-expression">{{calcExpression || bill.num}}</view> -->
+			<view class="money num {{selectedTab==0?'active':''}}">{{calcExpression ||'0.00'}}</view>
+			<!-- <view class="money num calc-expression">{{calcExpression || bill.num}}</view> -->
 
-	</view>
-	<!-- <text class="exp-text">{{calcExpression || '0'}}</text>
+		</view>
+		<!-- <text class="exp-text">{{calcExpression || '0'}}</text>
     <text class="num-text">¥{{bill.num.toFixed(2)}}</text> -->
-	<!-- <view class=" num calc-expression" wx:if="{{calcExpression}}">{{calcExpression ||'0.00'}}</view> -->
-</view>
+		<!-- <view class=" num calc-expression" wx:if="{{calcExpression}}">{{calcExpression ||'0.00'}}</view> -->
+	</view>
 
 </view>
 
@@ -49,24 +49,24 @@
 	<swiper class="scroll-list" current="{{selectedTab}}" bind:change="onTabChanged"
 		worklet:onscrollstart="onTabTransition" worklet:onscrollupdate="onTabTransition"
 		worklet:onscrollend="onTabTransitionEnd" duration="{{400}}" cache-extent="1">
-		<swiper-item wx:for="{{swiperTabs}}" wx:key="index" class="swiper-{{index}}" >
+		<swiper-item wx:for="{{swiperTabs}}" wx:key="index" class="swiper-{{index}}">
 			<view class="card" style="height: 100%; box-sizing: border-box;">
 				<!-- 核心优化：添加可滚动容器 scroll-view -->
-				<scroll-view class="list-scroll" scroll-y enable-flex  scroll-with-animation show-scrollbar="{{false}}"
+				<scroll-view class="list-scroll" scroll-y enable-flex scroll-with-animation show-scrollbar="{{false}}"
 					style="height: 100%;">
 
 					<view class="list" wx:if="{{categoryList.length}}">
 						<view class="item" wx:for="{{categoryList}}" wx:key="index" data-index="{{index}}"
 							bind:tap="handleChooseCategory">
-							<view class="icon {{ categoryIndex==index?'active':'not-active'}}">
+							<view class="icon radius {{ categoryIndex==index?'active':'not-active'}}">
 								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 							</view>
 							<view class="icon-title">{{item.name}}</view>
 						</view>
-						<view class="item"
-							bind:tap="handleSettingCategory">
+						<view class="item" bind:tap="handleSettingCategory">
 							<view class="icon">
-								<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/%E8%AE%BE%E7%BD%AE.png" mode="widthFix" />
+								<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/%E8%AE%BE%E7%BD%AE.png"
+									mode="widthFix" />
 							</view>
 							<view class="icon-title">设置</view>
 						</view>
@@ -101,8 +101,8 @@
 
 				<view class="label">备注</view>
 				<view class="value"> <input class="remark_placeholder" style="font-size: 24rpx;" type="text" maxlength="20"
-						placeholder="添加备注吧～" adjust-position="{{false}}" bindinput="bindKeyInput" bindfocus="onInputFocus"
-						bindblur="onInputBlur" /></view>
+						value="{{bill.remark}}" placeholder="添加备注吧～" adjust-position="{{false}}" bindinput="bindKeyInput"
+						bindfocus="onInputFocus" bindblur="onInputBlur" /></view>
 				<view style="width:180rpx;font-size: 22rpx;">
 					<z-tabs bind:change="onTapTab" active="{{selectedTab}}" tabs="{{typeList}}"></z-tabs>
 				</view>
@@ -125,20 +125,37 @@
 		</view>
 
 
-
+		<view class="image-list">
+			<view class="imgs" wx:if="{{bill.image_list}}">
+				<!-- 删除按钮图片 -->
+				<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768470100368-67fae662-1d0a-43ee-8ec4-6981a9e008fb.png"
+					mode="widthFix" class="delete-image" bind:tap="deleteImage" />
+				<!-- 核心图片：设置关键的 mode="aspectFill" -->
+				<image class="imgs-list" bindtap="previewImage" src="{{bill.image_list}}" mode="aspectFill" />
+			</view>
+		</view>
 
 
 		<view class="keyboard-tab-list flex  flex-space-between">
 			<view class="left">
 				<scroll-view class=" flex" scroll-x="{{true}}"
-					style="height:46rpx;width:calc(100vw - 80rpx);white-space: nowrap;">
-					<view class="bill-tag radius-4" bind:tap="handlePopup" data-type="date">{{bill.date}}</view>
-					<!-- <view class="bill-tag radius-4" bind:tap="handlePopup" data-type="account"
+					style="height:46rpx;width:calc(100vw - 90rpx);white-space: nowrap;">
+
+					<view class="bill-tag radius-4" bind:tap="handlePopup" data-type="date">
+				
+				<text wx:if="{{bill.date}}">	{{bill.date}}</text>
+						<image wx:else src="http://oss-api.zz-mate.cn/uploads/2026/01/1768534954511-3710b2ae-2790-488b-b506-111b4e49a76e.png" mode=""  class="z-icon icon-calendar"/>
+					</view>
+					<view class="bill-tag radius-4" bind:tap="handlePopup" data-type="account"
 						style="color:{{bill.account_id?'#000':'#999'}}">
 						{{bill.account_name || '账户'}}
 					</view>
-					<view class="bill-tag radius-4" bind:tap="handlePopup" data-type="user">自己</view>
-					<view class="bill-tag radius-4" bind:tap="handleRefund" style="color:{{bill.refound?'#000':'#999'}}">退款</view> -->
+					<view class="bill-tag radius-4" bind:tap="getLocation" 	style="color:{{bill.address?'#000':'#999'}}">
+					
+					{{bill.address||'定位'}}
+					<!-- http://oss-api.zz-mate.cn/uploads/2026/01/1768535105838-2fe6476f-254b-4db7-a634-b339c39074f1.png -->
+					</view>
+						<!--	<view class="bill-tag radius-4" bind:tap="handleRefund" style="color:{{bill.refound?'#000':'#999'}}">退款</view> -->
 				</scroll-view>
 				<!-- <scroll-view class="flex category-child-list" scroll-x="{{true}}"
 					wx:if="{{categoryList[categoryIndex].children.length}}"
@@ -154,53 +171,79 @@
 					<view class="not-active radius-4">+添加标签</view>
 				</scroll-view> -->
 			</view>
-			<view class="right">
-				<!-- <image class="upload"
-					src="https://env-00jxubueh4pn.normal.cloudstatic.cn/相机 (1).png?expire_at=1764470058&er_sign=a35a4a1ac05926913a3c6d243800f5dc"
-					mode="" /> -->
+			<view class="right flex flex-align-items-center">
+				<!-- <view class="imgs" wx:if="{{bill.image_list}}">
+				<image src="/static/icon/icon-delete-category.png" mode="" class="delete-image" bind:tap="deleteImage"/>
+				<image class="imgs-list"   bindtap="previewImage"
+					src="{{bill.image_list}}"
+					mode="" />
+			</view> -->
+
+				<image class="upload" bind:tap="upload"
+					src="http://oss-api.zz-mate.cn/uploads/2026/01/1768536419408-b6f7b748-e326-479e-b236-ecd2aa5d3755.png"
+					mode="" />
+
 			</view>
 
 		</view>
 	</view>
 
 	<view class='keyboard-container'>
-  <view class="keyboard-bottom3">
-    <view class="keyboard-bottom3-num">
-      <view class='keyboard-row'>
-        <view class='key one' hover-class="weui-cell_active" data-key='1' bindtap='tapKey'>1</view>
-        <view class='key two' hover-class="weui-cell_active" data-key='2' bindtap='tapKey'>2</view>
-        <view class='key three' hover-class="weui-cell_active" data-key='3' bindtap='tapKey'>3</view>
-        <view class='key dot' hover-class="weui-cell_active" bindtap='tapDel'
-			bindlongpress="longpressDel" bindtouchend="stopInterval">
-          <image class="del-image"
-            src="/static/icon/icon-backspace.png"
-            mode="widthFix"></image>
-        </view>
-      </view>
-      <view class='keyboard-row'>
-        <view class='key four' hover-class="weui-cell_active" hover-stay-time='10' data-key='4' bindtap='tapKey'>4</view>
-        <view class='key five' hover-class="weui-cell_active" data-key='5' bindtap='tapKey'>5</view>
-        <view class='key six' hover-class="weui-cell_active" data-key='6' bindtap='tapKey'>6</view>
-        <view class='key sub' hover-class="weui-cell_active" data-key='-' bindtap='tapKey'>-</view>
-      </view>
-      <view class='keyboard-row'>
-        <view class='key seven' hover-class="weui-cell_active" data-key='7' bindtap='tapKey'>7</view>
-        <view class='key eight' hover-class="weui-cell_active" data-key='8' bindtap='tapKey'>8</view>
-        <view class='key nine' hover-class="weui-cell_active" data-key='9' bindtap='tapKey'>9</view>
-        <view class='key add' hover-class="weui-cell_active" data-key='+' bindtap='tapKey'>+</view>
-      </view>
-      <view class='keyboard-row'>
-        <view class='key point' hover-class="weui-cell_active" data-key='.' bindtap='tapKey'>.</view>
-        <view class='key zero' hover-class="weui-cell_active" data-key='0' bindtap='tapKey'>0</view>
-				<view class="key" data-again="{{1}}" bindtap="tapSubmit">再记</view>
-      <!-- 核心：动态切换=和完成 -->
-      <view class="key submit main {{selectedTab==0?'active-0':'active-1'}}" data-again="{{2}}" bindtap="tapSubmit">
-        {{operator && secondNum ? '=' : '完成'}}
-      </view>
-      </view>
-    </view>
-  </view>
-</view>
+		<view class="keyboard-bottom3">
+			<view class="keyboard-bottom3-num">
+
+				<view class='keyboard-row'>
+					<view class='key seven' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='7'
+						bindtap='tapKey'>7</view>
+					<view class='key eight' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='8'
+						bindtap='tapKey'>8</view>
+					<view class='key nine' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='9'
+						bindtap='tapKey'>9</view>
+					<view class='key dot' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
+						bindtap='tapDel' bindlongpress="longpressDel" bindtouchend="stopInterval">
+						<image class="del-image" src="/static/icon/icon-backspace.png" mode="widthFix"></image>
+					</view>
+
+				</view>
+				<view class='keyboard-row'>
+					<view class='key four' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key=' 4'
+						bindtap='tapKey'>4
+					</view>
+					<view class='key five'  data-key='5'
+						bindtap='tapKey'>5</view>
+					<view class='key six' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='6'
+						bindtap='tapKey'>6</view>
+					<view class='key add' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='+'
+						bindtap='tapKey'>+</view>
+
+				</view>
+
+				<view class='keyboard-row'>
+					<view class='key one' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='1'
+						bindtap='tapKey'>1</view>
+					<view class='key two' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='2'
+						bindtap='tapKey'>2</view>
+					<view class='key three' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='3'
+						bindtap='tapKey'>3</view>
+					<view class='key sub' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='-'
+						bindtap='tapKey'>-</view>
+				</view>
+				<view class='keyboard-row'>
+					<view class='key point' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='.'
+						bindtap='tapKey'>.</view>
+					<view class='key zero' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='0'
+						bindtap='tapKey'>0</view>
+					<view class="key again" data-again="{{1}}" hover-class="btn-hover" hover-stay-time="50"
+						hover-start-time="0" bindtap="tapSubmit">再记</view>
+					<!-- 核心：动态切换=和完成 -->
+					<view class="key submit main {{selectedTab==0?'active-0':'active-1'}}" hover-class="btn-hover"
+						hover-stay-time="50" hover-start-time="0" data-again="{{2}}" bindtap="tapSubmit">
+						{{operator && secondNum ? '=' : '完成'}}
+					</view>
+				</view>
+			</view>
+		</view>
+	</view>
 </view>
 
 
@@ -208,16 +251,17 @@
 
 <!-- 日期 -->
 <z-popup bind:popup="handleChildPopup" showTitle="date" bind:tap="handlePopup"
-	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_date}}" closeOnClickOverlay="{{false}}"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_date}}" closeOnClickOverlay="{{true}}"
 	mode="{{'bottom'}}">
 	<view class="popup-content" style="height:35vh">
-		<date-picker bind:onCancel="handleCloseOverlay" bind:onConfirm="onConfirmDate" mode="{{mode}}" date="{{date}}"
-			startDate="{{startDate}}" endDate="{{endDate}}" minScale="{{minScale}}"></date-picker>
+		<date-picker bind:onCancel="handleCloseOverlay" bind:onConfirm="onConfirmDate" mode="YMDhm" forceInitFirstDay="false"
+    initType="normal" date="{{date}}"
+			></date-picker>
 	</view>
 </z-popup>
 <!-- 账户 -->
 <z-popup bind:popup="handleChildPopup" showTitle="account" bind:tap="handlePopup"
-	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_account}}" closeOnClickOverlay="{{false}}"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_account}}" closeOnClickOverlay="{{true}}"
 	mode="{{'bottom'}}">
 	<view class="popup-content" style="height:65vh">
 		<view class="account-list list">
@@ -226,26 +270,29 @@
 					不使用账户
 				</view>
 				<view class=" icon" wx:if="{{ selectedParentIndex==-1 &&selectedChildIndex==-1}}">
-					<image
-						src="https://env-00jxubueh4pn.normal.cloudstatic.cn/选中.png?expire_at=1764261862&er_sign=70a70d791e41e1880e6ea64c4c61fd8b"
-						mode="widthFix" />
+					<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
 				</view>
 			</view>
 			<scroll-view class="account-scroll" scroll-y="{{true}}" style="height:50vh">
 				<view wx:if="{{accountList.length}}">
 					<view class="item" wx:for="{{accountList}}" wx:key="index">
-						<view class="item-header">{{item.type.type_name}}</view>
-						<view class="item-items  flex flex-space-between flex-align-items-center" wx:for="{{item.list}}"
+						<view class="item-header">{{item.category_name}}</view>
+						<view class="item-items  flex flex-space-between flex-align-items-center" wx:for="{{item.children}}"
 							wx:for-index="i" wx:for-item="v" bind:tap="handleChooseAccount" data-parent-index="{{index}}"
 							data-child-index="{{i}}">
 							<view class="account-icon">
 								<image src="{{v.icon}}" mode="widthFix" />
 							</view>
-							<view class="account-name">{{v.account_name}}</view>
-							<view class=" icon" wx:if="{{index === selectedParentIndex && i === selectedChildIndex}}">
-								<image
+							<view class="account-name">
+								<view class="name">{{v.name}}</view>
+								<view class="account-amount">{{v.amount}}</view>
+							</view>
+							<view class="icon">
+								<!-- <image wx:if="{{index === selectedParentIndex && i === selectedChildIndex}}"
 									src="https://env-00jxubueh4pn.normal.cloudstatic.cn/选中.png?expire_at=1764261862&er_sign=70a70d791e41e1880e6ea64c4c61fd8b"
-									mode="widthFix" />
+									mode="widthFix" /> -->
+								<image wx:if="{{index === selectedParentIndex && i === selectedChildIndex}}"
+									src="/static/icon/icon-book-choose.png" mode="widthFix" />
 							</view>
 						</view>
 					</view>
@@ -273,7 +320,7 @@
 </z-popup>
 <!-- 消费人 -->
 <z-popup bind:popup="handleChildPopup" showTitle="user" bind:tap="handlePopup"
-	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_user}}" closeOnClickOverlay="{{false}}"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_user}}" closeOnClickOverlay="{{true}}"
 	mode="{{'bottom'}}">
 	<view class="popup-content" style="height:60vh">
 		<view class="no-data">
@@ -293,43 +340,43 @@
 </z-popup>
 <!-- 账本 -->
 <z-popup bind:popup="handleChildPopup" showTitle="book" bind:tap="handlePopup"
-	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_book}}" closeOnClickOverlay="{{false}}"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_book}}" closeOnClickOverlay="{{true}}"
 	mode="{{'bottom'}}">
 	<view class="popup-content">
 		<scroll-view scroll-y style="height:60vh">
 			<block wx:if="{{bookList.length>0}}">
-				<block wx:for="{{bookList}}" wx:key="index">
-					<view class="book-list {{index==bookIndex?'book-list_active':''}}" style="width: 100%;height: 100rpx;"
-						data-index="{{index}}" bind:tap="handleMenoSelected">
-						<view class="book-item flex flex-align-items-center flex-space-between">
-							<view class="cover">
-								<image src="{{item.icon}}" mode="aspectFill" />
-							</view>
-							<view class="info">
-								<view class="book-name">{{item.book_name}}</view>
-								<view class="num">1人</view>
-							</view>
-							<view class="icon" wx:if="{{bookIndex==index}}">
-								<image
-									src="https://env-00jxubueh4pn.normal.cloudstatic.cn/选中.png?expire_at=1764261862&er_sign=70a70d791e41e1880e6ea64c4c61fd8b"
-									mode="widthFix" />
-							</view>
-						</view>
-					</view>
-				</block>
-			</block>
 
-			<view class="no-data" wx:else>
-				<view class="no-data-icon">
-					<image
-						src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
-						mode="widthFix" />
-				</view>
-				<view class="no-data-text">
-					<view>记账就是记录生活</view>
-					<view>财务自由，从记第一笔开始</view>
-				</view>
-			</view>
+<view class="book-list  radius-10">
+	<view
+		class="book-item  flex flex-align-items-center flex-space-between {{index==bookIndex?'book-list_active':''}}"
+		wx:for="{{bookList}}" wx:key="index"  hover-class="btn-hover" hover-stay-time="50"
+							hover-start-time="0" data-index="{{index}}"
+		bind:tap="handleMenoSelected">
+		<view class="cover">
+			<image src="{{item.icon|| 'https://picsum.photos/50/60?random=2'}}" mode="aspectFill" />
+		</view>
+		<view class="info">
+			<view class="book-name">{{item.name}}</view>
+			<!-- <view class="num">1人</view> -->
+		</view>
+		<view class="icon" wx:if="{{item.is_default==1}}">
+			<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
+		</view>
+	</view>
+</view>
+
+</block>
+<view class="no-data" wx:else>
+<view class="no-data-icon">
+	<image
+		src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+		mode="widthFix" />
+</view>
+<view class="no-data-text">
+	<view>记账就是记录生活</view>
+	<view>财务自由，从记第一笔开始</view>
+</view>
+</view>
 		</scroll-view>
 
 	</view>
@@ -337,7 +384,7 @@
 </z-popup>
 <!--消费类别 -->
 <z-popup bind:popup="handleChildPopup" showTitle="category" bind:tap="handlePopup"
-	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_category}}" closeOnClickOverlay="{{false}}"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_category}}" closeOnClickOverlay="{{true}}"
 	mode="{{'bottom'}}">
 	<view class="popup-content">
 		<scroll-view scroll-y style="height:60vh">

@@ -1,0 +1,109 @@
+/* subPackages/pages/plan/info/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
+
+.plan-container {
+	padding: 20rpx;
+}
+
+.plan-card {
+	background-color: #FFF;
+	padding-top: 20rpx;
+
+	.plan-desc {
+		font-size: $z-font-size-22;
+		text-align: center;
+	}
+
+	.plan-content {
+		padding: 20rpx;
+
+		.plan-list {
+			margin-top: 20rpx;
+
+			.plan-type-list-item {
+				font-size: $z-font-size-22;
+				line-height: 50rpx;
+
+				.content {
+					background-color: #f8f8f8;
+					margin-bottom: 20rpx;
+
+					.content-title {
+						font-size: $z-font-size-22;
+						font-weight: 600;
+						padding:20rpx 10rpx;
+					}
+
+					.content-list {
+						padding: 0 20rpx 20rpx 0;
+						width: 100%;
+
+						.content-list-item {
+							width: 100%;
+			margin-bottom: 10rpx;
+							.name {
+								flex: 1;
+								margin-right: 20rpx;
+								font-size: $z-font-size-20;
+								padding:0 10rpx;
+							border: 1rpx solid transparent;
+							transition:  .3s all;
+								&.border-primary{
+										border: 1rpx solid $z-color-primary;
+								}
+								&.border-theme{
+									border: 1rpx solid $-theme-color;
+							}
+								&.primary {
+									color: #FFF;
+									background-color:	$z-color-primary;
+									text-decoration: line-through;
+								}
+								&.theme {
+									// color: #FFF;
+									background-color:	$-theme-color;
+									text-decoration: line-through;
+								}
+							}
+
+							.check {
+								position: relative;
+								border: 1rpx solid #cac6c6;
+								width: 28rpx;
+								height: 28rpx;
+
+								.icon-choose {
+									position: absolute;
+									left: -6rpx;
+									top: -6rpx;
+									width: 36rpx;
+									height: 36rpx;
+									// &.active {
+									// 	margin: 4rpx;
+									// 	width: 14rpx;
+									// 	height: 14rpx;
+									// 	background-color: #000;
+									// }
+								}
+							}
+						}
+					}
+
+				}
+			}
+
+			.plan-tag-list-item {
+				font-size: $z-font-size-20;
+				margin-right: 20rpx;
+				background-color: $z-color-primary;
+				padding: 2rpx 8rpx;
+				color: #FFF;
+			}
+
+			.plan-attachments-list-item {
+				font-size: $z-font-size-20;
+			}
+
+		}
+	}
+}

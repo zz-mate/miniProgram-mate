@@ -5,15 +5,15 @@
 	.icon{
 		width: 40rpx;
 		height: 40rpx;
-		background-color: #f4f2f7;
-		border-radius: 50%;
+		// background-color: #f4f2f7;
+		// border-radius: 50%;
 		margin-left: 6rpx;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		.icon-clear{
-			width: 28rpx;
-			height: 28rpx;
+			width: 36rpx;
+			height: 36rpx;
 			// margin: 6rpx;
 		}
 	}
@@ -58,8 +58,8 @@
     .icon {
       width: 60rpx;
       height: 60rpx;
-			background-color: #ffd60878;
-			border-radius: 50%;
+			background-color: #eeeeee;
+			// border-radius: 50%;
 			overflow: hidden;
     }
 
@@ -119,7 +119,7 @@
       margin: 12rpx 0;
       height: 6rpx;
       background-color: #e6e6e6;
-      border-radius: 4rpx;
+      // border-radius: 4rpx;
       overflow: hidden;
     }
 

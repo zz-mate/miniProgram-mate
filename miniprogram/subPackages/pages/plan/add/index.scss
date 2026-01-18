@@ -1,0 +1,282 @@
+/* subPackages/pages/plan/add/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
+
+.plan-container {
+	padding: 20rpx;
+}
+
+// .plan-name {
+// 	background-color: #fff;
+// 	height: 80rpx;
+// 	padding: 20rpx;
+
+// }
+
+// .label {
+// 	font-size: 22rpx;
+// }
+
+// .input {
+// 	width: 200rpx;
+// 	text-align: right;
+// 	font-size: $z-font-size-22;
+// }
+
+/* 基础布局类 */
+.flex-1 {
+	flex: 1;
+}
+
+/* 容器样式 */
+.plan-container {
+	padding: 20rpx;
+	// background-color: #fff;
+}
+
+/* 名称/描述行样式 */
+.plan-name {
+	background-color: #fff;
+	padding: 20rpx;
+	margin-bottom: 20rpx;
+}
+
+.plan-name .label {
+	font-size: $z-font-size-22;
+	font-weight: 600;
+	color: #333;
+}
+
+.plan-name .input {
+	flex: 1;
+}
+
+.plan-name .input input {
+	font-size: $z-font-size-22;
+	color: #666;
+	// padding: 10rpx 0;
+	text-align: right;
+}
+
+/* 计划清单整体样式 */
+.plan-content {
+	background-color: #fff;
+	padding: 20rpx;
+	margin-bottom: 20rpx;
+}
+
+.content-header {
+	// margin-bottom: 20rpx;
+	// padding-bottom: 10rpx;
+	// border-bottom: 1px solid #fbf3f3;
+}
+
+.content-title {
+	font-size: $z-font-size-22;
+	font-weight: 700;
+	color: #333;
+}
+
+/* 按钮通用样式 */
+.add-btn {
+	// background-color: $z-color-primary;
+	// color: #fff;
+	// font-size: $z-font-size-18;
+	// padding: 0 10rpx;
+	width: 32rpx;
+	height: 32rpx;
+}
+
+.add-category-btn {
+	width: 32rpx;
+	height: 32rpx;
+}
+
+.add-item-btn {
+	height: 36rpx;
+	line-height: 36rpx;
+	font-size: $z-font-size-18;
+}
+
+.del-btn {
+	width: 32rpx;
+	height: 32rpx;
+}
+
+.item-del-btn {
+	width: 32rpx;
+	height: 32rpx;
+}
+
+/* 分类项样式 */
+.category-item {
+	margin: 20rpx 0;
+	// padding-bottom: 20rpx;
+	// border-bottom: 1px solid #f0f0f0;
+}
+
+.category-item:last-child {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: none;
+}
+
+/* 分类头部 */
+.category-header {
+	margin-bottom: 15rpx;
+	padding:10rpx 20rpx;
+	background-color: #f5f5f5d2;
+}
+
+.category-checkbox {
+	transform: scale(1.2);
+	margin-right: 15rpx;
+}
+
+.category-title-input {
+	font-size: $z-font-size-22;
+	color: #333;
+	// font-weight: 600;
+	width: 100%;
+	margin-bottom: 8rpx;
+}
+
+.priority-selector {
+	display: flex;
+	align-items: center;
+}
+
+.priority-label {
+	font-size: $z-font-size-20;
+	color: #666;
+	margin-right: 8rpx;
+}
+
+.priority-tag {
+	font-size: $z-font-size-18;
+	width: 30rpx;
+	height: 30rpx;
+	line-height: 30rpx;
+	text-align: center;
+}
+
+.priority-1 {
+	background-color: #ffe5e5;
+	color: #e64340;
+}
+
+.priority-2 {
+	background-color: #fff3e0;
+	color: #ff9800;
+}
+
+.priority-3 {
+	background-color: #e8f4f8;
+	color: #4299e1;
+}
+
+.category-actions {
+	padding-left: 20rpx;
+	align-items: center;
+}
+
+.weight-text {
+	font-size: $z-font-size-22;
+	color: #999;
+	min-width: 60rpx;
+	text-align: center;
+}
+
+/* 分类备注编辑 */
+.category-note-edit {
+	height: 50rpx;
+	margin-bottom: 15rpx;
+}
+
+.note-input {
+	font-size: $z-font-size-22;
+	color: #666;
+	height: 50rpx;
+	background-color: #f4f2f7;
+	width: 100%;
+	line-height: 50rpx;
+	padding-left: 10rpx;
+}
+
+.placeholder-style {
+	color: #ccc;
+}
+
+/* 子项区域 */
+.items-wrap {
+	padding-left: 20rpx;
+}
+
+.items-header {
+	margin-bottom: 10rpx;
+}
+
+.items-title {
+	font-size: $z-font-size-22;
+	color: #666;
+}
+
+.items-list {
+	margin-top: 10rpx;
+
+}
+
+.item-row {
+	padding: 12rpx 20rpx;
+	background-color: #f5f5f5d2;
+	margin-bottom: 5rpx;
+}
+
+.item-row:last-child {
+	border-bottom: none;
+}
+
+.item-checkbox {
+	transform: scale(1.1);
+	margin-right: 15rpx;
+}
+
+.item-name-input {
+	font-size: $z-font-size-22;
+	color: #333;
+	flex: 1;
+}
+
+.item-completed {
+	color: #999;
+	text-decoration: line-through;
+}
+
+
+
+.check {
+	position: relative;
+	border: 1rpx solid #cac6c6;
+	width: 28rpx;
+	height: 28rpx;
+	margin-right: 10rpx;
+
+	.icon-choose {
+		position: absolute;
+		left: -6rpx;
+		top: -6rpx;
+		width: 36rpx;
+		height: 36rpx;
+		// &.active {
+		// 	margin: 4rpx;
+		// 	width: 14rpx;
+		// 	height: 14rpx;
+		// 	background-color: #000;
+		// }
+	}
+}
+
+.save-disabled {
+  background-color: #e5e5e5 !important;
+  color: #999 !important;
+  pointer-events: none; /* 禁止点击事件 */
+}

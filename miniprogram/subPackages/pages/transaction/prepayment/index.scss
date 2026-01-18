@@ -1,0 +1,108 @@
+/* subPackages/pages/more/index.wxss */
+@import "../../../../app.scss"; // 引入全局变量
+
+
+.book-list {
+	overflow: hidden;
+
+
+	.book-item {
+		// background-color: $z-bg-color;
+		padding: 20rpx;
+		position: relative;
+		margin-bottom: 10rpx;
+
+		&.btn-hover {
+			background-color: $z-btn-white-hover;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+
+		}
+
+		.title {
+	.icon-aw{
+		width:24rpx ;height: 24rpx;
+		margin-right: 8rpx;
+	}
+			.remark{
+						font-size: $z-font-size-24;
+			font-weight: 600;
+			}
+		}
+
+		.content {
+			margin: 20rpx 0;
+			font-size: $z-font-size-22;
+
+			.left-box {
+				min-width: 100rpx;
+			}
+
+			.icon-center {
+				width: 100rpx;
+				height: 10rpx;
+				margin: 0 14rpx;
+
+			}
+
+			.right-box {
+				min-width: 100rpx;
+				.book-name{
+					color: $z-text-color;
+					font-size: $z-font-size-22;
+					text-align: center;
+				}
+			}
+			.name{
+				color: $z-text-color-80;
+			font-size: $z-font-size-18;
+			padding-top: 4rpx;
+			text-align: center;
+			}
+
+		}
+
+		.start-date {
+			color: $z-text-color;
+			font-size: $z-font-size-20;
+
+			.date-border {
+				position: relative;
+
+				.icon-border-bottom {
+					position: absolute;
+					bottom: 0rpx;
+					left: 0rpx;
+					width: 100rpx;
+					height: 8rpx;
+				}
+			}
+			.num{
+				font-weight: 600;
+				color: $z-color-primary;;
+					font-size: $z-font-size-24;
+			}
+		}
+
+		.version {
+			position: absolute;
+			right: 0rpx;
+			bottom: 0rpx;
+			padding: 4rpx 10rpx;
+			color: $z-text-color-80;
+			font-size: $z-font-size-20;
+		}
+		.status{
+			position: absolute;
+			right: 0;
+			top: 0;
+			padding: 4rpx 10rpx;
+			color: $z-bg-color;
+			font-size: $z-font-size-18;
+			background-color:$z-color-primary;
+		}
+
+	}
+}

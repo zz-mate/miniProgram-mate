@@ -2,6 +2,7 @@
 
 const app = getApp()
 import { getStorageSync } from '../../../../utils/util';
+import { playBtnAudio } from '../../../../utils/audioUtil'
 import { getAccountCategoryList } from '../../../../api/account'
 Page({
 
@@ -26,16 +27,17 @@ Page({
 		})
 	},
 	handleBookSelected(evt) {
-		wx.vibrateShort({ type: 'heavy' })
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		let userInfo = getStorageSync("userInfo")
 		const { item } = evt.currentTarget.dataset
-		let params = `accountCategoryId=${item.id}&icon=${item.icon}&description=${item.description}&userId=${userInfo.id}&title=${item.name}`
+		let params = `accountCategoryId=${item.id}&userId=${userInfo.id}&title=${item.name}&type=${item.type}&icon=${item.icon}`
 		console.log(item)
-		if(item.type==1){
+		if(item.type==1||item.type==4){
 			wx.navigateTo({
 				url: `/subPackages/pages/account/add/index?${params}`
 			})
-		}else{
+		}else if(item.type==2||item.type==3){
 					wx.navigateTo({
 			url: `/subPackages/pages/account/category/index?${params}`
 		})

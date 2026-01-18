@@ -29,6 +29,11 @@
 .filter-date {
 	background-color: #FFF;
 	height: 60rpx;
+	.date{
+		width: 300rpx;
+		height: 60rpx;
+justify-content: center;
+	}
 }
 
 .bill-card {
@@ -42,7 +47,7 @@
 		border: 1rpx solid transparent;
 		box-sizing: border-box;
 		overflow: hidden;
-
+		transition: all 0.3s;
 		text {
 			font-size: 20rpx;
 			color: #666;
@@ -111,7 +116,7 @@
 		&_items {
 			padding: 0 20rpx;
 			// margin: 4rpx 0;
-			background-color: #FFF;
+			// background-color: #FFF;
 			overflow: hidden;
 
 			.left-icon {
@@ -173,7 +178,7 @@
 
 
 .sticky-card {
-	background-color: #FFF;
+	// background-color: #FFF;
 	padding: 20rpx;
 	margin-bottom: 20rpx;
 	border-bottom: 1rpx solid #f4f2f7;
@@ -183,7 +188,7 @@
 		text-align: center;
 		width: 60rpx;
 		height: 60rpx;
-		background-color: #f4f2f7;
+		// background-color: #f4f2f7;
 		padding-top: 2rpx;
 
 		.month {
@@ -210,7 +215,6 @@
 			.red,
 			.default {
 				height: 4rpx;
-				border-radius: 2rpx;
 				overflow: hidden;
 				background-color: #f4f2f758;
 

@@ -38,12 +38,18 @@
 			}
 
 			.title {
-
+				flex: 1;
 				font-size: 22rpx;
+				.button{
+					width: 100%;
+					height: 100%;
+					color: var(--text-color);
+					background-color: transparent;
+				}
 			}
 
 			.info {
-				flex: 1;
+				// flex: 1;
 				justify-content: flex-end;
 
 			}

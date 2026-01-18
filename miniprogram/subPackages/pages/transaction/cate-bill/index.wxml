@@ -40,9 +40,9 @@
 	</view>
 </view>
 
-<view class="ad-card radius-10" wx:if="{{!categoryId}}">
+<!-- <view class="ad-card radius-10" wx:if="{{!categoryId}}">
 	<ad-custom unit-id="adunit-469f033868d8c18d" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
-</view>
+</view> -->
 
 <view class="bill-item_header flex flex-align-items-center flex-space-between" wx:if="{{!categoryId}}">
 	<view class="bill-title" >分类明细</view>
@@ -75,7 +75,7 @@
 				</view> -->
 						<view class="bill-wrapper {{item.status ? '':'active'}}">
 							<view class="bill-wrapper_item bill-item_items cart-list flex flex-space-between flex-center"
-								hover-class="btn-hover" hover-stay-time='150' data-transaction_type="{{item.type}}"
+								hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-transaction_type="{{item.type}}"
 								data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}"
 								bindtouchstart="touchS" bindtouchmove="touchM">
 								<!-- {{item.status}} -->
@@ -111,7 +111,7 @@
 		
 			<view class="no-data" wx:if="{{!transactionList.length}}">
 				<view class="no-data-icon">
-					<image src="/static/async-icon/icon-not-bill.png" mode="widthFix" />
+					<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png" mode="widthFix" />
 				</view>
 				<view class="no-data-text">
 					<view>记账就是记录生活</view>
@@ -125,14 +125,14 @@
 
 
 
-		<view class="radius-10" wx:if="{{categoryId}}">
+		<!-- <view class="radius-10" wx:if="{{categoryId}}">
 	<ad-custom unit-id="adunit-469f033868d8c18d" bindload="adLoad" binderror="adError" bindclose="adClose"></ad-custom>
-</view>
+</view> -->
 
 
 		<view class="no-data" wx:if="{{transactionList.length==0}}">
 			<view class="no-data-icon">
-				<image src="/static/async-icon/icon-not-bill.png" mode="widthFix" />
+				<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png" mode="widthFix" />
 			</view>
 			<view class="no-data-text">
 				<view>记账就是记录生活</view>
@@ -145,7 +145,7 @@
 
 <!--年 -->
 <z-popup bind:popup="handleChildPopup" showTitle="year" bind:tap="handlePopup"
-	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_year}}" closeOnClickOverlay="{{false}}"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_year}}" closeOnClickOverlay="{{true}}"
 	mode="{{'bottom'}}">
 	<view class="popup-content num">
 		<view class="content">
@@ -169,7 +169,7 @@
 </z-popup>
 <!--月 -->
 <z-popup bind:popup="handleChildPopup" showTitle="month" bind:tap="handlePopup"
-	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_month}}" closeOnClickOverlay="{{false}}"
+	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_month}}" closeOnClickOverlay="{{true}}"
 	mode="{{'bottom'}}">
 	<view class="popup-content num">
 		<view class="content">

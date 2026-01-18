@@ -1,6 +1,17 @@
 /* subPackages/pages/budget/index.wxss */
 @import "../../../app.scss"; // 引入全局变量
-
+.bg-success {
+	background-color: $z-color-success;
+}
+.bg-error {
+	background-color: $z-color-error;
+}
+.bg-warning {
+	background-color: $z-color-warning;
+}
+.text-error {
+	color: $z-color-error;
+}
 .header-card {
   position: relative;
   margin: 20rpx;
@@ -21,15 +32,15 @@
     }
 
     .num {
-      color: #999999;
+      color: $z-text-color-60;
     }
 
     .budget-title {
       text-align: center;
       padding-top: 10rpx;
-      color: #000;
+      color: $z-text-color;
 			font-weight: 550;
-      font-size: 20rpx;
+      font-size: $z-font-size-22;
 			z-index: -1;
     }
 
@@ -38,14 +49,13 @@
       font-size: 44rpx;
       font-weight: bold;
       padding: 20rpx 0;
-      color: #000;
+      color: $z-text-color;
     }
 
     .budget-progress-container {
       margin: 10rpx 0;
       height: 6rpx;
-      background-color: #faf8fd;
-      border-radius: 4rpx;
+      background-color: $z-bg-color-progress;
       overflow: hidden;
     }
 
@@ -63,9 +73,9 @@
 
 
 .budget-category-title {
-  font-size: 20rpx;
+  font-size: $z-font-size-20;
   font-weight: bold;
-  color: #333;
+  color: $z-text-color;
   margin: 20rpx;
 }
 
@@ -81,8 +91,7 @@
   .icon {
     width: 54rpx;
     height: 54rpx;
-		background-color: #ffd60878;
-		border-radius: 50%;
+		background-color: $z-bg-color-grey;
 		overflow: hidden;
   }
 
@@ -91,23 +100,22 @@
     margin-left: 20rpx;
 
     .card-bp {
-      height:40rpx;
-      color: #333333;
+      // height:40rpx;
+      color: $z-text-color;
     }
 
     .card-bt {
-      font-size: 20rpx;
+      font-size: $z-font-size-20;
       text {
        
-        color: #999999;
+        color: $z-text-color-60;
       }
     }
 
     .budget-progress-container {
       margin: 6rpx 0;
       height: 4rpx;
-      background-color: #faf8fd;
-      border-radius: 2rpx;
+      background-color: $z-bg-color-progress;
       overflow: hidden;
     }
 
@@ -117,7 +125,7 @@
     }
 
     .budget-money {
-      color: #999999;
+      color: $z-text-color-80;
     }
   }
 }

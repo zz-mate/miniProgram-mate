@@ -1,12 +1,12 @@
 <!--components/calendar/calendar.wxml-->
-<view class="calendar">
+<view class="calendar radius-10">
 	<view class="title flex">
 		<!-- 标题 -->
 		<view class="cal_title">{{cal_title}}</view>
 		<view class="flex">
 			<!-- 上个月 -->
 			<view class="iconfont" bindtap="lastMonth">
-			<image src="/static/icon/icon-calendar-left.png" mode="widthFix" />
+			<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768534560599-e877f35c-6307-41e9-994e-21711b8c3833.png" mode="widthFix" />
 				<!-- <view class='left-color' style="border-right-color:{{theme_color}}"></view> -->
 			</view>
 			<!-- 选择日期 -->
@@ -14,7 +14,7 @@
 				class="year-month">{{selectDay.year}}年{{selectDay.month>9?selectDay.month:"0"+selectDay.month}}月</picker>
 			<!-- 下个月 -->
 			<view class="iconfont" bindtap="nextMonth">
-				<image src="/static/icon/icon-calendar-right.png" mode="widthFix" />
+				<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768534527644-db768e1f-0c65-48a9-8001-0c5bd536dc82.png" mode="widthFix" />
 			</view>
 		</view>
 		<view class="cal_title">{{cal_title}}</view>
@@ -45,8 +45,12 @@
 				data-date-string="{{item.dateString}}">
 				{{item.day}}
 
-
-				<view class="money">
+				
+				<view class="money" wx:if="{{dailyType=='plan'}}">
+             <text class="text-primary" wx:if="{{item.income!=0}}">备忘录；{{item.income}}</text>
+             <text class="text-theme" wx:if="{{item.expense!=0}}">计划：{{item.expense}}</text>
+            </view>
+				<view class="money" wx:else>
              <text class="text-error" wx:if="{{item.income!=0}}">{{item.income}}</text>
              <text class="text-success" wx:if="{{item.expense!=0}}">{{item.expense}}</text>
             </view>

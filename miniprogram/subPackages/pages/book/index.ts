@@ -3,13 +3,16 @@
 const app = getApp()
 import { getStorageSync, setStorageSync } from '../../../utils/util';
 import { updateBook } from '../../../api/book'
+import { playBtnAudio } from '../../../utils/audioUtil'
 Component({
 	// 组件所在页面的生命周期
 	pageLifetimes: {
 		show: function () {
 
 			this.setData({
-				bookList: getStorageSync('bookList') || []
+				bookList: getStorageSync('bookList') || [],
+				multiBookList:getStorageSync('multiBookList') || [],
+				userInfo:getStorageSync("userInfo")
 			})
 			// 页面被展示
 		},
@@ -48,22 +51,25 @@ Component({
 		selected: 0,
 		bookIndex: 0,
 		bookList: [],
+		userInfo:null
 	},
+	
 	methods: {
 		// 添加账本
 		handleBookAdd() {
-			 wx.vibrateShort({ type: 'heavy' })
-			let userInfo = getStorageSync('userInfo')
-			if (userInfo.level_exp >= 200) {
+			wx.vibrateShort({ type: 'light' })
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+			// let userInfo = getStorageSync('userInfo')
+			// if (userInfo.level_exp >= 200) {
 				wx.navigateTo({
 					url: '/subPackages/pages/book/category/index'
 				})
-			} else {
-				wx.showToast({
-					title: "您的积分不足200",
-					icon: "none"
-				})
-			}
+			// } else {
+			// 	wx.showToast({
+			// 		title: "您的积分不足200",
+			// 		icon: "none"
+			// 	})
+			// }
 
 		},
 		/**
@@ -75,9 +81,25 @@ Component({
 				selected: currentTarget.dataset.selected
 			})
 		},
+		handleMultiSelected({ currentTarget }: any){
+			wx.vibrateShort({ type: 'light' })
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+			let index = currentTarget.dataset.index
+			console.log(index)
+			// const newBookList = that.data.multiBookList.map((item, idx) => {
+			// 	return {
+			// 		...item,
+			// 		is_default: idx === index ? 1 : 0 // 选中的为1，其他为0
+			// 	};
+			// });
+			setStorageSync("bookInfo",this.data.multiBookList[index])
+			console.log(this.data.multiBookList[index])
+			wx.navigateBack({ delta: 1 })
+		},
 		async handleMenoSelected({ currentTarget }: any) {
 			let that = this
-			wx.vibrateShort({ type: 'heavy' })
+			wx.vibrateShort({ type: 'light' })
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			let index = currentTarget.dataset.index
 			let data = {
 				bookId: this.data.bookList[index].id,
@@ -185,7 +207,8 @@ Component({
 		},
 
 		handleMemoAdd() {
-			console.log('新增');
+			wx.vibrateShort({ type: 'light' })
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			let userInfo = getStorageSync('userInfo')
 			if (userInfo.level_exp >= 200) {
 				wx.navigateTo({

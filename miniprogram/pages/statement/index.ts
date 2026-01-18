@@ -1,5 +1,6 @@
 // pages/statement/index.ts
 import { COLOR } from '../../utils/color.js';
+import { getBookList } from '../../api/book'
 import { playBtnAudio } from '../../utils/audioUtil'
 import { getStorageSync, getThisDate, formatCurrentTime, generateYearGroupList, findYearIndex, generateYearMonthNestedList, findYearMonthInNestedList } from '../../utils/util.js';
 import { getBillByMonthChart } from '../../api/statement'
@@ -37,8 +38,10 @@ Page({
 		popupType: "",
 		showPopup_year: false,
 		showPopup_month: false,
+		showPopup_book: false,
 		yearList: generateYearGroupList({ startYear, endYear, groupSize: 10 }),
 		groupYearIndex: 0,
+		bookIndex: -1,
 		groupMonthIndex: 0,
 		isDataYReady: false,
 		isDataMReady: false,
@@ -55,14 +58,15 @@ Page({
 		ec: {
 			lazyLoad: true // 延迟加载
 		},
-		chartData: {}
+		chartData: {},
+		bookList: []
 	},
 
 	/**
 	 * 切换图表类型（折线图/柱状图）
 	 */
 	toggleChartType() {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' });
 
 		// 切换图表类型
@@ -84,7 +88,7 @@ Page({
 	},
 
 	changeType(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' });
 		console.log(evt);
 		let { type } = evt.currentTarget.dataset;
@@ -99,7 +103,8 @@ Page({
 	 */
 	async getChartData(typeIndex) {
 		let userInfo = getStorageSync("userInfo");
-		let bookInfo = getStorageSync("bookInfo");
+		// let bookInfo = getStorageSync("bookInfo");
+		let { bookInfo } = this.data
 		// 只保留支出(2)和收入(1)
 		let data = {
 			"userId": userInfo.id,
@@ -124,7 +129,7 @@ Page({
 	/**点击TAB 默认日期 */
 	handleChange(evt) {
 		const { sub } = evt.detail.delta;
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' });
 
 		if (sub == 0) {
@@ -158,7 +163,7 @@ Page({
 	},
 
 	handleYear(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' });
 		this.setData({
 			'queryParams.start_time': evt.currentTarget.dataset.year
@@ -169,7 +174,7 @@ Page({
 	},
 
 	changeMonth(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' });
 		const { current } = evt.detail;
 		this.setData({
@@ -180,7 +185,7 @@ Page({
 	},
 
 	handleMonth(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' });
 		let split_month = evt.currentTarget.dataset.month;
 		let { split_year } = this.data;
@@ -207,8 +212,11 @@ Page({
 	},
 
 	handlePopup() {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' });
+
+
+
 		const yearMonthMoreActive = this.data.yearMonthMoreActive;
 		let type = '';
 		switch (yearMonthMoreActive) {
@@ -246,7 +254,15 @@ Page({
 		}
 		this.updatePopupStatus(type, true);
 	},
+	handleBookPopup(evt) {
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' });
+		const { type } = evt.currentTarget.dataset;
+		if (!type) return; // 增加类型校验，避免空值操作
 
+		this.handleCheckBook()
+		this.updatePopupStatus(type, true);
+	},
 	/**
 	 * 处理弹窗关闭
 	 */
@@ -494,7 +510,7 @@ Page({
 				itemStyle: {
 					color: typeIndex === 0 ? COLOR?.expenseColor : COLOR.incomeColor,
 					fontFamily: 'WeChatSansStd',
-					borderRadius: [3, 3, 0, 0] // 柱状图顶部圆角
+					borderRadius: [0, 0, 0, 0] // 柱状图顶部圆角
 				},
 				emphasis: {
 					itemStyle: {
@@ -536,11 +552,11 @@ Page({
 				trigger: 'axis',
 				triggerOn: 'mousemove',
 				confine: true,
-				backgroundColor: '#f4f2f7',
+				backgroundColor:typeIndex === 0 ? COLOR.expenseColor:COLOR.incomeColor,
 				padding: [2, 6],
-				borderRadius: [4, 4, 4, 4],
+				borderRadius: [0, 0, 0, 0],
 				textStyle: {
-					color: '#999999',
+					color: '#FFF',
 					fontSize: 6,
 					lineHeight: 1.2, // 关键：设置行高，避免文字重叠
 					fontFamily: 'PingFang SC, Microsoft YaHei' // 统一字体 
@@ -691,85 +707,57 @@ Page({
 		return option;
 	},
 
-	/**
-	* 获取ECharts饼图配置（新增标题 + 移除结余相关）
-	* @param {Array} data - 饼图数据
-	* @param {string} timeDimension - 时间维度：'month'（月份）| 'day'（日期）
-	* @returns {Object} ECharts配置项
-	*/
 	getPie(data, timeDimension = 'day') {
 		let { typeIndex } = this.data;
-
+	
 		// 支出颜色数组
 		let typeIndexGrColors = [
-			'#FFE042', // 浅黄1
-			'#FFE666', // 浅黄2
-			'#FFEC8A', // 浅黄3
-			'#FFF2AE', // 浅黄4
-			'#FFF8D2', // 浅黄5
-			'#FFE500', // 亮黄1
-			'#FFD100', // 亮黄2
-			'#FFC107', // 亮黄3
-			'#FFB300', // 亮黄4
-			'#FFA000', // 亮黄5
-			'#FF8F00', // 橙黄1
-			'#FF8000', // 橙黄2
-			'#F5D000', // 暗黄1
-			'#E6C200', // 暗黄2
-			'#D9B500', // 暗黄3
-			'#CCA800', // 暗黄4
-			'#BF9B00'  // 暗黄5
+			'#FFE500', '#FFD100', '#FFC107', '#FFB300', '#FFA000',
+			'#FF8F00', '#FF8000', '#F5D000', '#E6C200', '#D9B500',
+			'#CCA800', '#BF9B00', '#B28E00', '#A58100', '#987400',
+			'#8B6700', '#7E5A00'
 		];
-
+	
 		// 收入颜色数组
 		let typeIndexReColors = [
-			COLOR.incomeColor,
-			'#E55555', '#FF8A65', '#E64A19', '#FFB74D', '#F57C00',
-			'#FF5C8A', '#D84315', '#FFAB91', '#FBC02D', '#FF9800',
-			'#D32F2F', '#E91E63', '#C71585', '#FFCCBC', '#FFE0B2',
-			'#FFD740', '#E65100', '#BF360C', '#FF7043', '#FFCA28',
-			'#F4511E', '#E0F2F1'
+			COLOR.incomeColor, '#E55555', '#FF8A65', '#E64A19', '#FFB74D',
+			'#F57C00', '#FF5C8A', '#D84315', '#FFAB91', '#FBC02D',
+			'#FF9800', '#D32F2F', '#E91E63', '#C71585', '#FFCCBC',
+			'#FFE0B2', '#FFD740', '#E65100', '#BF360C', '#FF7043',
+			'#FFCA28', '#F4511E', '#E0F2F1'
 		];
+	
 
+		
+		const amountText = this.data.chartData.PieData.summary.totalAmount;
+	
 		// 无数据兜底逻辑
 		const isEmptyData = !data || data.length === 0 || (data.length === 1 && !data[0].value && !data[0].count);
 		const renderData = isEmptyData ? [{
 			name: '暂无数据',
 			value: 100,
 			itemStyle: { color: '#e5e5e5' },
-			label: { show: false, formatter: '暂无数据', color: '#999', fontSize: 12,fontFamily: 'WeChatSansStd' },
+			label: { show: false, formatter: '暂无数据', color: '#999', fontSize: 12, fontFamily: 'WeChatSansStd' },
 			labelLine: { show: false }
 		}] : data;
-
-		// 生成饼图标题
-		// const typeText = typeIndex === 0 ? '支出' : '收入';
-		// const timeRangeText = this.data.queryParams.start_time ?
-		// 	(this.data.queryParams.start_time.length === 4 ?
-		// 		`${this.data.queryParams.start_time}年` :
-		// 		`${this.data.queryParams.start_time.replace('-', '年')}月`) :
-		// 	`${getThisDate('YYYY')}年${getThisDate('MM')}月`;
-		// const pieTitle = `${timeRangeText}分类占比图`;
-
+	
 		// 数据量判断
 		const dataLength = renderData.length;
 		const isLargeData = dataLength > 10;
 		const isMonthDimensionLarge = timeDimension === 'month' && dataLength > 15;
-
+	
 		let option = {
-			// ===== 新增：饼图标题配置 =====
 			title: {
 				text: '分类占比',
-				// left: 'center',
 				top: 0,
 				textStyle: {
-					fontSize: 12, // 标题字体大小
-					fontWeight: '600', // 字体粗细
+					fontSize: 12,
+					fontWeight: '600',
 					color: '#333',
 					fontFamily: 'WeChatSansStd'
 				}
 			},
-			// =============================
-			color: typeIndex == 0 ? typeIndexGrColors : typeIndexReColors, // 只保留支出/收入颜色
+			color: typeIndex == 0 ? typeIndexGrColors : typeIndexReColors,
 			animation: true,
 			animationDuration: isEmptyData ? 1000 : (isMonthDimensionLarge ? 2500 : (isLargeData ? 2000 : 5000)),
 			animationEasing: isEmptyData ? "linear" : (isMonthDimensionLarge ? "linear" : (isLargeData ? "linear" : "bounceOut")),
@@ -782,40 +770,38 @@ Page({
 			tooltip: isEmptyData ? {
 				show: false
 			} : {
-					trigger: "item",
-					formatter: "{b} : {c} ({d}%)",
-					position: function (point, params, dom, rect, size) {
-						let x = 0;
-						let y = 0;
-						let pointX = point[0];
-						let pointY = point[1];
-						let boxWidth = size.contentSize[0];
-						let boxHeight = size.contentSize[1];
-						if (boxWidth > pointX) {
-							x = 5;
-						} else {
-							x = pointX - boxWidth;
-						}
-						if (boxHeight > pointY) {
-							y = 5;
-						} else {
-							y = pointY - boxHeight;
-						}
-						return [x, y];
-					},
-					backgroundColor: '#f4f2f7',
-					padding: [2, 6],
-					borderRadius: [4, 4, 4, 4],
-					textStyle: { color: '#999999', fontSize: 8 },
-					shadowBlur: 0,
-					shadowColor: 'transparent',
-					borderWidth: 0
+				trigger: "item",
+				formatter: "{b} : {c} ({d}%)",
+				position: function (point, params, dom, rect, size) {
+					let x = 0;
+					let y = 0;
+					let pointX = point[0];
+					let pointY = point[1];
+					let boxWidth = size.contentSize[0];
+					let boxHeight = size.contentSize[1];
+					if (boxWidth > pointX) {
+						x = 5;
+					} else {
+						x = pointX - boxWidth;
+					}
+					if (boxHeight > pointY) {
+						y = 5;
+					} else {
+						y = pointY - boxHeight;
+					}
+					return [x, y];
 				},
-			// ===== 调整饼图位置：为标题预留空间 =====
-			grid: {
-				top: 40 // 顶部边距增加，适配标题
+				backgroundColor: '#f4f2f7',
+				padding: [2, 6],
+				borderRadius: [0, 0, 0, 0],
+				textStyle: { color: '#999999', fontSize: 8 },
+				shadowBlur: 0,
+				shadowColor: 'transparent',
+				borderWidth: 0
 			},
-			// =======================================
+			grid: {
+				top: 40
+			},
 			toolbox: {
 				show: !isEmptyData,
 				feature: {},
@@ -829,15 +815,12 @@ Page({
 					length2: timeDimension === 'month' ? 25 : 20,
 					smooth: 0.2,
 					showAbove: true,
-					lineStyle: { width: 1, color:  '#ccc'}
-
-					// color: (params) => params.data.color || '#ccc'
+					lineStyle: { width: 1, color: '#ccc' }
 				},
 				type: "pie",
 				radius: [50, 80],
-				center: ["50%", "60%"], // 饼图向下偏移10%，避开标题
-				itemStyle: { borderRadius: 0, borderColor: '#fff', borderWidth: 0 ,},
-				// color: (params) => params.data.color || '#ccc',
+				center: ["50%", "60%"],
+				itemStyle: { borderRadius: 0, borderColor: '#fff', borderWidth: 0 },
 				label: {
 					show: !isEmptyData,
 					position: "outside",
@@ -854,8 +837,47 @@ Page({
 				},
 				data: renderData
 			}],
-			graphic: { elements: [] }
+			// ===== 在环形中间添加金额文字 =====
+			graphic: {
+				elements: [
+					{
+						type: 'text',
+						left: 'center',
+						top: '55%', // 与饼图center保持一致，微调位置
+						style: {
+							text: amountText,
+							fontSize: 18,
+							fontWeight: 'bold',
+							fill: typeIndex == 0 ? COLOR.expenseColor : COLOR.incomeColor, // 支出用橙色，收入用收入颜色
+							fontFamily: 'WeChatSansStd',
+							textAlign: 'center',
+							textVerticalAlign: 'middle'
+						},
+						z: 100
+					},
+					{
+						type: 'text',
+						left: 'center',
+						top: '65%', // 金额下方的类型标签
+						style: {
+							text: typeIndex == 0 ? '总支出' : '总收入',
+							fontSize: 12,
+							fill: '#999',
+							fontFamily: 'WeChatSansStd',
+							textAlign: 'center',
+							textVerticalAlign: 'middle'
+						},
+						z: 100
+					}
+				]
+			}
 		};
+		
+		// 如果是暂无数据，不显示中间金额
+		if (isEmptyData) {
+			option.graphic.elements = [];
+		}
+		
 		return option;
 	},
 
@@ -863,7 +885,7 @@ Page({
 	 * 切换折叠/展开状态 折线图
 	 */
 	toggleLineExpand() {
-		wx.vibrateShort({ type: 'heavy' });
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		this.setData({ isLineExpand: !this.data.isLineExpand });
 	},
 
@@ -871,8 +893,7 @@ Page({
 	 * 切换折叠/展开状态 环形图
 	 */
 	togglePieExpand() {
-		playBtnAudio('/static/audio/click.mp3', 1000);
-		wx.vibrateShort({ type: 'light' });
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		this.setData({ isPieExpand: !this.data.isPieExpand });
 	},
 
@@ -880,14 +901,14 @@ Page({
 	 * 跳转到日期账单列表
 	 */
 	handleDatePage(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' });
 
-		let { typeIndex } = this.data;
+		let { typeIndex,bookInfo } = this.data;
 		// 只保留支出(2)和收入(1)
 		let transactionType = typeIndex == 0 ? 2 : 1;
 
-		let bookInfo = getStorageSync("bookInfo");
+		// let bookInfo = getStorageSync("bookInfo");
 		let userInfo = getStorageSync("userInfo");
 		let { date, category_id, category_name, title, chart } = evt.currentTarget.dataset;
 		console.log(evt)
@@ -945,11 +966,41 @@ Page({
 			});
 		}
 
-		const { typeIndex } = this.data;
-		let type_idx = typeIndex == 0 ? 0 : 1; // 只保留支出/收入
+		let { typeIndex } = this.data;
+		let token = getStorageSync("token");
+		if (!token) return;
+
+
+		let bookList = getStorageSync("bookList")
+		let bookInfo = bookList.filter((ele) => ele.is_default == 1)[0]
+		let bookIndex = bookList.findIndex((ele)=>ele.is_default==1)
+		this.setData({ bookInfo,bookIndex });
+		this.getChartData(typeIndex);
+	},
+	async handleCheckBook() {
+		let data = {
+			userId: getStorageSync('userInfo').id
+		}
+		let res = await getBookList(data)
+		this.setData({
+			bookList: res.data.singleBookList,
+		})
+	},
+	// 选择账本
+	handleBookSelected(evt) {
+		const { index } = evt.currentTarget.dataset
+		wx.vibrateShort({ type: 'light' })
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		let type_idx = this.data.typeIndex == 0 ? 0 : 1;
+		console.log(this.data.bookList[index])
+		this.setData({
+			'params.bookId': this.data.bookList[index].id,
+			bookInfo: this.data.bookList[index],
+			// 'params.bookCategoryId': this.data.bookList[index].book_category_id,
+			bookIndex: index
+		})
 		this.getChartData(type_idx);
 	},
-
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
 	 */
@@ -960,11 +1011,6 @@ Page({
 	 */
 	onShow() {
 		this.getTabBar().setData({ selected: 3 });
-		let { typeIndex } = this.data;
-		let token = getStorageSync("token");
-		if (!token) return;
-		this.getChartData(typeIndex);
-		this.setData({ bookInfo: getStorageSync("bookInfo") });
 	},
 
 	/**

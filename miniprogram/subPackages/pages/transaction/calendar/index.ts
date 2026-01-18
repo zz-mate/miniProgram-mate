@@ -22,15 +22,15 @@ Page({
 
 	},
 	dateChange(e) {
-		// playBtnAudio('/static/audio/click.mp3', 1000);
-		// wx.vibrateShort({ type: 'light' })
-		let dateString = e.detail.dateString
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+		// let dateString = e.detail.dateString
 		// const year = dateString.split('-')[0];
 		// const month = dateString.split('-')[1];
 		// const day = dateString.split('-')[2];
-		this.setData({
-		  start_time: dateString
-		})
+		// this.setData({
+		//   start_time: dateString
+		// })
 
 		this.handleTransactionList()
 	},
@@ -49,6 +49,7 @@ Page({
 		}
 
 		let res: any = await filterMonthTransaction(data)
+		console.log(JSON.stringify(res.data.dailyList))
 		this.setData({
 			calendarDate: getThisDate('YY-MM-DD'),
 			dailyList: res.data.dailyList,
@@ -92,7 +93,7 @@ Page({
 	// 跳转到账单详情页面
 	handleTransactionInfo(evt) {
 		const { transaction_id, transaction_type } = evt.currentTarget.dataset
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		wx.navigateTo({
 			url: `/subPackages/pages/transaction/info/index?id=${transaction_id}&type=${transaction_type}`
@@ -190,7 +191,7 @@ Page({
 	},
 	async deleteList(e) {
 		try {
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			wx.vibrateShort({ type: 'light' })
 			// 1. 安全获取要删除的 id 和 dataset 中的索引（关键：需要 index/i 定位列表项）
 			let { id, index, i } = e.currentTarget.dataset || {};
@@ -243,9 +244,9 @@ Page({
 	 * 生命周期函数--监听页面显示
 	 */
 	onShow() {
-		// this.setData({
-		// 	'queryParams.start_time': getThisDate('YY-MM')
-		// })
+		this.setData({
+			'start_time': getThisDate('YY-MM')
+		})
 
 		this.handleTransactionList()
 	},

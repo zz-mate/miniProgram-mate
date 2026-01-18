@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-		"z-calendar": "/components/z-calendar/z-calendar",
 		"calendar":"/components/calendar/calendar"
 	}
 }

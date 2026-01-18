@@ -1,0 +1,7 @@
+<!--components/z-switch/z-switch.wxml-->
+<view class="check myclass" bindtap='changeCheck'
+	style="background: {{checked==true?bgColor:unBgColor}};border-color: {{checked==true?bgColor:'#e5e5e5'}};height: {{height}}rpx;width: {{width}}rpx">
+	<view class="circle"
+		style="height: {{height-2}}rpx;border-color: {{checked==true?bgColor:'#e5e5e5'}};width: {{height-2}}rpx;left:{{checked==true?(width-height-2)+'rpx':''}}">
+	</view>
+</view>

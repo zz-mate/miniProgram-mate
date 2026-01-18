@@ -1,20 +1,16 @@
 <!--subPackages/pages/account/category/index.wxml-->
 <navigation-bar title="{{title}}" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
-background="{{navBgColor}}">
+background="{{navBgColor}}"></navigation-bar>
 
-</navigation-bar>
-
-
-<scroll-view  scroll-y="true" class="sy_container scroll-view-container " scroll-into-view="{{scrollViewId}}" style="height:calc(100% - {{height}}px) ">
-
+<scroll-view  scroll-y="true" class="sy_container scroll-view-container "  show-scrollbar="{{false}}" scroll-into-view="{{scrollViewId}}" style="height:calc(100% - {{height}}px) ">
   <view class="all_city">
     <view wx:for="{{list}}" wx:key="city_list" wx:if="{{item.data.length>0}}">
-      <view class="letter_name" id="{{item.letter}}">{{item.letter}}</view>
+      <view class="letter_name" id="{{item.letter}}" wx:if="{{item.letter}}" >{{item.letter}}</view>
       <view class="city radius-10" >
         <block wx:for="{{item.data}}" wx:key="data" wx:for-index="index0" wx:for-item="item0">
-				<view class="flex icon-name flex-align-items-center" hover-class="btn-hover" hover-stay-time='10'  >
+				<view class="flex icon-name flex-align-items-center" hover-class="btn-hover" hover-stay-time='10' data-item="{{item0}}"  bind:tap="handleBookSelected">
 					<view class="icon flex-row">
-						<image src="{{item0.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
+						<image src="{{item0.icon|| 'https://picsum.photos/50/60?random=3'}}" mode="widthFix" />
 					</view>
           <view class="name flex-row">{{item0.name}}</view>				
 				</view>
@@ -25,20 +21,16 @@ background="{{navBgColor}}">
 </scroll-view>
 
 <view>
-	<!-- style="height: {{barHeight}}px;" -->
-  <view class="fixed_bar" style="top:{{height}}px" catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">
+  <!-- 给bar_item增加点击事件：handleBarItemClick，并传递index参数 -->
+  <view class="fixed_bar" catchtouchstart="touchStart" catchtouchmove="touchMove" catchtouchend="touchEnd" catchtouchcancel="touchCancel">
     <view wx:for="{{list}}" wx:key="index" style="height: {{barHeight/22}}px;">
-      <view class="bar_item flex-column j_c {{curr==index&&'bar_item_active'}}" style="width: {{barHeight/22*0.75}}px;height: {{barHeight/22*0.75}}px;line-height: {{barHeight/22*0.75}}px;">{{item.letter}}</view>
+      <view class="bar_item flex-column j_c {{curr==index&&'bar_item_active'}}" 
+            style="width: {{barHeight/22*0.75}}px;height: {{barHeight/22*0.75}}px;line-height: {{barHeight/22*0.75}}px;"
+            bind:tap="handleBarItemClick"
+            data-index="{{index}}">
+        {{item.letter}}
+      </view>
     </view>
   </view>
-  <view wx:if="{{showLetter &&list[curr].letter}}" class="fixed_letter">{{list[curr].letter}}</view>
-</view>
-
-
-
-
-<view class="shortcut" bind:tap="handleBookSave">
-	<view class="shortcut_count radius-10 flex flex-center" >
-	保存
-	</view>
+  <!-- <view wx:if="{{showLetter &&list[curr].letter}}" class="fixed_letter">{{list[curr].letter}}</view> -->
 </view>

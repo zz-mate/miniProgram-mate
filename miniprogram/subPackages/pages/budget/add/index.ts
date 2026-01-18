@@ -39,9 +39,10 @@ Page({
 	 */
 	async getCategoryListFn(list, flag) {
 		let userId = getStorageSync("userInfo").id
-		let res = await getCategoryList({ userId, type: 2, ...this.data.queryParams })
-		console.log(JSON.stringify(res.list))
-		console.log(JSON.stringify(list))
+		let bookCategoryId = getStorageSync("bookInfo").book_category_id
+		let res = await getCategoryList({ userId, type: 2, ...this.data.queryParams,bookCategoryId })
+		// console.log(JSON.stringify(res.list))
+		// console.log(JSON.stringify(list))
 		// const resultList = matchAndSortArrays({
 		// 	targetList: res.list,
 		// 	sourceList: list,
@@ -130,6 +131,8 @@ Page({
 	 * @param {Object} e - 事件对象
 	 */
 	bindBudgetInputFocus(e) {
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		const index = e.currentTarget.dataset.index; // 当前分类索引
 		const originalVal = e.currentTarget.dataset.val || ''; // 原始预算值（从 data-val 取，而非直接读 categoryList）
 		const categoryList = [...this.data.categoryList]; // 解构数组
@@ -218,7 +221,7 @@ Page({
 	 * 保存预算
 	 */
 	async save() {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		const { categoryList, userId, bookId, budgetInfo } = this.data
 		// if (budgetInfo.category_amount <= 0) return wx.showToast({ title: "请添加总预算金额", icon: "none" })
@@ -235,9 +238,9 @@ Page({
 		// return
 		let res = await createBudget(data)
 		if (res.code == 200) {
-			wx.showToast({
-				title: "添加预算成功", icon: "none"
-			})
+			// wx.showToast({
+			// 	title: "添加预算成功", icon: "none"
+			// })
 			wx.navigateBack({ delta: 1 })
 		}
 		// console.log(data)
@@ -302,6 +305,8 @@ Page({
 	 * 总预算输入框 - 聚焦事件（对齐循环表单的 bindBudgetInputFocus）
 	 */
 	bindTotalBudgetFocus(e) {
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		// 1. 备份原始值（和循环表单一样，从 data-val 获取）
 		const originalVal = e.currentTarget.dataset.val || '';
 		this.setData({ totalBudgetOriginal: originalVal });
@@ -441,11 +446,14 @@ Page({
 	},
 	handleClear() {
 		const that = this; // 保存this指向（也可改用箭头函数）
-
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
 		// 显示操作菜单
 		wx.showActionSheet({
 			itemList: ['确认清空'],
 			success: async (res) => { // 关键：回调声明为async
+				playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+				wx.vibrateShort({ type: 'light' })
 				if (res.tapIndex === 0) { // 点击了“确认清空”
 					try {
 						// 显示加载提示
@@ -476,6 +484,8 @@ Page({
 			},
 			fail(res) {
 				console.log('取消清空：', res.errMsg);
+				playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+				wx.vibrateShort({ type: 'light' })
 				// 可选：取消操作的提示
 				// wx.showToast({ title: '已取消', icon: 'none' });
 			}

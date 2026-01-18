@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+		"z-notify": "/components/z-notify/z-notify",
+		"date-picker": "/components/date-picker/date-picker"
+	}
+}

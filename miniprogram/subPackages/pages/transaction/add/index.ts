@@ -1,13 +1,14 @@
 // subPackages/pages/transaction/add/index.ts
 import { playBtnAudio } from '../../../../utils/audioUtil'
-import { getStorageSync, } from '../../../../utils/util';
+import { getStorageSync, findAccountIndexes } from '../../../../utils/util';
 import { getAccountList } from '../../../../api/account'
 import { getCategoryList } from '../../../../api/category'
 import { getBookList } from '../../../../api/book'
-import { createTransaction } from '../../../../api/transaction'
+import { createTransaction, transactionInfo } from '../../../../api/transaction'
+
 import { COLOR } from '../../../../utils/color.js';
 import SystemConfig from '../../../../utils/capsule';
-
+import { uploadFile } from '../../../../utils/upload'; // 路径根据你的项目结构调整
 const dateUtils = require('../../../../utils/dateutils')
 // 定义常量，统一管理弹窗类型相关的key前缀
 const POPUP_SHOW_KEY_PREFIX = 'showPopup_';
@@ -25,12 +26,13 @@ Page({
 	data: {
 		navBgColor: COLOR.theme,
 		bookInfo: null as unknown as BookItem,
+		billId: null,
 		bookList: [],
 		bookIndex: 0,
 		selectedTab: 1,// 默认支出
 
 		userInfo: null,
-
+		isAnimate: false, // 动画开关
 		intoView: '',
 		swiperHeight: 0,
 		swiperIndex: 1,
@@ -38,10 +40,13 @@ Page({
 			{
 				id: 1,
 				title: '收入',
+				type: 1
 			},
 			{
 				id: 2,
 				title: '支出',
+
+				type: 2
 			},
 
 			// {
@@ -56,7 +61,7 @@ Page({
 		typeList: [{ color: COLOR.incomeColor, name: '收入' }, { color: COLOR.theme, name: '支出' }],
 		hasDot: false,
 		bill: {
-			id: null,// 账单id
+			billId: null,// 账单id
 			account_id: null,//账户id
 			account_name: null,//账户名称
 			num: 0, //金额
@@ -65,9 +70,13 @@ Page({
 			categoryId: 1, //分类id
 			remark: '', //备注
 			tags: [],
-			date: dateUtils.formatLongTime(new Date(), dateUtils.modeMapToFields['YMDhm'])  //日期
+			image_list: "",
+			date: '',  //日期
+			address: "",
+			longitude: "",
+			latitude: ""
 		},
-
+		imagesHeight: 0,
 		keyboardHeight: 0, // 键盘高度，初始为0
 		keyboardHeadHeight: 0,//css键盘header
 		calculatorHeight: 0,
@@ -116,12 +125,6 @@ Page({
 		calcExpression: '', // 显示的表达式
 		isCalculated: false,// 是否已计算出结果
 		result: '',         // 计算结果（用于连续运算）
-		//  bill: { num: 0 },   // 账单金额
-		//  doneFlag: false,    // 分类选中标记
-		//  selectedTab: 0,     // 标签选中状态
-		//  categoryList: [],   // 分类列表
-		//  categoryIndex: 0,   // 选中分类索引
-		//  bookInfo: {},       // 账本信息
 		delInterval: null   // 删除长按定时器
 	},
 
@@ -167,7 +170,7 @@ Page({
 	tapKey(e) {
 		const key = e.currentTarget.dataset.key;
 		wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		const { firstNum, secondNum, operator, result } = this.data;
 
 		// ========== 核心工具方法 ==========
@@ -335,7 +338,7 @@ Page({
 		const flag = evt.currentTarget.dataset.again; // 1=再记 2=等于
 		const { firstNum, secondNum, operator, result } = this.data;
 		wx.vibrateShort({ type: 'light' })
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		// 等于按钮核心逻辑：计算后直接显示纯结果
 		if (flag === 2 && operator && secondNum) {
 
@@ -357,11 +360,11 @@ Page({
 		}
 
 		// 记账提交逻辑（再记/完成）
-		let submitAmount = Number(result || firstNum) || 0;
+		let submitAmount = Number(result || firstNum) || this.data.bill.num;
 		submitAmount = parseFloat(submitAmount.toFixed(2));
 		this.setData({ 'bill.num': submitAmount });
 
-		if (submitAmount === 0) {
+		if (submitAmount === 0 && !this.data.billId) {
 
 			wx.showToast({ title: '请先输入金额', icon: 'none' });
 			return;
@@ -372,15 +375,16 @@ Page({
 
 		} else if (flag === 2) {
 			await this.submitBill(true);
-			wx.showToast({ title: '记账成功', icon: 'none' });
+			// wx.showToast({ title: '记账成功', icon: 'none' });
 		}
+
 	},
 
 	// ========== 5. 删除键逻辑 ==========
 	tapDel() {
 		const { firstNum, secondNum, operator, result, calcExpression } = this.data;
 		wx.vibrateShort({ type: 'light' })
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		// 有结果（如2）→ 清空所有
 		if (result && !operator && !secondNum) {
 			this.initCalc();
@@ -450,7 +454,7 @@ Page({
 
 	// ========== 8. 提交账单 ==========
 	async submitBill(resetCalc = true) {
-		const { bill } = this.data;
+		const { bill, billId } = this.data;
 
 		// if (!this.data.doneFlag) {
 		// 	wx.showToast({ title: '没有分类你点什么😠', icon: 'none' });
@@ -458,6 +462,7 @@ Page({
 		// }
 
 		const data = {
+			'billId': billId,
 			"user_id": getStorageSync("userInfo").id,
 			"consume_user_id": getStorageSync("userInfo").id,
 			"account_id": bill.account_id,
@@ -467,11 +472,18 @@ Page({
 			"amount": Number(Math.abs(bill.num)),
 			"currency": "CNY",
 			"tags": JSON.stringify(bill.tags),
+			"image_list": bill.image_list,
 			"bill_time": bill.date.replace(/\//g, '-') + ':00',
-			"remark": bill.remark
+			"remark": bill.remark,
+			address: bill.address,
+			longitude: bill.longitude,
+			latitude: bill.latitude
 		};
 
+
 		try {
+
+
 			const res = await createTransaction(data);
 			if (res.code === 200) {
 				// playBtnAudio('/static/audio/save_bill.mp3', 1000);
@@ -526,13 +538,15 @@ Page({
 		query.select('.keyboard-container').boundingClientRect();
 		query.select('.money-content').boundingClientRect();
 		query.select('.keyboard-head').boundingClientRect();
-
+		query.select('.image-list').boundingClientRect();
 		query.exec((res) => {
 			if (res) {
+				let imagesHeight = res[3].height || 0
 				this.setData({
 					calculatorHeight: res[0].height,
 					tabMoneyCardHeight: res[1].height,
 					keyboardHeadHeight: res[2].height,
+					imagesHeight
 				});
 			}
 		})
@@ -565,6 +579,8 @@ Page({
 		this.updatePopupStatus(type, !delta);
 	},
 	handlePopup(evt) {
+		wx.vibrateShort({ type: 'light' });
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		const { type } = evt.currentTarget.dataset;
 		if (!type) return; // 增加类型校验，避免空值操作
 
@@ -574,14 +590,11 @@ Page({
 				date: date ? new Date(date).getTime() : new Date().getTime(),
 			})
 		} else if (type == 'account') {
+			// wx.vibrateShort({ type: 'light' })
+			// playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			this.handleAccountList()
 		} else if (type == 'book') {
 			this.handleBookList()
-		} else if (type == 'category') {
-			// this.setData({
-			//   'queryParams.pageSize':100
-			// })
-			this.getCategoryListFn()
 		}
 		// 封装更新弹窗状态的方法
 		this.updatePopupStatus(type, true);
@@ -612,12 +625,6 @@ Page({
 		if (show) {
 			data.popupType = type;
 		}
-		//     if(this.data.showPopup_category){
-		//       this.setData({
-		//   'queryParams.pageSize':14
-		// })
-		// this.getCategoryListFn()
-		// }
 		this.setData(data);
 	},
 
@@ -627,7 +634,11 @@ Page({
 	onConfirmDate(e) {
 		let mode = this.data.mode;
 		let date = e.detail.date;
+		// console.log('选中的时间戳：', e);
+		// console.log('格式化日期：', e.detail.value); // 例：2026-01-01
+
 		let renderTime = dateUtils.formatLongTime(date, dateUtils.modeMapToFields[mode]);
+		console.log(renderTime)
 		this.setData({
 			'bill.date': renderTime
 		})
@@ -658,7 +669,6 @@ Page({
 			bookInfo: bookList[index],
 			categoryList: []
 		})
-
 		// 更改账本分类 例如： 日常 汽车
 		this.getCategoryListFn()
 	},
@@ -668,11 +678,12 @@ Page({
 	 */
 	async handleAccountList() {
 		let data = {
-			userId: getStorageSync('userInfo').user_id
+			userId: getStorageSync('userInfo').id
 		}
 		let res = await getAccountList(data)
+
 		this.setData({
-			accountList: res.data
+			accountList: res.list
 		})
 	},
 	/**
@@ -681,7 +692,8 @@ Page({
 	handleChooseAccount(e) {
 		// 获取点击事件传递的索引数据
 		const { parentIndex, childIndex } = e.currentTarget.dataset;
-
+		wx.vibrateShort({ type: 'light' })
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		// 更新选中状态
 		this.setData({
 			selectedParentIndex: parentIndex,
@@ -689,15 +701,16 @@ Page({
 		});
 
 		// 如果你需要获取选中的数据
-		const selectedItem = this.data.accountList[parentIndex]?.list[childIndex];
-		console.log('选中的账户：', selectedItem);
+		const selectedItem = this.data.accountList[parentIndex]?.children[childIndex];
 		this.setData({
-			'bill.account_id': selectedItem.account_id,
-			'bill.account_name': selectedItem.account_name
+			'bill.account_id': selectedItem.id,
+			'bill.account_name': selectedItem.name
 		})
 		// 这里可以添加其他业务逻辑，比如回调、数据提交等
 	},
 	handleAccountDefault() {
+		wx.vibrateShort({ type: 'light' })
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		this.setData({
 			selectedParentIndex: -1,
 			selectedChildIndex: -1
@@ -722,26 +735,39 @@ Page({
 	 * 类别列表
 	 */
 	async getCategoryListFn() {
-		let { userInfo, selectedTab, queryParams, bookList, bookIndex } = this.data
-		// console.log(bookList, bookIndex, 123)
-		let res = await getCategoryList({ userId: userInfo.id, type: selectedTab + 1, ...queryParams, bookCategoryId: bookList[bookIndex].id })
+		let { userInfo, queryParams, bookList, bookIndex, bill } = this.data
+		let data = { userId: userInfo.id, type: bill.transaction_type, ...queryParams, bookCategoryId: bookList[bookIndex].book_category_id }
+
+		let res = await getCategoryList(data)
 		this.setData({
 			categoryList: res.list,
 			categoryIndex: 0,
 			doneFlag: res.list.length > 0 ? true : false
 		})
+		if (this.data.billId) {
+			let data = {
+				userId: getStorageSync("userInfo").id,
+				billId: this.data.billId,
+			}
+			this.getTransactionInfo(data)
+		}
 	},
 	/**
 	 * 选择类别  服饰 日用 交通 
 	 */
 	handleChooseCategory(e) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		let { index } = e.currentTarget.dataset
 
 		this.setData({
 			categoryIndex: index,
-			selectedCategoryTags: []
+			selectedCategoryTags: [],
+			isAnimate: true
 		})
+
+		setTimeout(() => {
+			this.setData({ isAnimate: false });
+		}, 500);
 		this.updateCategorySelectedStatus()
 		this.getNavBarHeight()
 	},
@@ -849,33 +875,36 @@ Page({
 	//     selectedCategoryTags.includes(item.category_id)
 	//   );
 	// },
+	async getTransactionInfo({ userId, billId }) {
 
-	/**
-	 * 生命周期函数--监听页面加载
-	 */
+		let res = await transactionInfo({ userId, billId })
+		console.log(res)
 
-	onLoad(options) {
-		this.getNavBarHeight()
-		let bookList = getStorageSync("bookList")
-		const bookIndex = bookList.findIndex(ele => ele.id == options.bookId)
-		const systemInfo = wx.getSystemInfoSync();
-		this.setData({
-			safeAreaBottom: systemInfo.screenHeight - systemInfo.safeArea.bottom,
-			bookIndex,
-			'bill.date': options.date || this.data.bill.date
-		});
-		// 提前在onLoad中就开始监听
-		this.initKeyboardListener();
-		this.initCalc();
-	},
-	/**
- * 生命周期函数--监听页面卸载
- */
-	onUnload() {
-		this.stopInterval();
-		if (this.keyboardListener) {
-			this.keyboardListener();
+		let data = {
+			billId: res.data.id,// 账单id
+			account_id: res.data.account.id,//账户id
+			account_name: res.data.account.id == 0 ? '账户' : res.data.account.name,//账户名称
+			num: Number(res.data.amount), //金额
+			transaction_type: this.data.bill.transaction_type, //类型1-收入 2-支出  3-转账 4-借贷
+			refound: false,// 退款 true 默认 false
+			categoryId: res.data.category.id, //分类id
+			remark: res.data.remark, //备注
+			tags: res.data.tags,
+			image_list: res.data.image_list,
+			address: this.data.bill.address ? this.data.bill.address : res.data.address,
+			date: res.data.bill_time, //日期
+			latitude: this.data.bill.latitude ? this.data.bill.latitude : res.data.latitude,
+			longitude: this.data.bill.longitude ? this.data.bill.longitude : res.data.longitude
+
 		}
+		const categoryIndex = this.data.categoryList.findIndex(ele => ele.id == data.categoryId)
+		let indexResult = findAccountIndexes(this.data.accountList, data.account_id)
+		this.setData({
+			selectedParentIndex: indexResult.parentIndex,
+			selectedChildIndex: indexResult.childIndex,
+			bill: data, categoryIndex: categoryIndex < 0 ? 0 : categoryIndex,
+			calcExpression: res.data.amount
+		})
 	},
 
 	/**
@@ -883,7 +912,7 @@ Page({
 	 */
 	onTabChanged(evt: any) {
 		const index = evt.detail.current
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		// playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		this.setData({
 			selectedTab: index,
 			'bill.transaction_type': this.data.swiperTabs[index].id
@@ -891,9 +920,7 @@ Page({
 		this.getCategoryListFn()
 	},
 	onTapTab(evt) {
-		console.log(evt)
 		const { sub } = evt.detail.delta
-		// playBtnAudio('/static/audio/click.mp3', 1000);
 		this.setData({
 			selectedTab: sub,
 			'bill.transaction_type': this.data.swiperTabs[sub].id
@@ -903,11 +930,176 @@ Page({
 	// 设置类别页面
 	handleSettingCategory() {
 
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.navigateTo({
 			url: "/subPackages/pages/category/index?typeIndex=" + this.data.selectedTab,
 			routeType: "wx://upwards"
 		})
+	},
+	upload() {
+		// 1. 选择图片（可选择相册/拍照）
+		wx.vibrateShort({ type: 'light' })
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.chooseMedia({
+			count: 1, // 仅选择1张图片
+			mediaType: ['image'], // 只选图片类型
+			sourceType: ['album', 'camera'], // 支持相册和拍照
+			success: (res) => {
+				// 获取选中图片的临时路径
+				const tempFilePath = res.tempFiles[0].tempFilePath;
+				// 2. 上传图片到服务器
+				this.uploadToServer(tempFilePath);
+			},
+			fail: (err) => {
+				console.error('选择图片失败：', err);
+			}
+		});
+	},
+
+	async uploadToServer(filePath: string) {
+		const uploadRes = await uploadFile({
+			url: '/common/upload/single', // 你的后端上传接口路径
+			filePath: filePath, // 图片临时路径
+			name: 'file', // 后端接收文件的key（默认是file，可根据后端要求改）
+			formData: {
+				// 额外的参数（如手机号、用户ID等），按需添加
+				// phone: '13800138000',
+				// userId: '123456',
+			},
+			showLoading: true, // 显示上传中loading（默认true，可省略）
+		});
+
+
+		this.setData({
+			'bill.image_list': uploadRes.data.url
+		})
+		this.getNavBarHeight()
+
+	},
+	// 图片预览函数
+	previewImage(e) {
+
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+		try {
+			// 获取当前要预览的图片地址
+			const currentImgUrl = this.data.bill.image_list;
+
+			// 校验图片地址是否有效
+			if (!currentImgUrl || currentImgUrl.trim() === '') {
+				wx.showToast({
+					title: '暂无图片可预览',
+					icon: 'none'
+				});
+				return;
+			}
+
+			// 调用小程序预览图片接口
+			wx.previewImage({
+				current: currentImgUrl, // 当前显示的图片链接
+				urls: [currentImgUrl],  // 需要预览的图片链接列表（支持多张）
+				// 可选：预览时的回调
+				success: () => {
+					console.log('图片预览成功');
+				},
+				fail: (err) => {
+					wx.showToast({
+						title: '预览失败，请重试',
+						icon: 'none'
+					});
+				}
+			});
+		} catch (error) {
+			console.error('预览图片异常：', error);
+			wx.showToast({
+				title: '预览出错',
+				icon: 'none'
+			});
+		}
+	},
+	deleteImage() {
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+
+		this.setData({
+			'bill.image_list': ""
+		})
+		this.getNavBarHeight()
+	},
+
+
+
+	getLocation() {
+		let that = this
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+
+		wx.getLocation({
+			type: 'gcj02', //返回可以用于wx.openLocation的经纬度
+			// altitude: true, //传入 true 会返回高度信息，由于获取高度需要较高精确度，会减慢接口返回速度
+			success: function (res) {
+				console.log(res, '地图')
+				wx.chooseLocation({
+					latitude: res.latitude,
+					longitude: res.longitude,
+					success: function (r) {
+						console.log(r)
+
+						// r = { //返回的r数据字段为
+						//   address: "江苏省南京市雨花台区雨花南路2号",
+						//   errMsg: "chooseLocation:ok",
+						//   latitude: 31.98115,
+						//   longitude: 118.793015,
+						//   name: "南京市雨花台区人民政府北(雨花南路南)"
+						// }
+						that.setData({
+							'bill.address': r.address,
+							'bill.latitude': r.latitude,
+							'bill.longitude': r.longitude
+						})
+					},
+					fail: function (err) {
+						console.log(err);
+					},
+				})
+			}
+		})
+	},
+
+	/**
+ * 生命周期函数--监听页面加载
+ */
+
+	onLoad(options) {
+
+		this.getNavBarHeight()
+		let bookList = getStorageSync("bookList")
+		const bookIndex = bookList.findIndex(ele => ele.id == options.bookId)
+
+		const systemInfo = wx.getSystemInfoSync();
+		this.setData({
+			safeAreaBottom: systemInfo.screenHeight - systemInfo.safeArea.bottom,
+			bookIndex,
+			'bill.date': options.date || this.data.bill.date,
+			'bill.transaction_type': options.type ? options.type : 2,
+			billId: options.billId,
+			selectedTab: options.type ? Number(options.type) - 1 : 1,
+
+		});
+		// 提前在onLoad中就开始监听
+		this.initKeyboardListener();
+		this.initCalc();
+
+	},
+	
+	/**
+ * 生命周期函数--监听页面卸载
+ */
+	onUnload() {
+		this.stopInterval();
+		if (this.keyboardListener) {
+			this.keyboardListener();
+		}
 	},
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
@@ -920,12 +1112,15 @@ Page({
 	 * 生命周期函数--监听页面显示
 	 */
 	onShow() {
+		console.log(dateUtils.formatLongTime(new Date(), dateUtils.modeMapToFields['YMDhm']))
 		this.setData({
 			bookList: getStorageSync("bookList"),
 			bookInfo: getStorageSync("bookInfo"),
-			userInfo: getStorageSync("userInfo")
+			userInfo: getStorageSync("userInfo"),
+			'bill.date': dateUtils.formatLongTime(new Date(), dateUtils.modeMapToFields['YMDhm'])
 		})
 		this.getCategoryListFn()
+		this.handleAccountList()
 	},
 
 	/**

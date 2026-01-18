@@ -1,0 +1,7 @@
+{
+	"usingComponents": {
+		"z-switch-wiew": "../../../../../components/z-switch/z-switch",
+		"date-filter-popup": "../../../../../components/date-filter-popup/date-filter-popup",
+		"z-notify": "../../../../../components/z-notify/z-notify"
+	}
+}

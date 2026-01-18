@@ -1,7 +1,0 @@
-{
-  "component": true,
-  "usingComponents": {
-    
-    "z-divider": "../z-divider/z-divider"
-  }
-}

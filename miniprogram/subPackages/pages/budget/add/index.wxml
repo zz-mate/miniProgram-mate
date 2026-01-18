@@ -3,7 +3,7 @@
   <view slot="center" class="subsection flex flex-align-items-center"  bind:tap="handleClear">
     <text>支出月预算</text>
 		<view class="icon">
-			<image src="/static/icon/icon-clear.png" mode="widthFix"
+			<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768534220036-57e8bec9-757b-488a-a7cb-5a32ce31860f.png" mode="widthFix"
 			class="icon-clear" />
 		</view>
   </view>
@@ -13,8 +13,8 @@
   <view class="budget-info fade-animate alternative">
     <view class="budget-list">
       <view class="budget-card flex flex-space-between flex-align-items-center">
-        <view class="icon" style="width:58rpx;height:58rpx">
-          <image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/%E5%85%B3%E8%81%94.png"  mode="widthFix" />
+        <view class="icon" style="width:62rpx;height:62rpx">
+          <image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/%E9%A2%84%E7%AE%97.png"  mode="widthFix" />
         </view>
         <view class="total">总预算</view>
         <view class="budget-money total-total num flex flex-space-between flex-align-items-center">
@@ -40,7 +40,7 @@
       <view wx:for="{{categoryList}}" wx:key="index">
         <view class="budget-card radius-10 flex flex-space-between flex-align-items-center">
           <view class="icon">
-            <image src="{{item.category_icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
+            <image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
           </view>
           <view class="budget-title">
             {{item.name}}
@@ -64,7 +64,7 @@
   </view>
 </view> -->
 <view class="shortcut" bind:tap="save">
-	<view class="shortcut_count radius-10 flex flex-center"  hover-class="btn-yellow-hover" hover-stay-time='150'>
+	<view class="shortcut_count radius-10 flex flex-center"  hover-class="btn-yellow-hover" hover-stay-time="50" hover-start-time="0">
 		保存
 	</view>
 </view>

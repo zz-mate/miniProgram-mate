@@ -29,7 +29,7 @@
 								<image src="{{'/static/async-icon/lv'+userInfo.levelInfo.user_level+'.png'}}" mode="widthFix" />
 							</view> -->
 							{{userInfo.levelInfo.level_name}}
-							<view class="exp">{{userInfo.levelInfo.user_level_exp+'/'+userInfo.levelInfo.min_exp}}</view>
+							<!-- <view class="exp">{{userInfo.levelInfo.user_level_exp+'/'+userInfo.levelInfo.next_level_min_exp}}</view> -->
 						</view>
 						<view class="progress-content" wx:if="{{userInfo.nickname}}">
 							<view class="default">
@@ -116,7 +116,7 @@
 
 			<view class="menu  radius-10">
 				<!-- <view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover"
-					hover-stay-time='150'>
+					hover-stay-time="50" hover-start-time="0">
 					<view class="icon">
 						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
 					</view>
@@ -127,7 +127,7 @@
 						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 					</view>
 				</view> -->
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
 					data-url="/subPackages/pages/transaction/export/index" data-type="share" bind:tap="handlePageUrl">
 					<view class="icon">
 						<image src="/static/icon/icon-feedback.png" mode="widthFix" />
@@ -139,7 +139,7 @@
 						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 					</view>
 				</view>
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
 					data-url="/subPackages/pages/transaction/export/index" data-type="share" bind:tap="handlePageUrl">
 					<view class="icon">
 						<image src="/static/icon/icon-kf.png" mode="widthFix" />
@@ -154,10 +154,10 @@
 				</view>
 
 
-				<!-- <view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
 					data-url="/subPackagesMine/pages/setting/index" data-type="page" bind:tap="handlePageUrl">
 					<view class="icon">
-						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+						<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768468610176-323be5d9-5071-49de-806a-d8ceb259dd32.png" mode="widthFix" />
 					</view>
 					<view class="title">
 						设置
@@ -165,16 +165,16 @@
 					<view class="icon-arrow">
 						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 					</view>
-				</view> -->
+				</view>
 			</view>
 
 
 
 			<!-- <view class="menu  radius-10">
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
 					data-url="/subPackages/pages/transaction/export/index" data-type="share" bind:tap="handlePageUrl">
 					<view class="icon">
-						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
+						<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768468301480-8e4eb28d-df25-4f7d-b583-d1d64e4a3a4f.png" mode="widthFix" />
 					</view>
 					<view class="title">
 						<button class='button' open-type="contact">用户手册</button>
@@ -186,8 +186,8 @@
 				</view>
 
 
-				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time='150'
-					data-url="/subPackagesMine/pages/setting/index" data-type="page" bind:tap="handlePageUrl">
+				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
+					>
 					<view class="icon">
 						<image src="/static/icon/icon-Placeholder-image.png" mode="widthFix" />
 					</view>
@@ -195,9 +195,14 @@
 						关于我们
 					</view>
 					<view class="icon-arrow">
+
 						<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
 					</view>
 				</view>
+
+
+
+		
 			</view> -->
 		</view>
 

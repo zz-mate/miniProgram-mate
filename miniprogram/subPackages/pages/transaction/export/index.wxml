@@ -13,6 +13,7 @@ background="{{navBgColor}}">
   </view>
   <view class="no-data-text">
 		<view wx:if="{{level_exp<500}}">抱歉呀，您目前积分不满足导出账单功能</view>
+		<view wx:else>抱歉呀，该功能未开发</view>
   </view>
 </view>
 </view>

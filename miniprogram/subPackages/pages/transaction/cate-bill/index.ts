@@ -64,7 +64,7 @@ Page({
 	/**点击TAB 默认日期 */
 	handleChange(evt) {
 		const { sub } = evt.detail.delta
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		if (sub == 0) {
 			this.setData({
@@ -101,10 +101,10 @@ Page({
 
 	},
 	async handleTransactionList(type) {
-		const { categoryId } = this.data
+		const { categoryId,bookId } = this.data
 		let data = {
 			userId: getStorageSync("userInfo").id,
-			bookId: getStorageSync("bookInfo").id,
+			bookId,
 			...this.data.queryParams,
 			type:Number(type),
 			categoryId
@@ -147,7 +147,7 @@ Page({
 		// }
 	},
 	handleTabType(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		const { type } = evt.currentTarget.dataset
 		this.setData({
@@ -186,7 +186,7 @@ Page({
 		const { typeIndex, queryParams, categoryId, categoryName } = this.data
 		let bookInfo = getStorageSync("bookInfo")
 		let userInfo = getStorageSync("userInfo")
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		let that = this
 		wx.showActionSheet({
@@ -195,7 +195,7 @@ Page({
 				wx.vibrateShort({ type: 'heavy' })
 				if (res.tapIndex == 0) {
 					// 跳转前标记：已跳转到详情页
-					playBtnAudio('/static/audio/click.mp3', 1000);
+					playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 					that.setData({
 						isJumpToDetail: true
 					})
@@ -203,7 +203,7 @@ Page({
 						url: `/subPackages/pages/transaction/data/index?date=${queryParams.start_time}&typeIndex=${typeIndex}&title=${name}`
 					})
 				} else {
-					playBtnAudio('/static/audio/click.mp3', 1000);
+					playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 					// 跳转前标记：已跳转到详情页
 					that.setData({
 						isJumpToDetail: true
@@ -225,7 +225,7 @@ Page({
 
 
 	handleYear(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		this.setData({
 			'queryParams.start_time': evt.currentTarget.dataset.year
@@ -235,7 +235,7 @@ Page({
 	},
 
 	changeMonth(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		const { current } = evt.detail
 		this.setData({
@@ -247,7 +247,7 @@ Page({
 	},
 
 	handleMonth(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		let split_month = evt.currentTarget.dataset.month
 		let { split_year } = this.data
@@ -276,7 +276,7 @@ Page({
 		this.updatePopupStatus(type, !delta);
 	},
 	handlePopup() {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		const yearMonthMoreActive = this.data.yearMonthMoreActive
 		let type = ''
@@ -369,7 +369,7 @@ Page({
 		handleTransactionInfo(evt) {
 			const { transaction_id, transaction_type } = evt.currentTarget.dataset
 			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			this.setData({
 				isJumpToDetail: true
 			})

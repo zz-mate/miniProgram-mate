@@ -3,6 +3,7 @@ import { getStorageSync, setStorageSync } from '../../../utils/util';
 import { COLOR } from '../../../utils/color.js';
 import { playBtnAudio } from '../../../utils/audioUtil'
 import { getUserById, updateUser } from '../../../api/user'
+import { uploadFile } from '../../../utils/upload'; // 路径根据你的项目结构调整
 const app = getApp()
 Page({
 
@@ -16,25 +17,33 @@ Page({
 		version: ''
 	},
 	async onChooseAvatar(e) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
+		this.chooseAndUploadImage(e.detail.avatarUrl)
+	},
+	async chooseAndUploadImage(filePath: string) {
+	
+		const uploadRes = await uploadFile({
+			url: '/common/upload/single', // 你的后端上传接口路径
+			filePath: filePath, // 图片临时路径
+			name: 'file', // 后端接收文件的key（默认是file，可根据后端要求改）
+			formData: {
+				// 额外的参数（如手机号、用户ID等），按需添加
+				// phone: '13800138000',
+				// userId: '123456',
+			},
+			showLoading: true, // 显示上传中loading（默认true，可省略）
+		});
 		let data = {
 			userId: getStorageSync("userInfo").id,
 			updateType: 'avatar',
 			userInfo: {
-				avatar: e.detail.avatarUrl
+				avatar: uploadRes.data.url
 			}
 		}
 
-		let res = await updateUser(data)
-		console.log(res)
-		if (res.data.code == 200) {
-			wx.navigateBack({
-				delta: 1
-			})
-		}
-
-		// this.setData({ 'userInfo.avatar': e.detail.avatarUrl });
+		await updateUser(data)
+		this.getUserInfo()
 	},
 	/**
 	 * 退出登录
@@ -65,7 +74,9 @@ Page({
 		}
 		let userInfo = getStorageSync("userInfo")
 
-		getUserById({ userId: userInfo.id }).then((res) => {
+		getUserById({
+			userId: userInfo.id
+		}).then((res) => {
 			setStorageSync('userInfo', res.data);
 			this.setData({
 				userInfo: res.data
@@ -74,7 +85,7 @@ Page({
 	},
 	handlePageUrl(evt) {
 		const { url, type, value } = evt.currentTarget.dataset
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		console.log(url, type)
 		// if (type == 'page') {

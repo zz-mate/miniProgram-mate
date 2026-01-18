@@ -1,0 +1,70 @@
+<!--subPackages/pages/plan/info/index.wxml-->
+<navigation-bar title="{{planInfo.name}}" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="#000"
+	background="{{navBgColor}}">
+	
+</navigation-bar>
+<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{height}}px) ">
+	<view class="plan-container ">
+		<view class="plan-card radius-10">
+			<view class="plan-desc">
+				{{planInfo.desc}}
+			</view>
+			<view class="plan-content" wx:if="{{planInfo.content.length}}"> 
+
+				<view class="plan-list ">
+					<view class="plan-type-list-item" wx:for="{{planInfo.content}}" wx:key="id" wx:for-index="catIndex">
+						<view class="content">
+							<view class="content-title">
+								{{item.title}}
+							</view>
+							<view class="content-list">
+								<view class="content-list-item flex flex-align-items-center flex-align-items-center"
+									wx:for="{{item.items}}" wx:key="name" wx:for-index="itemIndex" data-cat-index="{{catIndex}}"
+									data-item-index="{{itemIndex}}" bind:tap="handleChoosePlan">
+									<view class="name border-primary {{item.completed==true?'primary':''}}" wx:if="{{planHeaderIndex==1}}">{{item.name}}</view>
+									<view class="name border-theme {{item.completed==true?'theme':''}}" wx:else> {{item.name}}</view>
+									<view class="check">
+
+										<image wx:if="{{item.completed==true?'active':''}}"
+											src="http://oss-api.zz-mate.cn/uploads/2026/01/1768559268931-e674568b-b030-420b-912f-d72799c2a0bc.png"
+											mode="" class="icon-choose" />
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="plan-list flex flex-align-items-center">
+					<view class="plan-tag-list-item" wx:for="{{planInfo.tags}}">
+						{{item}}
+					</view>
+				</view>
+
+
+				<view class="plan-list">
+					<view class="plan-attachments-list-item" wx:for="{{planInfo.attachments}}">
+						{{item.name}}
+					</view>
+				</view>
+
+			</view>
+			<view class="no-data" wx:else>
+				<view class="no-data-icon">
+					<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png" mode="widthFix" />
+				</view>
+				<view class="no-data-text">
+					<view>暂无{{planHeaderIndex==0?'备忘录':'计划'}}</view>
+				</view>
+				<!-- <view class="no-data-btn-plan" bind:tap="handleCreatPlab">
+					<view>添加{{planHeaderIndex==0?'备忘录':'计划'}}</view>
+				</view> -->
+			</view>
+		</view>
+	</view>
+</scroll-view>
+<view class="shortcut" bind:tap="handleCreatPlab">
+	<view class="shortcut_count color-primary save-disabled radius-10 flex flex-center">
+		继续添加
+	</view>
+</view>
+<z-notify id="customNotify" bind:close="onNotifyClose"/>

@@ -1,11 +1,14 @@
 @import "../../app.scss";
+
 @font-face {
-  font-family: 'WeChatSansStd';
-  src: url('https://env-00jxubueh4pn.normal.cloudstatic.cn/WeChatSansStd-Regular.ttf?expire_at=1764047061&er_sign=acc877bca1f5872e4cbd7cfb2c7da03f');
+	font-family: 'WeChatSansStd';
+	src: url('https://env-00jxubueh4pn.normal.cloudstatic.cn/WeChatSansStd-Regular.ttf?expire_at=1764047061&er_sign=acc877bca1f5872e4cbd7cfb2c7da03f');
 }
-.num{
-  font-family: 'WeChatSansStd';
+
+.num {
+	font-family: 'WeChatSansStd';
 }
+
 .bg-primary {
 	background-color: $z-color-primary;
 }
@@ -39,88 +42,21 @@
 }
 
 .collapse-container {
-  width: 100%;
-  margin-bottom: 20rpx;
-  overflow: hidden;
-  background-color: #ffffff;
-	border-radius: 10rpx;
-  // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+	width: 100%;
+	margin-bottom: 20rpx;
+	overflow: hidden;
+	// background-color: $z-bg-color;
 }
 
-// .collapse-header {
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   padding: 20rpx;
-//   font-weight: 500;
-//   color: #333333;
-//   background-color: #f9f9f9;
-//   cursor: pointer;
-//   transition: background-color 0.2s ease;
-// }
 
-// .collapse-header-hover {
-//   background-color: #f2f2f2;
-// }
-
-// .collapse-title {
-//   flex: 1;
-//   display: flex;
-//   align-items: center;
-// 	font-size: 22rpx;
-//   text{
-//     font-size: 20rpx;
-//     color: #666666;
-//   }
-// }
-
-// .collapse-icon {
-//   color: #999999;
-//   transition: transform 0.3s ease;
-// }
-
-// .collapse-content-wrapper {
-//   overflow: hidden;
-//   transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-// }
-
-// .collapse-content {
-//   padding: 20rpx;
-//   // font-size: 14px;
-//   color: #666666;
-//   line-height: 1.6;
-//   visibility: hidden;
-//   transition: visibility 0s linear 0.3s;
-// }
-
-// /* 当展开时，立即显示内容（取消visibility延迟） */
-// .collapse-content-wrapper[style*="height: 0px"] .collapse-content {
-//   visibility: hidden;
-// }
-
-// .collapse-content-wrapper:not([style*="height: 0px"]) .collapse-content {
-//   visibility: visible;
-//   transition-delay: 0s;
-// }
-
-// .right-arrow{
-//   display: flex;
-//   align-items: center;
-//   .total-money{
-//     margin-right: 10rpx;
-//   }
-// }
-
-
-
-
-.sticky-content{
+.sticky-content {
+	position: relative;
 	width: 100%;
 }
 
 .sticky-card {
 	width: 100%;
-	background-color: #FFF;
+	background-color: $z-bg-color;
 	padding: 20rpx;
 	// margin-bottom: 20rpx;
 	// border-bottom: 1rpx solid #f4f2f7;
@@ -157,9 +93,10 @@
 			.red,
 			.default {
 				height: 4rpx;
-				border-radius: 2rpx;
+				// border-radius: 2rpx;
 				overflow: hidden;
 				background-color: #f4f2f758;
+
 				.progress-bar {
 					height: 100%;
 					transition: width .3s ease;
@@ -188,4 +125,79 @@
 		height: 24rpx;
 		margin-left: 4rpx;
 	}
+}
+
+
+
+.account-collapse {
+	.collapse-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 25rpx 20rpx;
+		font-weight: 500;
+		color: #333333;
+		background-color: #FFF;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+	}
+	
+	.collapse-header-hover {
+		background-color: #f2f2f2;
+	}
+
+	.collapse-title {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		font-size: 22rpx;
+
+		text {
+			font-size: 20rpx;
+			color: #666666;
+		}
+	}
+
+	.collapse-icon {
+		color: #999999;
+		transition: transform 0.3s ease;
+	}
+
+	.collapse-content-wrapper {
+		overflow: hidden;
+		transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+	}
+
+	.collapse-content {
+		padding: 20rpx;
+		// font-size: 14px;
+		color: #666666;
+		line-height: 1.6;
+		visibility: hidden;
+		transition: visibility 0s linear 0.3s;
+	}
+
+	/* 当展开时，立即显示内容（取消visibility延迟） */
+	.collapse-content-wrapper[style*="height: 0px"] .collapse-content {
+		visibility: hidden;
+	}
+
+	.collapse-content-wrapper:not([style*="height: 0px"]) .collapse-content {
+		visibility: visible;
+		transition-delay: 0s;
+	}
+
+	.right-arrow {
+		display: flex;
+		align-items: center;
+
+		.total-money {
+			margin-right: 10rpx;
+		}
+	}
+}
+
+.icon-arrow-down{
+	width: 26rpx;
+				height: 26rpx;
 }

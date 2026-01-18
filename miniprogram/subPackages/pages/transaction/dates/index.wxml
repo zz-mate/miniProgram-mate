@@ -22,7 +22,7 @@
 					<block wx:for="{{item.list}}" wx:for-index="i">
 						<view class="bill-wrapper {{item.status ? '':'active'}}">
 							<view class="bill-wrapper_item bill-item_items cart-list flex flex-space-between flex-center"
-								hover-class="btn-hover" hover-stay-time='150' data-transaction_type="{{item.type}}"
+								hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-transaction_type="{{item.type}}"
 								data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}"
 								bindtouchstart="touchS" bindtouchmove="touchM">
 								<!-- {{item.status}} -->
@@ -60,7 +60,7 @@
 			<view class="no-data" wx:if="{{!transactionList.length}}">
 				<view class="no-data-icon">
 					<image
-					src="/static/async-icon/icon-not-bill.png"
+					src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png"
 						mode="widthFix" />
 				</view>
 				<view class="no-data-text">

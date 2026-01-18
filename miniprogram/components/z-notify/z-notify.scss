@@ -1,0 +1,48 @@
+/* components/z-notify/z-notify.wxss */
+.notify {
+  position: fixed;
+  left: 0;
+  right: 0;
+  padding: 12rpx 24rpx;
+  color: #fff;
+  font-size: 20rpx;
+  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  white-space: nowrap;
+  text-align: center;
+	z-index: 999;
+}
+
+/* 显示状态 */
+.notify-show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 顶部定位 */
+.notify[style*="top"] {
+  top: 0;
+}
+
+/* 底部定位 */
+.notify[style*="bottom"] {
+  bottom: 0;
+}
+
+/* 不同类型的样式 */
+.notify-success {
+  background: #67c23a;
+}
+
+.notify-error {
+  background: #f56c6c;
+}
+
+.notify-warning {
+  background: #e6a23c;
+}
+
+.notify-info {
+  background: #409eff;
+}

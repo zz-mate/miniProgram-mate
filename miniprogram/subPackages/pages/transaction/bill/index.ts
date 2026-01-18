@@ -16,8 +16,8 @@ Page({
 	 */
 	data: {
 		scrollHeight: 0,
-		advHeight:0,
-		type:"",
+		advHeight: 0,
+		type: "",
 		navBgColor: COLOR.white,
 		yearMonthMoreActive: 0,
 		categoryId: "", bookId: "", userId: "", categoryName: "",
@@ -62,7 +62,7 @@ Page({
 	/**点击TAB 默认日期 */
 	handleChange(evt) {
 		const { sub } = evt.detail.delta
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		if (sub == 0) {
 			this.setData({
@@ -99,64 +99,57 @@ Page({
 
 	},
 	async handleTransactionList(type) {
-		const { categoryId } = this.data
+		const { categoryId,bookId } = this.data
 		let data = {
 			userId: getStorageSync("userInfo").id,
-			bookId: getStorageSync("bookInfo").id,
+			bookId,
 			...this.data.queryParams,
 			type,
 			categoryId
 		}
-
+	
 		let res: any = await getTransactionList(data)
-		// const { yearMonthMoreActive } = this.data
-
-		// let start_time = ''
-		// let end_time = ''
-		// // let startDate = ''
-		// if (yearMonthMoreActive == 0) {
-		// 	start_time = res.list.timeRange.start
-		// 	end_time = res.list.timeRange.end
-		// 	// startDate	dateUtils.formatToTimestamp(res.list.timeRange.start, '-')
-		// } else if (yearMonthMoreActive == 1) {
-		// 	start_time = res.list.year
-		// } else if (yearMonthMoreActive == 2) {
-		// 	start_time = `${res.list.year}-${res.list.month}`
-		// }
-
-
-		this.setData({
-			transactionList: res.list.dataList || [],
-			dailySummary: res.dailySummary,
-			summary: res.summary,
-			'queryParams.page': res.pagination.page,
-			'queryParams.pageSize': res.pagination.pageSize,
-			// 'queryParams.start_time':start_time,
-			// 'queryParams.end_time': end_time,
-			// startDate: res.list.timeRange?.start ? dateUtils.formatToTimestamp(res.list.timeRange.start, '-') : (res.list.year),
-			// endDate: type ? dateUtils.formatToTimestamp(res.list.timeRange.end, '-') : '',
-			total: res.pagination.total,
-			totalPages: res.pagination.totalPages
+	
+		return new Promise((resolve) => {
+			this.setData({
+				transactionList: res.list.dataList || [],
+				dailySummary: res.dailySummary,
+				summary: res.summary,
+				'queryParams.page': res.pagination.page,
+				'queryParams.pageSize': res.pagination.pageSize,
+				total: res.pagination.total,
+				totalPages: res.pagination.totalPages
+			}, () => {
+				// 数据设置完成后解析 Promise
+				resolve(true);
+			})
 		})
-		// console.log(dateUtils.formatToTimestamp(res.list.timeRange.start,'-'))
-		// const calendar = this.selectComponent('#calendar');
-		// if (calendar) {
-		// 	calendar.createDays(2025, 12);
-		// }
 	},
 	handleTabType(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		const { type } = evt.currentTarget.dataset
 		this.setData({
 			typeIndex: type
 		})
 		let type_idx = type == 0 ? '' : type == 1 ? 2 : 1
-		this.handleTransactionList(type_idx)
+		
+		// 先清空列表，触发视图更新
+		this.setData({ }, () => {
+			// 请求新数据
+			this.handleTransactionList(type_idx).then(() => {
+				// 数据加载完成后，延迟触发 collapse 组件重新计算高度
+				setTimeout(() => {
+					// 获取所有 collapse 组件实例
+					const collapseComponents = this.selectAllComponents('.collapse-container');
+					// 遍历所有组件，强制重新计算高度
+					collapseComponents.forEach(component => {
+						component.reCalculateHeight();
+					});
+				}, 100);
+			});
+		});
 	},
-
-
-
 
 
 
@@ -167,15 +160,15 @@ Page({
 		query.select('.filter-date').boundingClientRect();
 		query.select('.bill-card').boundingClientRect();
 		query.select('.bill-item_header').boundingClientRect();
-		query.select('.ad-card').boundingClientRect();
-		
+		// query.select('.ad-card').boundingClientRect();
+
 		query.exec((res) => {
 			if (res) {
 				console.log(res)
-				let filterHeightPx = 0 || res[1].height
+				let filterHeightPx = res[1] == null ? 0 : res[1].height
 				this.setData({
 					scrollHeight: res[0].height + filterHeightPx + res[2].height + res[3].height,
-					advHeight:res[4].height+100
+					// advHeight: res[4].height + 120
 				});
 			}
 		})
@@ -186,7 +179,7 @@ Page({
 		const { typeIndex, queryParams, categoryId, categoryName } = this.data
 		let bookInfo = getStorageSync("bookInfo")
 		let userInfo = getStorageSync("userInfo")
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		let that = this
 		wx.showActionSheet({
@@ -195,7 +188,7 @@ Page({
 				wx.vibrateShort({ type: 'heavy' })
 				if (res.tapIndex == 0) {
 					// 跳转前标记：已跳转到详情页
-					playBtnAudio('/static/audio/click.mp3', 1000);
+					playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 					that.setData({
 						isJumpToDetail: true
 					})
@@ -203,7 +196,7 @@ Page({
 						url: `/subPackages/pages/transaction/data/index?date=${queryParams.start_time}&typeIndex=${typeIndex}&title=${name}`
 					})
 				} else {
-					playBtnAudio('/static/audio/click.mp3', 1000);
+					playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 					// 跳转前标记：已跳转到详情页
 					that.setData({
 						isJumpToDetail: true
@@ -225,7 +218,7 @@ Page({
 
 
 	handleYear(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		this.setData({
 			'queryParams.start_time': evt.currentTarget.dataset.year
@@ -235,7 +228,7 @@ Page({
 	},
 
 	changeMonth(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		const { current } = evt.detail
 		this.setData({
@@ -247,7 +240,7 @@ Page({
 	},
 
 	handleMonth(evt) {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		let split_month = evt.currentTarget.dataset.month
 		let { split_year } = this.data
@@ -276,7 +269,7 @@ Page({
 		this.updatePopupStatus(type, !delta);
 	},
 	handlePopup() {
-		playBtnAudio('/static/audio/click.mp3', 1000);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
 		const yearMonthMoreActive = this.data.yearMonthMoreActive
 		let type = ''
@@ -365,30 +358,30 @@ Page({
 
 
 
-		// 跳转到账单详情页面
-		handleTransactionInfo(evt) {
-			const { transaction_id, transaction_type } = evt.currentTarget.dataset
-			wx.vibrateShort({ type: 'light' })
-			playBtnAudio('/static/audio/click.mp3', 1000);
-			this.setData({
-				isJumpToDetail: true
-			})
-			wx.navigateTo({
-				url: `/subPackages/pages/transaction/info/index?id=${transaction_id}&type=${transaction_type}`
-			})
-		},
+	// 跳转到账单详情页面
+	handleTransactionInfo(evt) {
+		const { transaction_id, transaction_type } = evt.currentTarget.dataset
+		wx.vibrateShort({ type: 'light' })
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		this.setData({
+			isJumpToDetail: true
+		})
+		wx.navigateTo({
+			url: `/subPackages/pages/transaction/info/index?id=${transaction_id}&type=${transaction_type}`
+		})
+	},
 
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad({ date, yearMonthMoreActive, type, categoryId, bookId, userId, categoryName }) {
 		this.getScrollHeight()
-		let type_idx = Number(type) == 2 ? 1 :  Number(type)  == 1 ? 2 : 0
+		let type_idx = Number(type) == 2 ? 1 : Number(type) == 1 ? 2 : 0
 		this.setData({
 			'queryParams.start_time': date,
-			yearMonthMoreActive:Number(yearMonthMoreActive),	
+			yearMonthMoreActive: Number(yearMonthMoreActive),
 			type,
-			typeIndex:type_idx,
+			typeIndex: type_idx,
 			categoryId,
 			bookId,
 			userId,
@@ -419,8 +412,10 @@ Page({
 		// 1. 不是首次进入（排除onLoad后的首次onShow）
 		// 2. 是从详情页返回（isJumpToDetail为true）
 		if (!this.data.isFirstEnter && this.data.isJumpToDetail) {
-			console.log("从账单详情页返回，执行刷新")
-			this.handleTransactionList(this.data.type)
+		
+			let type_idx = Number(this.data.typeIndex) == 2 ? 1 : Number(this.data.typeIndex) == 1 ? 2 : 0
+			console.log("从账单详情页返回，执行刷新",type_idx)
+			this.handleTransactionList(type_idx)
 			// 刷新后重置标记，避免重复刷新
 			this.setData({
 				isJumpToDetail: false

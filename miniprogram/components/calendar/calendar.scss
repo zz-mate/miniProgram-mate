@@ -65,7 +65,7 @@
 .calendar {
   background-color: #fff;
 	padding:20rpx;
-	border-radius: 10rpx;
+	// border-radius: 10rpx;
 	overflow: hidden;
 }
 
@@ -92,7 +92,7 @@
   color: #999;
   font-size: 22rpx;
   line-height: 36rpx;
-  border-radius: 18rpx;
+  // border-radius: 18rpx;
   padding: 0 20rpx;
 }
 
@@ -160,8 +160,8 @@
   // line-height: 80rpx;
   color: #000000;
   margin: 0 auto;
-  border-radius: 4rpx;
-	border: 1rpx solid #FFD608;
+  // border-radius: 4rpx;
+ background: #f4f2f7;
 	transition: all .3s ;
 }
 
@@ -173,7 +173,7 @@
   width: 8rpx;
   height: 8rpx;
   background-color: #3179CB;
-  border-radius: 50%;
+  // border-radius: 50%;
   position: absolute;
   bottom: 3px;
   left: 50%;
@@ -232,4 +232,10 @@
 }
 .text-error{
 	color: $z-color-error;
+}
+.text-primary{
+	color: $z-color-primary;
+}
+.text-theme{
+	color: $-theme-color;
 }
