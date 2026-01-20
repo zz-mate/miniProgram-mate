@@ -47,8 +47,8 @@
 
 				
 				<view class="money" wx:if="{{dailyType=='plan'}}">
-             <text class="text-primary" wx:if="{{item.income!=0}}">备忘录；{{item.income}}</text>
-             <text class="text-theme" wx:if="{{item.expense!=0}}">计划：{{item.expense}}</text>
+             <text class="text-primary" wx:if="{{item.income!=0}}">备忘录: {{item.income}}</text>
+             <text class="text-theme" wx:if="{{item.expense!=0}}">计划: {{item.expense}}</text>
             </view>
 				<view class="money" wx:else>
              <text class="text-error" wx:if="{{item.income!=0}}">{{item.income}}</text>

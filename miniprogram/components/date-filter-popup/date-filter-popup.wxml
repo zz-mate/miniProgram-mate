@@ -57,7 +57,7 @@
           </view>
         </view>
       </block>
-
+<view class="tips">{{tips}}{{selectedDate}}</view>
       <!-- 底部操作按钮 -->
       <view class="btn-group">
         <view class="btn cancel" bind:tap="handleCancel">取消</view>

@@ -23,15 +23,15 @@ Page({
 		// 新增标记：是否首次进入页面
 		isFirstEnter: true,
 	},
-	async getPlanInfo(planId) {
+	async getPlanInfo(id) {
 		let data = {
 			userId: getStorageSync("userInfo").id,
-			planId
+			id
 		}
 		let res = await info(data)
 		console.log(res)
 		this.setData({
-			planInfo: res.data
+			planInfo: res.data.data
 		})
 	},
 	async updatePlan() {

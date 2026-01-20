@@ -311,6 +311,30 @@ Component({
 				wx.showToast({ title: "网络异常，删除失败", icon: "none" });
 			}
 		},
+
+  // 查看账单
+  // handleViewBill(e) {
+  //   const { id, index, i } = e.currentTarget.dataset;
+  //   console.log('查看账单：', id);
+  //   // 这里添加查看账单的逻辑
+  //   this.setData({ ['item.list[' + i + '].slideActive']: false }); // 操作后关闭滑动栏
+  // },
+
+  // 编辑账单
+  handleEditBill(e) {
+    const { id,type} = e.currentTarget.dataset;
+    console.log('编辑账单：', id);
+		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		wx.vibrateShort({ type: 'light' })
+		// const { id,type } = this.data.transactionInfo
+		const bookInfo = wx.getStorageSync('bookInfo')
+
+		wx.navigateTo({
+			url: "/subPackages/pages/transaction/add/index?bookId=" + bookInfo.id + '&billId=' + id+'&type='+type,
+			routeType: "wx://upwards"
+		})
+  },
+
 		handleEye(evt) {
 			const { eye } = evt.currentTarget.dataset
 			this.setData({
@@ -528,9 +552,9 @@ Component({
 			wx.vibrateShort({ type: 'light' })
 			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			if (!token) {
-				wx.navigateTo({
-					url: "/pages/login/index"
-				})
+				// wx.navigateTo({
+				// 	url: "/pages/login/index"
+				// })
 			}
 			else {
 				wx.navigateTo({
@@ -546,9 +570,9 @@ Component({
 			let bookIndex = bookList.findIndex(ele => ele.book_id == bookInfo.book_id)
 			const token = wx.getStorageSync('token') || null
 			if (!token) {
-				wx.navigateTo({
-					url: "/pages/login/index"
-				})
+				// wx.navigateTo({
+				// 	url: "/pages/login/index"
+				// })
 			} else {
 				wx.navigateTo({
 					url: "/subPackages/pages/transaction/add/index?bookIndex=" + bookIndex,
@@ -585,9 +609,9 @@ Component({
 			wx.vibrateShort({ type: 'light' })
 			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			if (!token) {
-				wx.navigateTo({
-					url: "/pages/login/index"
-				})
+				// wx.navigateTo({
+				// 	url: "/pages/login/index"
+				// })
 			} else {
 				wx.navigateTo({
 					url: "/subPackages/pages/transaction/add/index?bookIndex=" + bookIndex + '&date=' + e.detail,

@@ -37,12 +37,13 @@ Page({
    * 获取账户列表
    */
   async handleAccountList() {
+
     let userInfo = wx.getStorageSync('userInfo')
     let data = {
       userId: userInfo.id
     }
     let res = await getAccountList(data)
-		console.log(res)
+
     this.setData({
       total_asset: res.asset_stats.total_asset,
       net_asset: res.asset_stats.net_asset,

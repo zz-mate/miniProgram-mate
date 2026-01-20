@@ -260,3 +260,6 @@
 	</view>
 
 </z-popup>
+
+
+<z-notify id="customNotify" bind:close="onNotifyClose"/>

@@ -1,4 +1,5 @@
 {
   "usingComponents": {
+		"z-notify": "../../components/z-notify/z-notify"
   }
 }

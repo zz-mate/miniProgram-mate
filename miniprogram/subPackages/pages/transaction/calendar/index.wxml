@@ -23,7 +23,7 @@
 		<view class="disburse num">支{{totalExpense}}</view>
 	</view>
 </view>
-<scroll-view type="custom" scroll-y style="height:calc(100% - {{billContentHeight}}px);padding:0 20rpx; ">
+<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{billContentHeight}}px);padding:0 20rpx; ">
 
 	<!-- 流水列表 & 数据为空 区域 -->
 
@@ -77,3 +77,5 @@
 	</view>
 
 </scroll-view>
+
+<z-notify id="customNotify" bind:close="onNotifyClose"/>

@@ -12,6 +12,7 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
+		planOrMemoName:"",
 		capsuleHeight: 0,
 		navBarHeight: 0,
 		statusBarHeight: 0,
@@ -284,8 +285,9 @@ Page({
 		const { categoryId, itemIndex } = e.currentTarget.dataset;
 		const value = e.detail.value;
 		const content = [...this.data.params.content];
+		console.log(JSON.stringify(content))
 		const categoryIndex = content.findIndex(item => item.id === categoryId);
-
+console.log(categoryId,itemIndex,categoryIndex)
 		if (categoryIndex !== -1) {
 			content[categoryIndex].items[itemIndex].name = value;
 			this.setData({
@@ -389,15 +391,16 @@ Page({
 		}
 		this.setData(data);
 	},
-	async getPlanInfo(planId) {
+	async getPlanInfo(id) {
 		let data = {
 			userId: getStorageSync("userInfo").id,
-			planId
+			id
 		}
 		let res = await info(data)
 		console.log(res)
 		this.setData({
-			params: res.data
+			params: res.data.data,
+			planTime:res.data.data.plan_time,
 		})
 	},
 	async updatePlan() {
@@ -406,7 +409,7 @@ Page({
 			planId: this.data.id,
 			planType: getStorageSync("planIndex"),
 			...this.data.params,
-			planTime: this.data.params.plan_time,
+			planTime: this.data.planTime,
 		}
 
 		let res = await update(data)
@@ -438,6 +441,7 @@ Page({
 			title: planIndex == 1 ? '添加备忘录' : '添加计划',
 			saveDisabled: true, // 初始禁用保存按钮
 			id,
+			planOrMemoName:planIndex == 1 ? '备忘录' : '计划',
 			'planTime': planTime ? planTime : dateUtils.formatLongTime(new Date(), dateUtils.modeMapToFields['YMDhm'])
 		})
 	},

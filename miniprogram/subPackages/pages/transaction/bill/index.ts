@@ -59,6 +59,7 @@ Page({
 		// 新增标记：是否首次进入页面
 		isFirstEnter: true,
 	},
+	
 	/**点击TAB 默认日期 */
 	handleChange(evt) {
 		const { sub } = evt.detail.delta
@@ -96,9 +97,10 @@ Page({
 		const { typeIndex } = this.data
 		let type_idx = typeIndex == 0 ? '' : typeIndex == 1 ? 2 : 1
 		this.handleTransactionList(type_idx)
-
 	},
+
 	async handleTransactionList(type) {
+		const notify = this.selectComponent('#customNotify');
 		const { categoryId,bookId } = this.data
 		let data = {
 			userId: getStorageSync("userInfo").id,

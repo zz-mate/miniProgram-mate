@@ -62,7 +62,8 @@
 	"usingComponents": {
 		"navigation-bar": "./components/navigation-bar/navigation-bar",
 		"z-popup": "./components/z-popup/z-popup",
-		"z-divider": "./components/z-divider/z-divider"
+		"z-divider": "./components/z-divider/z-divider",
+		"z-notify": "./components/z-notify/z-notify"
 	},
 	"tabBar": {
 		"custom": true,
@@ -108,10 +109,12 @@
 	"permission": {
 		"scope.userLocation": {
 			"desc": "用于展示附近服务或导航"
-		}
+		},
+		"scope.subscribeMessage": {
+      "desc": "用于发送订阅消息"
+    }
 	},
 	"requiredPrivateInfos": [
-		"getLocation",
 		"chooseLocation"
 	]
 }

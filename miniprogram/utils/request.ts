@@ -148,7 +148,7 @@ export function request<T = any>(options: RequestOptions<T>): Promise<ResponseDa
 
           // 特殊处理：401 Token失效 - 仅做跳转，提示用后端返回的msg
           if (statusCode === 401) {
-            wx.removeStorageSync('token');
+            wx.clearStorage();
             setTimeout(() => {
               wx.redirectTo({ url: '/pages/login/login' });
             }, 1500);

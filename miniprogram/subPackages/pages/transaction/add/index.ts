@@ -1028,42 +1028,104 @@ Page({
 	},
 
 
-
 	getLocation() {
 		let that = this
+		// 保留原有交互效果：播放音频 + 震动
 		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
-
-		wx.getLocation({
-			type: 'gcj02', //返回可以用于wx.openLocation的经纬度
-			// altitude: true, //传入 true 会返回高度信息，由于获取高度需要较高精确度，会减慢接口返回速度
-			success: function (res) {
-				console.log(res, '地图')
-				wx.chooseLocation({
-					latitude: res.latitude,
-					longitude: res.longitude,
-					success: function (r) {
-						console.log(r)
-
-						// r = { //返回的r数据字段为
-						//   address: "江苏省南京市雨花台区雨花南路2号",
-						//   errMsg: "chooseLocation:ok",
-						//   latitude: 31.98115,
-						//   longitude: 118.793015,
-						//   name: "南京市雨花台区人民政府北(雨花南路南)"
-						// }
-						that.setData({
-							'bill.address': r.address,
-							'bill.latitude': r.latitude,
-							'bill.longitude': r.longitude
-						})
-					},
-					fail: function (err) {
-						console.log(err);
-					},
-				})
+		const notify = this.selectComponent('#customNotify');
+	
+		// 第一步：先检查并申请地理位置权限
+		wx.getSetting({
+			success: (res) => {
+				// 检查是否授权地理位置权限
+				if (!res.authSetting['scope.userLocation']) {
+					// 未授权，主动申请
+					wx.authorize({
+						scope: 'scope.userLocation',
+						success: () => {
+							// 授权成功，直接调用选择位置接口
+							that.callChooseLocation(notify);
+						},
+						fail: () => {
+							// 授权失败，引导用户去设置页开启
+							notify.showNotify({
+								message: "需要获取你的地理位置权限才能选择位置，请前往设置开启",
+								type: 'error',
+								duration: 2000
+							});
+							// 可选：引导用户打开设置页
+							// wx.openSetting({
+							//   success: (settingRes) => {
+							//     if (settingRes.authSetting['scope.userLocation']) {
+							//       that.callChooseLocation(notify);
+							//     }
+							//   }
+							// });
+						}
+					});
+				} else {
+					// 已授权，直接调用选择位置接口
+					that.callChooseLocation(notify);
+				}
+			},
+			fail: () => {
+				notify.showNotify({
+					message: "获取权限设置失败",
+					type: 'error',
+					duration: 1500
+				});
 			}
-		})
+		});
+	},
+	
+	// 封装选择位置的核心逻辑
+	callChooseLocation(notify) {
+		let that = this;
+		// 直接调用chooseLocation，无需传入经纬度（默认使用用户当前位置）
+		wx.chooseLocation({
+			// 如需默认定位到某个固定位置，可手动设置经纬度
+			// latitude: 31.98115, 
+			// longitude: 118.793015,
+			success: function (r) {
+				console.log(r);
+				// 保留原有数据赋值逻辑
+				that.setData({
+					'bill.address': r.address,
+					'bill.latitude': r.latitude,
+					'bill.longitude': r.longitude
+				});
+				// 可选：添加成功提示
+				notify.showNotify({
+					message: "位置选择成功",
+					type: 'success',
+					duration: 1500
+				});
+			},
+			fail: function (err) {
+				console.log(err);
+				// 区分不同失败场景，给出友好提示
+				if (err.errMsg === 'chooseLocation:fail cancel') {
+					notify.showNotify({
+						message: "已取消位置选择",
+						type: 'warning',
+						duration: 1500
+					});
+				} else if (err.errMsg.includes('auth')) {
+					notify.showNotify({
+						message: "位置权限未授权，无法选择位置",
+						type: 'error',
+						duration: 1500
+					});
+				} else {
+					notify.showNotify({
+						message: "位置选择失败",
+						type: 'error',
+						duration: 1500
+					});
+				}
+			},
+		});
 	},
 
 	/**

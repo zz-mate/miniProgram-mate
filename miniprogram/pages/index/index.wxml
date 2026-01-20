@@ -4,18 +4,32 @@
 	<view slot="left" wx:if="{{refreshStatus!='松手进入二楼'&&refreshStatus!='进入二楼'}}">
 		<!-- catch:tap="handleBookPage"border-radius:0  {{capsuleHeight/2}}px {{capsuleHeight/2}}px 0 -->
 		<view class="custom-capsule flex flex-align-items-center" catch:tap="handleBookPage"
-		
 			style="height:{{capsuleHeight}}px;line-height: {{capsuleHeight}}px;">
 			{{bookInfo.name||'未登录'}}
-			<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"/>
+			<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom" />
 		</view>
 	</view>
 	<view slot="right">
-		<view class="custom-circle"
+		<view class="custom-right">
+			<!-- <view class="custom-circle" style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
+				catch:tap="handleCalenderPage">
+				<image class="icon-calendar"
+					src="http://oss-api.zz-mate.cn/uploads/2026/01/1768884390279-4fdc55e1-177b-43e2-97d4-a6f2918bd493.png"
+					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
+			</view> -->
+
+			<!-- <view class="custom-circle" style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
+				catch:tap="handleCalenderPage">
+				<image class="icon-calendar"
+					src="http://oss-api.zz-mate.cn/uploads/2026/01/1768538636228-c75e736c-449d-4260-84b7-e8072302895c.png"
+					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
+			</view> -->
+			<!-- <view class="custom-circle"
 			style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
-			catch:tap="handleCalenderPage">
-			<image class="icon-calendar" src="http://oss-api.zz-mate.cn/uploads/2026/01/1768538636228-c75e736c-449d-4260-84b7-e8072302895c.png" mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;"/>
-			</view>
+			catch:tap="handleSaoCode">
+			<image class="icon-calendar" src="http://oss-api.zz-mate.cn/uploads/2026/01/1768796079222-312c0966-e986-4e55-996d-3dcc655c23a9.png" mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;"/>
+			</view> -->
+		</view>
 	</view>
 </navigation-bar>
 <!-- <login-popup /> -->
@@ -42,7 +56,7 @@
 		<!-- 本月支出 收入 结余 卡片 -->
 		<view class="fake-nav-bar">
 			<view class="fake-card">
-				<image class="icon-book" src="{{bookInfo.icon}}" mode="scaleToFill" lazy-load="true"/>
+				<image class="icon-book" src="{{bookInfo.icon}}" mode="scaleToFill" lazy-load="true" />
 				<!-- <view class="user-together" catch:tap="handlePopup" data-type="together">
 					<view class="together-icon">
 						<image class="icon-together" src="/static/together.png" mode="widthFix" />
@@ -65,7 +79,7 @@
 				<view class="fast-card shadow radius-10">
 					<view class="list radius-10 flex flex-space-around">
 						<view class="item" data-type="bill" data-url="/subPackages/pages/transaction/bill/index"
-						catch:tap="handlePageUrl">
+							catch:tap="handlePageUrl">
 
 							<image src="/static/icon/icon-bill.png" mode="widthFix" />
 							<view class="title">明细</view>
@@ -98,9 +112,9 @@
 		<!-- <view style="padding-top:90rpx;z-index: -1; pointer-events: none;"></view> -->
 
 		<!-- 预算 -->
-		<view class="budget-card shadow"   style="padding: 0 20rpx;"
-			wx:if="{{token&&budgetInfo}}">
-			<view class="card num radius-10" 	hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"  hover-stop-propagation="true" bind:tap="handleSetting" >
+		<view class="budget-card shadow" style="padding: 0 20rpx;" wx:if="{{token&&budgetInfo}}">
+			<view class="card num radius-10" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
+				hover-stop-propagation="true" bind:tap="handleSetting">
 				<view class="budget-title flex flex-space-between flex-align-items-center">
 					<text class="title">支出月预算</text>
 					<text class="text" wx:if="{{budgetInfo.remaining_amount!=0}}"
@@ -109,7 +123,7 @@
 					<view class="text flex flex-align-items-center" wx:else>
 
 						<text>去设置</text>
-						
+
 						<!-- <image
 							src="http://oss-api.zz-mate.cn/uploads/2026/01/1768479483027-ee4fdf4a-2d0f-4685-9430-369f662fb714.png"
 							mode="widthFix" style="width: 24rpx;height: 24rpx;margin-left: 4rpx;" /> -->
@@ -221,9 +235,24 @@
 								</view>
 
 							</view>
-							<view class="del_button" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-type="single"
+							<!-- <view class="del_button" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-type="single"
 								bindtap='deleteList'>删除
+							</view> -->
+
+							<view class="slide-actions">
+								<!-- 查看按钮 -->
+								<!-- <view class="action-btn view-btn" 
+          data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-type="{{item.type}}" 
+          bindtap='handleViewBill'>查看</view> -->
+								<!-- 编辑按钮 -->
+								<view class="action-btn edit-btn" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}"
+									data-type="{{item.type}}" bindtap='handleEditBill'>编辑</view>
+								<!-- 删除按钮 -->
+								<view class="action-btn del-btn" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}"
+									data-type="single" bindtap='deleteList'>删除</view>
 							</view>
+
+
 						</view>
 					</block>
 				</view>
@@ -256,16 +285,11 @@
 	<view class="popup-content" style="height:500rpx">
 		<view class="invite-book" style="height:500rpx">
 			<view class="avatar-container">
-    <!-- 循环渲染头像列表 -->
-    <view class="avatar-item" wx:for="{{bookUserList}}" wx:key="index">
-      <image 
-        class="avatar-img" 
-        src="{{item.avatar}}" 
-        alt=""
-        mode="aspectFill" 
-      ></image>
-    </view>
-  </view>
+				<!-- 循环渲染头像列表 -->
+				<view class="avatar-item" wx:for="{{bookUserList}}" wx:key="index">
+					<image class="avatar-img" src="{{item.avatar}}" alt="" mode="aspectFill"></image>
+				</view>
+			</view>
 			<button class="invite-btn" open-type="share" data-invite="friend" data-friend="friend" bind:tap="handleInvite">
 				<view class="radius-10 flex flex-center" hover-class="btn-yellow-hover" hover-stay-time='10'>
 					邀请加入账本
@@ -278,4 +302,4 @@
 
 </z-popup>
 
-<z-notify id="customNotify" bind:close="onNotifyClose"/>
+<z-notify id="customNotify" bind:close="onNotifyClose" />

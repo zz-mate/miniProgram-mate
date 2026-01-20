@@ -107,10 +107,81 @@ Page({
 			// 	"sendTime": this.data.params.billTime
 			// });
 		}
-		this.setData({
-			checked: res.detail.checked
-		})
+
+		// wx.getSetting({
+		// 	withSubscriptions: true, // 请求中包含订阅消息的选项
+		// 	success (res) {
+		// 		if (res.authSetting['scope.subscribeMessage']) {
+		// 			// 用户已经授权了订阅消息
+		// 			console.log('用户已授权订阅消息');
+		// 			// 接下来可以调用 wx.requestSubscribeMessage 获取具体的订阅消息状态
+		// 			wx.requestSubscribeMessage({
+		// 				tmplIds: ['hzWciRDNcqtdvd5-ndh0A4PFNr9wCfWQpr6UG-ZdjpY'], // 模板ID列表，这里需要替换为实际使用的模板ID
+		// 				success (res) {
+		// 					console.log('订阅消息请求成功', res);
+		// 				},
+		// 				fail (err) {
+		// 					console.log('订阅消息请求失败', err);
+		// 				}
+		// 			});
+		// 		} else {
+		// 			// 用户未授权订阅消息
+		// 			console.log('用户未授权订阅消息');
+		// 		}
+		// 	},
+		// 	fail (err) {
+		// 		console.log('获取设置失败', err);
+		// 	}
+		// });
+			this.subscribeTargetTemplate(res.detail.checked)
+		
+
 	},
+	// 单独封装请求具体模板订阅的逻辑
+ subscribeTargetTemplate (checked) {
+  // 模板ID列表，可根据业务场景动态传入
+  const tmplIds = ['hzWciRDNcqtdvd5-ndh0A4PFNr9wCfWQpr6UG-ZdjpY'];
+  let that = this
+  wx.requestSubscribeMessage({
+    tmplIds: tmplIds,
+    success (res) {
+      console.log('订阅消息请求成功', res);
+			that.setData({
+				checked: checked
+			})
+      // 遍历模板ID，检查每个模板的订阅状态
+      tmplIds.forEach(tmplId => {
+        if (res[tmplId] === 'accept') {
+          wx.showToast({
+            title: '订阅成功',
+            icon: 'success'
+          });
+        } else if (res[tmplId] === 'reject') {
+          wx.showToast({
+            title: '你拒绝了该模板订阅',
+            icon: 'none'
+          });
+        } else if (res[tmplId] === 'ban') {
+          wx.showToast({
+            title: '该模板已被封禁',
+            icon: 'none'
+          });
+        }
+      });
+    },
+    fail (err) {
+      console.log('订阅消息请求失败', err);
+			that.setData({
+				checked: false
+			})
+      // 常见失败原因：用户未授权、模板ID无效、小程序未配置模板
+      wx.showToast({
+        title: '订阅失败，请重试',
+        icon: 'none'
+      });
+    }
+  });
+},
 	/**
 	 * 校验预约转账必填项
 	 * @returns {Object} { isValid: 是否通过, msg: 提示信息 }
@@ -292,8 +363,8 @@ Page({
  *  处理账户选择事件
  */
 	handleChooseAccount(e) {
-		wx.vibrateShort({ type: 'light' })
-		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		// wx.vibrateShort({ type: 'light' })
+		// playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		// 获取点击事件传递的索引数据
 		const { parentIndex, childIndex } = e.currentTarget.dataset;
 		// 更新选中状态
@@ -372,7 +443,7 @@ Page({
 			return;
 		}
 
-
+		// const notify = this.selectComponent('#customNotify');
 
 		let userInfo = getStorageSync("userInfo")
 		let { params, cycleStartInfo, cycleStartFilterList, cycleEndInfo, backParams } = this.data
@@ -382,18 +453,25 @@ Page({
 			category_id: backParams.categoryId,
 			book_id: backParams.bookId,
 			expense_amount: params.amount,
-			appointment_time: cycleStartInfo.actualDate + ' ' + params.billTime,
+			cycle_exec_rule:cycleStartInfo.defaultDate,
+			appointment_time: cycleStartInfo.activeIndex == 0 ?  cycleStartInfo.actualDate + ' ' + params.billTime: params.billTime,
 			cycle_type: cycleStartFilterList[cycleStartInfo.activeIndex].cycle_type,
 			cycle_rule: cycleStartFilterList[cycleStartInfo.activeIndex].name,
-			cycle_end_time: cycleEndInfo.activeIndex == 0 ? '2100-01-31' : cycleEndInfo.displayDate + ' ' + params.billTime,
+			cycle_end_time: cycleEndInfo.activeIndex == 0 ? cycleStartInfo.actualDate + ' ' + params.billTime:  params.billTime,
 			expense_type: backParams.type,
 			remark: params.remark,
 			creator: userInfo.nickname
 		}
 		console.log(JSON.stringify(data))
+		// return
 		let res = await createAppointment(data)
 		console.log(res)
 		if (res.code == 200) {
+			// notify.showNotify({
+			// 	message: "添加成功",
+			// 	type: 'success',
+			// 	duration: 1500
+			// });
 			wx.navigateBack({ delta: 1 })
 		} else {
 			const notify = this.selectComponent('#customNotify');
@@ -494,7 +572,7 @@ Page({
 		wx.vibrateShort({ type: 'light' })
 		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		const filterData = e.detail;
-		console.log('筛选选项点击结果START：', filterData);
+
 
 		let cycleStartInfo = {
 			activeIndex: filterData.index,
@@ -528,7 +606,7 @@ Page({
 		});
 		this.closeCycleStartPopup();
 		this.updateSaveBtnStatus();
-		// console.log('周期开始筛选结果：', this.data.cycleStartInfo);
+		console.log('周期开始筛选结果：', e.detail);
 	},
 
 
@@ -550,6 +628,7 @@ Page({
 	// 	let res = await cancelSchedule(data)
 	// 	return res.data
 	// },
+
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
@@ -572,9 +651,9 @@ Page({
 		let remark = ''
 		if (this.data.backParams?.categoryName) {
 			if (this.data.backParams?.type == 1) {
-				remark = '收入 ' + this.data.backParams?.categoryName
+				remark = '收入' + this.data.backParams?.categoryName
 			} else {
-				remark = '支出 ' + this.data.backParams?.categoryName
+				remark = '支出' + this.data.backParams?.categoryName
 			}
 		}
 		// :this.data.backParams?.type==1?'收入 '+  this.data.backParams?.categoryName:'支出 '+  this.data.backParams?.categoryName || ''

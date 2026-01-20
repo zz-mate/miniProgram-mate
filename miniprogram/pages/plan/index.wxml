@@ -3,14 +3,14 @@
 	<view slot="left">
 		计划
 	</view>
-	<view slot="right">
+	<!-- <view slot="right">
 		<view class="custom-circle" style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
 			catch:tap="handleCalenderPage">
 			<image class="icon-calendar"
 				src="http://oss-api.zz-mate.cn/uploads/2026/01/1768569299579-3c6f1fcf-a73a-4b80-ba90-b12ff0750479.png"
 				mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
 		</view>
-	</view>
+	</view> -->
 </navigation-bar>
 <scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{height}}px) ">
 	<view class="plan-container">

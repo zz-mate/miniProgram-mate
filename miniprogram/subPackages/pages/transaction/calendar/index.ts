@@ -24,13 +24,13 @@ Page({
 	dateChange(e) {
 		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
-		// let dateString = e.detail.dateString
+		let dateString = e.detail.dateString
 		// const year = dateString.split('-')[0];
 		// const month = dateString.split('-')[1];
 		// const day = dateString.split('-')[2];
-		// this.setData({
-		//   start_time: dateString
-		// })
+		this.setData({
+		  start_time: dateString
+		})
 
 		this.handleTransactionList()
 	},
@@ -73,6 +73,7 @@ Page({
 	},
 	//组件监听事件 查询本月账单
 	select(e: any) {
+		console.log(e)
 		// wx.vibrateShort({ type: 'heavy' })
 		let start_time = this.formatDateStr(e.detail)
 		let userInfo = getStorageSync("userInfo")
@@ -245,7 +246,7 @@ Page({
 	 */
 	onShow() {
 		this.setData({
-			'start_time': getThisDate('YY-MM')
+			'start_time': getThisDate('YY-MM-DD')
 		})
 
 		this.handleTransactionList()

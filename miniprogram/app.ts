@@ -4,7 +4,6 @@ import { checkUpdateVersion } from './utils/updateVersion';
 import { setToken } from './utils/config';
 import { setStorageSync, getStorageSync } from './utils/util';
 
-
 App<IAppOption>({
 	globalData: {
 		systemInfo: null,
@@ -35,16 +34,33 @@ App<IAppOption>({
 				this.globalData.systemInfo.autoheight = res.safeArea.top + 44;
 			}
 		});
-		let userInfo = getStorageSync("userInfo")
-		let token = getStorageSync("token")
-		if (token) {
+		
+		// ========== 核心修改：处理 userInfo 为 null 的情况 ==========
+		let userInfo = getStorageSync("userInfo");
+		let token = getStorageSync("token");
+		
+		// 1. 双重校验：token 存在 且 userInfo 存在 且 userInfo.id 存在
+		if (token && userInfo && userInfo.id) {
 			getUserById({ userId: userInfo.id }).then((res) => {
 				setStorageSync('userInfo', res.data);
-				console.log("userInfo")
-			})
+				console.log("用户信息已更新", res.data);
+			}).catch((err) => {
+				// 捕获接口调用失败的异常，避免崩溃
+				console.error("更新用户信息失败：", err);
+				// 兜底：清除无效 token，触发重新登录
+				setStorageSync('token', '');
+				setStorageSync('userInfo', null);
+				this.login(); // 重新登录获取有效信息
+			});
+		} else {
+			// 2. 空值兜底：token 或 userInfo 缺失时，清除无效缓存并触发登录
+			console.log("用户信息/token 缺失，准备重新登录");
+			setStorageSync('token', ''); // 清除无效 token
+			setStorageSync('userInfo', null); // 清除无效 userInfo
+			// 这里可根据需求选择是否自动登录（建议非强制，避免启动时频繁登录）
+			// this.login(); 
 		}
 	},
-
 
 	// 登录方法：加锁避免重复登录
 	async login(): Promise<void> {
@@ -114,7 +130,7 @@ App<IAppOption>({
 		} catch (error) {
 			const errMsg = error instanceof Error ? error.message : '登录失败';
 			console.error('登录异常：', errMsg);
-			wx.showToast({ title: errMsg, icon: 'none' });
+			// wx.showToast({ title: errMsg, icon: 'none' });
 		} finally {
 			this.isLoginInProgress = false; // 解除登录锁
 		}

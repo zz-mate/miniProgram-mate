@@ -1,7 +1,7 @@
 // pages/plan/index.ts
 import { COLOR } from '../../../../utils/color.js';
 import { playBtnAudio } from '../../../../utils/audioUtil'
-import { appointmentList,removeAppointment } from '../../../../api/appointment'
+import { appointmentList, removeAppointment } from '../../../../api/appointment'
 import { getStorageSync } from '../../../../utils/util'
 const app = getApp()
 
@@ -62,9 +62,9 @@ Page({
 
 
 			item.stat = true;
-					
-				
-	
+
+
+
 		});
 
 		// 5. 统一通过 setData 响应式更新所有数据（坐标 + 列表）
@@ -120,8 +120,8 @@ Page({
 			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			wx.vibrateShort({ type: 'light' })
 			// 1. 安全获取要删除的 id 和 dataset 中的索引（关键：需要 index/i 定位列表项）
-			let { id,version} = e.currentTarget.dataset || {};
-	
+			let { id, version } = e.currentTarget.dataset || {};
+
 			// 2. 构造请求参数
 			let data = {
 				userId: getStorageSync("userInfo")?.id || "", // 加容错，防止 userInfo 不存在
@@ -132,16 +132,13 @@ Page({
 				wx.showToast({ title: "用户信息异常，请重新登录", icon: "none" });
 				return;
 			}
-	
+
 			// 3. 调用删除接口
-			let res = await removeAppointment(data);
-			if (res.code === 200) {
-				wx.showToast({ title: "删除成功", icon: "none" });
+		await removeAppointment(data);
+
 				this.getAppointmentList()
-				// });
-			} else {
-				wx.showToast({ title: res.msg || "删除失败", icon: "none" });
-			}
+			
+		
 		} catch (error) {
 			// 捕获异常，避免代码崩溃
 			console.error("删除接口调用异常：", error);

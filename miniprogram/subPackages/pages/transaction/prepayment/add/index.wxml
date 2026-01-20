@@ -60,7 +60,7 @@
 		</view>
 	</view>
 	<view class="input-remark">
-		<input class="book_placeholder" disabled type="text" maxlength="14" placeholder="转账说明" adjust-position="{{false}}"
+		<input class="book_placeholder"  type="text" maxlength="14" placeholder="转账说明" adjust-position="{{false}}"
 			value="{{params.remark}}" bindinput="bindKeyInputRemark" />
 	</view>
 	<view class="date-content">
@@ -81,14 +81,12 @@
 			</view>
 		</view>
 	</view>
-	<view class="book-name radius-10 flex flex-align-items-center flex-space-between">
+	<!-- <view class="book-name radius-10 flex flex-align-items-center flex-space-between">
 		<view class="label">开启转账提醒</view>
 		<view class="inputs">
-			<!-- <input class="book_placeholder" type="text" maxlength="10" placeholder="备注(选填)" adjust-position="{{false}}"
-				bindinput="bindKeyInputRemark" /> -->
 				<z-switch-wiew height="40" width="80"  bgColor="{{switchOpenColor}}" unBgColor="#f4f2f7" bind:change="changeCheck" checked="{{checked}}"> </z-switch-wiew>
 		</view>
-	</view>
+	</view> -->
 	<view class="book-name radius-10 flex flex-align-items-center flex-space-between">
 		<view class="label">金额</view>
 		<view class="input amount">
@@ -165,7 +163,7 @@
 					<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
 				</view>
 			</view> -->
-			<scroll-view class="account-scroll" scroll-y="{{true}}" style="height:50vh">
+			<scroll-view class="account-scroll" show-scrollbar="{{false}}" scroll-y="{{true}}" style="height:50vh">
 				<view wx:if="{{accountList.length}}">
 					<view class="item" wx:for="{{accountList}}" wx:key="index">
 						<view class="item-header">{{item.category_name}}</view>
@@ -214,12 +212,12 @@
 
 
 
-<date-filter-popup show="{{showCycleStartPopupFlag}}" mode="bottom" contentHeight="40vh"
+<date-filter-popup show="{{showCycleStartPopupFlag}}" mode="bottom" contentHeight="42vh"
 	filterList="{{cycleStartFilterList}}" defaultActiveIndex="{{cycleStartInfo.activeIndex}}"
 	showPickerWhen="{{['YMD', 'WEEK', 'D', 'MD']}}" defaultDate="{{cycleStartInfo.defaultDate}}"
 	closeOnClickOverlay="{{false}}" pickerMode="{{cycleStartPickerMode}}" startDateLimit="{{startDateLimit}}"
 	endDateLimit="2100-01-31" bind:close="closeCycleStartPopup" bind:confirm="onCycleStartConfirm"
-	bind:filterTap="onStartFilterTap" />
+	bind:filterTap="onStartFilterTap"/>
 <!--周期结束弹窗  -->
 <date-filter-popup show="{{showCycleEndPopupFlag}}" mode="bottom" contentHeight="20vh"
 	filterList="{{cycleEndFilterList}}" defaultActiveIndex="{{cycleEndInfo.activeIndex}}" closeOnClickOverlay="{{false}}"

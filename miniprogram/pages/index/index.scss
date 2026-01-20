@@ -27,8 +27,11 @@
 	color: $z-text-color;
 	font-weight: 600;
 }
-
+.custom-right{
+	display: flex;
+}
 .custom-circle {
+	
 	position: relative;
 	background-color: rgba(255, 255, 255, .6);
 	border: 1rpx solid rgba(0, 0, 0, 0.05);
@@ -536,5 +539,83 @@
 		margin: 0;
 		-webkit-tap-highlight-color: transparent;
 	}
+
+}
+
+
+
+#scrollview{
+
+.bill-container {
+  overflow: hidden;
+
+  .bill-wrapper {
+    position: relative;
+    top: 0;
+    overflow: hidden;
+    background: $z-bg-color;
+    margin-bottom: 10rpx; // 增加间距，避免滑动时遮挡
+
+    &.btn-hover {
+      background-color: $z-btn-white-hover;
+    }
+
+    // 账单主内容区
+    .bill-wrapper_item {
+      position: relative;
+      left: 0;
+      // height: 120rpx; // 固定高度，保证按钮对齐
+      transition: all 0.3s ease; // 顺滑过渡
+      padding: 0 20rpx;
+      box-sizing: border-box;
+    }
+
+    // 滑动操作栏容器
+    .slide-actions {
+      position: absolute;
+      right: -200rpx; // 3个按钮 * 130rpx = 390rpx
+      top: 0;
+      height: 100%;
+      display: flex;
+      transition: all 0.3s ease;
+    }
+
+    // 通用操作按钮样式
+    .action-btn {
+      width: 100rpx;
+      height: 100%;
+      color: $z-bg-color;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: $z-font-size-20;
+    }
+
+    // 各按钮个性化样式
+    .view-btn {
+      background-color: $z-color-primary; // 蓝色-查看
+    }
+
+    .edit-btn {
+      background-color: $z-color-success; // 绿色-编辑
+    }
+
+    .del-btn {
+      background-color: $z-color-error; // 红色-删除
+    }
+
+    // 激活滑动后的样式
+    &.active {
+      .bill-wrapper_item {
+        left: -200rpx; // 对应操作栏宽度，整体左移
+      }
+
+      .slide-actions {
+        right: 0; // 操作栏显示
+      }
+    }
+  }
+}
 
 }

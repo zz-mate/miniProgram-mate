@@ -64,7 +64,7 @@
 </scroll-view>
 <view class="shortcut" bind:tap="handleCreatPlab">
 	<view class="shortcut_count color-primary save-disabled radius-10 flex flex-center">
-		继续添加
+		编辑
 	</view>
 </view>
 <z-notify id="customNotify" bind:close="onNotifyClose"/>

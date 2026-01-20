@@ -17,7 +17,7 @@
 						<view class="bill-wrapper_item cart-list"  data-i="{{i}}" bindtouchstart="touchS" bindtouchmove="touchM"
 							bind:tap="handlePageUrl">
 							<view class="status">{{item.status_text}}</view>
-							<view class="version" wx:if="{{item.cycle_text!=='一次性'}}">已转{{item.version}}次</view>
+							<view class="version" wx:if="{{item.cycle_text!=='仅一次'}}">已转{{item.version}}次</view>
 							<view class="title flex flex-align-items-center">
 								<image class="icon-aw"
 									src="http://oss-api.zz-mate.cn/uploads/2026/01/1768398547211-dc1b2f87-7666-428e-bdcc-faecbc5e65c3.png"
@@ -40,7 +40,7 @@
 								</view>
 								<view class="right-box">
 									<view class="account-info">
-										<view class="book-name">{{item.book_info.name}} 账本</view>
+										<view class="book-name">{{item.book_info.name}}</view>
 										<view class="name">{{item.category_info.name}}</view>
 									</view>
 								</view>
@@ -69,8 +69,10 @@
 					mode="widthFix" />
 			</view>
 			<view class="no-data-text">
-				<view>暂无预约计划</view>
-				<view>添加计划，自动记账更省心</view>
+				<!-- <view>暂无预约计划</view>
+				<view>添加计划，自动记账更省心</view> -->
+				<view>抱歉呀，这个功能还在“修炼”</view>
+				<view>等它解锁新技能就和您见面</view>
 			</view>
 		</view>
 	</sticky-section>
@@ -78,8 +80,9 @@
 
 
 </scroll-view>
-<view class="shortcut" bind:tap="handleAdd">
+<!-- <view class="shortcut" bind:tap="handleAdd">
 	<view class="shortcut_count color-primary radius-10 flex flex-center">
 		添加
 	</view>
-</view>
+</view> -->
+<z-notify id="customNotify" bind:close="onNotifyClose"/>

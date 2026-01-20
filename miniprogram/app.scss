@@ -32,7 +32,7 @@
 /** 主题颜色**/
 $-theme-color:#FFD608;
 /* 文字基本颜色 */
-$z-text-color:#303030; // 基本色
+$z-text-color:#303030; // 基本色 图标色
 $z-text-color-80:#646464; 
 $z-text-color-60:#9c9c9c;
 $z-text-color-40:#bcbcbc;
@@ -467,8 +467,8 @@ input {
 
  .del_button {
 		position: absolute;
-		right: -130rpx;
-		width: 130rpx;
+		right: -100rpx;
+		width: 100rpx;
 		height: 100%;
 		// height: 253rpx;
 		background-color: $z-color-error;
@@ -479,12 +479,12 @@ input {
 		justify-content: center;
 		align-items: center;
 		transition: all 0.3s;
-		font-size: $z-font-size-22;
+		font-size: $z-font-size-20;
 	}
 
 	.active .bill-wrapper_item {
 		height: 100%;
-		left: -130rpx;
+		left: -100rpx;
 	}
 
 	.active .del_button {

@@ -34,3 +34,4 @@ background="{{navBgColor}}"></navigation-bar>
   </view>
   <!-- <view wx:if="{{showLetter &&list[curr].letter}}" class="fixed_letter">{{list[curr].letter}}</view> -->
 </view>
+<z-notify id="customNotify" bind:close="onNotifyClose"/>

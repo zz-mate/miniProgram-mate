@@ -149,7 +149,10 @@ Page({
 		}
 	},
  async	getCategoryIconListFn(){
+
 		let res = await getCategoryIconList({page:1,pageSize:200})
+
+
 	this.setData({list:res.data.list})
 		
 	},

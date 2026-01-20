@@ -138,25 +138,29 @@
 
 		<view class="keyboard-tab-list flex  flex-space-between">
 			<view class="left">
-				<scroll-view class=" flex" scroll-x="{{true}}"
-					style="height:46rpx;width:calc(100vw - 90rpx);white-space: nowrap;">
-
-					<view class="bill-tag radius-4" bind:tap="handlePopup" data-type="date">
-				
-				<text wx:if="{{bill.date}}">	{{bill.date}}</text>
-						<image wx:else src="http://oss-api.zz-mate.cn/uploads/2026/01/1768534954511-3710b2ae-2790-488b-b506-111b4e49a76e.png" mode=""  class="z-icon icon-calendar"/>
-					</view>
-					<view class="bill-tag radius-4" bind:tap="handlePopup" data-type="account"
-						style="color:{{bill.account_id?'#000':'#999'}}">
-						{{bill.account_name || '账户'}}
-					</view>
-					<view class="bill-tag radius-4" bind:tap="getLocation" 	style="color:{{bill.address?'#000':'#999'}}">
-					
-					{{bill.address||'定位'}}
-					<!-- http://oss-api.zz-mate.cn/uploads/2026/01/1768535105838-2fe6476f-254b-4db7-a634-b339c39074f1.png -->
-					</view>
-						<!--	<view class="bill-tag radius-4" bind:tap="handleRefund" style="color:{{bill.refound?'#000':'#999'}}">退款</view> -->
-				</scroll-view>
+				<scroll-view 
+  class="flex scroll-x-container" 
+  scroll-x="{{true}}"  
+  show-scrollbar="{{false}}"
+  style="height:46rpx;width:calc(100vw - 90rpx);"
+>
+  <view class="bill-tag radius-4" bind:tap="handlePopup" data-type="date">
+	<image 
+      src="http://oss-api.zz-mate.cn/uploads/2026/01/1768534954511-3710b2ae-2790-488b-b506-111b4e49a76e.png"
+      mode="" class="z-icon icon-calendar" />
+    <text> {{bill.date}}</text>
+    
+  </view>
+  <view class="bill-tag radius-4" bind:tap="handlePopup" data-type="account"
+    style="color:{{bill.account_id?'#000':'#999'}}">
+		<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768832358149-0dd8a1a5-1785-4889-a161-bda1605976ed.png" mode="" class="z-icon" />
+		{{bill.account_name || '账户'}}</view>
+  <view class="bill-tag radius-4" bind:tap="getLocation" style="color:{{bill.address?'#000':'#999'}}">
+	<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768535105838-2fe6476f-254b-4db7-a634-b339c39074f1.png " mode="" class="z-icon"/>
+    {{bill.address||'定位'}} </view>
+</scroll-view>
+				<!--	<view class="bill-tag radius-4" bind:tap="handleRefund" style="color:{{bill.refound?'#000':'#999'}}">退款</view> -->
+				<!-- http://oss-api.zz-mate.cn/uploads/2026/01/1768535105838-2fe6476f-254b-4db7-a634-b339c39074f1.png -->
 				<!-- <scroll-view class="flex category-child-list" scroll-x="{{true}}"
 					wx:if="{{categoryList[categoryIndex].children.length}}"
 					style="height:40rpx;width:100%;white-space: nowrap;margin-top: 10rpx;">
@@ -199,8 +203,8 @@
 						bindtap='tapKey'>8</view>
 					<view class='key nine' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='9'
 						bindtap='tapKey'>9</view>
-					<view class='key dot' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
-						bindtap='tapDel' bindlongpress="longpressDel" bindtouchend="stopInterval">
+					<view class='key dot' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" bindtap='tapDel'
+						bindlongpress="longpressDel" bindtouchend="stopInterval">
 						<image class="del-image" src="/static/icon/icon-backspace.png" mode="widthFix"></image>
 					</view>
 
@@ -209,8 +213,7 @@
 					<view class='key four' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key=' 4'
 						bindtap='tapKey'>4
 					</view>
-					<view class='key five'  data-key='5'
-						bindtap='tapKey'>5</view>
+					<view class='key five' data-key='5' bindtap='tapKey'>5</view>
 					<view class='key six' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='6'
 						bindtap='tapKey'>6</view>
 					<view class='key add' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='+'
@@ -233,8 +236,8 @@
 						bindtap='tapKey'>.</view>
 					<view class='key zero' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='0'
 						bindtap='tapKey'>0</view>
-					<view class="key again" data-again="{{1}}" hover-class="btn-hover" hover-stay-time="50"
-						hover-start-time="0" bindtap="tapSubmit">再记</view>
+					<view class="key again" data-again="{{1}}" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
+						bindtap="tapSubmit">再记</view>
 					<!-- 核心：动态切换=和完成 -->
 					<view class="key submit main {{selectedTab==0?'active-0':'active-1'}}" hover-class="btn-hover"
 						hover-stay-time="50" hover-start-time="0" data-again="{{2}}" bindtap="tapSubmit">
@@ -254,9 +257,8 @@
 	bind:closeOnClickOverlay="handleCloseOverlay" show="{{showPopup_date}}" closeOnClickOverlay="{{true}}"
 	mode="{{'bottom'}}">
 	<view class="popup-content" style="height:35vh">
-		<date-picker bind:onCancel="handleCloseOverlay" bind:onConfirm="onConfirmDate" mode="YMDhm" forceInitFirstDay="false"
-    initType="normal" date="{{date}}"
-			></date-picker>
+		<date-picker bind:onCancel="handleCloseOverlay" bind:onConfirm="onConfirmDate" mode="YMDhm"
+			forceInitFirstDay="false" initType="normal" date="{{date}}"></date-picker>
 	</view>
 </z-popup>
 <!-- 账户 -->
@@ -346,37 +348,36 @@
 		<scroll-view scroll-y style="height:60vh">
 			<block wx:if="{{bookList.length>0}}">
 
-<view class="book-list  radius-10">
-	<view
-		class="book-item  flex flex-align-items-center flex-space-between {{index==bookIndex?'book-list_active':''}}"
-		wx:for="{{bookList}}" wx:key="index"  hover-class="btn-hover" hover-stay-time="50"
-							hover-start-time="0" data-index="{{index}}"
-		bind:tap="handleMenoSelected">
-		<view class="cover">
-			<image src="{{item.icon|| 'https://picsum.photos/50/60?random=2'}}" mode="aspectFill" />
-		</view>
-		<view class="info">
-			<view class="book-name">{{item.name}}</view>
-			<!-- <view class="num">1人</view> -->
-		</view>
-		<view class="icon" wx:if="{{item.is_default==1}}">
-			<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
-		</view>
-	</view>
-</view>
+				<view class="book-list  radius-10">
+					<view
+						class="book-item  flex flex-align-items-center flex-space-between {{index==bookIndex?'book-list_active':''}}"
+						wx:for="{{bookList}}" wx:key="index" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
+						data-index="{{index}}" bind:tap="handleMenoSelected">
+						<view class="cover">
+							<image src="{{item.icon|| 'https://picsum.photos/50/60?random=2'}}" mode="aspectFill" />
+						</view>
+						<view class="info">
+							<view class="book-name">{{item.name}}</view>
+							<!-- <view class="num">1人</view> -->
+						</view>
+						<view class="icon" wx:if="{{item.is_default==1}}">
+							<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
+						</view>
+					</view>
+				</view>
 
-</block>
-<view class="no-data" wx:else>
-<view class="no-data-icon">
-	<image
-		src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
-		mode="widthFix" />
-</view>
-<view class="no-data-text">
-	<view>记账就是记录生活</view>
-	<view>财务自由，从记第一笔开始</view>
-</view>
-</view>
+			</block>
+			<view class="no-data" wx:else>
+				<view class="no-data-icon">
+					<image
+						src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
+						mode="widthFix" />
+				</view>
+				<view class="no-data-text">
+					<view>记账就是记录生活</view>
+					<view>财务自由，从记第一笔开始</view>
+				</view>
+			</view>
 		</scroll-view>
 
 	</view>
@@ -431,3 +432,5 @@
 	</view>
 
 </z-popup>
+
+<z-notify id="customNotify" bind:close="onNotifyClose" />

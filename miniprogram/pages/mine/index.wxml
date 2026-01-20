@@ -153,7 +153,7 @@
 					</view>
 				</view>
 
-
+				
 				<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
 					data-url="/subPackagesMine/pages/setting/index" data-type="page" bind:tap="handlePageUrl">
 					<view class="icon">
@@ -224,3 +224,5 @@
     <view>等它解锁新技能就和您见面</view>
   </view>
 </view> -->
+
+<z-notify id="customNotify" bind:close="onNotifyClose"/>

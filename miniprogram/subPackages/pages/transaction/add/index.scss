@@ -506,15 +506,39 @@ page {
 		// transition: all .3s ease;
 		// background-color: #07c160
 		.left {
-			.bill-tag {
-				display: inline-block;
-				height: 46rpx;
-				line-height: 46rpx;
-				padding: 0 8rpx;
-				background-color: #FFF;
-				margin-right: 8rpx;
-			}
+	/* 横向滚动容器核心样式 */
+.scroll-x-container {
+  display: flex;          /* 启用flex布局 */
+  flex-direction: row;    /* 主轴横向排列（默认，显式声明更稳妥） */
+  flex-wrap: nowrap;      /* 强制子元素不换行（核心） */
+  align-items: center;    /* 子元素垂直居中，适配46rpx高度 */
+  white-space: nowrap;    /* 兼容行内元素不换行 */
+}
 
+/* 标签项样式（解决换行的核心） */
+.bill-tag {
+  display: inline-flex;   /* 行内弹性布局，既保持行内特性又支持flex居中 */
+  align-items: center;    /* 内部文字/图片垂直居中 */
+  justify-content: center;/* 内部内容水平居中 */
+  height: 46rpx;          /* 和容器高度一致，避免高度不一致导致布局错乱 */
+  padding: 0 20rpx;       /* 内边距，避免内容挤在一起 */
+  margin-right: 10rpx;    /* 标签之间的间距，可选 */
+  background-color: #ffffff; /* 可选，增加视觉区分 */
+  white-space: nowrap;    /* 标签内文字不换行（比如长地址/日期） */
+	font-size: 22rpx;
+}
+
+/* 原有样式保留 */
+
+.z-icon {
+  width: 24rpx;
+  height: 24rpx;
+vertical-align: middle;
+margin-right: 4rpx;
+}
+.icon-calendar {
+  vertical-align: middle; /* 图片和文字对齐 */
+}
 		}
 
 

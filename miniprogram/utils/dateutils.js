@@ -314,6 +314,49 @@ function formatToTimestamp(timeStr, separator = '-') {
   return timestamp;
 }
 
+  /**
+   * 获取当日是周几（中文全称，如：周一、周二...周日）
+   * @param {Date | number | string} date 可选，指定日期，默认当前日期
+   * @returns {string} 中文周几（如：周三）
+   */
+  function getWeekdayCN(date) {
+    // 统一转换为Date对象
+    const targetDate = date ? new Date(date) : new Date();
+    // 原生getDay()返回 0(周日) - 6(周六)
+    const weekDay = targetDate.getDay();
+    const weekTextMap = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    return weekTextMap[weekDay];
+  }
+
+  /**
+   * 获取当日是几日（数字，如：1、15、31）
+   * @param {Date | number | string} date 可选，指定日期，默认当前日期
+   * @returns {number} 日期数字（1-31）
+   */
+   function getDayOfMonth(date) {
+    const targetDate = date ? new Date(date) : new Date();
+    // 原生getDate()返回当月的日期（1-31）
+    return targetDate.getDate();
+  }
+
+  /**
+   * 获取当日是几月几日（格式化字符串，如：01月01日、12月31日）
+   * @param {Date | number | string} date 可选，指定日期，默认当前日期
+   * @param {boolean} withLeadingZero 可选，是否补前导0，默认true
+   * @returns {string} 格式化后的月日字符串
+   */
+   function getMonthDay(date, withLeadingZero = true) {
+    const targetDate = date ? new Date(date) : new Date();
+    // 原生getMonth()返回 0(1月) - 11(12月)，需要+1
+    const month = targetDate.getMonth() + 1;
+    const day = targetDate.getDate();
+
+    // 补前导0处理
+    const formatNum = (num) => withLeadingZero ? num.toString().padStart(2, '0') : num;
+    return `${formatNum(month)}月${formatNum(day)}日`;
+  }
+
+
 module.exports = {
   formatTime: formatTime,
   formatLongTime: formatLongTime,
@@ -339,5 +382,8 @@ module.exports = {
   getDaysOfMonth,
   modeMapToFields: modeMapToFields,
   adaptIosDateStr,
-	formatToTimestamp
+	formatToTimestamp,
+	getWeekdayCN,
+	getDayOfMonth,
+	getMonthDay
 }

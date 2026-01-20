@@ -4,11 +4,74 @@
 		"miniprogram": {
 			"list": [
 				{
+					"name": "subPackages/pages/transaction/prepayment/add/index",
+					"pathName": "subPackages/pages/transaction/prepayment/add/index",
+					"query": "",
+					"scene": null,
+					"launchMode": "default"
+				},
+				{
+					"name": "subPackages/pages/transaction/add/index",
+					"pathName": "subPackages/pages/transaction/add/index",
+					"query": "bookId=25",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/prepayment/add/index",
+					"pathName": "subPackages/pages/transaction/prepayment/add/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/prepayment/add/index",
+					"pathName": "subPackages/pages/transaction/prepayment/add/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/bill/index",
+					"pathName": "subPackages/pages/transaction/bill/index",
+					"query": "date=2026&yearMonthMoreActive=1&type=0&bookId=28",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/book/index",
+					"pathName": "subPackages/pages/book/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/calendar/index",
+					"pathName": "subPackages/pages/transaction/calendar/index",
+					"query": "date=",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/prepayment/add/index",
+					"pathName": "subPackages/pages/transaction/prepayment/add/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "subPackages/pages/transaction/prepayment/add/index",
+					"pathName": "subPackages/pages/transaction/prepayment/add/index",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
 					"name": "subPackages/pages/plan/add/index",
 					"pathName": "subPackages/pages/plan/add/index",
 					"query": "bookId=26",
-					"scene": null,
-					"launchMode": "default"
+					"launchMode": "default",
+					"scene": null
 				},
 				{
 					"name": "subPackages/pages/plan/add/index",

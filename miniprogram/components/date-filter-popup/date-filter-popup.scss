@@ -133,7 +133,12 @@
     background: rgba(0, 0, 0, 0);
   }
 }
-
+.tips{
+	text-align: center;
+	font-size: 20rpx;
+	color: #FF8C08;
+height: 50rpx;
+}
 /* 遮罩层核心样式 */
 .popup {
   position: fixed;

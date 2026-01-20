@@ -85,3 +85,5 @@ background="{{navBgColor}}">
 		添加
 	</view>
 </view>
+
+<z-notify id="customNotify" bind:close="onNotifyClose"/>

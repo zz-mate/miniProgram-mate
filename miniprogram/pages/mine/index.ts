@@ -139,8 +139,26 @@ Page({
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad() {
+	// clear(){
+	// 	const notify = this.selectComponent('#customNotify');
+		
+	// 	this.getUserInfo()
+	// 	notify.showNotify({
+	// 		message: '缓存已清除',
+	// 		type: 'success',
+	// 		duration: 1500,
+	// 		position:"bottom",
+	// 	});
+	// },
+	getUserInfo(){
+		let userInfo = getStorageSync("userInfo")
 
+		getUserById({ userId: userInfo.id }).then((res) => {
+			setStorageSync('userInfo', res.data);
+			this.setData({
+				userInfo: res.data
+			})
+		})
 	},
 
 	/**
@@ -163,14 +181,7 @@ Page({
 			return
 		}
 		// this.isSubscribedBind()
-		let userInfo = getStorageSync("userInfo")
-
-		getUserById({ userId: userInfo.id }).then((res) => {
-			setStorageSync('userInfo', res.data);
-			this.setData({
-				userInfo: res.data
-			})
-		})
+		this.getUserInfo()
 	},
 
 	/**
