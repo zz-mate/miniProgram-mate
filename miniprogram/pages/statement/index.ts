@@ -25,9 +25,10 @@ Page({
 		isPieExpand: false,
 		navBarHeight: 0,
 		statusBarHeight: 0,
+		capsuleHeight:0,
 		filterHeight: 0,
 		bookInfo: null,
-		yearMonthMoreActive: 1,
+		yearMonthMoreActive: 2,
 		tabsList: [{ id: 1, name: "全部" }, { id: 2, name: "年" }, { id: 3, name: "月" }],
 		typeIndex: 0, // 0-支出 1-收入
 		chartType: 'line', // 图表类型 line/bar
@@ -158,8 +159,8 @@ Page({
 		this.setData({ yearMonthMoreActive: sub });
 		const { typeIndex } = this.data;
 		// 只保留支出(0)和收入(1)
-		let type_idx = typeIndex == 0 ? 0 : 1;
-		this.getChartData(type_idx);
+
+		this.getChartData(typeIndex);
 	},
 
 	handleYear(evt) {
@@ -552,7 +553,7 @@ Page({
 				trigger: 'axis',
 				triggerOn: 'mousemove',
 				confine: true,
-				backgroundColor:typeIndex === 0 ? COLOR.expenseColor:COLOR.incomeColor,
+				backgroundColor: typeIndex === 0 ? COLOR.expenseColor : COLOR.incomeColor,
 				padding: [2, 6],
 				borderRadius: [0, 0, 0, 0],
 				textStyle: {
@@ -709,15 +710,28 @@ Page({
 
 	getPie(data, timeDimension = 'day') {
 		let { typeIndex } = this.data;
-	
+
 		// 支出颜色数组
 		let typeIndexGrColors = [
-			'#FFE500', '#FFD100', '#FFC107', '#FFB300', '#FFA000',
-			'#FF8F00', '#FF8000', '#F5D000', '#E6C200', '#D9B500',
-			'#CCA800', '#BF9B00', '#B28E00', '#A58100', '#987400',
-			'#8B6700', '#7E5A00'
+			'#FFF8E1', // 极浅黄（主题primaryLight浅一度）
+			'#FFF176', 
+			'#FFE500', 
+			'#FFD608', // 核心主题色（重点突出）
+			'#FFD100', 
+			'#FFC107', 
+			'#FFB300', 
+			'#FFA000', 
+			'#FF8F00', 
+			'#FF8000', 
+			'#F5D000', 
+			'#E6C200', 
+			'#D9B500', 
+			'#CCA800', 
+			'#BF9B00', 
+			'#B28E00', 
+			'#A58100'
 		];
-	
+
 		// 收入颜色数组
 		let typeIndexReColors = [
 			COLOR.incomeColor, '#E55555', '#FF8A65', '#E64A19', '#FFB74D',
@@ -726,11 +740,11 @@ Page({
 			'#FFE0B2', '#FFD740', '#E65100', '#BF360C', '#FF7043',
 			'#FFCA28', '#F4511E', '#E0F2F1'
 		];
-	
 
-		
+
+
 		const amountText = this.data.chartData.PieData.summary.totalAmount;
-	
+
 		// 无数据兜底逻辑
 		const isEmptyData = !data || data.length === 0 || (data.length === 1 && !data[0].value && !data[0].count);
 		const renderData = isEmptyData ? [{
@@ -740,12 +754,12 @@ Page({
 			label: { show: false, formatter: '暂无数据', color: '#999', fontSize: 12, fontFamily: 'WeChatSansStd' },
 			labelLine: { show: false }
 		}] : data;
-	
+
 		// 数据量判断
 		const dataLength = renderData.length;
 		const isLargeData = dataLength > 10;
 		const isMonthDimensionLarge = timeDimension === 'month' && dataLength > 15;
-	
+
 		let option = {
 			title: {
 				text: '分类占比',
@@ -770,35 +784,35 @@ Page({
 			tooltip: isEmptyData ? {
 				show: false
 			} : {
-				trigger: "item",
-				formatter: "{b} : {c} ({d}%)",
-				position: function (point, params, dom, rect, size) {
-					let x = 0;
-					let y = 0;
-					let pointX = point[0];
-					let pointY = point[1];
-					let boxWidth = size.contentSize[0];
-					let boxHeight = size.contentSize[1];
-					if (boxWidth > pointX) {
-						x = 5;
-					} else {
-						x = pointX - boxWidth;
-					}
-					if (boxHeight > pointY) {
-						y = 5;
-					} else {
-						y = pointY - boxHeight;
-					}
-					return [x, y];
+					trigger: "item",
+					formatter: "{b} : {c} ({d}%)",
+					position: function (point, params, dom, rect, size) {
+						let x = 0;
+						let y = 0;
+						let pointX = point[0];
+						let pointY = point[1];
+						let boxWidth = size.contentSize[0];
+						let boxHeight = size.contentSize[1];
+						if (boxWidth > pointX) {
+							x = 5;
+						} else {
+							x = pointX - boxWidth;
+						}
+						if (boxHeight > pointY) {
+							y = 5;
+						} else {
+							y = pointY - boxHeight;
+						}
+						return [x, y];
+					},
+					backgroundColor: '#f4f2f7',
+					padding: [2, 6],
+					borderRadius: [0, 0, 0, 0],
+					textStyle: { color: '#999999', fontSize: 8 },
+					shadowBlur: 0,
+					shadowColor: 'transparent',
+					borderWidth: 0
 				},
-				backgroundColor: '#f4f2f7',
-				padding: [2, 6],
-				borderRadius: [0, 0, 0, 0],
-				textStyle: { color: '#999999', fontSize: 8 },
-				shadowBlur: 0,
-				shadowColor: 'transparent',
-				borderWidth: 0
-			},
 			grid: {
 				top: 40
 			},
@@ -872,12 +886,12 @@ Page({
 				]
 			}
 		};
-		
+
 		// 如果是暂无数据，不显示中间金额
 		if (isEmptyData) {
 			option.graphic.elements = [];
 		}
-		
+
 		return option;
 	},
 
@@ -904,7 +918,7 @@ Page({
 		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' });
 
-		let { typeIndex,bookInfo } = this.data;
+		let { typeIndex, bookInfo } = this.data;
 		// 只保留支出(2)和收入(1)
 		let transactionType = typeIndex == 0 ? 2 : 1;
 
@@ -954,6 +968,7 @@ Page({
 		this.setData({
 			navBarHeight: capsuleConfig.navBarHeight,
 			statusBarHeight: capsuleConfig.statusBarHeight,
+			capsuleHeight: capsuleConfig.capsuleHeight
 		});
 
 		const { yearMonthMoreActive } = this.data;
@@ -971,10 +986,12 @@ Page({
 		if (!token) return;
 
 
-		let bookList = getStorageSync("bookList")
-		let bookInfo = bookList.filter((ele) => ele.is_default == 1)[0]
-		let bookIndex = bookList.findIndex((ele)=>ele.is_default==1)
-		this.setData({ bookInfo,bookIndex });
+		let singleBookList = getStorageSync("bookList")
+		let multiBookList = getStorageSync("multiBookList")
+		let bookList = [...singleBookList,...multiBookList]
+		let bookInfo = getStorageSync("bookInfo")
+		let bookIndex = bookList.findIndex((ele) => ele.id == bookInfo.id)
+		this.setData({ bookInfo, bookIndex });
 		this.getChartData(typeIndex);
 	},
 	async handleCheckBook() {
@@ -983,7 +1000,7 @@ Page({
 		}
 		let res = await getBookList(data)
 		this.setData({
-			bookList: res.data.singleBookList,
+			bookList: [...res.data.singleBookList,...res.data.multiBookList],
 		})
 	},
 	// 选择账本
@@ -1011,6 +1028,19 @@ Page({
 	 */
 	onShow() {
 		this.getTabBar().setData({ selected: 3 });
+
+		this.setData({ 
+			bookInfo: getStorageSync("bookInfo"),
+			'queryParams.start_time':getThisDate("YY-MM")
+		 })
+		let { typeIndex } = this.data
+		let singleBookList = getStorageSync("bookList")
+		let multiBookList = getStorageSync("multiBookList")
+		let bookList = [...singleBookList,...multiBookList]
+		let bookInfo = getStorageSync("bookInfo")
+		let bookIndex = bookList.findIndex((ele) => ele.id == bookInfo.id)
+		this.setData({ bookInfo, bookIndex });
+		this.getChartData(typeIndex);
 	},
 
 	/**

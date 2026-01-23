@@ -88,12 +88,13 @@
 		.progress-content {
 			.default {
 				margin-bottom: 4rpx;
+				border-radius: 2rpx;
 			}
 
 			.red,
 			.default {
 				height: 4rpx;
-				// border-radius: 2rpx;
+				border-radius: 2rpx;
 				overflow: hidden;
 				background-color: #f4f2f758;
 

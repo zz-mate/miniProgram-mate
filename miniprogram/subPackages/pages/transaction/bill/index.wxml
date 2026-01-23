@@ -46,7 +46,7 @@
 </view>
 
 
-<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y
+<scroll-view type="custom"  show-scrollbar="{{false}}" scroll-y
 	style="height:calc(100% - {{scrollHeight+advHeight}}px) ">
 	<view class="collapse-wrap">
 		<view class="sticky-content  radius-10" style="top:{{navBarHeight +'px'}}">
@@ -70,7 +70,7 @@
 											data-transaction_type="{{item.type}}" data-transaction_id="{{item.id}}"
 											bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}" bindtouchstart="touchS"
 											bindtouchmove="touchM">
-											<view class="left-icon">
+											<view class="left-icon radius-4">
 												<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}"
 													mode="widthFix" />
 											</view>
@@ -79,6 +79,8 @@
 													<view class="title">{{item.category.name}}</view>
 													<view class="date-other num flex flex-align-items-center">
 														<text class="time-text text">{{item.bill_time}} </text>
+														<text class="time-text text"
+												wx:if="{{bookType==2}}">{{item.consumer.id==userInfo.id?'自己':item.consumer.nickname}} </text>
 													</view>
 												</view>
 												<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
@@ -117,7 +119,7 @@
 
 
 
-		<view class="no-data" wx:if="{{transactionList.length==0}}">
+		<view class="no-data radius-10" wx:if="{{transactionList.length==0}}">
 			<view class="no-data-icon">
 				<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png" mode="widthFix" />
 			</view>
@@ -144,7 +146,7 @@
 						<!-- 内层循环：渲染当前swiper-item中的10个年份 -->
 						<view class="year-group">
 							<block wx:for="{{item}}" wx:for-item="year" wx:key="year">
-								<view class="year-item {{year==queryParams.start_time?'active':''}}" data-year="{{year}}"
+								<view class="year-item radius-4 {{year==queryParams.start_time?'active':''}}" data-year="{{year}}"
 									bind:tap="handleYear">{{year}}</view>
 							</block>
 						</view>
@@ -174,7 +176,7 @@
 								<block wx:for="{{yearObj.monthList}}" wx:for-item="monthRow" wx:key="index">
 									<!-- 第四层循环：单个月份（行内的每个数字） -->
 									<block wx:for="{{monthRow}}" wx:for-item="month" wx:key="month">
-										<view class="month-item  {{yearObj.year+'-'+month == chooseYearDate ? 'active' : ''}}"
+										<view class="month-item radius-4  {{yearObj.year+'-'+month == chooseYearDate ? 'active' : ''}}"
 											data-month="{{month}}" data-="{{yearObj.year}}" bind:tap="handleMonth">
 											{{month}}月
 										</view>

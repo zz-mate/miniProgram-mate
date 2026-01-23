@@ -10,7 +10,7 @@
 				<view
 					class="book-item flex flex-align-items-center flex-space-between {{index==bookIndex?'book-list_active':''}}"
 					wx:for="{{bookList}}" wx:key="index" data-index="{{index}}">
-					<view class="cover">
+					<view class="cover radius-2">
 						<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="aspectFill" />
 					</view>
 					<view class="info">

@@ -2,17 +2,24 @@
 <navigation-bar title="" back="{{false}}" homeButton="{{false}}" auto="{{false}}" color="#000"
 	background="{{navBgColor}}">
 	<view slot="left">
-		<view class=" flex flex-align-items-center"    bind:tap="handleBookPopup"
+		<!-- <view class=" flex flex-align-items-center"    bind:tap="handleBookPopup"
 		data-type="book">
 			<text>{{bookInfo.name|| '未登录'}}</text>
 			<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"/>
-		</view>
+		</view> -->
+		<view class="custom-circle" data-type="book" bind:tap="handleBookPopup"
+				style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius: {{capsuleHeight/2}}px "
+				>
+				<image class="icon-calendar"
+					src="http://oss-api.zz-mate.cn/uploads/2026/01/1769129024959-c46b3cbc-c31d-4736-838f-f7a83d449310.png"
+					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
+			</view>
 	</view>
 	<view slot="center" class="subsection">
 		<z-tabs bind:change="handleChange" active="{{yearMonthMoreActive}}" tabs="{{tabsList}}"></z-tabs>
 	</view>
 </navigation-bar>
-<view class="filter-date flex flex-space-between  flex-align-items-center">
+<view class="filter-date flex flex-space-between  flex-align-items-center" wx:if="{{yearMonthMoreActive!==0}}">
 	<view class="place-hoder-lt"></view>
 	<view class="date num flex flex-align-items-center" bind:tap="handlePopup">
 		<text>{{queryParams.start_time}}{{queryParams.end_time}}</text>
@@ -39,14 +46,12 @@
 						</view>
 
 
-						<view class="tips-content flex flex-align-items-center flex-space-between  num "
+						<view class="tips-content  radius-6 flex flex-align-items-center flex-space-between  num "
 							bind:tap="handleDatePage" data-chart="line" data-date="{{queryParams.start_time}}"
 							data-title="{{chartData.lineData.summary.timeRange}}">
-							<view>
-								{{chartData.lineData.summary.timeRange}}，{{typeIndex==0?'支出':typeIndex==1?'收入':'结余'}}
-								共计 {{chartData.lineData.summary.totalCount}} 笔
-								{{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
-								{{chartData.lineData.summary.totalAmount}}
+							<view class="flex flex-align-items-center">
+							<text>{{chartData.lineData.summary.timeRange}}，{{typeIndex==0?'支出':typeIndex==1?'收入':'结余'}} 共计 {{chartData.lineData.summary.totalCount}} 笔 {{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}</text>
+							<text class="{{typeIndex==0?'text-theme ':'text-error'}}">{{chartData.lineData.summary.totalAmount}}</text>
 							</view>
 
 							<view class="icon-arrow">
@@ -57,13 +62,13 @@
 						<view class="bill-day flex flex-align-items-center" wx:for="{{chartData.lineData.list}}"
 							hover-class="btn-hover" hover-stay-time='10' data-date="{{item.date}}" data-title="{{item.dateStr}}"
 							data-chart="line" wx:if="{{isLineExpand || index < 3}}" bind:tap="handleDatePage">
-							<view class="day  num radius {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">{{item.day}}</view>
+							<view class="day  num radius-4 {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">{{item.day}}</view>
 							<view class="info">
 								<view class="date-money flex flex-space-between num">
 									<text class="date">{{item.dateStr}}</text>
 									<text class="money">{{item.amount}}</text>
 								</view>
-								<view class="progress-container">
+								<view class="progress-container  radius-2">
 									<view class="progress-bar"
 										style="width: {{item.ratioPercent}}%;background-color:{{typeIndex==0? greenClor:typeIndex==1? redClor : yellowClor}}">
 									</view>
@@ -89,15 +94,15 @@
 
 
 
-						<view class="tips-content flex flex-align-items-center flex-space-between num "
+						<view class="tips-content  radius-6 flex flex-align-items-center flex-space-between num "
 							bind:tap="handleDatePage" data-date="{{queryParams.start_time}}" data-chart="pie"
 							data-title="{{chartData.PieData.summary.timeRange}}">
-							<view>
-								{{chartData.PieData.summary.timeRange}}，{{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}
-								{{chartData.PieData.summary.totalAmount}}
+							<view class="flex flex-align-items-center">
+								<text>{{chartData.PieData.summary.timeRange}}，{{typeIndex==0?'总支出':typeIndex==1?'总收入':'总结余'}}</text>
+								<text class="{{typeIndex==0?'text-theme ':'text-error'}}">{{chartData.PieData.summary.totalAmount}}</text>
 							</view>
 							<!-- 收入共计 {{chartData.PieData.summary.totalCategory}} 笔分类， -->
-							<view class="icon-arrow">
+							<view class="icon-arrow ">
 								<image src="/static/icon/icon-data-right.png" mode="widthFix" />
 							</view>
 						</view>
@@ -106,16 +111,16 @@
 							data-category_id="{{item.categoryId}}" data-date="{{queryParams.start_time}}" data-chart="pie"
 							data-category_name="{{item.name}}" hover-class="btn-hover" hover-stay-time='10'
 							wx:if="{{isPieExpand || index < 3}}" bind:tap="handleDatePage">
-							<view class="day radius disburse num {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">
+							<view class="day radius-4 disburse num {{typeIndex==0?'disburse':typeIndex==1?'income':'jy'}}">
 								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" class="icon" />
 
 							</view>
 							<view class="info">
 								<view class="date-money flex flex-space-between num">
-									<text class="date">{{item.name}}</text>
+									<text class="date ">{{item.name}}</text>
 									<text class="money">{{item.value}}</text>
 								</view>
-								<view class="progress-container">
+								<view class="progress-container radius-2">
 									<view class="progress-bar"
 										style="width: {{item.ratioPercent}}%;background-color:{{typeIndex==0? greenClor:typeIndex==1? redClor : yellowClor}}">
 									</view>
@@ -172,7 +177,7 @@
 						<!-- 内层循环：渲染当前swiper-item中的10个年份 -->
 						<view class="year-group">
 							<block wx:for="{{item}}" wx:for-item="year" wx:key="year">
-								<view class="year-item {{year==queryParams.start_time?'active':''}}" data-year="{{year}}"
+								<view class="year-item radius-4 {{year==queryParams.start_time?'active':''}}" data-year="{{year}}"
 									bind:tap="handleYear">{{year}}</view>
 							</block>
 						</view>
@@ -202,7 +207,7 @@
 								<block wx:for="{{yearObj.monthList}}" wx:for-item="monthRow" wx:key="index">
 									<!-- 第四层循环：单个月份（行内的每个数字） -->
 									<block wx:for="{{monthRow}}" wx:for-item="month" wx:key="month">
-										<view class="month-item {{yearObj.year+'-'+month == chooseYearDate ? 'active' : ''}}"
+										<view class="month-item radius-4 {{yearObj.year+'-'+month == chooseYearDate ? 'active' : ''}}"
 											data-month="{{month}}" data-="{{yearObj.year}}" bind:tap="handleMonth">
 											{{month}}月
 										</view>
@@ -225,12 +230,12 @@
 	mode="{{'bottom'}}">
 	<view class="popup-content">
 		<scroll-view scroll-y style="height:50vh">
-			<block wx:if="{{bookList.length>0}}">
-				<block wx:for="{{bookList}}" wx:key="index">
+			<view wx:if="{{bookList.length>0}}" style="padding-bottom:70px">
+				<view wx:for="{{bookList}}" wx:key="index" >
 					<view class="book-list {{index==bookIndex?'book-list_active':''}}" style="width: 100%;height: 100rpx;"
 						data-index="{{index}}" bind:tap="handleBookSelected">
 						<view class="book-item flex flex-align-items-center flex-space-between">
-							<view class="cover">
+							<view class="cover radius-2">
 								<image src="{{item.icon}}" mode="" />
 							</view>
 							<view class="info">
@@ -242,8 +247,8 @@
 							</view>
 						</view>
 					</view>
-				</block>
-			</block>
+				</view>
+			</view>
 			<view class="no-data" wx:else>
 					<view class="no-data-icon">
 						<image

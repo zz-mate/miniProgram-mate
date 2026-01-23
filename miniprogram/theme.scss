@@ -1,0 +1,59 @@
+// src/styles/theme.scss
+// 1. 静态主题变量（默认使用 FFD608 柠檬黄）
+// 如需切换，直接修改下面的变量值，或替换为其他主题的配置
+$primary: #FFD608;
+$primaryLight: #FFFDE7;
+$primaryDark: #F9C700;
+$primaryText: #263238;
+$expense: #FFD608;
+$expenseLight: #FFFDE7;
+$income: #81C784;
+$incomeLight: #E8F5E9;
+$success: #66BB6A;
+$warning: #FFA726;
+$danger: #EF5350;
+$info: #90CAF9;
+$textPrimary: #263238;
+$textSecondary: #546E7A;
+$textTertiary: #90A4AE;
+$bgMain: #FAFAFA;
+$bgCard: #FFFFFF;
+$bgLine: #ECEFF1;
+$bgMask: rgba(0,0,0,0.3);
+$white: #FFFFFF;
+$black: #000000;
+$gray1: #F5F5F5;
+$gray2: #EEEEEE;
+$gray3: #E0E0E0;
+$gray4: #BDBDBD;
+$gray5: #9E9E9E;
+
+// 2. 混合器（复用样式逻辑）
+@mixin theme-bg($type: primary) {
+  @if $type == primary {
+    background-color: $primary;
+    color: $primaryText;
+  } @else if $type == danger {
+    background-color: $danger;
+    color: $white;
+  } @else if $type == success {
+    background-color: $success;
+    color: $white;
+  }
+}
+
+// 3. 全局样式混入（页面通用）
+@mixin page-common {
+  background-color: $bgMain;
+  min-height: 100vh;
+  color: $textPrimary;
+}
+
+// 4. 卡片样式混入
+@mixin bill-card {
+  background-color: $bgCard;
+  border: 1px solid $bgLine;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 10px 16px;
+}

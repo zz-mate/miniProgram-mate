@@ -4,7 +4,7 @@
 </navigation-bar>
 
 <view class="category-container">
-	<view class="choose-icon radius {{isAnimate ? 'jelly-animate' : ''}} {{selectedCategory.childIcon?'active':'no-active'}} ">
+	<view class="choose-icon  radius-4 {{isAnimate ? 'jelly-animate' : ''}} {{selectedCategory.childIcon?'active':'no-active'}} ">
 		<image src="{{selectedCategory.childIcon||'/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 	</view>
 	<view class="form">
@@ -39,7 +39,7 @@
         data-child-id="{{childItem.id}}" 
        
       >
-        <view class="icon radius {{childItem.isSelected ? 'active' : 'no-active'}}">
+        <view class="icon  radius-4 {{childItem.isSelected ? 'active' : 'no-active'}}">
           <image 
             src="{{childItem.icon|| '/static/icon/icon-Placeholder-image.png'}}" 
             mode="widthFix" 

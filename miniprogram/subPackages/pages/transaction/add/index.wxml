@@ -24,7 +24,7 @@
 	<view class="conent radius-10">
 		<view class=" flex flex-align-items-center flex-space-between">
 			<view class="lt flex flex-align-items-center">
-				<view class="icon  {{isAnimate ? 'jelly-animate' : ''}}">
+				<view class="icon  radius-4 {{isAnimate ? 'jelly-animate' : ''}}">
 					<image src="{{categoryList[categoryIndex].icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
 				</view>
 				<view class="icon-title">{{categoryList[categoryIndex].name}}</view>
@@ -55,10 +55,10 @@
 				<scroll-view class="list-scroll" scroll-y enable-flex scroll-with-animation show-scrollbar="{{false}}"
 					style="height: 100%;">
 
-					<view class="list" wx:if="{{categoryList.length}}">
+					<view class="list">
 						<view class="item" wx:for="{{categoryList}}" wx:key="index" data-index="{{index}}"
 							bind:tap="handleChooseCategory">
-							<view class="icon radius {{ categoryIndex==index?'active':'not-active'}}">
+							<view class="icon  radius-4 {{ categoryIndex==index?'active':'not-active'}}">
 								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 							</view>
 							<view class="icon-title">{{item.name}}</view>
@@ -72,7 +72,7 @@
 						</view>
 					</view>
 
-					<block wx:else>
+					<!-- <block wx:else>
 						<view class="no-data-1">
 							<view class="no-data-icon">
 								<image
@@ -84,7 +84,7 @@
 								<view>等它解锁新技能就和您见面</view>
 							</view>
 						</view>
-					</block>
+					</block> -->
 				</scroll-view>
 			</view>
 		</swiper-item>
@@ -154,7 +154,7 @@
   <view class="bill-tag radius-4" bind:tap="handlePopup" data-type="account"
     style="color:{{bill.account_id?'#000':'#999'}}">
 		<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768832358149-0dd8a1a5-1785-4889-a161-bda1605976ed.png" mode="" class="z-icon" />
-		{{bill.account_name || '账户'}}</view>
+		{{bill.account_name || '不使用账户'}}</view>
   <view class="bill-tag radius-4" bind:tap="getLocation" style="color:{{bill.address?'#000':'#999'}}">
 	<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768535105838-2fe6476f-254b-4db7-a634-b339c39074f1.png " mode="" class="z-icon"/>
     {{bill.address||'定位'}} </view>

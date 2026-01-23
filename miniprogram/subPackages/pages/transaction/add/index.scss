@@ -311,13 +311,13 @@ page {
   font-size: 32rpx;
   margin: 0 0 10rpx;
   background-color: #fff;
-  // border-radius: 0rpx;
+  border-radius: 10rpx;
   position: relative;
   // box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
   justify-content: center;
-	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
+	// box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
   // ========== 核心优化：解决:active无效+点击延迟 ==========
   // 1. 激活小程序view的:active伪类（关键）
   cursor: pointer;

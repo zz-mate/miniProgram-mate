@@ -11,18 +11,20 @@ Page({
 	data: {
 		navBgColor: COLOR.theme,
 		id: null,
+		bookInfo: null,
+		userInfo: null,
 		title: "",
 		transactionInfo: null,//账单详情
-			// 新增标记：是否跳转到详情页（用于判断是否是返回行为）
-			isJumpToDetail: false,
-			// 新增标记：是否首次进入页面
-			isFirstEnter: true,
+		// 新增标记：是否跳转到详情页（用于判断是否是返回行为）
+		isJumpToDetail: false,
+		// 新增标记：是否首次进入页面
+		isFirstEnter: true,
 	},
 
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad({ id, type }) {
+	onLoad({ id, type, userId }) {
 		let title = ""
 		switch (type) {
 			case '1':
@@ -39,11 +41,13 @@ Page({
 				break;
 		}
 		this.setData({
-			id, title
+			id, title, bookInfo: getStorageSync("bookInfo"),
+			userInfo: getStorageSync("userInfo")
 		})
 		let data = {
-			userId: getStorageSync("userInfo").id,
-			billId: id
+			userId: userId || getStorageSync("userInfo").id,
+			billId: id,
+
 		}
 		this.getTransactionInfo(data)
 	},
@@ -57,7 +61,7 @@ Page({
 		console.log(res)
 		this.setData({
 			transactionInfo: res.data,
-			'transactionInfo.markers':[
+			'transactionInfo.markers': [
 				{
 					id: 1,
 					latitude: res.data.latitude,
@@ -83,13 +87,13 @@ Page({
 	handleUpdate() {
 		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		wx.vibrateShort({ type: 'light' })
-		const { id,type } = this.data.transactionInfo
+		const { id, type } = this.data.transactionInfo
 		const bookInfo = wx.getStorageSync('bookInfo')
 		this.setData({
 			isJumpToDetail: true
 		})
 		wx.navigateTo({
-			url: "/subPackages/pages/transaction/add/index?bookId=" + bookInfo.id + '&billId=' + id+'&type='+type,
+			url: "/subPackages/pages/transaction/add/index?bookId=" + bookInfo.id + '&billId=' + id + '&type=' + type,
 			routeType: "wx://upwards"
 		})
 	},
@@ -107,9 +111,9 @@ Page({
 				if (res.confirm) {
 					playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 					that.handleConfirm()
-				}else{
-						playBtnAudio('/static/audio/btnaudio.mp3', 1000);
-		wx.vibrateShort({ type: 'light' })
+				} else {
+					playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+					wx.vibrateShort({ type: 'light' })
 				}
 
 			}
@@ -179,7 +183,7 @@ Page({
 			});
 		}
 	},
-	
+
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
 	 */
@@ -191,7 +195,7 @@ Page({
 	 * 生命周期函数--监听页面显示
 	 */
 	onShow() {
-				// 核心判断逻辑：
+		// 核心判断逻辑：
 		// 1. 不是首次进入（排除onLoad后的首次onShow）
 		// 2. 是从详情页返回（isJumpToDetail为true）
 		if (!this.data.isFirstEnter && this.data.isJumpToDetail) {
@@ -214,7 +218,7 @@ Page({
 			})
 		}
 
-		
+
 	},
 
 	/**

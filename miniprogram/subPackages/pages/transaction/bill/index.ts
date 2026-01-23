@@ -26,7 +26,7 @@ Page({
 			start_time: "" as string,
 			end_time: "" as string,
 			page: 1,
-			pageSize: 100,
+			pageSize: 1000,
 		},
 		total: 0,
 		startDate: 0,
@@ -58,6 +58,7 @@ Page({
 		isJumpToDetail: false,
 		// 新增标记：是否首次进入页面
 		isFirstEnter: true,
+		bookType:1
 	},
 	
 	/**点击TAB 默认日期 */
@@ -104,10 +105,12 @@ Page({
 		const { categoryId,bookId } = this.data
 		let data = {
 			userId: getStorageSync("userInfo").id,
-			bookId,
+			bookId:getStorageSync("bookInfo").id,
 			...this.data.queryParams,
 			type,
-			categoryId
+			categoryId,
+			bill_mode: getStorageSync("bookInfo").bookType
+
 		}
 	
 		let res: any = await getTransactionList(data)
@@ -391,7 +394,7 @@ Page({
 			// 初始化标记
 			isFirstEnter: true,
 			isJumpToDetail: false,
-			// typeIndex: Number(type), 
+			bookType: getStorageSync("bookType")
 			// yearIndex: findYearIndex({ targetYear: type, yearGroupList:this.data.yearList})
 		})
 		// let type_idx = Number(type) == 2 ? 1 :  Number(type)  == 1 ? 2 : 0

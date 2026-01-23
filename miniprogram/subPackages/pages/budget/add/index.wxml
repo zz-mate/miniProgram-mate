@@ -2,7 +2,7 @@
 <navigation-bar title="" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black" background="#FFF">
   <view slot="center" class="subsection flex flex-align-items-center"  bind:tap="handleClear">
     <text>支出月预算</text>
-		<view class="icon">
+		<view class="icon radius-4">
 			<image src="http://oss-api.zz-mate.cn/uploads/2026/01/1768534220036-57e8bec9-757b-488a-a7cb-5a32ce31860f.png" mode="widthFix"
 			class="icon-clear" />
 		</view>
@@ -33,13 +33,13 @@
 
 <view class="budget-category-title">分类预算</view>
 
-<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{height+scrollHeight+40}}px) ">
+<scroll-view type="custom" show-scrollbar="{{false}}" scroll-y style="height:calc(100% - {{height+scrollHeight+50}}px) ">
   <sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
 
-    <view class="budget-list">
+    <view class="budget-list radius-10">
       <view wx:for="{{categoryList}}" wx:key="index">
-        <view class="budget-card radius-10 flex flex-space-between flex-align-items-center">
-          <view class="icon">
+        <view class="budget-card flex flex-space-between flex-align-items-center">
+          <view class="icon radius-4">
             <image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
           </view>
           <view class="budget-title">

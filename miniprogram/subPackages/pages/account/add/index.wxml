@@ -9,27 +9,29 @@
 		<image src="{{params.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 	 </view>
 
-	<view class="book-name radius-10 flex flex-align-items-center flex-space-between">
+<view class="radius-10">
+	<view class="book-name  flex flex-align-items-center flex-space-between">
 		<view class="label">账户名称</view>
 		<view class="input">
 			<input class="book_placeholder num"   type="text" maxlength="10" placeholder="{{params.name}}"
 				adjust-position="{{false}}" bindinput="bindKeyInputName" />
 		</view>
 	</view>
-	<view class="book-name radius-10 flex flex-align-items-center flex-space-between" wx:if="{{params.accountCategoryId=='2'||params.accountCategoryId=='3'||params.accountCategoryId=='5'}}">
+	<view class="book-name flex flex-align-items-center flex-space-between" wx:if="{{params.accountCategoryId=='2'||params.accountCategoryId=='3'||params.accountCategoryId=='5'}}">
 		<view class="label">卡号</view>
 		<view class="input">
 			<input class="book_placeholder num" type="digit" maxlength="4" placeholder="卡号后四位(选填)"
 				adjust-position="{{false}}" bindinput="bindKeyInputCard" />
 		</view>
 	</view>
-	<view class="book-name radius-10 flex flex-align-items-center flex-space-between">
+	<view class="book-name  flex flex-align-items-center flex-space-between">
 		<view class="label">余额</view>
 		<view class="input">
 			<input class="book_placeholder num" type="digit" maxlength="10" placeholder="{{params.money}}"
 				adjust-position="{{false}}" bindinput="bindKeyInput" />
 		</view>
 	</view>
+</view>
 </view>
 
 

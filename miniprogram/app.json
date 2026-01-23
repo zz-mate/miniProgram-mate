@@ -6,6 +6,9 @@
 		"pages/login/index",
 		"pages/account/index",
 		"pages/statement/index",
+		"pages/community/index",
+
+
 		"pages/tools/index"
 	],
 	"subPackages": [
@@ -44,6 +47,8 @@
 				"pages/transaction/calendar/index",
 				"pages/book/index",
 				"pages/book/list/index",
+				"pages/book/info/index",
+				"pages/book/info/qrcode/index",
 				"pages/book/category/index",
 				"pages/book/add/index",
 				"pages/account/category/index",

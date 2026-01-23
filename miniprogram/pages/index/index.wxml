@@ -4,30 +4,34 @@
 	<view slot="left" wx:if="{{refreshStatus!='松手进入二楼'&&refreshStatus!='进入二楼'}}">
 		<!-- catch:tap="handleBookPage"border-radius:0  {{capsuleHeight/2}}px {{capsuleHeight/2}}px 0 -->
 		<view class="custom-capsule flex flex-align-items-center" catch:tap="handleBookPage"
-			style="height:{{capsuleHeight}}px;line-height: {{capsuleHeight}}px;">
-			{{bookInfo.name||'未登录'}}
+			style="height:{{capsuleHeight}}px;line-height: {{capsuleHeight}}px;border-radius:0  {{capsuleHeight/2}}px {{capsuleHeight/2}}px 0">
+			{{ bookInfo.name ||'未登录'}}
 			<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom" />
 		</view>
 	</view>
 	<view slot="right">
 		<view class="custom-right">
-			<!-- <view class="custom-circle" style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
+			<!-- <view class="custom-circle"
+				style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius: {{capsuleHeight/2}}px "
 				catch:tap="handleCalenderPage">
 				<image class="icon-calendar"
 					src="http://oss-api.zz-mate.cn/uploads/2026/01/1768884390279-4fdc55e1-177b-43e2-97d4-a6f2918bd493.png"
 					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
 			</view> -->
 
-			<!-- <view class="custom-circle" style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
+			<view class="custom-circle" wx:if="{{bookType==2}}"
+				style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius: {{capsuleHeight/2}}px "
 				catch:tap="handleCalenderPage">
 				<image class="icon-calendar"
 					src="http://oss-api.zz-mate.cn/uploads/2026/01/1768538636228-c75e736c-449d-4260-84b7-e8072302895c.png"
 					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
-			</view> -->
+			</view>
 			<!-- <view class="custom-circle"
-			style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
-			catch:tap="handleSaoCode">
-			<image class="icon-calendar" src="http://oss-api.zz-mate.cn/uploads/2026/01/1768796079222-312c0966-e986-4e55-996d-3dcc655c23a9.png" mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;"/>
+				style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius:{{capsuleHeight/2}}px "
+				catch:tap="handleSaoCode">
+				<image class="icon-calendar"
+					src="http://oss-api.zz-mate.cn/uploads/2026/01/1768796079222-312c0966-e986-4e55-996d-3dcc655c23a9.png"
+					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
 			</view> -->
 		</view>
 	</view>
@@ -57,17 +61,18 @@
 		<view class="fake-nav-bar">
 			<view class="fake-card">
 				<image class="icon-book" src="{{bookInfo.icon}}" mode="scaleToFill" lazy-load="true" />
-				<!-- <view class="user-together" catch:tap="handlePopup" data-type="together">
-					<view class="together-icon">
-						<image class="icon-together" src="/static/together.png" mode="widthFix" />
-					</view>
-					<view class="together-text">一起记</view>
-				</view> -->
 				<view class="bill-card">
 					<view class="current-title">本月支出</view>
-					<view class="current-money num flex flex-align-items-center flex-space-between">
+					<view class="current-money num flex flex-align-items-center">
 						<view class="money">{{eyeIndex==1?summary.totalExpend||'0.00':'*******'}}</view>
-
+						<view class="text-tips flex  flex-align-items-center" wx:if="{{bookType==1}}">
+							<text>同比上月</text>
+							<image class="text-image"
+								src="{{summary.yearOnYearExpend.isOver100?'http://oss-api.zz-mate.cn/uploads/2026/01/1768975328591-ed2b5a71-3c6d-44d2-b2b2-407c6b16335d.png':'http://oss-api.zz-mate.cn/uploads/2026/01/1769088319134-5c3e6bc4-99d2-4200-9626-f897c6fa7d5a.png'}}"
+								mode="" />
+							<text style="padding-top:2rpx"
+								class="{{summary.yearOnYearExpend.isOver100?'text-error':'text-success'}}">{{summary.yearOnYearExpend.value}}</text>
+						</view>
 					</view>
 					<view class="current-title flex num">
 						<text>本月收入 {{eyeIndex==1?summary.totalIncome||'0.00':'****'}}</text>
@@ -75,7 +80,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="fake-plac">
+			<view class="fake-plac" wx:if="{{bookType==1}}">
 				<view class="fast-card shadow radius-10">
 					<view class="list radius-10 flex flex-space-around">
 						<view class="item" data-type="bill" data-url="/subPackages/pages/transaction/bill/index"
@@ -96,7 +101,7 @@
 							<image src="/static/icon/icon-calendar.png" mode="widthFix" />
 							<view class="title">日历</view>
 						</view>
-						<view class="item" data-url="/subPackages/pages/transaction/prepayment/index"  catch:tap="handlePageUrl">
+						<view class="item" data-url="/subPackages/pages/transaction/prepayment/index" catch:tap="handlePageUrl">
 							<image src="/static/icon/icon-prepayment.png" mode="widthFix" />
 							<view class="title">预约</view>
 						</view>
@@ -107,12 +112,54 @@
 					</view>
 				</view>
 			</view>
+			<view class="fake-plac-mutil" wx:else>
+				<view class="fast-card">
+					<view class="mutil-list flex flex-space-between">
+						<view class="item radius-10">
+							<view class="flex flex-align-items-center">
+								<image
+									src="http://oss-api.zz-mate.cn/uploads/2026/01/1769068841142-fda6dcf5-27c1-4356-9d04-beb5bc6ed083.png"
+									mode="" class="icon" />
+								<view class="money-title">
+									<view class="money text-success num">{{mutilData.personalTotalExpend}}</view>
+									<view class="title">我的支出</view>
+								</view>
+							</view>
+							<view class="progress-container radius-4">
+								<view
+									class="progress-bar bg-success"
+									style="width: {{mutilData.rawPersonalData.personalExpendPercentage}}%">
+								</view>
+							</view>
+						</view>
+						<view class="item radius-10">
+							<view class="flex flex-align-items-center">
+								<image
+									src="http://oss-api.zz-mate.cn/uploads/2026/01/1769069048361-e9b60b25-51c5-41a5-bc77-bd877c22f5f8.png"
+									mode="" class="icon" />
+								<view class="money-title">
+									<view class="money text-error num">{{mutilData.personalTotalIncome}}</view>
+									<view class="title">我的收入</view>
+								</view>
+							</view>
+							<view class="progress-container radius-4">
+								<view
+									class="progress-bar bg-error"
+									style="width: {{ mutilData.rawPersonalData.personalIncomePercentage}}%">
+								</view>
+							</view>
+						</view>
+
+					</view>
+				</view>
+
+			</view>
 
 		</view>
 		<!-- <view style="padding-top:90rpx;z-index: -1; pointer-events: none;"></view> -->
 
 		<!-- 预算 -->
-		<view class="budget-card shadow" style="padding: 0 20rpx;" wx:if="{{token&&budgetInfo}}">
+		<view class="budget-card shadow" style="padding: 0 20rpx;" wx:if="{{token&&bookType==1}}">
 			<view class="card num radius-10" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
 				hover-stop-propagation="true" bind:tap="handleSetting">
 				<view class="budget-title flex flex-space-between flex-align-items-center">
@@ -129,7 +176,7 @@
 							mode="widthFix" style="width: 24rpx;height: 24rpx;margin-left: 4rpx;" /> -->
 					</view>
 				</view>
-				<view class="progress-container">
+				<view class="progress-container radius-4">
 					<view
 						class="progress-bar {{ budgetInfo.remaining_percent>0?'bg-success':budgetInfo.remaining_percent==0?'bg-success':'bg-error'}}"
 						style="width: {{100 -  budgetInfo.remaining_percent}}%">
@@ -173,12 +220,12 @@
 						<view class="num">收{{summary.totalIncome}}</view>
 						<view class="num">{{summary.totalSurplus}}</view>
 					</view>
-					<view class="progress-content">
-						<view class="default">
+					<view class="progress-content radius-2">
+						<view class="default radius-2">
 							<view class="progress-bar bg-error" style="width: {{summary.incomeProgress}}%">
 							</view>
 						</view>
-						<view class="red">
+						<view class="red radius-2">
 							<view class="progress-bar bg-success" style="width: {{summary.expendProgress}}%">
 							</view>
 						</view>
@@ -216,10 +263,10 @@
 					<block wx:for="{{item.list}}" wx:for-index="i">
 						<view class="bill-wrapper {{item.status ? '':'active'}}">
 							<view class="bill-wrapper_item shadow bill-item_items cart-list flex flex-space-between flex-center"
-								hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-transaction_type="{{item.type}}"
+								hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-transaction_type="{{item.type}}" data-consumer_id="{{item.consumer.id}}"
 								data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}"
 								bindtouchstart="touchS" bindtouchmove="touchM">
-								<view class="left-icon">
+								<view class="left-icon radius-4">
 									<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 								</view>
 								<view class="border">
@@ -227,6 +274,8 @@
 										<view class="title">{{item.category.name}}</view>
 										<view class="date-other num flex flex-align-items-center">
 											<text class="time-text text">{{item.bill_time}} </text>
+											<text class="user-text text" wx:if="{{bookType==2}}">{{item.consumer.id==userInfo.id?'自己':item.consumer.nickname}} </text>
+
 										</view>
 									</view>
 									<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
@@ -239,16 +288,16 @@
 								bindtap='deleteList'>删除
 							</view> -->
 
-							<view class="slide-actions">
+							<view class="slide-actions" wx:if="{{userInfo.id==bookInfo.bookOwnerId||userInfo.id==item.consumer.id}}">
 								<!-- 查看按钮 -->
 								<!-- <view class="action-btn view-btn" 
           data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-type="{{item.type}}" 
           bindtap='handleViewBill'>查看</view> -->
 								<!-- 编辑按钮 -->
-								<view class="action-btn edit-btn" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}"
+								<view class="action-btn edit-btn" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-user_id="{{item.consumer.id}}"
 									data-type="{{item.type}}" bindtap='handleEditBill'>编辑</view>
 								<!-- 删除按钮 -->
-								<view class="action-btn del-btn" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}"
+								<view class="action-btn del-btn" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-user_id="{{item.consumer.id}}"
 									data-type="single" bindtap='deleteList'>删除</view>
 							</view>
 
@@ -268,6 +317,7 @@
 					<view>财务自由，从记第一笔开始</view>
 				</view>
 			</view>
+			
 		</view>
 
 

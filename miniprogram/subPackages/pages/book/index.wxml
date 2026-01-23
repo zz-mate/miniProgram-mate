@@ -1,64 +1,105 @@
 <!--subPackages/pages/book/index.wxml-->
-<navigation-bar title="选择账本" back="{{false}}" homeButton="{{false}}" color="black" background="#fff"></navigation-bar>
+<navigation-bar title="选择账本" back="{{true}}" homeButton="{{false}}" color="black" background="#fff"></navigation-bar>
 
-<scroll-view type="custom" scroll-y style="height:calc(100% - {{height}}px) ">
+<scroll-view type="custom" id="scrollview" scroll-y style="height:calc(100% - {{height}}px) ">
 	<!-- 备忘录内容 -->
-	<sticky-section push-pinned-header="{{false}}" padding="{{[10,10,10,10]}}">
-		<block wx:if="{{bookList.length>0}}">
-
-			<view class="book-list  radius-10">
-				<view
-					class="book-item  flex flex-align-items-center flex-space-between {{index==bookIndex?'book-list_active':''}}"
-					wx:for="{{bookList}}" wx:key="index"  hover-class="btn-hover" hover-stay-time="50"
-										hover-start-time="0" data-index="{{index}}"
-					bind:tap="handleMenoSelected">
-					<view class="cover">
-						<image src="{{item.icon|| 'https://picsum.photos/50/60?random=2'}}" mode="aspectFill" />
-					</view>
-					<view class="info">
-						<view class="book-name">{{item.name}}</view>
-						<!-- <view class="num">1人</view> -->
-					</view>
-					<view class="icon" wx:if="{{item.is_default==1}}">
-						<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
+	<sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
+		<view wx:if="{{bookList.length>0}}">
+			<view class="book-tit">个人账本</view>
+			<view class="book-list bill-container radius-10 ">
+				<view wx:for="{{bookList}}" wx:for-index="i">
+					<view class="bill-wrapper  {{item.status ? '':'active'}}">
+						<view
+							class="book-item bill-wrapper_item  flex flex-align-items-center flex-space-between {{index==bookIndex?'book-list_active':''}}"
+							 data-i="{{i}}" bindtouchstart="touchS"  data-type="single"
+							bindtouchmove="touchM" data-id="{{item.id}}" data-book_name="{{item.name}}" bind:tap="handleMenoSelected">
+							<view class="cover radius-2">
+								<image src="{{item.icon|| 'https://picsum.photos/50/60?random=2'}}" mode="aspectFill" />
+							</view>
+							<view class="info">
+								<view class="book-name">{{item.name}}</view>
+							
+							</view>
+							<view class="icon" wx:if="{{item.is_default==1&&bookType==1}}">
+								<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
+							</view>
+						</view>
+						<view class="slide-actions">
+							<!-- 查看按钮 -->
+							<!-- <view class="action-btn view-btn" data-i="{{i}}" data-id="{{item.id}}" data-type="{{item.type}}"
+								bindtap='handleViewBill'>查看</view> -->
+							<!-- 编辑按钮 -->
+							<view class="action-btn edit-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.name}}" data-type="{{item.type}}"
+							data-book_owner_id="{{item.bookOwnerId}}" 		bindtap='handleEditBook'>编辑</view>
+							<!-- 删除按钮 -->
+							<view class="action-btn del-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.name}}"
+								bindtap='singleDel'>删除</view>
+						</view>
 					</view>
 				</view>
-			</view>
-
-		</block>
-		<view class="no-data" wx:else>
-			<view class="no-data-icon">
-				<image
-					src="https://env-00jxubueh4pn.normal.cloudstatic.cn/定价.png?expire_at=1764261402&er_sign=4ab433c02317f99059060951b00c32e1"
-					mode="widthFix" />
-			</view>
-			<view class="no-data-text">
-				<view>记账就是记录生活</view>
-				<view>财务自由，从记第一笔开始</view>
+				<view class="mutil-tips">向左滑动账本-编辑-添加 解锁多人共享账本新功能</view>
 			</view>
 		</view>
-		<block wx:if="{{multiBookList.length>0}}">
 
+		<!-- <block wx:if="{{multiBookList.length>0}}">
+			<view  class="book-tit"> 多人账本</view>
 			<view class="book-list multi radius-10">
 				<view class="book-item  flex flex-align-items-center flex-space-between " wx:for="{{multiBookList}}"
-					wx:key="index" hover-class="btn-hover" hover-stay-time='10' data-index="{{index}}"
+					wx:key="index" hover-class="btn-hover" hover-stay-time='10' data-index="{{index}}" data-type="multi"
 					bind:tap="handleMultiSelected">
 					<view class="cover">
 						<image src="{{item.icon|| 'https://picsum.photos/50/60?random=3'}}" mode="" />
 					</view>
 					<view class="info">
 						<view class="book-name">{{item.name}}</view>
-						<view class="num">{{item.is_multi_user_name}}人</view>
+						<view class="num role-name radius-2">{{item.userRoleName}}</view>
 					</view>
-					<view class="icon" wx:if="{{item.is_default==1&&item.book_owner_id==userInfo.id}}">
+					<view class="icon" wx:if="{{multiIndex==index&&bookType==2}}">
 						<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
 					</view>
 				</view>
 			</view>
 
-		</block>
+		</block> -->
 
-
+		<view wx:if="{{multiBookList.length>0}}">
+			<view class="book-tit">多人账本</view>
+			<view class="book-list bill-container radius-10 ">
+				<view wx:for="{{multiBookList}}" wx:for-index="i">
+					<view class="bill-wrapper  {{item.status ? '':'active'}}">
+						<view
+							class="book-item bill-wrapper_item  flex flex-align-items-center flex-space-between {{index==bookIndex?'book-list_active':''}}"
+						 data-i="{{i}}" bindtouchstart="MtouchS"  data-type="single"
+							bindtouchmove="MtouchM" data-id="{{item.id}}" data-book_name="{{item.name}}" bind:tap="handleMultiSelected">
+							<view class="cover radius-2">
+								<image src="{{item.icon|| 'https://picsum.photos/50/60?random=2'}}" mode="aspectFill" />
+							</view>
+							<view class="info">
+								<view class="book-name">{{item.name}}</view>
+						
+						<view class="role-name radius-2">{{item.userRoleName}}</view>
+							</view>
+							<view class="member-num">{{item.memberCount}}人</view>
+							<view class="icon" wx:if="{{multiIndex==i&&bookType==2}}">
+								<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
+							</view>
+						</view>
+						<view class="slide-actions">
+							<!-- 查看按钮 -->
+							<!-- <view class="action-btn view-btn" data-i="{{i}}" data-id="{{item.id}}" data-type="{{item.type}}"
+								bindtap='handleViewBill'>查看</view> -->
+							<!-- 编辑按钮 -->
+							<view class="action-btn edit-btn" data-i="{{i}}" data-id="{{item.id}}" data-book_owner_id="{{item.bookOwnerId}}"  data-name="{{item.name}}" 
+								bindtap='handleEditBook'>编辑</view>
+							<!-- 删除按钮 -->
+							<view class="action-btn del-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.name}}" data-book_owner_id="{{item.bookOwnerId}}"
+								bindtap='MutilDel'> {{item.bookOwnerId==userInfo.id?'解散':'退出'}}</view>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="mutil-tips">「多人记账适配协作，功能少可建单人账本」</view>
+		</view>
 
 	</sticky-section>
 
@@ -71,4 +112,4 @@
 		添加
 	</view>
 </view>
-<z-notify id="customNotify" bind:close="onNotifyClose"/>
+<z-notify id="customNotify" bind:close="onNotifyClose" />

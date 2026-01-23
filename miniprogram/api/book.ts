@@ -48,18 +48,63 @@ export function getBookUserList(data?:any) {
     data,
   });
 }
-
-export function bindJoinBook(data?:any) {
+export function shareCreate(data?:any) {
   return request({
-    url: '/miniProgram/book/bindJoinBook',
+    url: '/miniProgram/share/create',
+    method: 'POST',
+    data,
+  });
+}
+export function joinBook(data?:any) {
+  return request({
+    url: '/miniProgram/book/join',
+    method: 'POST',
+    data,
+  });
+}
+export function validateQrCode(data?:any) {
+  return request({
+    url: '/miniProgram/share/qrcode/validate',
     method: 'POST',
     data,
   });
 }
 
-export function shareBook(data?:any) {
+export function generateCode(data?:any) {
   return request({
-    url: '/miniProgram/book/shareBook',
+    url: '/miniProgram/share/qrcode/generate',
+    method: 'POST',
+    data,
+  });
+}
+
+
+
+export function bookBill(data?:any) {
+  return request({
+    url: '/miniProgram/book/bookBill',
+    method: 'POST',
+    data,
+  });
+}
+export function remove(data?:any) {
+  return request({
+    url: '/miniProgram/book/remove',
+    method: 'POST',
+    data,
+  });
+}
+
+export function removeshareUs(data?:any) {
+  return request({
+    url: '/miniProgram/share/removeshareUs',
+    method: 'POST',
+    data,
+  });
+}
+export function removeMutiBook(data?:any) {
+  return request({
+    url: '/miniProgram/share/removeMutiBook',
     method: 'POST',
     data,
   });

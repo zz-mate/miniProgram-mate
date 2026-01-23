@@ -1,5 +1,5 @@
 import { getTransactionList, removeTransaction } from '../../api/transaction'
-import { getBookList, getBookInfo, getBookUserList, bindJoinBook, shareBook } from '../../api/book'
+import { getBookList, getBookInfo, getBookUserList, bookBill } from '../../api/book'
 import { budgetInfo } from '../../api/budget'
 import { playBtnAudio } from '../../utils/audioUtil'
 import { getThisDate } from '../../utils/util'
@@ -46,32 +46,16 @@ Component({
 			this.getTabBar().setData({ selected: 0 })
 			this.setData({
 				userInfo: getStorageSync("userInfo"),
+				
 			})
+			// setStorageSync("multiIndex",0)
 			app.onLoginSuccess(() => {
 				console.log('回调触发！执行handleBookList');
-				this.handleBookList();
+				this.handleBookList(); // 改造后会自动判断bookType
 			});
 		},
 		hide: function () { },
 		resize: function (size) { },
-		// 新增：页面加载时接收分享参数（核心）
-		load: function (options) {
-			// 捕获分享链接中的 userId 和 bookId
-			const { userId: shareUserId, bookId: shareBookId, type } = options || {};
-			if (shareUserId && shareBookId && type) {
-				console.log('接收的分享参数：', { shareUserId, shareBookId });
-				// 1. 存入组件 data，供后续使用
-				this.setData({
-					shareUserId,
-					shareBookId
-				});
-				// 2. 可选：存入缓存，防止数据丢失
-				setStorageSync('shareParams', { shareUserId, shareBookId });
-				// 3. 可选：执行业务逻辑（比如加入该账本）
-
-				this.handleBindJoinSharedBook(shareUserId, shareBookId);
-			}
-		}
 	},
 	data: {
 		token,
@@ -113,7 +97,7 @@ Component({
 		queryParams: {
 			start_time: '',
 			page: 1,
-			pageSize: 100,
+			pageSize: 1000,
 		},
 		total: 0,
 		totalPages: 0,
@@ -130,7 +114,9 @@ Component({
 			budget_status_code: 1,
 		},
 
-		budgetInfo: null,
+		budgetInfo: {
+			remaining_percent:100
+		},
 		startX: '',
 		startY: '',
 		showPopup_together: false,
@@ -138,7 +124,10 @@ Component({
 		bookUserList: [],
 		// 关键2：新增字段存储分享参数
 		shareUserId: '', // 分享者ID
-		shareBookId: ''  // 分享的账本ID
+		shareBookId: '',  // 分享的账本ID
+		// 新增：存储bookType
+		bookType: 1, // 默认个人账本
+		mutilData:{}
 	},
 
 	lifetimes: {
@@ -148,6 +137,9 @@ Component({
 			this.navBarOpactiy = shared(1)
 			this.showCard = shared(false)
 			this.fakNavBarHeight = shared(0)
+			// 初始化时读取bookType缓存
+			const bookType = Number(getStorageSync('bookType')) || 1;
+			this.setData({ bookType });
 		},
 		attached() {
 			const padding = 10 * 2
@@ -185,7 +177,7 @@ Component({
 	created() {
 		let token = getStorageSync("token")
 		if (!token) return
-		this.handleBookList()
+		this.handleBookList() // 改造后会自动判断bookType
 	},
 	methods: {
 		// 关键3：新增方法 - 处理加入分享账本的业务逻辑
@@ -202,13 +194,11 @@ Component({
 					shareBookId
 				});
 				if (res.code === 200 && !res.data.hasRecord) {
-
 					wx.showToast({ title: '成功加入分享的账本', icon: "none" });
-					// // 重新拉取账本列表和当前账本信息
+					// 重新拉取账本列表和当前账本信息（仅bookType=1时生效）
 					this.handleBookList();
 				}
 			} catch (err) {
-
 				wx.showToast({ title: '网络异常', icon: 'none' });
 			}
 		},
@@ -278,13 +268,13 @@ Component({
 			try {
 				wx.vibrateShort({ type: 'light' })
 				playBtnAudio('/static/audio/btnaudio.mp3', 1000);
-				let { id } = e.currentTarget.dataset || {};
+				let { id ,user_id} = e.currentTarget.dataset || {};
 				if (!id) {
 					wx.showToast({ title: "删除失败：缺少账单ID", icon: "none" });
 					return;
 				}
 				let data = {
-					userId: getStorageSync("userInfo")?.id || "",
+					userId:user_id|| getStorageSync("userInfo")?.id,
 					bookId: getStorageSync("bookInfo")?.id || "",
 					billId: id
 				};
@@ -294,7 +284,6 @@ Component({
 				}
 				let res = await removeTransaction(data);
 				if (res.code === 200) {
-
 					this.getBudgetInfo(data.bookId, data.userId)
 					this.handleTransactionList()
 					notify.showNotify({
@@ -312,28 +301,19 @@ Component({
 			}
 		},
 
-  // 查看账单
-  // handleViewBill(e) {
-  //   const { id, index, i } = e.currentTarget.dataset;
-  //   console.log('查看账单：', id);
-  //   // 这里添加查看账单的逻辑
-  //   this.setData({ ['item.list[' + i + '].slideActive']: false }); // 操作后关闭滑动栏
-  // },
+		// 编辑账单
+		handleEditBill(e) {
+			const { id, type,user_id } = e.currentTarget.dataset;
+			console.log('编辑账单：', id);
+			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+			wx.vibrateShort({ type: 'light' })
+			const bookInfo = wx.getStorageSync('bookInfo')
 
-  // 编辑账单
-  handleEditBill(e) {
-    const { id,type} = e.currentTarget.dataset;
-    console.log('编辑账单：', id);
-		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
-		wx.vibrateShort({ type: 'light' })
-		// const { id,type } = this.data.transactionInfo
-		const bookInfo = wx.getStorageSync('bookInfo')
-
-		wx.navigateTo({
-			url: "/subPackages/pages/transaction/add/index?bookId=" + bookInfo.id + '&billId=' + id+'&type='+type,
-			routeType: "wx://upwards"
-		})
-  },
+			wx.navigateTo({
+				url: "/subPackages/pages/transaction/add/index?bookId=" + bookInfo.id + '&billId=' + id + '&type=' + type+'&user_id='+user_id,
+				routeType: "wx://upwards"
+			})
+		},
 
 		handleEye(evt) {
 			const { eye } = evt.currentTarget.dataset
@@ -341,41 +321,105 @@ Component({
 				eyeIndex: eye == 1 ? 2 : 1,
 			})
 		},
+
+		// ========== 核心改造：handleBookList 方法 ==========
 		async handleBookList() {
 			let token = getStorageSync("token")
-			if (!token) return
+			if (!token) return;
+
+			// 读取bookType缓存
+			const bookType = Number(getStorageSync('bookType')) || 1;
+			this.setData({ bookType });
+
+			// 逻辑1：bookType=2（多人账本）- 直接读取缓存，不请求接口
+			if (bookType === 2) {
+				console.log('当前为多人账本，直接读取缓存bookInfo');
+				const cacheBookInfo = getStorageSync("bookInfo");
+				const cacheSingleBookList = getStorageSync("bookList");
+				const cacheMultiBookList = getStorageSync("multiBookList");
+
+				// 缓存有数据则直接使用
+				if (cacheBookInfo) {
+					this.setData({
+						bookInfo: cacheBookInfo,
+						bookList: [...(cacheSingleBookList || []), ...(cacheMultiBookList || [])]
+					});
+					// 直接执行后续逻辑（不请求bookInfo接口）
+					this.getBudgetInfo(cacheBookInfo.id, getStorageSync("userInfo").id);
+					this.handleTransactionList();
+				} else {
+					// 缓存无数据时降级请求接口（兜底）
+					console.warn('多人账本缓存bookInfo为空，降级请求接口');
+					await this.requestBookListApi();
+				}
+				return;
+			}
+
+			// 逻辑2：bookType=1（个人账本）- 走原有接口请求流程
+			await this.requestBookListApi();
+		},
+
+		// ========== 新增：抽离接口请求逻辑（便于复用和兜底） ==========
+		async requestBookListApi() {
 			let data = {
 				userId: getStorageSync("userInfo").id,
+			};
+			let res = await getBookList(data);
+			console.log('请求账本列表接口返回：', res);
+			let list = [...res.data.singleBookList, ...res.data.multiBookList];
+			if (list.length == 0) {
+				return wx.reLaunch({
+				url:"/subPackages/pages/book/category/index"
+				})
 			}
-			let res = await getBookList(data)
-			console.log(res)
-			let list = res.data.singleBookList
-			if (list.length == 0) return
-			let bookInfo = list.find(ele => {
-				return ele.is_default == 1
-			});
+
+			let bookInfo = list.find(ele => ele.is_default == 1);
 			this.setData({
 				bookInfo,
 				bookList: list
-			})
-			setStorageSync("bookList", res.data.singleBookList)
-			setStorageSync("multiBookList", res.data.multiBookList)
-			this.handleBookInfo()
+			});
+			if (res.data.singleBookList.length == 0) {
+				setStorageSync('bookType', 2)
+							this.setData({
+								bookType:2
+			});
+			}
+			setStorageSync("bookList", res.data.singleBookList);
+			setStorageSync("multiBookList", res.data.multiBookList);
+			// 继续请求账本详情（仅bookType=1时执行）
+			this.handleBookInfo();
 		},
+
+		// ========== 核心改造：handleBookInfo 方法 ==========
 		async handleBookInfo() {
+			let token = getStorageSync("token")
+			if (!token) return;
+
+			// 读取bookType缓存
+			const bookType = Number(getStorageSync('bookType')) || 1;
+
+			// bookType=2（多人账本）- 不请求接口，直接返回
+			if (bookType === 2) {
+				console.log('当前为多人账本，跳过账本详情接口请求');
+				return;
+			}
+
+			// bookType=1（个人账本）- 走原有接口请求流程
 			let data = {
 				userId: getStorageSync("userInfo").id,
 				bookId: this.data.bookInfo.id,
 				is_default: 1
-			}
-			let res = await getBookInfo(data)
-			setStorageSync("bookInfo", res.data)
-			this.getBudgetInfo(data.bookId, data.userId)
+			};
+			let res = await getBookInfo(data);
+			setStorageSync("bookInfo", res.data);
+			this.getBudgetInfo(data.bookId, data.userId);
 			this.setData({
 				bookInfo: res.data,
-			})
-			this.handleTransactionList()
+				bookType:1
+			});
+			this.handleTransactionList();
 		},
+
 		async getBudgetInfo(bookId, userId) {
 			let data = {
 				bookId, userId,
@@ -384,14 +428,28 @@ Component({
 			this.setData({
 				budgetInfo: res.data,
 			})
+			this.getbookBill()
 			this.handleTransactionList()
+
+		},
+		async getbookBill() {
+			let data = {
+				userId: getStorageSync("userInfo").id,
+				bookId: this.data.bookInfo.id,
+				start_time: getThisDate('YY-MM'),
+			}
+			let res = await bookBill(data)
+			this.setData({
+				mutilData:res.data
+			})
 		},
 		async handleTransactionList() {
 			let data = {
 				userId: getStorageSync("userInfo").id,
 				bookId: this.data.bookInfo.id,
 				...this.data.queryParams,
-				start_time: getThisDate('YY-MM')
+				start_time: getThisDate('YY-MM'),
+				bill_mode: getStorageSync("bookInfo").bookType
 			}
 			let res: any = await getTransactionList(data)
 			this.setData({
@@ -547,8 +605,6 @@ Component({
 		},
 		handleBookPage() {
 			const token = wx.getStorageSync('token') || null
-			// const userInfo = getStorageSync("userInfo")
-			// if(userInfo.levelInfo.user_level<=3) return
 			wx.vibrateShort({ type: 'light' })
 			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			if (!token) {
@@ -581,11 +637,12 @@ Component({
 			}
 		},
 		handleTransactionInfo(evt) {
-			const { transaction_id, transaction_type } = evt.currentTarget.dataset
+			const { transaction_id, transaction_type,consumer_id } = evt.currentTarget.dataset
+			// if(consumer_id!==this.data.userInfo.id) return
 			wx.vibrateShort({ type: 'light' })
 			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			wx.navigateTo({
-				url: `/subPackages/pages/transaction/info/index?id=${transaction_id}&type=${transaction_type}`
+				url: `/subPackages/pages/transaction/info/index?id=${transaction_id}&type=${transaction_type}&userId=${consumer_id}`
 			})
 		},
 		handleCalenderPage() {
@@ -675,13 +732,11 @@ Component({
 			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 
 			let userId = getStorageSync("userInfo").id
-
 			let bookId = getStorageSync("bookInfo").id
 			let data = {
 				shareUserId: userId,
 				shareBookId: bookId,
 				inviteeId: 0,
-
 			}
 			await shareBook(data)
 			this.onShareAppMessage()

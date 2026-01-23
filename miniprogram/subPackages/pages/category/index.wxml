@@ -27,7 +27,7 @@
 							<view class="icon-delete" data-i="{{i}}" bind:tap="handleShowDelete">
 								<image src="/static/icon/icon-delete-category.png" mode="widthFix" />
 							</view>
-							<view class="left-icon">
+							<view class="left-icon radius-4">
 								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 							</view>
 							<view class="borde">
@@ -56,7 +56,7 @@
 								bind:tap="handleAddCate">
 								<image src="/static/icon/icon-add-category.png" mode="widthFix" />
 							</view>
-							<view class="left-icon">
+							<view class="left-icon radius-4">
 								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 							</view>
 							<view class="borde">

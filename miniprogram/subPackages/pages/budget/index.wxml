@@ -15,7 +15,7 @@
 		<view class="budget-title" style="color:{{budgetInfo.remaining_percent>=0?'#000000':'#ff0000'}}">
 			总预算{{budgetInfo.remaining_percent>=0?'剩余':'超支'}}</view>
 		<view class="budget-amount num">{{budgetInfo.surplus_amount}}</view>
-		<view class="budget-progress-container">
+		<view class="budget-progress-container radius-6">
 			<view
 				class="progress-bar {{ budgetInfo.remaining_percent>0?'bg-success':budgetInfo.remaining_percent==0?'bg-success':'bg-error'}}"
 				style="width: {{budgetInfo.remaining_percent_}}%">
@@ -65,7 +65,7 @@
 									</view>
 								</view>
 
-								<view class="budget-progress-container">
+								<view class="budget-progress-container radius-2">
 									<view class="progress-bar"
 										style="width: {{100 - item.remaining_percent}}%;background-color: {{ item.remaining_percent>0?'#67C23A':item.remaining_percent==0?'#67C23A':'#ff0000'}}">
 									</view>

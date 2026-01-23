@@ -1,0 +1,58 @@
+/* subPackagesMine/pages/qrcode/index.wxss */
+@import '../../../../../app.scss';
+
+.qrcode-container {
+
+	padding: 0 20rpx;
+	margin: 5vh auto 0;
+}
+
+.qr-content {
+	background-color: #FFF;
+	margin: 0 auto;
+	text-align: center;
+	padding: 20rpx;
+
+	.qr-header {
+		margin-bottom: 30rpx;
+			padding: 40rpx 0 10rpx 0;
+		.icon-qr {
+			width: 28rpx;
+			height: 28rpx;
+			margin-right: 10rpx;
+			vertical-align: middle;
+		}
+
+		.title {
+			font-size: $z-font-size-22;
+
+		}
+	}
+
+	.qr-tips {
+		padding: 0 80rpx;
+		font-size: $z-font-size-18;
+		color: $z-text-color-60;
+		padding-top: 50rpx;
+	}
+
+	.qr-time {
+		padding: 0 80rpx;
+		font-size: $z-font-size-18;
+		color: $z-text-color-60;
+		padding-top: 30rpx;
+	}
+	
+}
+
+.qr-code {
+	width: 280rpx;
+	height: 280rpx;
+	margin: 0 auto;
+}
+.text-error{
+
+	font-size: $z-font-size-20;
+	padding-top: 30rpx;
+	color: $z-color-error;
+	}

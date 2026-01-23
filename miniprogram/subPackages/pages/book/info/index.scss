@@ -1,0 +1,147 @@
+/* subPackages/pages/book/info/index.wxss */
+@import '../../../../app.scss';
+
+.info-container {
+	padding: 20rpx;
+
+	.info-header {
+		padding: 20rpx;
+		background-color: #FFF;
+
+		.add {
+			padding-top: -22rpx;
+
+			.icon-add {
+				width: 60rpx;
+				height: 60rpx;
+				border-radius: 50%;
+			}
+
+			text {
+				color: #FFF;
+				font-size: $z-font-size-18;
+			}
+		}
+
+		.header-title {
+			margin-bottom: 20rpx;
+			font-size: $z-font-size-22;
+		}
+
+		.avatar-container {
+			display: flex;
+			gap: 20rpx;
+			align-items: center;
+			flex-wrap: wrap;
+
+			.avatar {
+				position: relative;
+				width: 90rpx;
+				height: 90rpx;
+			}
+
+			.avatar-item {
+				text-align: center;
+			}
+
+
+			.avatar-img {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				width: 60rpx;
+				height: 60rpx;
+				margin: 0 auto;
+				overflow: hidden;
+			}
+
+			.icon-del {
+				position: absolute;
+				right: 0rpx;
+				top: 0rpx;
+				width: 30rpx;
+				height: 30rpx;
+			}
+
+			text {
+				font-size: $z-font-size-18;
+				color: $z-text-color-60;
+			}
+		}
+	}
+
+	.menu {
+		background-color: #FFF;
+		margin-top: 20rpx;
+
+		.item {
+			height: 80rpx;
+			border-bottom: 1rpx solid #efedf188;
+			padding: 20rpx;
+
+			&:last-child {
+				border: 0;
+			}
+
+			.icon {
+				width: 58rpx;
+				height: 58rpx;
+				margin-right: 20rpx;
+			}
+
+			.title {
+				font-size: $z-font-size-22;
+			}
+
+			.info {
+				flex: 1;
+				justify-content: flex-end;
+				font-size: $z-font-size-22;
+				color: $z-text-color-60;
+			}
+
+			.value {
+				margin-right: 10rpx;
+				color: $z-text-color-80;
+				font-size: $z-font-size-22;
+			}
+
+			.icon-arrow {
+				width: 26rpx;
+				height: 26rpx;
+			}
+		}
+	}
+
+
+
+	.invite-btn {
+		font-size: $z-font-size-18;
+		font-weight: normal;
+		letter-spacing: 2rpx;
+		color: #FFF;
+		text-align: center;
+		border: none;
+		border-radius: 0;
+		padding: 0;
+		margin: 0;
+		background-color: transparent;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+}
+
+.logout {
+	margin: 20rpx 0;
+	padding: 24rpx;
+	background-color: #FFF;
+
+
+
+	.title {
+		font-size: $z-font-size-22;
+	}
+
+
+}

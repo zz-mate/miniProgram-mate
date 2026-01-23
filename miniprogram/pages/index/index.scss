@@ -1,5 +1,9 @@
 /* pages/home/index.wxss */
 @import "../../app.scss"; // 引入全局变量
+@import "../../theme.scss";
+
+
+
 
 .bg-success {
 	background-color: $z-color-success;
@@ -16,7 +20,9 @@
 .text-error {
 	color: $z-color-error;
 }
-
+.text-success {
+	color: $z-color-success;
+}
 /***自定义胶囊样式***/
 .custom-capsule {
 	position: relative;
@@ -27,11 +33,13 @@
 	color: $z-text-color;
 	font-weight: 600;
 }
-.custom-right{
+
+.custom-right {
 	display: flex;
 }
+
 .custom-circle {
-	
+
 	position: relative;
 	background-color: rgba(255, 255, 255, .6);
 	border: 1rpx solid rgba(0, 0, 0, 0.05);
@@ -75,6 +83,13 @@
 		bottom: 30rpx;
 		height: 120rpx;
 	}
+	.fake-plac-mutil {
+		position: absolute;
+		left: 20rpx;
+		right: 20rpx;
+		bottom: 20rpx;
+		// height: 120rpx;
+	}
 
 	.user-together {
 		position: absolute;
@@ -101,11 +116,18 @@
 		overflow: hidden;
 
 		.item {
+			text-align: center;
+
 			.title {
 				font-size: $z-font-size-18;
 				text-align: center;
 				padding-top: 4rpx;
 				color: $z-text-color;
+			}
+
+			.money {
+
+				padding-bottom: 10rpx;
 			}
 
 			image {
@@ -114,6 +136,46 @@
 				margin: 0 auto;
 			}
 		}
+	}
+
+	.mutil-list {
+
+
+		// overflow: hidden;
+		gap: 20rpx;
+
+		.item {
+			padding: 20rpx;
+			background-color: #fff;
+			flex: 1;
+			.icon{
+				width: 60rpx;
+				height: 60rpx;
+				margin-right: 20rpx;
+			}
+			.money-title{
+				.money{
+					font-size: $z-font-size-24;
+					font-weight: 550;
+				}
+				.title{
+					font-size: $z-font-size-18;
+				}
+			}
+		}
+		.progress-container {
+			margin: 12rpx 0 0 0;
+			height: 6rpx;
+			// padding-top: 10rpx;
+			background-color: $z-bg-color-progress;
+			overflow: hidden;
+		}
+
+		.progress-bar {
+			height: 100%;
+			transition: width .3s ease;
+		}
+
 	}
 }
 
@@ -127,6 +189,22 @@
 
 .bill-card .current-title text {
 	margin-right: 30rpx;
+}
+
+.bill-card .current-money .text-tips {
+	font-weight: normal;
+	font-size: $z-font-size-18;
+	color: $z-text-color-80;
+	margin-left: 4rpx;
+}
+
+.bill-card .current-money .text-image {
+	width: 20rpx;
+	height: 20rpx;
+}
+
+.bill-card .current-money .money {
+	margin-right: 20rpx;
 }
 
 .bill-card .current-money {
@@ -147,9 +225,11 @@
 	.card {
 		padding: 20rpx;
 		background-color: $z-bg-color;
+
 		&.btn-hover {
 			background-color: $z-btn-white-hover;
 		}
+
 		.budget-title {
 			.title {
 				font-size: $z-font-size-22;
@@ -180,7 +260,7 @@
 		}
 
 		.budget-money {
-			font-size: $z-font-size-20;
+			font-size: $z-font-size-18;
 			color: $z-text-color-40;
 		}
 	}
@@ -544,78 +624,78 @@
 
 
 
-#scrollview{
+#scrollview {
 
-.bill-container {
-  overflow: hidden;
+	.bill-container {
+		overflow: hidden;
 
-  .bill-wrapper {
-    position: relative;
-    top: 0;
-    overflow: hidden;
-    background: $z-bg-color;
-    margin-bottom: 10rpx; // 增加间距，避免滑动时遮挡
+		.bill-wrapper {
+			position: relative;
+			top: 0;
+			overflow: hidden;
+			background: $z-bg-color;
+			// margin-bottom: 10rpx; // 增加间距，避免滑动时遮挡
 
-    &.btn-hover {
-      background-color: $z-btn-white-hover;
-    }
+			&.btn-hover {
+				background-color: $z-btn-white-hover;
+			}
 
-    // 账单主内容区
-    .bill-wrapper_item {
-      position: relative;
-      left: 0;
-      // height: 120rpx; // 固定高度，保证按钮对齐
-      transition: all 0.3s ease; // 顺滑过渡
-      padding: 0 20rpx;
-      box-sizing: border-box;
-    }
+			// 账单主内容区
+			.bill-wrapper_item {
+				position: relative;
+				left: 0;
+				// height: 120rpx; // 固定高度，保证按钮对齐
+				transition: all 0.3s ease; // 顺滑过渡
+				padding: 0 20rpx;
+				box-sizing: border-box;
+			}
 
-    // 滑动操作栏容器
-    .slide-actions {
-      position: absolute;
-      right: -200rpx; // 3个按钮 * 130rpx = 390rpx
-      top: 0;
-      height: 100%;
-      display: flex;
-      transition: all 0.3s ease;
-    }
+			// 滑动操作栏容器
+			.slide-actions {
+				position: absolute;
+				right: -200rpx; // 3个按钮 * 130rpx = 390rpx
+				top: 0;
+				height: 100%;
+				display: flex;
+				transition: all 0.3s ease;
+			}
 
-    // 通用操作按钮样式
-    .action-btn {
-      width: 100rpx;
-      height: 100%;
-      color: $z-bg-color;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: $z-font-size-20;
-    }
+			// 通用操作按钮样式
+			.action-btn {
+				width: 100rpx;
+				height: 100%;
+				color: $z-bg-color;
+				text-align: center;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: $z-font-size-20;
+			}
 
-    // 各按钮个性化样式
-    .view-btn {
-      background-color: $z-color-primary; // 蓝色-查看
-    }
+			// 各按钮个性化样式
+			.view-btn {
+				background-color: $z-color-primary; // 蓝色-查看
+			}
 
-    .edit-btn {
-      background-color: $z-color-success; // 绿色-编辑
-    }
+			.edit-btn {
+				background-color: $z-color-success; // 绿色-编辑
+			}
 
-    .del-btn {
-      background-color: $z-color-error; // 红色-删除
-    }
+			.del-btn {
+				background-color: $z-color-error; // 红色-删除
+			}
 
-    // 激活滑动后的样式
-    &.active {
-      .bill-wrapper_item {
-        left: -200rpx; // 对应操作栏宽度，整体左移
-      }
+			// 激活滑动后的样式
+			&.active {
+				.bill-wrapper_item {
+					left: -200rpx; // 对应操作栏宽度，整体左移
+				}
 
-      .slide-actions {
-        right: 0; // 操作栏显示
-      }
-    }
-  }
-}
+				.slide-actions {
+					right: 0; // 操作栏显示
+				}
+			}
+		}
+	}
 
 }

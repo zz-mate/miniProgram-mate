@@ -1,0 +1,91 @@
+<!--subPackages/pages/book/info/index.wxml-->
+
+<navigation-bar title="{{bookInfo.name}}" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="#000"
+	background="{{navBgColor}}">
+
+</navigation-bar>
+
+<view class="info-container">
+	<view class="info-header radius-10">
+		<view class="header-title">共享成员</view>
+		<view class="avatar-container">
+		
+			<view class="avatar-item radius-4" wx:for="{{bookInfo.relatedUsers}}" wx:key="index">
+			<view class="avatar">
+			<image class="avatar-img radius-4" src="{{item.avatar}}" alt="" mode="aspectFill"></image>
+			<image class="icon-del" src="/static/icon/icon-delete-category.png" alt="" mode="aspectFill" data-id="{{item.id}}" wx:if="{{bookInfo.user_id==userInfo.id&&bookInfo.user_id!==item.id}}"   data-name="{{item.nickname}}" bind:tap="deleteUser"></image>
+		
+			</view>
+				
+				<text>{{item.nickname==userInfo.nickname?'自己':item.nickname}}</text>
+			</view>
+			<view class="add">
+
+				<button class="invite-btn" open-type="share" data-invite="friend" data-friend="friend" bind:tap="handleInvite">
+				<view>
+					<image class="icon-add"
+					src="http://oss-api.zz-mate.cn/uploads/2026/01/1768884390279-4fdc55e1-177b-43e2-97d4-a6f2918bd493.png"
+					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
+					<!-- <text>添加</text> -->
+				</view>
+			</button>
+
+		
+			</view>
+		</view>
+	</view>
+
+	<view class="menu radius-10">
+		<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time="50" data-book_owner_id="{{bookInfo.bookOwnerId}}"
+			hover-start-time="0" bind:tap="editBookName">
+
+			<view class="title">
+				账本名称
+			</view>
+			<view class="info flex flex-align-items-center">
+				{{bookInfo.name}}
+				<view class="icon-arrow" wx:if="{{book_owner_id==userInfo.id}}">	<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+				</view>
+			</view>
+		</view>
+		<view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time="50"
+			hover-start-time="0" data-type="qrcode" data-value="{{userInfo.nickname}}" bind:tap="handlePageUrl"
+		>
+
+			<view class="title">
+				二维码
+			</view>
+			<view class="info flex flex-align-items-center">
+
+				<view class="icon-arrow">
+					<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+				</view>
+			</view>
+		</view>
+		<!-- <view class="item flex flex-align-items-center flex-space-between" hover-class="btn-hover" hover-stay-time="50"
+			hover-start-time="0" data-type="gender" data-value="{{userInfo.gender}}" bind:tap="handlePageUrl"
+			data-url="/subPackagesMine/pages/userInfo/edit/index">
+
+			<view class="title">
+				封面选项
+			</view>
+			<view class="info flex flex-align-items-center">
+
+				<view class="icon-arrow">
+					<image src="/static/imgs/icon-arrow_right.png" mode="widthFix" />
+				</view>
+			</view>
+		</view> -->
+	</view>
+
+			<view class="logout radius-10" bind:tap="handleExit" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" wx:if="{{bookInfo.type!==1&&book_owner_id!=userInfo.id}}">
+				<view class="item flex flex-align-items-center flex-center">
+
+					<view class="title">
+						退出群组
+					</view>
+
+				</view>
+			</view>
+</view>	
+<z-notify id="customNotify" bind:close="onNotifyClose" />

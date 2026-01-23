@@ -1,0 +1,49 @@
+<!--subPackagesMine/pages/qrcode/index.wxml-->
+<navigation-bar title="邀请成员" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="#000"
+	background="{{navBgColor}}">
+
+</navigation-bar>
+
+<view class="qrcode-container">
+
+	<view class="qr-content radius-10">
+		<view class="qr-header  flex flex-center flex-align-items-center">
+
+		  <image class="icon-qr"
+      src="http://oss-api.zz-mate.cn/uploads/2026/01/1768987157653-010c39f1-4a86-4af8-8d05-418bc701c1cb.png"
+      mode="widthFix" />
+		
+
+		<text class="title">面对面邀请</text>
+		</view>
+		<view class="qr-code">
+			<image
+      src="{{qrcode}}"
+      mode="widthFix" />
+		</view>
+
+		<view class="qr-tips">
+		打开「掌账 Mate」首页-顶部「扫一扫加入账本」或者打开微信，扫码加入
+		</view>
+		<view class="qr-time">
+		二维码{{expireTime}}前有效
+		</view>
+
+	</view>
+		<view class="qr-time text-error">
+		由于该小程序是个人开发，暂无使用自定义二维码权限，后续会使用小程序二维码
+		</view>
+	<!-- <view class="no-data radius-10">
+  <view class="no-data-icon">
+    <image
+      src="{{qrcode}}"
+      mode="widthFix" />
+  </view>
+  <view class="no-data-text" bind:tap="generateUserQRCodeFn">
+    <view>抱歉呀，这个功能还在 “修炼”</view>
+    <view>等它解锁新技能就和您见面</view>
+  </view>
+</view> -->
+</view>
+
+

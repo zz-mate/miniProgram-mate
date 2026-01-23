@@ -32,6 +32,7 @@ Page({
 		selectedTab: 1,// 默认支出
 
 		userInfo: null,
+		userId:'',
 		isAnimate: false, // 动画开关
 		intoView: '',
 		swiperHeight: 0,
@@ -454,7 +455,7 @@ Page({
 
 	// ========== 8. 提交账单 ==========
 	async submitBill(resetCalc = true) {
-		const { bill, billId } = this.data;
+		const { bill, billId,bookInfo,userId } = this.data;
 
 		// if (!this.data.doneFlag) {
 		// 	wx.showToast({ title: '没有分类你点什么😠', icon: 'none' });
@@ -463,8 +464,8 @@ Page({
 
 		const data = {
 			'billId': billId,
-			"user_id": getStorageSync("userInfo").id,
-			"consume_user_id": getStorageSync("userInfo").id,
+			"user_id":userId|| getStorageSync("userInfo").id,
+			"consume_user_id":userId|| getStorageSync("userInfo").id,
 			"account_id": bill.account_id,
 			"book_id": this.data.bookInfo?.id,
 			"category_id": this.data.categoryList[this.data.categoryIndex].id,
@@ -477,7 +478,8 @@ Page({
 			"remark": bill.remark,
 			address: bill.address,
 			longitude: bill.longitude,
-			latitude: bill.latitude
+			latitude: bill.latitude,
+			bill_mode:bookInfo.bookType
 		};
 
 
@@ -648,8 +650,9 @@ Page({
 	 * 获取账本
 	 */
 	async handleBookList() {
+		let {userId} = this.data
 		let data = {
-			userId: getStorageSync('userInfo').id
+			userId:userId|| getStorageSync('userInfo').id
 		}
 		let res = await getBookList(data)
 		this.setData({
@@ -677,8 +680,9 @@ Page({
 	 * 获取账户列表
 	 */
 	async handleAccountList() {
+		let {userId} = this.data
 		let data = {
-			userId: getStorageSync('userInfo').id
+			userId:userId|| getStorageSync('userInfo').id
 		}
 		let res = await getAccountList(data)
 
@@ -735,8 +739,8 @@ Page({
 	 * 类别列表
 	 */
 	async getCategoryListFn() {
-		let { userInfo, queryParams, bookList, bookIndex, bill } = this.data
-		let data = { userId: userInfo.id, type: bill.transaction_type, ...queryParams, bookCategoryId: bookList[bookIndex].book_category_id }
+		let { userInfo, queryParams, bookList, bookIndex, bill,bookInfo ,userId} = this.data
+		let data = { userId: userId||userInfo.id, type: bill.transaction_type, ...queryParams, bookCategoryId: bookInfo.book_category_id}
 
 		let res = await getCategoryList(data)
 		this.setData({
@@ -746,7 +750,7 @@ Page({
 		})
 		if (this.data.billId) {
 			let data = {
-				userId: getStorageSync("userInfo").id,
+				userId:userId|| getStorageSync("userInfo").id,
 				billId: this.data.billId,
 			}
 			this.getTransactionInfo(data)
@@ -1096,21 +1100,21 @@ Page({
 					'bill.longitude': r.longitude
 				});
 				// 可选：添加成功提示
-				notify.showNotify({
-					message: "位置选择成功",
-					type: 'success',
-					duration: 1500
-				});
+				// notify.showNotify({
+				// 	message: "位置选择成功",
+				// 	type: 'success',
+				// 	duration: 1500
+				// });
 			},
 			fail: function (err) {
 				console.log(err);
 				// 区分不同失败场景，给出友好提示
 				if (err.errMsg === 'chooseLocation:fail cancel') {
-					notify.showNotify({
-						message: "已取消位置选择",
-						type: 'warning',
-						duration: 1500
-					});
+					// notify.showNotify({
+					// 	message: "已取消位置选择",
+					// 	type: 'warning',
+					// 	duration: 1500
+					// });
 				} else if (err.errMsg.includes('auth')) {
 					notify.showNotify({
 						message: "位置权限未授权，无法选择位置",
@@ -1146,7 +1150,7 @@ Page({
 			'bill.transaction_type': options.type ? options.type : 2,
 			billId: options.billId,
 			selectedTab: options.type ? Number(options.type) - 1 : 1,
-
+			userId:options.user_id || getStorageSync("userInfo").id
 		});
 		// 提前在onLoad中就开始监听
 		this.initKeyboardListener();
@@ -1178,7 +1182,7 @@ Page({
 		this.setData({
 			bookList: getStorageSync("bookList"),
 			bookInfo: getStorageSync("bookInfo"),
-			userInfo: getStorageSync("userInfo"),
+			userInfo:this.data.userId|| getStorageSync("userInfo"),
 			'bill.date': dateUtils.formatLongTime(new Date(), dateUtils.modeMapToFields['YMDhm'])
 		})
 		this.getCategoryListFn()

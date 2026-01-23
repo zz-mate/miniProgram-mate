@@ -1,10 +1,12 @@
+
+
 /**app.wxss**/
 ::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-  color: transparent;
-  background: transparent;
+	display: none;
+	width: 0;
+	height: 0;
+	color: transparent;
+	background: transparent;
 }
 
 
@@ -17,10 +19,12 @@
 .num {
 	font-family: 'WeChatSansStd';
 }
-.ad-card{
+
+.ad-card {
 	margin: 0 20rpx;
 	overflow: hidden;
 }
+
 .container {
 	height: 100%;
 	width: 100%;
@@ -33,7 +37,7 @@
 $-theme-color:#FFD608;
 /* 文字基本颜色 */
 $z-text-color:#303030; // 基本色 图标色
-$z-text-color-80:#646464; 
+$z-text-color-80:#646464;
 $z-text-color-60:#9c9c9c;
 $z-text-color-40:#bcbcbc;
 $z-text-color-20:#dcdcdc;
@@ -115,7 +119,9 @@ $z-font-size-paragraph:15px;
 page {
 	box-sizing: border-box;
 	background-color: #f4f2f7;
+	color: $z-text-color;
 	font-size: $z-font-size-24;
+	font-family: 'WeChatSansStd';
 }
 
 
@@ -175,33 +181,35 @@ image {
 input {
 	font-weight: normal;
 }
-.radius{
-	border-radius: 0%;
+
+.radius {
+	border-radius: 50%;
 	overflow: hidden;
-	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
+	// box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
 }
+
 .radius-2 {
-	border-radius: 0rpx;
+	border-radius: 2rpx;
 	overflow: hidden;
-	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
+	// box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
 }
 
 .radius-4 {
-	border-radius: 0rpx;
+	border-radius: 4rpx;
 	overflow: hidden;
-	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
+	// box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
 }
 
 .radius-6 {
-	border-radius: 0rpx;
+	border-radius: 6rpx;
 	overflow: hidden;
-	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
+	// box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
 }
 
 .radius-10 {
-	border-radius: 0rpx;
+	border-radius: 10rpx;
 	overflow: hidden;
-	box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
+	// box-shadow: 8rpx 8rpx 20rpx 0 rgba(55, 99, 170, .1);
 }
 
 .fade-animate {
@@ -237,7 +245,8 @@ input {
 	justify-content: center;
 	background-color: $z-bg-color;
 	overflow: hidden;
-// border-radius: 10rpx;
+
+	// border-radius: 10rpx;
 	&-icon {
 		width: 240rpx;
 		height: 240rpx;
@@ -245,10 +254,11 @@ input {
 	}
 
 	&-text {
-		font-size:$z-font-size-20;
+		font-size: $z-font-size-20;
 		text-align: center;
 		color: #666;
 	}
+
 	&-btn {
 		font-size: $z-font-size-24;
 		width: 200rpx;
@@ -262,6 +272,7 @@ input {
 		text-align: center;
 		// border-radius: 6rpx;
 	}
+
 	&-btn-plan {
 		font-size: $z-font-size-20;
 		width: 180rpx;
@@ -276,11 +287,13 @@ input {
 		// border-radius: 6rpx;
 	}
 }
+
 .btn-disabled {
-  background-color: #cccccc !important;
-  color: #999999 !important;
-  pointer-events: none; /* 禁止点击事件 */
-  opacity: 0.7;
+	background-color: #cccccc !important;
+	color: #999999 !important;
+	pointer-events: none;
+	/* 禁止点击事件 */
+	opacity: 0.7;
 }
 
 .develop-tips {
@@ -317,6 +330,7 @@ input {
 	width: 32rpx;
 	height: 32rpx;
 }
+
 /**公共底部按钮样式**/
 .shortcut {
 	position: fixed;
@@ -344,7 +358,8 @@ input {
 		text-align: center;
 		background-color: $-theme-color;
 	}
-	.color-primary{	
+
+	.color-primary {
 		color: $z-text-color-inverse !important;
 		background-color: $z-color-primary !important;
 	}
@@ -353,6 +368,7 @@ input {
 .btn-hover {
 	background-color: $z-btn-white-hover;
 }
+
 .btn-yellow-hover {
 	background-color: $z-btn-yellow-hover;
 
@@ -370,9 +386,11 @@ input {
 		color: $z-text-color-60;
 		padding: 20rpx 0;
 		font-size: $z-font-size-20;
-		.bill-title{
+
+		.bill-title {
 			color: $z-text-color;
 		}
+
 		.money {
 			.income {
 				margin-right: 10rpx;
@@ -399,7 +417,7 @@ input {
 		.border {
 			flex: 1;
 			display: flex;
-			border-bottom: 1rpx solid $z-border-color;
+			// border-bottom: 1rpx solid $z-border-color;
 			padding: 14rpx 0 14rpx 14rpx;
 		}
 
@@ -407,13 +425,15 @@ input {
 			flex: 1;
 
 			.title {
-				font-size: $z-font-size-22;;
+				font-size: $z-font-size-22;
+				;
 				color: $z-text-color;
 				padding-bottom: 4rpx;
 			}
 
 			.tags {
-				font-size: $z-font-size-18;;
+				font-size: $z-font-size-18;
+				;
 				color: $z-text-color-60;
 				padding: 4rpx 0;
 
@@ -427,7 +447,10 @@ input {
 				color: $z-text-color-60;
 
 				.text {
-					margin-right: 4rpx;
+					margin-right: 8rpx;
+				}
+				.user-text{
+					padding-top: -4rpx;
 				}
 			}
 		}
@@ -452,20 +475,21 @@ input {
 		position: relative;
 		top: 0;
 		overflow: hidden;
-		background:$z-bg-color;
+		background: $z-bg-color;
+
 		&.btn-hover {
 			background-color: $z-btn-white-hover;
 		}
 	}
 
-.bill-wrapper_item {
+	.bill-wrapper_item {
 		position: relative;
 		left: 0;
 		height: 100%;
 		transition: all 0.3s;
 	}
 
- .del_button {
+	.del_button {
 		position: absolute;
 		right: -100rpx;
 		width: 100rpx;
@@ -493,9 +517,3 @@ input {
 	}
 
 }
-
-
-
-
-
-

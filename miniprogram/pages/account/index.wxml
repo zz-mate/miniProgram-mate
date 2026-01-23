@@ -31,7 +31,7 @@ background="{{navBgColor}}">
   <collapse title="{{item.category_name}}" count="{{item.children.length}}" totalMoney="{{eyeIndex==1?item.category_total_money||'0.00':'*******'}}"
     expanded="{{false}}" wx:for="{{accountList}}" wx:for-index="index" wx:for-item="item" type="account">
 
-    <view class="content-item radius-10 flex flex-space-between flex-align-items-center" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" wx:for="{{item.children}}" wx:for-index="i"
+    <view class="content-item flex flex-space-between flex-align-items-center" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" wx:for="{{item.children}}" wx:for-index="i"
       wx:for-item="v">
       <view class="icon">
         <image src="{{v.icon}}" mode="widthFix" />
@@ -46,8 +46,8 @@ background="{{navBgColor}}">
 
 
 </view>
-<view wx:else style="background-color: #FFF;margin:20rpx" class="radius-10">
-  <view class="no-data radius-10" style="margin-top:{{token?'':'20rpx'}}">
+<view wx:else style="background-color: #FFF;margin:0 20rpx 20rpx 20rpx" class="radius-10">
+  <view class="no-data radius-10">
     <view class="no-data-icon">
       <image
 			src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png"

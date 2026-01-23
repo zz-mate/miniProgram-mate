@@ -4,7 +4,7 @@
 		计划
 	</view>
 	<!-- <view slot="right">
-		<view class="custom-circle" style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px"
+		<view class="custom-circle" style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius: {{capsuleHeight/2}}px"
 			catch:tap="handleCalenderPage">
 			<image class="icon-calendar"
 				src="http://oss-api.zz-mate.cn/uploads/2026/01/1768569299579-3c6f1fcf-a73a-4b80-ba90-b12ff0750479.png"

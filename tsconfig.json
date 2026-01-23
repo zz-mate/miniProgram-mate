@@ -23,7 +23,7 @@
   },
   "include": [
     "./**/*.ts"
-  ],
+, "miniprogram/subPackages/pages/book/index.js"  ],
   "exclude": [
     "node_modules"
   ]

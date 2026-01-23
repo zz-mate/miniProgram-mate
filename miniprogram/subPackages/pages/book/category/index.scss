@@ -11,8 +11,8 @@
 	overflow: hidden;
 	.book-item {
 		background-color: #fff;
-		padding: 20rpx;
-		margin-bottom: 10rpx;
+		padding:10rpx 20rpx;
+		// margin-bottom: 10rpx;
 		&.btn-hover {
 			background-color: $z-btn-white-hover;
 		}

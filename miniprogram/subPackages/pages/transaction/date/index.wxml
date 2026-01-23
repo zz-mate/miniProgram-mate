@@ -25,7 +25,7 @@
 								data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}"
 								bindtouchstart="touchS" bindtouchmove="touchM">
 								<!-- {{item.status}} -->
-								<view class="left-icon">
+								<view class="left-icon radius-4">
 									<image src="{{item.category.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 								</view>
 								<view class="border">

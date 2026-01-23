@@ -2,6 +2,7 @@
 import { COLOR } from '../../../../utils/color.js';
 import { createBook, updateBook } from '../../../../api/book'
 import { playBtnAudio } from '../../../../utils/audioUtil'
+import { setStorageSync } from '../../../../utils/util.js';
 Page({
 
 	/**
@@ -9,7 +10,9 @@ Page({
 	 */
 	data: {
 		navBgColor: COLOR.white,
+		title: '',
 		params: {
+			id: '',
 			userId: "", bookCategoryId: "", icon: '', description: "", name: ""
 		}
 	},
@@ -31,25 +34,52 @@ Page({
 				icon: "none"
 			})
 		}
-		let res = await createBook(params)
-		if (res.code == 200) {
+		
+		if (params.id) {
 			let obj = {
-				bookId: res.data.id,
+				bookId:params.id,
 				userId: params.userId,
-				is_default: 1
+				name:params.name
 			}
-			await updateBook(obj)
-			wx.switchTab({
-				url: "/pages/index/index"
-			})
-		}else{
-			notify.showNotify({
-				message: res.message,
-				type: 'warning',
-				duration: 1500
-			});
-		}
 
+		let res = 	await updateBook(obj)
+
+			if (res.code == 200) {
+						wx.navigateBack({ delta: 1 })
+			}else{
+				notify.showNotify({
+					message: res.message,
+					type: 'warning',
+					duration: 1500
+				});
+			}
+	
+		} else {
+
+			let res = await createBook(params)
+			if (res.code == 200) {
+				let obj = {
+					bookId: res.data.id,
+					userId: params.userId,
+					is_default: 1,
+				}
+
+				await updateBook(obj)
+				setStorageSync("bookType", 1)
+				wx.switchTab({
+					url: "/pages/index/index"
+				})
+
+			} else {
+				notify.showNotify({
+					message: res.message,
+					type: 'warning',
+					duration: 1500
+				});
+			}
+
+
+		}
 
 
 	},
@@ -61,12 +91,14 @@ Page({
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad({ userId, bookCategoryId, icon = '', name }) {
+	onLoad({ userId, bookCategoryId, icon = '', name, id }) {
 		this.setData({
 			'params.userId': userId,
 			'params.bookCategoryId': bookCategoryId,
 			'params.icon': icon,
 			'params.name': name,
+			'params.id': id,
+			title: id ? '修改账本' : '添加账本'
 		})
 
 	},

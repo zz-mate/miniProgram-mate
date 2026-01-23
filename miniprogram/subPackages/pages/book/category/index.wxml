@@ -14,7 +14,7 @@
 		<view class="book-item flex flex-align-items-center flex-space-between" wx:for="{{bookCategoryList}}" wx:key="index"
 			data-index="{{index}}" data-item="{{item}}"  hover-class="btn-hover" hover-stay-time="50"
 										hover-start-time="0" bind:tap="handleBookSelected">
-			<view class="cover">
+			<view class="cover radius-2">
 				<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="aspectFill" />
 			</view>
 			<view class="info">

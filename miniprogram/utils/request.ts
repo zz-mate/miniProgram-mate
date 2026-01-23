@@ -47,6 +47,7 @@ const showNotify = (options: {
   message: string;
   type?: 'success' | 'error' | 'warning' | 'info';
   duration?: number;
+	position?:string;
   notifyId?: string;
 }) => {
   const { message, type = 'error', duration = 2000, notifyId } = options;
@@ -172,6 +173,7 @@ export function request<T = any>(options: RequestOptions<T>): Promise<ResponseDa
             message: msg,
             type: 'error',
             duration: 2000,
+						position:'bottom',
             notifyId
           });
         }

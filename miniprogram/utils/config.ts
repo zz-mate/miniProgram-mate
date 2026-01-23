@@ -11,7 +11,8 @@ const envConfig = {
     BASE_URL: 'https://api-dev.zz-mate.cn/api/v1',
   },
   develop: { // 开发版（本地开发环境）
-    BASE_URL: 'http://192.168.1.65:9876/api/v1',
+    BASE_URL: 'http://192.168.1.65:9877/api/v1',
+		// BASE_URL: 'https://api-dev.zz-mate.cn/api/v1',
 		// BASE_URL: 'https://api.zz-mate.cn/api/v1',
   },
 };

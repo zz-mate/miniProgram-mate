@@ -1,20 +1,29 @@
 /* subPackages/pages/book/index.wxss */
 @import "../../../app.scss"; // 引入全局变量
 
-.multi{
-	margin-top: 20rpx;
+.book-tit {
+	font-size: $z-font-size-22;
+	font-weight: 600;
+	margin: 20rpx;
 }
+
+.multi {
+	// margin-top: 20rpx;
+}
+
 .book-list {
 	overflow: hidden;
 
 
 	.book-item {
-	background-color: $z-bg-color;
+		background-color: $z-bg-color;
 		padding: 20rpx;
-		margin-bottom: 10rpx;
+		// margin-bottom: 10rpx;
+
 		&.btn-hover {
 			background-color: $z-btn-white-hover;
 		}
+
 		&:last-child {
 			margin-bottom: 0;
 		}
@@ -34,9 +43,14 @@
 				font-size: $z-font-size-22;
 			}
 
-			.num {
-				font-size: $z-font-size-20;
-				color: $z-text-color-80;
+
+			.role-name {
+				display: inline-block;
+				margin-top: 4rpx;
+				font-size: $z-font-size-18;
+				padding: 0rpx 4rpx;
+				background-color: $-theme-color;
+				color: $z-text-color;
 			}
 		}
 
@@ -46,5 +60,92 @@
 		}
 	}
 }
+.member-num{
+	font-size: $z-font-size-20;
+	color: $z-text-color-60;
+	color: $z-text-color;
+	margin-right: 20rpx;
+}
+.mutil-tips{
+	text-align: center;
+	font-size: $z-font-size-18;
+	color: $z-text-color-60;
+	margin-top: 20rpx;
+}
 
+#scrollview {
 
+	.bill-container {
+		overflow: hidden;
+
+		.bill-wrapper {
+			position: relative;
+			top: 0;
+			overflow: hidden;
+			background: $z-bg-color;
+			// margin-bottom: 10rpx; // 增加间距，避免滑动时遮挡
+
+			&.btn-hover {
+				background-color: $z-btn-white-hover;
+			}
+
+			// 账单主内容区
+			.bill-wrapper_item {
+				position: relative;
+				left: 0;
+				// height: 120rpx; // 固定高度，保证按钮对齐
+				transition: all 0.3s ease; // 顺滑过渡
+				padding: 20rpx;
+				box-sizing: border-box;
+			}
+
+			// 滑动操作栏容器
+			.slide-actions {
+				position: absolute;
+				right: -200rpx; // 3个按钮 * 130rpx = 390rpx
+				top: 0;
+				height: 100%;
+				display: flex;
+				transition: all 0.3s ease;
+			}
+
+			// 通用操作按钮样式
+			.action-btn {
+				width: 100rpx;
+				height: 100%;
+				color: $z-bg-color;
+				text-align: center;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: $z-font-size-20;
+			}
+
+			// 各按钮个性化样式
+			.view-btn {
+				background-color: $z-color-primary; // 蓝色-查看
+			}
+
+			.edit-btn {
+				background-color: $z-color-success; // 绿色-编辑
+			}
+
+			.del-btn {
+				background-color: $z-color-error; // 红色-删除
+			}
+
+			// 激活滑动后的样式
+			&.active {
+				.bill-wrapper_item {
+					left: -200rpx; // 对应操作栏宽度，整体左移
+				}
+
+				.slide-actions {
+					right: 0; // 操作栏显示
+				}
+			}
+
+		}
+	}
+
+}

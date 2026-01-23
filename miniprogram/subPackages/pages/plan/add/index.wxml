@@ -49,9 +49,9 @@
 			</view>
 
 			<!-- 循环渲染分类 -->
-			<view class="category-item" wx:for="{{params.content}}" wx:key="id">
+			<view class="category-item  radius-4" wx:for="{{params.content}}" wx:key="id">
 				<!-- 分类头部（可编辑） -->
-				<view class="category-header flex flex-align-items-center">
+				<view class="category-header  radius-2 flex flex-align-items-center">
 					<!-- 分类勾选框 -->
 					<!-- <checkbox 
           class="category-checkbox" 
@@ -115,7 +115,7 @@
 					</view>
 
 					<view class="items-list">
-						<view class="item-row flex flex-align-items-center" wx:for="{{item.items}}" wx:for-item="subItem"
+						<view class="item-row  radius-2 flex flex-align-items-center" wx:for="{{item.items}}" wx:for-item="subItem"
 							wx:key="index" wx:for-index="i">
 							<!-- <view class="check" data-category-id="{{item.id}}" data-item-index="{{index}}"
 								bind:tap="toggleItemCompleted">

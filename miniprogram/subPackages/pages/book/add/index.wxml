@@ -1,5 +1,5 @@
 <!--subPackages/pages/book/add/index.wxml-->
-<navigation-bar title="添加账本" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
+<navigation-bar title="{{title}}" back="{{true}}" homeButton="{{false}}" auto="{{false}}" color="black"
 background="{{navBgColor}}">
 
 </navigation-bar>
