@@ -113,7 +113,7 @@ Page({
 		categoryList: [],
 		queryParams: {
 			page: 1,
-			pageSize: 100
+			pageSize: 100000
 		},
 
 		selectedCategoryTags: [] as any,
@@ -739,7 +739,9 @@ Page({
 	 * 类别列表
 	 */
 	async getCategoryListFn() {
-		let { userInfo, queryParams, bookList, bookIndex, bill,bookInfo ,userId} = this.data
+		let { userInfo, queryParams, bookList, bookIndex, bill ,userId,bookInfo} = this.data
+		// let bookInfo =  bookList.find(ele => ele.is_default == 1);
+		console.log(bookInfo)
 		let data = { userId: userId||userInfo.id, type: bill.transaction_type, ...queryParams, bookCategoryId: bookInfo.book_category_id}
 
 		let res = await getCategoryList(data)

@@ -11,6 +11,7 @@ Page({
 	 */
 	data: {
 		id:'',
+		type:"",
 		navBgColor: COLOR.white,
 		qrcode: "",
 		book_owner_id:"",
@@ -208,10 +209,11 @@ console.log(book_owner_id,userInfo.id)
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad({ id,book_owner_id }) {
+	onLoad({ id,book_owner_id,type }) {
 		this.getBookInfo(id)
 		this.setData({
 			id,
+			type,
 			book_owner_id,
 						// 初始化标记
 						isFirstEnter: true,

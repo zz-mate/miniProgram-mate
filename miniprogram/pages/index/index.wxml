@@ -19,7 +19,7 @@
 					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
 			</view> -->
 
-			<view class="custom-circle" wx:if="{{bookType==2}}"
+			<view class="custom-circle" wx:if="{{bookInfo.bookType==2}}"
 				style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius: {{capsuleHeight/2}}px "
 				catch:tap="handleCalenderPage">
 				<image class="icon-calendar"
@@ -65,7 +65,7 @@
 					<view class="current-title">本月支出</view>
 					<view class="current-money num flex flex-align-items-center">
 						<view class="money">{{eyeIndex==1?summary.totalExpend||'0.00':'*******'}}</view>
-						<view class="text-tips flex  flex-align-items-center" wx:if="{{bookType==1}}">
+						<view class="text-tips flex  flex-align-items-center" wx:if="{{bookInfo.bookType==1}}">
 							<text>同比上月</text>
 							<image class="text-image"
 								src="{{summary.yearOnYearExpend.isOver100?'http://oss-api.zz-mate.cn/uploads/2026/01/1768975328591-ed2b5a71-3c6d-44d2-b2b2-407c6b16335d.png':'http://oss-api.zz-mate.cn/uploads/2026/01/1769088319134-5c3e6bc4-99d2-4200-9626-f897c6fa7d5a.png'}}"
@@ -80,7 +80,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="fake-plac" wx:if="{{bookType==1}}">
+			<view class="fake-plac" wx:if="{{bookInfo.bookType==1}}">
 				<view class="fast-card shadow radius-10">
 					<view class="list radius-10 flex flex-space-around">
 						<view class="item" data-type="bill" data-url="/subPackages/pages/transaction/bill/index"
@@ -159,7 +159,7 @@
 		<!-- <view style="padding-top:90rpx;z-index: -1; pointer-events: none;"></view> -->
 
 		<!-- 预算 -->
-		<view class="budget-card shadow" style="padding: 0 20rpx;" wx:if="{{token&&bookType==1}}">
+		<view class="budget-card shadow" style="padding: 0 20rpx;" wx:if="{{token&&bookInfo.bookType==1}}">
 			<view class="card num radius-10" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
 				hover-stop-propagation="true" bind:tap="handleSetting">
 				<view class="budget-title flex flex-space-between flex-align-items-center">
@@ -274,7 +274,7 @@
 										<view class="title">{{item.category.name}}</view>
 										<view class="date-other num flex flex-align-items-center">
 											<text class="time-text text">{{item.bill_time}} </text>
-											<text class="user-text text" wx:if="{{bookType==2}}">{{item.consumer.id==userInfo.id?'自己':item.consumer.nickname}} </text>
+											<text class="user-text text" wx:if="{{bookInfo.bookType==2}}">{{item.consumer.id==userInfo.id?'自己':item.consumer.nickname}} </text>
 
 										</view>
 									</view>

@@ -210,7 +210,7 @@
 
 				</view>
 				<view class='keyboard-row'>
-					<view class='key four' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key=' 4'
+					<view class='key four' hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-key='4'
 						bindtap='tapKey'>4
 					</view>
 					<view class='key five' data-key='5' bindtap='tapKey'>5</view>

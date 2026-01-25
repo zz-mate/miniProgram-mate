@@ -38,7 +38,7 @@ Page({
 			type, bookId, userId, start_time,
 			categoryId,
 			"page": 1,
-			"pageSize": 100
+			"pageSize": 100000
 		}
 		let res = await getTransactionList(data)
 		this.setData({

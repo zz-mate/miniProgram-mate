@@ -13,7 +13,7 @@ Page({
 		title: '',
 		params: {
 			id: '',
-			userId: "", bookCategoryId: "", icon: '', description: "", name: ""
+			userId: "", bookCategoryId: "", icon: '', description: "", name: "", type: ""
 		}
 	},
 	bindKeyInput: function (e) {
@@ -34,26 +34,27 @@ Page({
 				icon: "none"
 			})
 		}
-		
+
 		if (params.id) {
 			let obj = {
-				bookId:params.id,
+				bookId: params.id,
 				userId: params.userId,
-				name:params.name
+				type: params.type,
+				name: params.name
 			}
 
-		let res = 	await updateBook(obj)
+			let res = await updateBook(obj)
 
 			if (res.code == 200) {
-						wx.navigateBack({ delta: 1 })
-			}else{
+				wx.navigateBack({ delta: 1 })
+			} else {
 				notify.showNotify({
 					message: res.message,
 					type: 'warning',
 					duration: 1500
 				});
 			}
-	
+
 		} else {
 
 			let res = await createBook(params)
@@ -61,6 +62,7 @@ Page({
 				let obj = {
 					bookId: res.data.id,
 					userId: params.userId,
+
 					is_default: 1,
 				}
 
@@ -91,13 +93,14 @@ Page({
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad({ userId, bookCategoryId, icon = '', name, id }) {
+	onLoad({ userId, bookCategoryId, icon = '', name, id, type }) {
 		this.setData({
 			'params.userId': userId,
 			'params.bookCategoryId': bookCategoryId,
 			'params.icon': icon,
 			'params.name': name,
 			'params.id': id,
+			'params.type': type,
 			title: id ? '修改账本' : '添加账本'
 		})
 

@@ -208,7 +208,7 @@ Page({
 		let data = {
 			userId:getStorageSync("userInfo").id,
 			plan_type:getStorageSync("planIndex"),
-			page:1,pageSize:100,
+			page:1,pageSize:10000,
 			planDate:this.data.planTime||  getThisDate("YY-MM-DD")
 		}
 	let res = 	await getPlan(data)

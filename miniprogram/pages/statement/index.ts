@@ -986,9 +986,7 @@ Page({
 		if (!token) return;
 
 
-		let singleBookList = getStorageSync("bookList")
-		let multiBookList = getStorageSync("multiBookList")
-		let bookList = [...singleBookList,...multiBookList]
+		let bookList = getStorageSync("bookList")
 		let bookInfo = getStorageSync("bookInfo")
 		let bookIndex = bookList.findIndex((ele) => ele.id == bookInfo.id)
 		this.setData({ bookInfo, bookIndex });
@@ -1000,7 +998,7 @@ Page({
 		}
 		let res = await getBookList(data)
 		this.setData({
-			bookList: [...res.data.singleBookList,...res.data.multiBookList],
+			bookList: res.data.bookList,
 		})
 	},
 	// 选择账本

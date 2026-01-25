@@ -67,7 +67,7 @@ Component({
 		categoryList: [],
 		queryParams: {
 			page: 1,
-			pageSize: 100
+			pageSize: 100000
 		},
 	},
 	

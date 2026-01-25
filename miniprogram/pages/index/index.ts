@@ -9,6 +9,8 @@ import SystemConfig from '../../utils/capsule';
 
 const token = getStorageSync('token') || null
 const POPUP_SHOW_KEY_PREFIX = 'showPopup_';
+// 新增：账本详情缓存有效期（5分钟）
+const BOOK_INFO_CACHE_EXPIRE = 5 * 60 * 1000;
 export enum RefreshStatus {
 	Idle,
 	CanRefresh,
@@ -32,26 +34,22 @@ const lerp = function (begin, end, t) {
 
 const clamp = function (cur, lowerBound, upperBound) {
 	'worklet'
-	if (cur > upperBound) return upperBound
-	if (cur < lowerBound) return lowerBound
-	return cur
+	return cur > upperBound ? upperBound : cur < lowerBound ? lowerBound : cur
 }
 
 const secondFloorCover = 'https://env-00jxubueh4pn.normal.cloudstatic.cn/5c9cda3274fc0 (1).jpg?expire_at=1766918614&er_sign=a8af17568ab72553fe83ada3c78d4d3a'
 
 Component({
-	// 关键1：启用页面级生命周期，才能监听 onLoad 接收分享参数
 	pageLifetimes: {
 		show: function () {
 			this.getTabBar().setData({ selected: 0 })
 			this.setData({
 				userInfo: getStorageSync("userInfo"),
-				
 			})
-			// setStorageSync("multiIndex",0)
 			app.onLoginSuccess(() => {
 				console.log('回调触发！执行handleBookList');
-				this.handleBookList(); // 改造后会自动判断bookType
+				// 新增：非强制刷新，优先用缓存
+				this.handleBookList(false); 
 			});
 		},
 		hide: function () { },
@@ -97,7 +95,7 @@ Component({
 		queryParams: {
 			start_time: '',
 			page: 1,
-			pageSize: 1000,
+			pageSize: 10000,
 		},
 		total: 0,
 		totalPages: 0,
@@ -109,9 +107,11 @@ Component({
 		},
 		userInfo: null,
 		bookList: [],
+		// 优化：初始化bookInfo，避免type为空导致的初始渲染异常
 		bookInfo: {
 			budget_usage_percent: 0,
 			budget_status_code: 1,
+			type: 1 // 默认值，避免wx:if判断时无值
 		},
 
 		budgetInfo: {
@@ -122,24 +122,37 @@ Component({
 		showPopup_together: false,
 		popupType: '',
 		bookUserList: [],
-		// 关键2：新增字段存储分享参数
-		shareUserId: '', // 分享者ID
-		shareBookId: '',  // 分享的账本ID
-		// 新增：存储bookType
-		bookType: 1, // 默认个人账本
-		mutilData:{}
+		shareUserId: '', 
+		shareBookId: '',  
+		mutilData:{},
+		// 新增：防重复请求标记
+		isBookInfoLoading: false
 	},
 
 	lifetimes: {
 		ready() { },
-		created() {
+		async created() {
 			this.initSystemConfig();
 			this.navBarOpactiy = shared(1)
 			this.showCard = shared(false)
 			this.fakNavBarHeight = shared(0)
-			// 初始化时读取bookType缓存
-			const bookType = Number(getStorageSync('bookType')) || 1;
-			this.setData({ bookType });
+			
+			// 新增：初始化时读取缓存的bookInfo，提前赋值
+			const cacheBookInfo = getStorageSync("bookInfo");
+			console.log(cacheBookInfo,"cacheBookInfo")
+			if(cacheBookInfo.bookType==2){
+				const bookBillRes = await bookBill({
+					userId: getStorageSync("userInfo").id,
+					bookId:cacheBookInfo.id,
+					start_time: getThisDate('YY-MM'),
+				});
+					this.setData({mutilData:bookBillRes.data});
+			}
+				// mutilData = bookBillRes.data;
+			
+			if (cacheBookInfo) {
+				this.setData({ bookInfo: cacheBookInfo });
+			}
 		},
 		attached() {
 			const padding = 10 * 2
@@ -177,10 +190,10 @@ Component({
 	created() {
 		let token = getStorageSync("token")
 		if (!token) return
-		this.handleBookList() // 改造后会自动判断bookType
+		// 新增：非强制刷新，优先用缓存
+		this.handleBookList(false); 
 	},
 	methods: {
-		// 关键3：新增方法 - 处理加入分享账本的业务逻辑
 		async handleBindJoinSharedBook(shareBookId: string) {
 			try {
 				const currentUserId = getStorageSync("userInfo")?.id;
@@ -188,26 +201,25 @@ Component({
 					wx.showToast({ title: '请先登录', icon: 'none' });
 					return;
 				}
-				// 示例：调用加入账本接口（根据你的实际接口调整）
 				const res = await bindJoinBook({
 					userId: currentUserId,
 					shareBookId
 				});
 				if (res.code === 200 && !res.data.hasRecord) {
 					wx.showToast({ title: '成功加入分享的账本', icon: "none" });
-					// 重新拉取账本列表和当前账本信息（仅bookType=1时生效）
-					this.handleBookList();
+					// 新增：强制刷新，更新缓存
+					this.handleBookList(true);
 				}
 			} catch (err) {
 				wx.showToast({ title: '网络异常', icon: 'none' });
 			}
 		},
 
-		// 原有方法保持不变...
 		handleLoginAndFetch() {
 			try {
 				app.onLoginSuccess(() => {
-					this.handleBookList();
+					// 新增：强制刷新
+					this.handleBookList(true);
 				});
 				app.login();
 			} catch (err) {
@@ -301,7 +313,6 @@ Component({
 			}
 		},
 
-		// 编辑账单
 		handleEditBill(e) {
 			const { id, type,user_id } = e.currentTarget.dataset;
 			console.log('编辑账单：', id);
@@ -322,54 +333,52 @@ Component({
 			})
 		},
 
-		// ========== 核心改造：handleBookList 方法 ==========
-		async handleBookList() {
+		// ========== 核心优化：handleBookList 增加缓存控制 ==========
+		async handleBookList(forceRefresh = false) {
 			let token = getStorageSync("token")
 			if (!token) return;
 
-			// 读取bookType缓存
-			const bookType = Number(getStorageSync('bookType')) || 1;
-			this.setData({ bookType });
+			// 1. 非强制刷新 + 有缓存 → 直接用缓存
+			const cacheBookList = getStorageSync("bookList");
+			const cacheBookInfo = getStorageSync("bookInfo");
+			const cacheBookInfoTime = getStorageSync("bookInfoCacheTime") || 0;
+			const now = Date.now();
 
-			// 逻辑1：bookType=2（多人账本）- 直接读取缓存，不请求接口
-			if (bookType === 2) {
-				console.log('当前为多人账本，直接读取缓存bookInfo');
-				const cacheBookInfo = getStorageSync("bookInfo");
-				const cacheSingleBookList = getStorageSync("bookList");
-				const cacheMultiBookList = getStorageSync("multiBookList");
-
-				// 缓存有数据则直接使用
-				if (cacheBookInfo) {
-					this.setData({
-						bookInfo: cacheBookInfo,
-						bookList: [...(cacheSingleBookList || []), ...(cacheMultiBookList || [])]
+			if (!forceRefresh && cacheBookList && cacheBookInfo && (now - cacheBookInfoTime) < BOOK_INFO_CACHE_EXPIRE) {
+				console.log('使用缓存的账本数据，避免重复请求');
+				this.setData({
+					bookList: cacheBookList,
+					bookInfo: cacheBookInfo
+				});
+				if(cacheBookInfo.bookType==2){
+					const bookBillRes = await bookBill({
+						userId: getStorageSync("userInfo").id,
+						bookId:cacheBookInfo.id,
+						start_time: getThisDate('YY-MM'),
 					});
-					// 直接执行后续逻辑（不请求bookInfo接口）
-					this.getBudgetInfo(cacheBookInfo.id, getStorageSync("userInfo").id);
-					this.handleTransactionList();
-				} else {
-					// 缓存无数据时降级请求接口（兜底）
-					console.warn('多人账本缓存bookInfo为空，降级请求接口');
-					await this.requestBookListApi();
+						this.setData({mutilData:bookBillRes.data});
 				}
+				// 直接执行后续逻辑，不请求接口
+				this.getBudgetInfo(cacheBookInfo.id, getStorageSync("userInfo").id);
+				this.handleTransactionList();
 				return;
 			}
 
-			// 逻辑2：bookType=1（个人账本）- 走原有接口请求流程
+			// 2. 无缓存/强制刷新 → 请求接口
 			await this.requestBookListApi();
 		},
 
-		// ========== 新增：抽离接口请求逻辑（便于复用和兜底） ==========
 		async requestBookListApi() {
 			let data = {
 				userId: getStorageSync("userInfo").id,
 			};
 			let res = await getBookList(data);
 			console.log('请求账本列表接口返回：', res);
-			let list = [...res.data.singleBookList, ...res.data.multiBookList];
+			
+			let list = res.data.bookList || [];
 			if (list.length == 0) {
 				return wx.reLaunch({
-				url:"/subPackages/pages/book/category/index"
+					url:"/subPackages/pages/book/category/index"
 				})
 			}
 
@@ -378,46 +387,56 @@ Component({
 				bookInfo,
 				bookList: list
 			});
-			if (res.data.singleBookList.length == 0) {
-				setStorageSync('bookType', 2)
-							this.setData({
-								bookType:2
-			});
-			}
-			setStorageSync("bookList", res.data.singleBookList);
-			setStorageSync("multiBookList", res.data.multiBookList);
-			// 继续请求账本详情（仅bookType=1时执行）
+			
+			// 存储缓存 + 记录缓存时间
+			setStorageSync("bookList", list);
+			setStorageSync("bookInfo", bookInfo);
+			setStorageSync("bookInfoCacheTime", Date.now()); // 新增：缓存时间戳
+
 			this.handleBookInfo();
 		},
 
-		// ========== 核心改造：handleBookInfo 方法 ==========
+		// ========== 核心优化：handleBookInfo 增加防重复请求 + 缓存 ==========
 		async handleBookInfo() {
 			let token = getStorageSync("token")
 			if (!token) return;
 
-			// 读取bookType缓存
-			const bookType = Number(getStorageSync('bookType')) || 1;
+			// 1. 防重复请求：正在请求则直接返回
+			if (this.data.isBookInfoLoading) return;
+			this.setData({ isBookInfoLoading: true });
 
-			// bookType=2（多人账本）- 不请求接口，直接返回
-			if (bookType === 2) {
-				console.log('当前为多人账本，跳过账本详情接口请求');
-				return;
+			try {
+				let data = {
+					userId: getStorageSync("userInfo").id,
+					bookId: this.data.bookInfo.id,
+					is_default: 1
+				};
+				let res = await getBookInfo(data);
+
+				// 2. 更新缓存 + 页面数据
+				setStorageSync("bookInfo", res.data);
+				setStorageSync("bookInfoCacheTime", Date.now()); // 更新缓存时间
+
+				// 3. 批量更新数据，减少setData次数
+
+				// 4. 仅在type=2时请求bookBill，避免多余请求
+				if(res.data.bookType==2){
+					const bookBillRes = await bookBill({
+						userId: getStorageSync("userInfo").id,
+						bookId: res.data.id,
+						start_time: getThisDate('YY-MM'),
+					});
+					// mutilData = bookBillRes.data;
+					this.setData({mutilData:bookBillRes.data});
+				}
+				
+				
+				this.getBudgetInfo(data.bookId, data.userId);
+				this.handleTransactionList();
+			} catch (err) {
+				console.error('账本详情请求失败：', err);
+				this.setData({ isBookInfoLoading: false });
 			}
-
-			// bookType=1（个人账本）- 走原有接口请求流程
-			let data = {
-				userId: getStorageSync("userInfo").id,
-				bookId: this.data.bookInfo.id,
-				is_default: 1
-			};
-			let res = await getBookInfo(data);
-			setStorageSync("bookInfo", res.data);
-			this.getBudgetInfo(data.bookId, data.userId);
-			this.setData({
-				bookInfo: res.data,
-				bookType:1
-			});
-			this.handleTransactionList();
 		},
 
 		async getBudgetInfo(bookId, userId) {
@@ -428,42 +447,38 @@ Component({
 			this.setData({
 				budgetInfo: res.data,
 			})
-			this.getbookBill()
 			this.handleTransactionList()
+		},
 
+		// 移除单独的getbookBill方法，合并到handleBookInfo中，减少请求次数
+		
+		// ========== 优化：handleTransactionList 增加防抖 ==========
+		handleTransactionList() {
+			// 防抖：100ms内多次调用仅执行最后一次，减少页面更新次数
+			if (this.txListTimer) clearTimeout(this.txListTimer);
+			this.txListTimer = setTimeout(async () => {
+				let data = {
+					userId: getStorageSync("userInfo").id,
+					bookId: this.data.bookInfo.id,
+					...this.data.queryParams,
+					start_time: getThisDate('YY-MM'),
+					bill_mode: this.data.bookInfo.type 
+				}
+				let res: any = await getTransactionList(data)
+				this.setData({
+					transactionList: res.list.dataList[0]?.children,
+					dailySummary: res.dailySummary,
+					summary: res.summary,
+					queryParams: {
+						page: res.pagination.page,
+						pageSize: res.pagination.pageSize,
+					},
+					total: res.pagination.total,
+					totalPages: res.pagination.totalPages
+				})
+			}, 100);
 		},
-		async getbookBill() {
-			let data = {
-				userId: getStorageSync("userInfo").id,
-				bookId: this.data.bookInfo.id,
-				start_time: getThisDate('YY-MM'),
-			}
-			let res = await bookBill(data)
-			this.setData({
-				mutilData:res.data
-			})
-		},
-		async handleTransactionList() {
-			let data = {
-				userId: getStorageSync("userInfo").id,
-				bookId: this.data.bookInfo.id,
-				...this.data.queryParams,
-				start_time: getThisDate('YY-MM'),
-				bill_mode: getStorageSync("bookInfo").bookType
-			}
-			let res: any = await getTransactionList(data)
-			this.setData({
-				transactionList: res.list.dataList[0]?.children,
-				dailySummary: res.dailySummary,
-				summary: res.summary,
-				queryParams: {
-					page: res.pagination.page,
-					pageSize: res.pagination.pageSize,
-				},
-				total: res.pagination.total,
-				totalPages: res.pagination.totalPages
-			})
-		},
+
 		getNavBarHeight() {
 			const query = wx.createSelectorQuery();
 			query.select('.nav-bar').boundingClientRect();
@@ -542,7 +557,8 @@ Component({
 			this._freshing = true
 			let token = getStorageSync("token")
 			if (!token) return
-			this.handleBookList()
+			// 新增：下拉刷新强制刷新
+			this.handleBookList(true);
 			this.setData({
 				triggered: false,
 			})
@@ -608,9 +624,6 @@ Component({
 			wx.vibrateShort({ type: 'light' })
 			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			if (!token) {
-				// wx.navigateTo({
-				// 	url: "/pages/login/index"
-				// })
 			}
 			else {
 				wx.navigateTo({
@@ -626,9 +639,6 @@ Component({
 			let bookIndex = bookList.findIndex(ele => ele.book_id == bookInfo.book_id)
 			const token = wx.getStorageSync('token') || null
 			if (!token) {
-				// wx.navigateTo({
-				// 	url: "/pages/login/index"
-				// })
 			} else {
 				wx.navigateTo({
 					url: "/subPackages/pages/transaction/add/index?bookIndex=" + bookIndex,
@@ -638,7 +648,6 @@ Component({
 		},
 		handleTransactionInfo(evt) {
 			const { transaction_id, transaction_type,consumer_id } = evt.currentTarget.dataset
-			// if(consumer_id!==this.data.userInfo.id) return
 			wx.vibrateShort({ type: 'light' })
 			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			wx.navigateTo({
@@ -666,9 +675,6 @@ Component({
 			wx.vibrateShort({ type: 'light' })
 			playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 			if (!token) {
-				// wx.navigateTo({
-				// 	url: "/pages/login/index"
-				// })
 			} else {
 				wx.navigateTo({
 					url: "/subPackages/pages/transaction/add/index?bookIndex=" + bookIndex + '&date=' + e.detail,

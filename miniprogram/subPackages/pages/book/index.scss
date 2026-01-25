@@ -13,7 +13,7 @@
 
 .book-list {
 	overflow: hidden;
-
+margin-top: 20rpx;
 
 	.book-item {
 		background-color: $z-bg-color;
@@ -27,7 +27,23 @@
 		&:last-child {
 			margin-bottom: 0;
 		}
-
+		.book-type{
+			// position: absolute;
+			// right: 0;
+			// top: 0;
+			display: inline-block;
+			font-size: $z-font-size-16;
+			padding: 0 2rpx;
+			margin-top: 2rpx;
+			&.si{
+				border: 1rpx solid $z-color-success;
+				color: $z-color-success;
+			}
+			&.mu{
+				border: 1rpx solid $z-color-error;
+				color: $z-color-error;
+			}
+		}
 		.cover {
 			width: 50rpx;
 			height: 60rpx;

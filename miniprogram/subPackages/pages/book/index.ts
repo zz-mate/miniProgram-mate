@@ -17,7 +17,6 @@ Page({
 		bookIndex: 0,
 		multiIndex: 0,
 		bookList: [],
-		multiBookList: [],
 		bookType: 1,
 		userInfo: null,
 		startX: '',
@@ -30,20 +29,15 @@ Page({
 	onShow() {
 		this.setData({
 			bookList: getStorageSync('bookList') || [],
-			multiBookList: getStorageSync('multiBookList') || [],
 			userInfo: getStorageSync("userInfo"),
-			bookType: getStorageSync("bookType") || 1,
-			multiIndex: getStorageSync("multiIndex"),
 		})
 		this.getBookList()
 	},
 	async getBookList() {
 		let res = await getBookList({ userId: getStorageSync("userInfo").id })
-		setStorageSync("bookList", res.data.singleBookList)
-		setStorageSync("multiBookList", res.data.multiBookList)
+		setStorageSync("bookList", res.data.bookList)
 		this.setData({
-			bookList: res.data.singleBookList,
-			multiBookList: res.data.multiBookList
+			bookList: res.data.bookList,
 		})
 	},
 	// 新增：页面加载时接收分享参数（核心）
@@ -77,11 +71,9 @@ Page({
 								});
 
 								let res = await getBookList({ userId: getStorageSync("userInfo").id })
-								setStorageSync("bookList", res.data.singleBookList)
-								setStorageSync("multiBookList", res.data.multiBookList)
+								setStorageSync("bookList", res.data.bookList)
 								that.setData({
-									bookList: res.data.singleBookList,
-									multiBookList: res.data.multiBookList
+									bookList: res.data.singleBookList
 								})
 							} else {
 								notify.showNotify({
@@ -135,19 +127,18 @@ Page({
 		})
 	},
 	handleMultiSelected({ currentTarget }: any) {
-		let that = this
-		wx.vibrateShort({ type: 'light' })
-		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
-		let index = currentTarget.dataset.i
-		let bookInfo = that.data.multiBookList[index]
-		console.log(bookInfo)
-		setStorageSync("bookInfo", bookInfo)
-		setStorageSync("bookType", 2)
-		this.setData({
-			multiIndex: index
-		})
-		setStorageSync("multiIndex", index)
-		wx.navigateBack({ delta: 1 })
+		// let that = this
+		// wx.vibrateShort({ type: 'light' })
+		// playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		// let index = currentTarget.dataset.i
+		// console.log(bookInfo)
+		// setStorageSync("bookInfo", bookInfo)
+		// setStorageSync("bookType", 2)
+		// this.setData({
+		// 	multiIndex: index
+		// })
+		// setStorageSync("multiIndex", index)
+		// wx.navigateBack({ delta: 1 })
 	},
 	async handleMenoSelected({ currentTarget }: any) {
 		let that = this
@@ -166,15 +157,16 @@ Page({
 				is_default: idx === index ? 1 : 0 // 选中的为1，其他为0
 			};
 		});
-		setStorageSync("bookType", 1)
-		setStorageSync("multiIndex", 0)
 
+setStorageSync("bookInfo",this.data.bookList[index])
 		that.setData({
 			bookIndex: index,
 			bookList: newBookList // 更新列表渲染
 		});
 
-		wx.navigateBack({ delta: 1 })
+		wx.switchTab({
+			url:'/pages/index/index'
+		})
 	},
 	touchS(e) {
 		let { bookList } = this.data
@@ -223,51 +215,51 @@ Page({
 	},
 
 
-	MtouchS(e) {
-		let { multiBookList } = this.data
-		const newTransactionList = JSON.parse(JSON.stringify(multiBookList));
-		newTransactionList.forEach((item) => {
-			item.status = true;
-		});
-		this.setData({
-			startX: e.touches[0].clientX,  // 触摸起始X坐标
-			startY: e.touches[0].clientY,  // 触摸起始Y坐标
-			multiBookList: newTransactionList  // 更新后的列表数据
-		}, () => {
+	// MtouchS(e) {
+	// 	let { multiBookList } = this.data
+	// 	const newTransactionList = JSON.parse(JSON.stringify(multiBookList));
+	// 	newTransactionList.forEach((item) => {
+	// 		item.status = true;
+	// 	});
+	// 	this.setData({
+	// 		startX: e.touches[0].clientX,  // 触摸起始X坐标
+	// 		startY: e.touches[0].clientY,  // 触摸起始Y坐标
+	// 		multiBookList: newTransactionList  // 更新后的列表数据
+	// 	}, () => {
 
-		});
-	},
-	MtouchM(e) {
-		// 1. 安全获取当前触摸坐标，做容错处理
-		if (!e.touches || e.touches.length === 0) return;
-		var currentX = e.touches[0].clientX;
-		var currentY = e.touches[0].clientY;
+	// 	});
+	// },
+	// MtouchM(e) {
+	// 	// 1. 安全获取当前触摸坐标，做容错处理
+	// 	if (!e.touches || e.touches.length === 0) return;
+	// 	var currentX = e.touches[0].clientX;
+	// 	var currentY = e.touches[0].clientY;
 
-		// 2. 计算滑动距离（横向/纵向）
-		const x = this.data.startX - currentX; // 横向移动距离（x>0 向左滑，x<0 向右滑）
-		const y = Math.abs(this.data.startY - currentY); // 纵向移动距离
+	// 	// 2. 计算滑动距离（横向/纵向）
+	// 	const x = this.data.startX - currentX; // 横向移动距离（x>0 向左滑，x<0 向右滑）
+	// 	const y = Math.abs(this.data.startY - currentY); // 纵向移动距离
 
-		// 3. 安全获取 dataset 中的索引（适配 transactionList 的 index/i）
-		let { i } = e.currentTarget.dataset || {};
-		const newTransactionList = JSON.parse(JSON.stringify(this.data.multiBookList));
-		if (newTransactionList[i]) {
-			if (x > 35 && y < 110) {
-				// 向左滑：显示删除 → status 设为 false
-				newTransactionList[i].status = false;
-			} else if (x < -35 && y < 110) {
-				// 向右滑：隐藏删除 → status 设为 true
-				newTransactionList[i].status = true;
-			}
-		}
+	// 	// 3. 安全获取 dataset 中的索引（适配 transactionList 的 index/i）
+	// 	let { i } = e.currentTarget.dataset || {};
+	// 	const newTransactionList = JSON.parse(JSON.stringify(this.data.multiBookList));
+	// 	if (newTransactionList[i]) {
+	// 		if (x > 35 && y < 110) {
+	// 			// 向左滑：显示删除 → status 设为 false
+	// 			newTransactionList[i].status = false;
+	// 		} else if (x < -35 && y < 110) {
+	// 			// 向右滑：隐藏删除 → status 设为 true
+	// 			newTransactionList[i].status = true;
+	// 		}
+	// 	}
 
-		// 7. 响应式更新数据（核心：用新数据替换原数据）
-		this.setData({
-			multiBookList: newTransactionList,
-		}, () => {
-			// 可选：验证更新结果
+	// 	// 7. 响应式更新数据（核心：用新数据替换原数据）
+	// 	this.setData({
+	// 		multiBookList: newTransactionList,
+	// 	}, () => {
+	// 		// 可选：验证更新结果
 
-		});
-	},
+	// 	});
+	// },
 	async singleDel(evt) {
 		wx.vibrateShort({ type: 'light' })
 		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
@@ -300,17 +292,16 @@ Page({
 							duration: 2000
 						});
 						let ret = await getBookList({ userId: getStorageSync("userInfo").id })
-						setStorageSync("bookList", ret.data.singleBookList)
-						setStorageSync("multiBookList", ret.data.multiBookList)
+						setStorageSync("bookList", ret.data.bookList)
+				
 						that.setData({
-							bookList: ret.data.singleBookList,
-							multiBookList: ret.data.multiBookList
+							bookList: ret.data.bookList,
 						})
 						// wx.navigateBack({ delta: 1 })
 
 					} else {
 						notify.showNotify({
-							message: result.msg,
+							message: result.message,
 							type: 'error',
 							duration: 2000
 						});
@@ -331,107 +322,107 @@ Page({
 		})
 
 	},
-	MutilDel(evt) {
-		// removeMutiBook
-		wx.vibrateShort({ type: 'light' })
-		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
-		let { id, name, book_owner_id } = evt.currentTarget.dataset
-		let exitType = book_owner_id == this.data.userInfo.id ? 1 : 2
-		let exitText=exitType==1?'解散':'退出'
-		console.log(evt)
-		const notify = this.selectComponent('#customNotify');
-		let that = this
-		wx.showModal({
-			title: '提示',
-			content: `确定要${exitText}「${name}」账本吗，其下所有账单将被删除`,
-			confirmText: `确认${exitText}`, // 确认按钮（突出警示）
-			cancelText: '取消',
-			confirmColor: '#FFD608', // 确认按钮用红色，强化风险提示
-			success: async function (res) { // 修正：async 应该写在 function 前面，而非后面
-				if (res.confirm) {
-					// 等待 joinBook 接口调用完成
-					wx.vibrateShort({ type: 'light' })
-					playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+	// MutilDel(evt) {
+	// 	// removeMutiBook
+	// 	wx.vibrateShort({ type: 'light' })
+	// 	playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+	// 	let { id, name, book_owner_id } = evt.currentTarget.dataset
+	// 	let exitType = book_owner_id == this.data.userInfo.id ? 1 : 2
+	// 	let exitText=exitType==1?'解散':'退出'
+	// 	console.log(evt)
+	// 	const notify = this.selectComponent('#customNotify');
+	// 	let that = this
+	// 	wx.showModal({
+	// 		title: '提示',
+	// 		content: `确定要${exitText}「${name}」账本吗，其下所有账单将被删除`,
+	// 		confirmText: `确认${exitText}`, // 确认按钮（突出警示）
+	// 		cancelText: '取消',
+	// 		confirmColor: '#FFD608', // 确认按钮用红色，强化风险提示
+	// 		success: async function (res) { // 修正：async 应该写在 function 前面，而非后面
+	// 			if (res.confirm) {
+	// 				// 等待 joinBook 接口调用完成
+	// 				wx.vibrateShort({ type: 'light' })
+	// 				playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 
 
-					if (exitType == 1) {
-						let data = {
-							id,
-							userId: getStorageSync("userInfo").id,
+	// 				if (exitType == 1) {
+	// 					let data = {
+	// 						id,
+	// 						userId: getStorageSync("userInfo").id,
 
-						}
-						let result = await removeMutiBook(data)
-						if (result.code == 200) {
-							notify.showNotify({
-								message: '已解散',
-								type: 'success',
-								duration: 2000
-							});
-							let ret = await getBookList({ userId: getStorageSync("userInfo").id })
-							setStorageSync("bookList", ret.data.singleBookList)
-							setStorageSync("multiBookList", ret.data.multiBookList)
-							that.setData({
-								bookList: ret.data.singleBookList,
-								multiBookList: ret.data.multiBookList
-							})
-						} else {
-							notify.showNotify({
-								message: result.msg,
-								type: 'error',
-								duration: 2000
-							});
-						}
+	// 					}
+	// 					let result = await removeMutiBook(data)
+	// 					if (result.code == 200) {
+	// 						notify.showNotify({
+	// 							message: '已解散',
+	// 							type: 'success',
+	// 							duration: 2000
+	// 						});
+	// 						let ret = await getBookList({ userId: getStorageSync("userInfo").id })
+	// 						setStorageSync("bookList", ret.data.singleBookList)
+	// 						setStorageSync("multiBookList", ret.data.multiBookList)
+	// 						that.setData({
+	// 							bookList: ret.data.singleBookList,
+	// 							multiBookList: ret.data.multiBookList
+	// 						})
+	// 					} else {
+	// 						notify.showNotify({
+	// 							message: result.msg,
+	// 							type: 'error',
+	// 							duration: 2000
+	// 						});
+	// 					}
 
 
-					}else {
-						let data = {
-							userId: getStorageSync("userInfo").id, bookId: id
-						}
-						console.log(data)
-						let result = await removeshareUs(data)
-						if (result.code == 200) {
-							notify.showNotify({
-								message: '退出成功',
-								type: 'success',
-								duration: 2000
-							});
-							let ret = await getBookList({ userId: getStorageSync("userInfo").id })
-							setStorageSync("bookList", ret.data.singleBookList)
-							setStorageSync("multiBookList", ret.data.multiBookList)
-							that.setData({
-								bookList: ret.data.singleBookList,
-								multiBookList: ret.data.multiBookList
-							})
-						} else {
-							notify.showNotify({
-								message: result.msg,
-								type: 'error',
-								duration: 2000
-							});
-						}
-					} 
-					// wx.removeStorageSync("shareParams")
-				} else {
-					wx.vibrateShort({ type: 'light' })
-					playBtnAudio('/static/audio/btnaudio.mp3', 1000);
-					console.log('取消')
+	// 				}else {
+	// 					let data = {
+	// 						userId: getStorageSync("userInfo").id, bookId: id
+	// 					}
+	// 					console.log(data)
+	// 					let result = await removeshareUs(data)
+	// 					if (result.code == 200) {
+	// 						notify.showNotify({
+	// 							message: '退出成功',
+	// 							type: 'success',
+	// 							duration: 2000
+	// 						});
+	// 						let ret = await getBookList({ userId: getStorageSync("userInfo").id })
+	// 						setStorageSync("bookList", ret.data.singleBookList)
+	// 						setStorageSync("multiBookList", ret.data.multiBookList)
+	// 						that.setData({
+	// 							bookList: ret.data.singleBookList,
+	// 							multiBookList: ret.data.multiBookList
+	// 						})
+	// 					} else {
+	// 						notify.showNotify({
+	// 							message: result.msg,
+	// 							type: 'error',
+	// 							duration: 2000
+	// 						});
+	// 					}
+	// 				} 
+	// 				// wx.removeStorageSync("shareParams")
+	// 			} else {
+	// 				wx.vibrateShort({ type: 'light' })
+	// 				playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+	// 				console.log('取消')
 
-				}
-			},
-			fail: function (err) {
-				// 增加失败回调，处理模态框弹出失败的情况
-				console.error('模态框弹出失败：', err)
+	// 			}
+	// 		},
+	// 		fail: function (err) {
+	// 			// 增加失败回调，处理模态框弹出失败的情况
+	// 			console.error('模态框弹出失败：', err)
 
-			}
-		})
-	},
+	// 		}
+	// 	})
+	// },
 	// 编辑
 	handleEditBook(evt) {
 		wx.vibrateShort({ type: 'light' })
 		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
-		const {book_owner_id} = evt.currentTarget.dataset
+		const {book_owner_id,type} = evt.currentTarget.dataset
 		wx.navigateTo({
-			url: "/subPackages/pages/book/info/index?id=" + evt.currentTarget.dataset.id+'&book_owner_id='+book_owner_id
+			url: "/subPackages/pages/book/info/index?id=" + evt.currentTarget.dataset.id+'&book_owner_id='+book_owner_id+'&type='+type
 		})
 	},
 	// 分享

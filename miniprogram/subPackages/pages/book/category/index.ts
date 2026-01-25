@@ -10,7 +10,8 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
-		bookCategoryList: []
+		multiBookList: [],
+		singleBookList:[]
 	},
 	/**
 	 * 账本分类列表
@@ -19,11 +20,12 @@ Page({
 		let token = getStorageSync("token")
 		if (!token) return
 		let res = await getBookCagetgoryList()
-		let list = res.list
+
 
 
 		this.setData({
-			bookCategoryList: list
+			multiBookList: res.multiBookList,
+			singleBookList:res.singleBookList
 		})
 	},
 	handleBookSelected(evt) {
@@ -31,7 +33,7 @@ Page({
 		playBtnAudio('/static/audio/btnaudio.mp3', 1000);
 		let userInfo = getStorageSync("userInfo")
 		const { item } = evt.currentTarget.dataset
-		let params = `bookCategoryId=${item.id}&icon=${item.icon}&name=${item.name}&userId=${userInfo.id}`
+		let params = `bookCategoryId=${item.id}&icon=${item.icon}&name=${item.name}&userId=${userInfo.id}&type=${item.type}`
 		wx.navigateTo({
 			url: `/subPackages/pages/book/add/index?${params}`
 		})

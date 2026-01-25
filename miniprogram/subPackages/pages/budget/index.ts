@@ -20,7 +20,7 @@ Page({
 		bookId: null,
 		queryParams: {
 			page: 1,
-			pageSize: 50
+			pageSize: 50000
 		},
 		categoryList: [],
 		budgetInfo: {

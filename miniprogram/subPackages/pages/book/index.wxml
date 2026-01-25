@@ -5,7 +5,7 @@
 	<!-- 备忘录内容 -->
 	<sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
 		<view wx:if="{{bookList.length>0}}">
-			<view class="book-tit">个人账本</view>
+			<!-- <view class="book-tit">个人账本</view> -->
 			<view class="book-list bill-container radius-10 ">
 				<view wx:for="{{bookList}}" wx:for-index="i">
 					<view class="bill-wrapper  {{item.status ? '':'active'}}">
@@ -13,14 +13,15 @@
 							class="book-item bill-wrapper_item  flex flex-align-items-center flex-space-between {{index==bookIndex?'book-list_active':''}}"
 							 data-i="{{i}}" bindtouchstart="touchS"  data-type="single"
 							bindtouchmove="touchM" data-id="{{item.id}}" data-book_name="{{item.name}}" bind:tap="handleMenoSelected">
+					
 							<view class="cover radius-2">
 								<image src="{{item.icon|| 'https://picsum.photos/50/60?random=2'}}" mode="aspectFill" />
 							</view>
 							<view class="info">
 								<view class="book-name">{{item.name}}</view>
-							
+								<view class="book-type {{item.bookType==1?'si':'mu'}}">{{item.bookTypeName}}</view>
 							</view>
-							<view class="icon" wx:if="{{item.is_default==1&&bookType==1}}">
+							<view class="icon" wx:if="{{item.is_default==1}}">
 								<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
 							</view>
 						</view>
@@ -29,7 +30,7 @@
 							<!-- <view class="action-btn view-btn" data-i="{{i}}" data-id="{{item.id}}" data-type="{{item.type}}"
 								bindtap='handleViewBill'>查看</view> -->
 							<!-- 编辑按钮 -->
-							<view class="action-btn edit-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.name}}" data-type="{{item.type}}"
+							<view class="action-btn edit-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.name}}" data-type="{{item.bookType}}"
 							data-book_owner_id="{{item.bookOwnerId}}" 		bindtap='handleEditBook'>编辑</view>
 							<!-- 删除按钮 -->
 							<view class="action-btn del-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.name}}"
@@ -37,7 +38,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="mutil-tips">向左滑动账本-编辑-添加 解锁多人共享账本新功能</view>
+				<!-- <view class="mutil-tips">向左滑动账本-编辑-添加 解锁多人共享账本新功能</view> -->
 			</view>
 		</view>
 

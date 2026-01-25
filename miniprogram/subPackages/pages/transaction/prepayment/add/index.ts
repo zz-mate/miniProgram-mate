@@ -36,7 +36,7 @@ Page({
 		},
 		queryParams: {
 			page: 1,
-			pageSize: 100
+			pageSize: 100000
 		},
 		bookList: [],
 		bookIndex: -1,
