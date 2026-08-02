@@ -2,109 +2,73 @@
 <navigation-bar title="选择账本" back="{{true}}" homeButton="{{false}}" color="black" background="#fff"></navigation-bar>
 
 <scroll-view type="custom" id="scrollview" scroll-y style="height:calc(100% - {{height}}px) ">
+	
 	<!-- 备忘录内容 -->
 	<sticky-section push-pinned-header="{{false}}" padding="{{[0,10,10,10]}}">
 		<view wx:if="{{bookList.length>0}}">
-			<!-- <view class="book-tit">个人账本</view> -->
 			<view class="book-list bill-container radius-10 ">
 				<view wx:for="{{bookList}}" wx:for-index="i">
-					<view class="bill-wrapper  {{item.status ? '':'active'}}">
+					<view class="bill-wrapper  {{item.isCollapse ? '':'active'}}">
 						<view
-							class="book-item bill-wrapper_item  flex flex-align-items-center flex-space-between {{index==bookIndex?'book-list_active':''}}"
+							class="book-item bill-wrapper_item  flex flex-align-items-center flex-space-between {{i==bookIndex?'book-list_active':''}}"
 							 data-i="{{i}}" bindtouchstart="touchS"  data-type="single"
-							bindtouchmove="touchM" data-id="{{item.id}}" data-book_name="{{item.name}}" bind:tap="handleMenoSelected">
+							bindtouchmove="touchM" data-id="{{item.id}}" data-book_name="{{item.bookName}}" bind:tap="handleMenoSelected">
 					
 							<view class="cover radius-2">
 								<image src="{{item.icon|| 'https://picsum.photos/50/60?random=2'}}" mode="aspectFill" />
 							</view>
 							<view class="info">
-								<view class="book-name">{{item.name}}</view>
-								<view class="book-type {{item.bookType==1?'si':'mu'}}">{{item.bookTypeName}}</view>
+								<view class="book-name">{{item.bookName}}</view>
+								<view class="book-type {{item.bookType=='PERSONAL'?'si':'mu'}}">{{item.bookTypeInfo.label}}</view>
 							</view>
-							<view class="icon" wx:if="{{item.is_default==1}}">
+							<view class="icon" wx:if="{{item.isDefault==1}}">
 								<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
 							</view>
 						</view>
 						<view class="slide-actions">
-							<!-- 查看按钮 -->
-							<!-- <view class="action-btn view-btn" data-i="{{i}}" data-id="{{item.id}}" data-type="{{item.type}}"
-								bindtap='handleViewBill'>查看</view> -->
-							<!-- 编辑按钮 -->
-							<view class="action-btn edit-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.name}}" data-type="{{item.bookType}}"
-							data-book_owner_id="{{item.bookOwnerId}}" 		bindtap='handleEditBook'>编辑</view>
-							<!-- 删除按钮 -->
-							<view class="action-btn del-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.name}}"
+							<view class="action-btn edit-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.bookName}}" data-type="{{item.bookType}}"
+								bindtap='handleEditBook'>编辑</view>
+							<view class="action-btn del-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.bookName}}"
 								bindtap='singleDel'>删除</view>
 						</view>
 					</view>
 				</view>
-				<!-- <view class="mutil-tips">向左滑动账本-编辑-添加 解锁多人共享账本新功能</view> -->
 			</view>
 		</view>
 
-		<!-- <block wx:if="{{multiBookList.length>0}}">
-			<view  class="book-tit"> 多人账本</view>
-			<view class="book-list multi radius-10">
-				<view class="book-item  flex flex-align-items-center flex-space-between " wx:for="{{multiBookList}}"
-					wx:key="index" hover-class="btn-hover" hover-stay-time='10' data-index="{{index}}" data-type="multi"
-					bind:tap="handleMultiSelected">
-					<view class="cover">
-						<image src="{{item.icon|| 'https://picsum.photos/50/60?random=3'}}" mode="" />
-					</view>
-					<view class="info">
-						<view class="book-name">{{item.name}}</view>
-						<view class="num role-name radius-2">{{item.userRoleName}}</view>
-					</view>
-					<view class="icon" wx:if="{{multiIndex==index&&bookType==2}}">
-						<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
-					</view>
-				</view>
-			</view>
-
-		</block> -->
-
-		<view wx:if="{{multiBookList.length>0}}">
+		<!-- <view wx:if="{{multiBookList.length>0}}">
 			<view class="book-tit">多人账本</view>
 			<view class="book-list bill-container radius-10 ">
 				<view wx:for="{{multiBookList}}" wx:for-index="i">
-					<view class="bill-wrapper  {{item.status ? '':'active'}}">
+					<view class="bill-wrapper  {{item.isCollapse ? '':'active'}}">
 						<view
-							class="book-item bill-wrapper_item  flex flex-align-items-center flex-space-between {{index==bookIndex?'book-list_active':''}}"
+							class="book-item bill-wrapper_item  flex flex-align-items-center flex-space-between {{i==bookIndex?'book-list_active':''}}"
 						 data-i="{{i}}" bindtouchstart="MtouchS"  data-type="single"
-							bindtouchmove="MtouchM" data-id="{{item.id}}" data-book_name="{{item.name}}" bind:tap="handleMultiSelected">
+							bindtouchmove="MtouchM" data-id="{{item.id}}" data-book_name="{{item.bookName}}" bind:tap="handleMultiSelected">
 							<view class="cover radius-2">
 								<image src="{{item.icon|| 'https://picsum.photos/50/60?random=2'}}" mode="aspectFill" />
 							</view>
 							<view class="info">
-								<view class="book-name">{{item.name}}</view>
-						
-						<view class="role-name radius-2">{{item.userRoleName}}</view>
+								<view class="book-name">{{item.bookName}}</view>
+								<view class="role-name radius-2">{{item.bookModeInfo.label}}</view>
 							</view>
-							<view class="member-num">{{item.memberCount}}人</view>
 							<view class="icon" wx:if="{{multiIndex==i&&bookType==2}}">
 								<image src="/static/icon/icon-book-choose.png" mode="widthFix" />
 							</view>
 						</view>
 						<view class="slide-actions">
-							<!-- 查看按钮 -->
-							<!-- <view class="action-btn view-btn" data-i="{{i}}" data-id="{{item.id}}" data-type="{{item.type}}"
-								bindtap='handleViewBill'>查看</view> -->
-							<!-- 编辑按钮 -->
-							<view class="action-btn edit-btn" data-i="{{i}}" data-id="{{item.id}}" data-book_owner_id="{{item.bookOwnerId}}"  data-name="{{item.name}}" 
+							<view class="action-btn edit-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.bookName}}" 
 								bindtap='handleEditBook'>编辑</view>
-							<!-- 删除按钮 -->
-							<view class="action-btn del-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.name}}" data-book_owner_id="{{item.bookOwnerId}}"
-								bindtap='MutilDel'> {{item.bookOwnerId==userInfo.id?'解散':'退出'}}</view>
+							<view class="action-btn del-btn" data-i="{{i}}" data-id="{{item.id}}" data-name="{{item.bookName}}"
+								bindtap='MutilDel'>退出</view>
 						</view>
 					</view>
 				</view>
 			</view>
 			<view class="mutil-tips">「多人记账适配协作，功能少可建单人账本」</view>
-		</view>
+		</view> -->
 
 	</sticky-section>
-
-
 
 </scroll-view>
 
@@ -113,4 +77,4 @@
 		添加
 	</view>
 </view>
-<z-notify id="customNotify" bind:close="onNotifyClose" />
+<!-- <z-notify id="customNotify" bind:close="onNotifyClose" /> -->

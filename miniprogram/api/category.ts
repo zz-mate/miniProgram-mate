@@ -2,6 +2,18 @@
 import { request } from '../utils/request';
 
 /**
+ * 获取账单分类列表
+ * @param params bookType: 账本类型, billType: 账单类型
+ */
+export function getBillCategoryList(params: { bookType: string; billType: string }) {
+  return request({
+    url: '/app/bill-category/list',
+    method: 'GET',
+    data: params,
+  });
+}
+
+/**
  * 获取用户信息
  * @returns 返回一个 Promise，resolve 的结果是用户信息对象
  */

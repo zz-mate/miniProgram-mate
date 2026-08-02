@@ -1,5 +1,5 @@
 // subPackages/pages/transaction/info/index.ts
-import { transactionInfo, removeTransaction } from "../../../../api/transaction"
+import { getBillInfo, deleteBill } from "../../../../api/bill"
 import { COLOR } from '../../../../utils/color.js';
 import { getStorageSync } from '../../../../utils/util';
 import { playBtnAudio } from '../../../../utils/audioUtil'
@@ -9,7 +9,7 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
-		navBgColor: COLOR.theme,
+		navBgColor: COLOR.white,
 		id: null,
 		bookInfo: null,
 		userInfo: null,
@@ -24,19 +24,19 @@ Page({
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad({ id, type, userId }) {
+	onLoad({ id, billType }) {
 		let title = ""
-		switch (type) {
-			case '1':
+		switch (billType) {
+			case 'INCOME':
 				title = '收入'
 				break;
-			case '2':
+			case 'EXPENSE':
 				title = '支出'
 				break;
-			case '3':
+			case 'TRANSFER':
 				title = '转账'
 				break;
-			case '4':
+			case 'LOAN':
 				title = '借贷'
 				break;
 		}
@@ -44,44 +44,21 @@ Page({
 			id, title, bookInfo: getStorageSync("bookInfo"),
 			userInfo: getStorageSync("userInfo")
 		})
-		let data = {
-			userId: userId || getStorageSync("userInfo").id,
-			billId: id,
-
-		}
-		this.getTransactionInfo(data)
+		this.getTransactionInfo(id)
 	},
 
 
 	/**
 	 * 获取账单详情
 	 */
-	async getTransactionInfo({ userId, billId }) {
-		let res = await transactionInfo({ userId, billId })
+	async getTransactionInfo(billId) {
+		let res = await getBillInfo(billId)
 		console.log(res)
-		this.setData({
-			transactionInfo: res.data,
-			'transactionInfo.markers': [
-				{
-					id: 1,
-					latitude: res.data.latitude,
-					longitude: res.data.longitude,
-					// title: '公司位置',
-					iconPath: 'http://oss-api.zz-mate.cn/uploads/2026/01/1768477735163-84b43868-7861-4053-ac1a-a3c37fbaab10.png',
-					width: 30,
-					height: 30,
-					callout: {
-						content: res.data.address,
-						color: '#000',
-						fontSize: 14,
-						bgColor: '#fff',
-						padding: 5,
-						borderRadius: 0,
-						display: 'ALWAYS' // 默认展示callout
-					}
-				}
-			]
-		})
+		if (res && res.data) {
+			this.setData({
+				transactionInfo: res.data
+			})
+		}
 	},
 	/**编辑 */
 	handleUpdate() {
@@ -124,11 +101,7 @@ Page({
 	 * 删除账单
 	 */
 	async handleConfirm() {
-		let data = {
-			userId: getStorageSync("userInfo").id,
-			billId: this.data.id
-		}
-		let res = await removeTransaction(data)
+		let res = await deleteBill(this.data.id)
 		if (res.code == 200) {
 			wx.showToast({
 				title: "删除成功",
@@ -201,11 +174,7 @@ Page({
 		if (!this.data.isFirstEnter && this.data.isJumpToDetail) {
 			console.log("从账单详情页返回，执行刷新")
 			// this.handleTransactionList(this.data.type)
-			let data = {
-				userId: getStorageSync("userInfo").id,
-				billId: this.data.id
-			}
-			this.getTransactionInfo(data)
+			this.getTransactionInfo(this.data.id)
 			// 刷新后重置标记，避免重复刷新
 			this.setData({
 				isJumpToDetail: false

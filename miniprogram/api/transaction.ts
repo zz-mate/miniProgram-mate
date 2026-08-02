@@ -11,36 +11,6 @@ export function getTransactionList(data:any) {
     data,
   });
 }
-/**
- * 创建账单
- */
-export function createTransaction(data:any) {
-  return request({
-    url: '/miniProgram/bill/create',
-    method: 'POST',
-    data,
-  });
-}
-/**
- * 账单详情
- */
-export function transactionInfo(data:any) {
-  return request({
-    url: '/miniProgram/bill/info',
-    method: 'POST',
-    data,
-  });
-}
-/**
- * 删除账单
- */
-export function removeTransaction(data:any) {
-  return request({
-    url: '/miniProgram/bill/remove',
-    method: 'POST',
-    data,
-  });
-}
 
 /**
  * 月查询账单

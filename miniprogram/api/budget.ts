@@ -2,6 +2,16 @@
 import { request } from '../utils/request';
 
 /**
+ * 获取当月预算
+ */
+export function getCurrentBudget() {
+  return request({
+    url: '/app/budget/current',
+    method: 'GET',
+  });
+}
+
+/**
  * 获取用户信息
  * @returns 返回一个 Promise，resolve 的结果是用户信息对象
  */

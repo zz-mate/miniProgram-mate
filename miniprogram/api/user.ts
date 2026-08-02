@@ -5,70 +5,18 @@ import { request } from '../utils/request';
  * 获取用户信息
  * @returns 返回一个 Promise，resolve 的结果是用户信息对象
  */
-export function login(data: { phone: string }) {
+export function wxLogin(data: { code: string }) {
   return request({
-    url: '/miniProgram/auth/loginByPhone',
+    url: '/app/auth/wx-login',
     method: 'POST',
     data,
   });
 }
-export function getUserInfo() {
+
+
+export function  userInfoApi() {
   return request({
-    url: '/miniProgram/auth/userInfo',
+    url: '/app/auth/user-info',
     method: 'GET',
-
   });
 }
-
-export function getUserById(data:{userId:string}) {
-  return request({
-    url: '/miniProgram/user/info',
-    method: 'POST',
-    data,
-  });
-}
-export function generateUserQRCode(data:{userId:string}) {
-  return request({
-    url: '/miniProgram/user/qrcode',
-    method: 'POST',
-    data,
-  });
-}
-
-export function updateUser(data:any) {
-  return request({
-    url: '/miniProgram/user/update',
-    method: 'POST',
-    data,
-  });
-}
-export function jscode2session(data:any) {
-  return request({
-    url: '/miniProgram/sns/jscode2session',
-    method: 'POST',
-    data,
-  });
-}
-export function saveUser(data:any) {
-  return request({
-    url: '/miniProgram/wx/saveUser',
-    method: 'POST',
-    data,
-  });
-}
-// 你还可以在这里封装其他用户相关的 API，例如：
-// export function login(data: { username: string; password: string }) {
-//   return request({
-//     url: '/user/login',
-//     method: 'POST',
-//     data,
-//   });
-// }
-//
-// export function updateUserInfo(data: any) {
-//   return request({
-//     url: '/user/update',
-//     method: 'PUT',
-//     data,
-//   });
-// }

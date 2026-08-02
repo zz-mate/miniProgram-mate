@@ -5,20 +5,12 @@
 		<!-- catch:tap="handleBookPage"border-radius:0  {{capsuleHeight/2}}px {{capsuleHeight/2}}px 0 -->
 		<view class="custom-capsule flex flex-align-items-center" catch:tap="handleBookPage"
 			style="height:{{capsuleHeight}}px;line-height: {{capsuleHeight}}px;border-radius:0  {{capsuleHeight/2}}px {{capsuleHeight/2}}px 0">
-			{{ bookInfo.name ||'未登录'}}
+			{{ bookInfo.bookName ||'未登录'}}
 			<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom" />
 		</view>
 	</view>
 	<view slot="right">
 		<view class="custom-right">
-			<!-- <view class="custom-circle"
-				style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius: {{capsuleHeight/2}}px "
-				catch:tap="handleCalenderPage">
-				<image class="icon-calendar"
-					src="http://oss-api.zz-mate.cn/uploads/2026/01/1768884390279-4fdc55e1-177b-43e2-97d4-a6f2918bd493.png"
-					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
-			</view> -->
-
 			<view class="custom-circle" wx:if="{{bookInfo.bookType==2}}"
 				style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius: {{capsuleHeight/2}}px "
 				catch:tap="handleCalenderPage">
@@ -26,13 +18,6 @@
 					src="http://oss-api.zz-mate.cn/uploads/2026/01/1768538636228-c75e736c-449d-4260-84b7-e8072302895c.png"
 					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
 			</view>
-			<!-- <view class="custom-circle"
-				style="height:{{capsuleHeight}}px;width: {{capsuleHeight}}px;border-radius:{{capsuleHeight/2}}px "
-				catch:tap="handleSaoCode">
-				<image class="icon-calendar"
-					src="http://oss-api.zz-mate.cn/uploads/2026/01/1768796079222-312c0966-e986-4e55-996d-3dcc655c23a9.png"
-					mode="heightFix" style="height:{{capsuleHeight-14}}px;width: {{capsuleHeight-14}}px;" />
-			</view> -->
 		</view>
 	</view>
 </navigation-bar>
@@ -80,35 +65,14 @@
 					</view>
 				</view>
 			</view>
-			<view class="fake-plac" wx:if="{{bookInfo.bookType==1}}">
+			<view class="fake-plac" wx:if="{{bookInfo.bookMode=='SINGLE'}}">
 				<view class="fast-card shadow radius-10">
 					<view class="list radius-10 flex flex-space-around">
-						<view class="item" data-type="bill" data-url="/subPackages/pages/transaction/bill/index"
-							catch:tap="handlePageUrl">
-
-							<image src="/static/icon/icon-bill.png" mode="widthFix" />
-							<view class="title">明细</view>
+						<view class="item" wx:for="{{navIconList}}" wx:key="id"
+							data-url="{{item.route}}" catch:tap="handlePageUrl">
+							<image src="{{item.icon}}" mode="widthFix" />
+							<view class="title">{{item.iconName}}</view>
 						</view>
-						<view class="item" data-url="/subPackages/pages/budget/index" catch:tap="handlePageUrl">
-							<image src="/static/icon/icon-budget.png" mode="widthFix" />
-							<view class="title">预算</view>
-						</view>
-						<view class="item" data-url="/pages/account/index" catch:tap="handlePageUrl">
-							<image src="/static/icon/icon-account.png" mode="widthFix" />
-							<view class="title">资产</view>
-						</view>
-						<view class="item" data-url="/subPackages/pages/transaction/calendar/index" catch:tap="handlePageUrl">
-							<image src="/static/icon/icon-calendar.png" mode="widthFix" />
-							<view class="title">日历</view>
-						</view>
-						<view class="item" data-url="/subPackages/pages/transaction/prepayment/index" catch:tap="handlePageUrl">
-							<image src="/static/icon/icon-prepayment.png" mode="widthFix" />
-							<view class="title">预约</view>
-						</view>
-						<!-- <view class="item" data-url="/subPackages/pages/more/index" catch:tap="handlePageUrl">
-							<image src="/static/icon/icon-more.png" mode="widthFix" />
-							<view class="title">全部</view>
-						</view> -->
 					</view>
 				</view>
 			</view>
@@ -159,41 +123,33 @@
 		<!-- <view style="padding-top:90rpx;z-index: -1; pointer-events: none;"></view> -->
 
 		<!-- 预算 -->
-		<view class="budget-card shadow" style="padding: 0 20rpx;" wx:if="{{token&&bookInfo.bookType==1}}">
+
+		<view class="budget-card shadow" style="padding: 0 20rpx;" wx:if="{{budgetInfo}}">
 			<view class="card num radius-10" hover-class="btn-hover" hover-stay-time="50" hover-start-time="0"
 				hover-stop-propagation="true" bind:tap="handleSetting">
 				<view class="budget-title flex flex-space-between flex-align-items-center">
 					<text class="title">支出月预算</text>
-					<text class="text" wx:if="{{budgetInfo.remaining_amount!=0}}"
-						style="color: {{budgetInfo.remaining_percent<0?'#ff0000':budgetInfo.remaining_percent==0?'#e6a23c':'#999999'}};">{{budgetInfo.remaining_percent<0?'超支':'剩余'}}<text
-							class="num">{{budgetInfo.surplus_amount}}</text></text>
+					<text class="text" wx:if="{{budgetInfo.totalRemain!=0}}"
+						style="color: {{budgetInfo.totalRemain<0?'#ff0000':budgetInfo.totalRemain==0?'#e6a23c':'#999999'}};">{{budgetInfo.totalRemain<0?'超支':'剩余'}}<text
+							class="num">{{budgetInfo.totalRemain}}</text></text>
 					<view class="text flex flex-align-items-center" wx:else>
-
 						<text>去设置</text>
-
-						<!-- <image
-							src="http://oss-api.zz-mate.cn/uploads/2026/01/1768479483027-ee4fdf4a-2d0f-4685-9430-369f662fb714.png"
-							mode="widthFix" style="width: 24rpx;height: 24rpx;margin-left: 4rpx;" /> -->
 					</view>
 				</view>
 				<view class="progress-container radius-4">
 					<view
-						class="progress-bar {{ budgetInfo.remaining_percent>0?'bg-success':budgetInfo.remaining_percent==0?'bg-success':'bg-error'}}"
-						style="width: {{100 -  budgetInfo.remaining_percent}}%">
+						class="progress-bar {{ budgetInfo.totalRemain>0?'bg-success':budgetInfo.totalRemain==0?'bg-success':'bg-error'}}"
+						style="width: {{budgetInfo.totalProgress||0}}%">
 					</view>
 				</view>
 
 				<view class="budget-money num flex flex-space-between flex-align-items-center">
 					<view class="flex flex-align-items-center">
-						<text wx:if="{{budgetInfo.amount!='0.00'}}">总{{budgetInfo.amount}} <text style="margin-left: 8rpx;"
-								wx:if="{{budgetInfo.daily_available>0}}">剩余日均{{budgetInfo.daily_available}}</text> </text>
+						<text wx:if="{{budgetInfo.totalBudget>0}}">总{{budgetInfo.totalBudget}}</text>
 						<text wx:else>节制使我更富足</text>
-
 					</view>
-					<view wx:if="{{budgetInfo.amount>0}}" class="percent">
-						{{ budgetInfo.remaining_percent }}%
-
-
+					<view wx:if="{{budgetInfo.totalBudget>0}}" class="percent">
+						{{ budgetInfo.totalProgress||0 }}%
 					</view>
 				</view>
 			</view>
@@ -250,7 +206,7 @@
 
 		<!-- 流水列表 & 数据为空 区域 -->
 		<view class="bill-list">
-			<view class="bill-item " wx:for="{{transactionList}}" wx:key="index">
+			<view class="bill-item " wx:for="{{billList}}" wx:key="index">
 				<view class="bill-item_header flex flex-space-between">
 					<view class="date num">{{item.month}}-{{item.day}} {{item.weekday }}</view>
 					<view class="money flex">
@@ -261,9 +217,9 @@
 
 				<view class="radius-10 bill-container  ">
 					<block wx:for="{{item.list}}" wx:for-index="i">
-						<view class="bill-wrapper {{item.status ? '':'active'}}">
+						<view class="bill-wrapper {{item.isCollapse ? '':'active'}}">
 							<view class="bill-wrapper_item shadow bill-item_items cart-list flex flex-space-between flex-center"
-								hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-transaction_type="{{item.type}}" data-consumer_id="{{item.consumer.id}}"
+								hover-class="btn-hover" hover-stay-time="50" hover-start-time="0" data-transaction_type="{{item.billType}}" data-consumer_id="{{item.consumer.id}}"
 								data-transaction_id="{{item.id}}" bind:tap="handleTransactionInfo" data-index="{{index}}" data-i="{{i}}"
 								bindtouchstart="touchS" bindtouchmove="touchM">
 								<view class="left-icon radius-4">
@@ -273,42 +229,30 @@
 									<view class="center-info">
 										<view class="title">{{item.category.name}}</view>
 										<view class="date-other num flex flex-align-items-center">
-											<text class="time-text text">{{item.bill_time}} </text>
+											<text class="time-text text">{{item.billTime}} </text>
 											<text class="user-text text" wx:if="{{bookInfo.bookType==2}}">{{item.consumer.id==userInfo.id?'自己':item.consumer.nickname}} </text>
 
 										</view>
 									</view>
-									<view class="right-money num flex flex-align-items-center {{item.type==1?'text-error':''}}">
-										<text>{{item.type==1||item.type==4?'+':'-'}}</text> {{item.amount}}
+									<view class="right-money num flex flex-align-items-center {{item.billType=='EXPENSE'?'':'text-error'}}">
+										<text>{{item.billType=='EXPENSE'?'-':'+'}}</text> {{item.amount}}
 									</view>
 								</view>
 
 							</view>
-							<!-- <view class="del_button" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-type="single"
-								bindtap='deleteList'>删除
-							</view> -->
-
 							<view class="slide-actions" wx:if="{{userInfo.id==bookInfo.bookOwnerId||userInfo.id==item.consumer.id}}">
-								<!-- 查看按钮 -->
-								<!-- <view class="action-btn view-btn" 
-          data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-type="{{item.type}}" 
-          bindtap='handleViewBill'>查看</view> -->
-								<!-- 编辑按钮 -->
 								<view class="action-btn edit-btn" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-user_id="{{item.consumer.id}}"
 									data-type="{{item.type}}" bindtap='handleEditBill'>编辑</view>
-								<!-- 删除按钮 -->
 								<view class="action-btn del-btn" data-i="{{i}}" data-index="{{index}}" data-id="{{item.id}}" data-user_id="{{item.consumer.id}}"
 									data-type="single" bindtap='deleteList'>删除</view>
 							</view>
-
-
 						</view>
 					</block>
 				</view>
 			</view>
-			<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{transactionList.length}}">
+			<z-divider text="没有更多账单了" style="margin-bottom: 80px;" textSize="{{11}}px" wx:if="{{billList.data.list.length}}">
 			</z-divider>
-			<view class="no-data radius-10" wx:if="{{!transactionList.length}}">
+			<view class="no-data radius-10" wx:if="{{!billList.length}}">
 				<view class="no-data-icon">
 					<image src="https://env-00jxubueh4pn.normal.cloudstatic.cn/icons/icon-not-bill.png" mode="widthFix" />
 				</view>

@@ -48,6 +48,10 @@ Component({
       type: String,
       value: 'normal'  //small
     },
+    labelKey: {
+      type: String,
+      value: 'name'  // 标签字段名，支持 name/label/title
+    },
   },
 
   /**

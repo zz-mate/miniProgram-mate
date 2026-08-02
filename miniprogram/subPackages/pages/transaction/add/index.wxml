@@ -3,9 +3,9 @@
 	background="{{navBgColor}}">
 	<!-- bind:tap="handlePopup" -->
 	<view slot="center" class="subsection flex flex-align-items-center" data-type="book">
-		{{bookInfo.name}}
-		<image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"
-			wx:if="{{userInfo.level_exp>=200}}" />
+		{{bookInfo.bookName}}
+		<!-- <image src="/static/icon/icon-choose-arrow-bottom.png" mode="widthFix" class="icon-choose-arrow-bottom"
+			wx:if="{{userInfo.level_exp>=200}}" /> -->
 	</view>
 </navigation-bar>
 
@@ -27,7 +27,7 @@
 				<view class="icon  radius-4 {{isAnimate ? 'jelly-animate' : ''}}">
 					<image src="{{categoryList[categoryIndex].icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="" />
 				</view>
-				<view class="icon-title">{{categoryList[categoryIndex].name}}</view>
+				<view class="icon-title">{{categoryList[categoryIndex].categoryName}}</view>
 			</view>
 			<view class="money num {{selectedTab==0?'active':''}}">{{calcExpression ||'0.00'}}</view>
 			<!-- <view class="money num calc-expression">{{calcExpression || bill.num}}</view> -->
@@ -49,7 +49,7 @@
 	<swiper class="scroll-list" current="{{selectedTab}}" bind:change="onTabChanged"
 		worklet:onscrollstart="onTabTransition" worklet:onscrollupdate="onTabTransition"
 		worklet:onscrollend="onTabTransitionEnd" duration="{{400}}" cache-extent="1">
-		<swiper-item wx:for="{{swiperTabs}}" wx:key="index" class="swiper-{{index}}">
+		<swiper-item wx:for="{{billTypeList}}" wx:key="value" class="swiper-{{index}}">
 			<view class="card" style="height: 100%; box-sizing: border-box;">
 				<!-- 核心优化：添加可滚动容器 scroll-view -->
 				<scroll-view class="list-scroll" scroll-y enable-flex scroll-with-animation show-scrollbar="{{false}}"
@@ -61,7 +61,7 @@
 							<view class="icon  radius-4 {{ categoryIndex==index?'active':'not-active'}}">
 								<image src="{{item.icon|| '/static/icon/icon-Placeholder-image.png'}}" mode="widthFix" />
 							</view>
-							<view class="icon-title">{{item.name}}</view>
+							<view class="icon-title">{{item.categoryName}}</view>
 						</view>
 						<view class="item" bind:tap="handleSettingCategory">
 							<view class="icon">
@@ -71,20 +71,6 @@
 							<view class="icon-title">设置</view>
 						</view>
 					</view>
-
-					<!-- <block wx:else>
-						<view class="no-data-1">
-							<view class="no-data-icon">
-								<image
-									src="https://env-00jxubueh4pn.normal.cloudstatic.cn/404.png?expire_at=1764298029&er_sign=d2685c528b824221189d515aec0e34fd"
-									mode="" />
-							</view>
-							<view class="no-data-text">
-								<view>抱歉呀，这个功能还在 “修炼”</view>
-								<view>等它解锁新技能就和您见面</view>
-							</view>
-						</view>
-					</block> -->
 				</scroll-view>
 			</view>
 		</swiper-item>
@@ -103,8 +89,8 @@
 				<view class="value"> <input class="remark_placeholder" style="font-size: 24rpx;" type="text" maxlength="20"
 						value="{{bill.remark}}" placeholder="添加备注吧～" adjust-position="{{false}}" bindinput="bindKeyInput"
 						bindfocus="onInputFocus" bindblur="onInputBlur" /></view>
-				<view style="width:180rpx;font-size: 22rpx;">
-					<z-tabs bind:change="onTapTab" active="{{selectedTab}}" tabs="{{typeList}}"></z-tabs>
+				<view style="width:270rpx;font-size: 22rpx;">
+					<z-tabs bind:change="onTapTab" active="{{selectedTab}}" tabs="{{billTypeList}}" labelKey="label"></z-tabs>
 				</view>
 			</view>
 
@@ -114,7 +100,7 @@
 					<view wx:for="{{categoryList[categoryIndex].children}}" wx:key="id" data-category="{{item}}"
 						data-index="{{index}}" class="radius-4 {{item.isSelected ? 'active' : 'not-active'}}"
 						bind:tap="handleCategoryTagSelect">
-						{{item.name}}
+						{{item.categoryName}}
 					</view>
 				</block>
 
@@ -168,7 +154,7 @@
 						<view wx:for="{{categoryList[categoryIndex].children}}" wx:key="id" data-category="{{item}}"
 							data-index="{{index}}" class="radius-4 {{item.isSelected ? 'active' : 'not-active'}}"
 							bind:tap="handleCategoryTagSelect">
-							{{item.name}}
+							{{item.categoryName}}
 						</view>
 		
 
@@ -357,7 +343,7 @@
 							<image src="{{item.icon|| 'https://picsum.photos/50/60?random=2'}}" mode="aspectFill" />
 						</view>
 						<view class="info">
-							<view class="book-name">{{item.name}}</view>
+							<view class="book-name">{{item.bookName}}</view>
 							<!-- <view class="num">1人</view> -->
 						</view>
 						<view class="icon" wx:if="{{item.is_default==1}}">
@@ -398,7 +384,7 @@
 								<image src="{{item.icon}}" mode="aspectFill" />
 							</view>
 							<view class="info">
-								<view class="category-name">{{item.name}}</view>
+								<view class="category-name">{{item.categoryName}}</view>
 							</view>
 							<view class="icon" wx:if="{{categoryIndex==index}}">
 								<image

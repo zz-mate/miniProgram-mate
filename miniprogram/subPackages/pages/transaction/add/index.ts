@@ -2,9 +2,10 @@
 import { playBtnAudio } from '../../../../utils/audioUtil'
 import { getStorageSync, findAccountIndexes } from '../../../../utils/util';
 import { getAccountList } from '../../../../api/account'
-import { getCategoryList } from '../../../../api/category'
+import { getBillCategoryList } from '../../../../api/category'
 import { getBookList } from '../../../../api/book'
-import { createTransaction, transactionInfo } from '../../../../api/transaction'
+import { createBill, getBillInfo } from '../../../../api/bill'
+import { getDictItems } from '../../../../api/dict'
 
 import { COLOR } from '../../../../utils/color.js';
 import SystemConfig from '../../../../utils/capsule';
@@ -14,6 +15,7 @@ const dateUtils = require('../../../../utils/dateutils')
 const POPUP_SHOW_KEY_PREFIX = 'showPopup_';
 
 interface BookItem {
+	bookType: string;
 	book_id: number;
 	book_name: string;
 }
@@ -24,8 +26,11 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
-		navBgColor: COLOR.theme,
+		navBgColor: COLOR.white,
+		bookType: '',
+
 		bookInfo: null as unknown as BookItem,
+
 		billId: null,
 		bookList: [],
 		bookIndex: 0,
@@ -36,37 +41,17 @@ Page({
 		isAnimate: false, // 动画开关
 		intoView: '',
 		swiperHeight: 0,
-		swiperIndex: 1,
-		swiperTabs: [
-			{
-				id: 1,
-				title: '收入',
-				type: 1
-			},
-			{
-				id: 2,
-				title: '支出',
-
-				type: 2
-			},
-
-			// {
-			//   id:3,
-			//   title: '转账'
-			// },
-			// {
-			//   id:4,
-			//   title: '借贷'
-			// }
-		],
-		typeList: [{ color: COLOR.incomeColor, name: '收入' }, { color: COLOR.theme, name: '支出' }],
+		swiperIndex: 2,
+		swiperTabs: [] as Array<{ id: number; title: string; type: string }>,
+		typeList: [] as Array<{ color: string; name: string }>,
+		billTypeList: [] as Array<{ value: string; label: string; orderNo: number }>,
 		hasDot: false,
 		bill: {
 			billId: null,// 账单id
 			account_id: null,//账户id
 			account_name: null,//账户名称
 			num: 0, //金额
-			transaction_type: 2, //类型1-收入 2-支出  3-转账 4-借贷
+			transaction_type: 'EXPENSE', //类型INCOME-收入 EXPENSES-支出  TRANSFER-转账 
 			refound: false,// 退款 true 默认 false
 			categoryId: 1, //分类id
 			remark: '', //备注
@@ -134,7 +119,6 @@ Page({
 
 			this.setData({
 				bookList: getStorageSync("bookList"),
-				bookInfo: getStorageSync("bookInfo"),
 				userInfo: getStorageSync("userInfo")
 			})
 		},
@@ -455,48 +439,45 @@ Page({
 
 	// ========== 8. 提交账单 ==========
 	async submitBill(resetCalc = true) {
-		const { bill, billId,bookInfo,userId } = this.data;
+		const { bill, bookInfo } = this.data;
+		const { categoryList, categoryIndex } = this.data;
 
-		// if (!this.data.doneFlag) {
-		// 	wx.showToast({ title: '没有分类你点什么😠', icon: 'none' });
-		// 	return;
-		// }
 
-		const data = {
-			'billId': billId,
-			"user_id":userId|| getStorageSync("userInfo").id,
-			"consume_user_id":userId|| getStorageSync("userInfo").id,
-			"account_id": bill.account_id,
-			"book_id": this.data.bookInfo?.id,
-			"category_id": this.data.categoryList[this.data.categoryIndex].id,
-			"type": bill.transaction_type,
-			"amount": Number(Math.abs(bill.num)),
-			"currency": "CNY",
-			"tags": JSON.stringify(bill.tags),
-			"image_list": bill.image_list,
-			"bill_time": bill.date.replace(/\//g, '-') + ':00',
-			"remark": bill.remark,
-			address: bill.address,
-			longitude: bill.longitude,
-			latitude: bill.latitude,
-			bill_mode:bookInfo.bookType
+
+		// 转换日期格式：时间戳 -> 'YYYY-MM-DD HH:mm:ss'
+		const formatDate = (timestamp: number) => {
+			const date = new Date(timestamp);
+			const Y = date.getFullYear();
+			const M = String(date.getMonth() + 1).padStart(2, '0');
+			const D = String(date.getDate()).padStart(2, '0');
+			const h = String(date.getHours()).padStart(2, '0');
+			const m = String(date.getMinutes()).padStart(2, '0');
+			const s = String(date.getSeconds()).padStart(2, '0');
+			return `${Y}-${M}-${D} ${h}:${m}:${s}`;
 		};
 
+		const data = {
+			bookId: bookInfo.id,
+			categoryId: categoryList[categoryIndex].id,
+			assetId: bill.account_id || '',
+			billType: bill.transaction_type,
+			amount: Number(Math.abs(bill.num)),
+			tradeTime: formatDate(bill.date),
+			remark: bill.remark || '',
+			icon: bill.icon || ''
+		};
 
 		try {
-
-
-			const res = await createTransaction(data);
+			const res = await createBill(data);
 			if (res.code === 200) {
-				// playBtnAudio('/static/audio/save_bill.mp3', 1000);
 				if (resetCalc) {
 					wx.navigateBack({ delta: 1 })
+				} else {
+					this.setData({ 'bill.remark': '' });
 				}
-
-				else this.setData({ 'bill.remark': '', 'bill.tags': [] });
 				this.initCalc();
 			} else {
-				wx.showToast({ title: res.msg || '记账失败', icon: 'none' });
+				wx.showToast({ title: res.message || '记账失败', icon: 'none' });
 			}
 		} catch (error) {
 			console.error('提交失败:', error);
@@ -739,23 +720,35 @@ Page({
 	 * 类别列表
 	 */
 	async getCategoryListFn() {
-		let { userInfo, queryParams, bookList, bookIndex, bill ,userId,bookInfo} = this.data
-		// let bookInfo =  bookList.find(ele => ele.is_default == 1);
-		console.log(bookInfo)
-		let data = { userId: userId||userInfo.id, type: bill.transaction_type, ...queryParams, bookCategoryId: bookInfo.book_category_id}
 
-		let res = await getCategoryList(data)
-		this.setData({
-			categoryList: res.list,
-			categoryIndex: 0,
-			doneFlag: res.list.length > 0 ? true : false
+		
+		// 获取账单类型：1-收入 2-支出
+		const billType = this.data.bill.transaction_type;
+		
+		let res = await getBillCategoryList({ 
+			bookType: this.data.bookInfo.bookType, 
+			billType: billType 
 		})
-		if (this.data.billId) {
-			let data = {
-				userId:userId|| getStorageSync("userInfo").id,
-				billId: this.data.billId,
-			}
-			this.getTransactionInfo(data)
+		
+		this.setData({
+			categoryList: res.data || [],
+			categoryIndex: 0,
+			doneFlag: res.data && res.data.length > 0
+		})
+	},
+
+	/**
+	 * 获取账单类型列表
+	 */
+	async getBillTypeList() {
+		let res = await getDictItems('bill_type');
+		if (res && res.data && Array.isArray(res.data)) {
+			this.setData({
+				billTypeList: res.data || []
+			});
+			
+			// 获取分类列表
+			this.getCategoryListFn();
 		}
 	},
 	/**
@@ -803,7 +796,7 @@ Page({
 		const { category, index } = e.currentTarget.dataset;
 		const { selectedCategoryTags, bill } = this.data;
 		// 解构分类ID和Name（确保字段存在）
-		const { id: categoryId, name: categoryName } = category;
+		const { id: categoryId, categoryName } = category;
 
 		// 判断当前标签是否已选中（纯ID数组判断）
 		const isSelected = selectedCategoryTags.indexOf(categoryId) !== -1;
@@ -881,27 +874,21 @@ Page({
 	//     selectedCategoryTags.includes(item.category_id)
 	//   );
 	// },
-	async getTransactionInfo({ userId, billId }) {
-
-		let res = await transactionInfo({ userId, billId })
+	async getTransactionInfo(billId) {
+		let res = await getBillInfo(billId)
 		console.log(res)
+		if (!res || !res.data) return
 
 		let data = {
 			billId: res.data.id,// 账单id
-			account_id: res.data.account.id,//账户id
-			account_name: res.data.account.id == 0 ? '账户' : res.data.account.name,//账户名称
+			account_id: res.data.asset?.id,//账户id
+			account_name: res.data.asset?.assetName || '账户',//账户名称
 			num: Number(res.data.amount), //金额
 			transaction_type: this.data.bill.transaction_type, //类型1-收入 2-支出  3-转账 4-借贷
 			refound: false,// 退款 true 默认 false
 			categoryId: res.data.category.id, //分类id
 			remark: res.data.remark, //备注
-			tags: res.data.tags,
-			image_list: res.data.image_list,
-			address: this.data.bill.address ? this.data.bill.address : res.data.address,
-			date: res.data.bill_time, //日期
-			latitude: this.data.bill.latitude ? this.data.bill.latitude : res.data.latitude,
-			longitude: this.data.bill.longitude ? this.data.bill.longitude : res.data.longitude
-
+			date: res.data.tradeTime, //日期
 		}
 		const categoryIndex = this.data.categoryList.findIndex(ele => ele.id == data.categoryId)
 		let indexResult = findAccountIndexes(this.data.accountList, data.account_id)
@@ -918,18 +905,23 @@ Page({
 	 */
 	onTabChanged(evt: any) {
 		const index = evt.detail.current
-		// playBtnAudio('/static/audio/btnaudio.mp3', 1000);
+		const currentTab = this.data.billTypeList[index].value;
+console.log(currentTab)
+		const transactionType = currentTab;
 		this.setData({
 			selectedTab: index,
-			'bill.transaction_type': this.data.swiperTabs[index].id
+			'bill.transaction_type': transactionType
 		})
 		this.getCategoryListFn()
 	},
 	onTapTab(evt) {
 		const { sub } = evt.detail.delta
+		const currentTab = this.data.billTypeList[sub].value;
+		console.log(currentTab)
+		const transactionType = currentTab;
 		this.setData({
 			selectedTab: sub,
-			'bill.transaction_type': this.data.swiperTabs[sub].id
+			'bill.transaction_type': transactionType
 		})
 		this.getCategoryListFn()
 	},
@@ -1142,21 +1134,40 @@ Page({
 
 		this.getNavBarHeight()
 		let bookList = getStorageSync("bookList")
-		const bookIndex = bookList.findIndex(ele => ele.id == options.bookId)
-
+		const bookIndex = bookList.findIndex(ele => ele.isDefault == 1)
+		console.log(bookIndex)
 		const systemInfo = wx.getSystemInfoSync();
+		const bookInfo = bookList[bookIndex]
+		console.log(bookInfo)
+		
+		// 默认使用当前时间戳
+		const nowDate = options.date ? new Date(options.date).getTime() : Date.now();
+		
 		this.setData({
 			safeAreaBottom: systemInfo.screenHeight - systemInfo.safeArea.bottom,
 			bookIndex,
-			'bill.date': options.date || this.data.bill.date,
-			'bill.transaction_type': options.type ? options.type : 2,
+			'bill.date': nowDate,
+			'bill.transaction_type': options.type ? options.type : this.data.bill.transaction_type,
 			billId: options.billId,
 			selectedTab: options.type ? Number(options.type) - 1 : 1,
-			userId:options.user_id || getStorageSync("userInfo").id
-		});
+			userId:options.user_id || getStorageSync("userInfo").id,
+			bookInfo: bookInfo,
+			bookId: bookInfo.bookId,
+			bookList: bookList,
+			bookIndex: bookIndex,
+			bookType: options.bookType,
+				});
 		// 提前在onLoad中就开始监听
 		this.initKeyboardListener();
 		this.initCalc();
+		
+		// 获取账单类型列表
+		this.getBillTypeList();
+		
+		// 如果是编辑账单，获取详情
+		if (options.billId) {
+			this.getTransactionInfo(options.billId)
+		}
 
 	},
 	
@@ -1181,14 +1192,19 @@ Page({
 	 */
 	onShow() {
 		console.log(dateUtils.formatLongTime(new Date(), dateUtils.modeMapToFields['YMDhm']))
+		let bookList = getStorageSync("bookList")
+		let bookIndex = bookList.findIndex(ele => ele.isDefault == 1)
 		this.setData({
-			bookList: getStorageSync("bookList"),
-			bookInfo: getStorageSync("bookInfo"),
+			bookList: bookList,
+			bookIndex: bookIndex,
+			bookInfo: bookList[bookIndex],
 			userInfo:this.data.userId|| getStorageSync("userInfo"),
 			'bill.date': dateUtils.formatLongTime(new Date(), dateUtils.modeMapToFields['YMDhm'])
 		})
-		this.getCategoryListFn()
-		this.handleAccountList()
+		// 如果是编辑账单，获取详情
+		if (this.data.billId) {
+			this.getTransactionInfo(this.data.billId)
+		}
 	},
 
 	/**

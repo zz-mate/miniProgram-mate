@@ -2,110 +2,69 @@
 import { request } from '../utils/request';
 
 /**
- * 获取用户信息
- * @returns 返回一个 Promise，resolve 的结果是用户信息对象
+ * 获取当前用户账本列表
  */
-export function getBookList(data:any) {
+export function getBookList() {
   return request({
-    url: '/miniProgram/book/list',
-    method: 'POST',
-    data,
+    url: '/app/book/list',
+    method: 'GET',
   });
 }
-export function getBookInfo(data:any) {
+
+/**
+ * 获取账本详情
+ * @param id 账本ID
+ */
+export function getBookInfo(id: string) {
   return request({
-    url: '/miniProgram/book/info',
-    method: 'POST',
-    data,
+    url: `/app/book/${id}`,
+    method: 'GET',
   });
 }
-export function createBook(data:any) {
+
+/**
+ * 创建账本
+ * @param data 账本信息
+ */
+export function createBook(data: any) {
   return request({
-    url: '/miniProgram/book/create',
-    method: 'POST',
-    data,
-  });
-}
-export function updateBook(data:any) {
-  return request({
-    url: '/miniProgram/book/update',
+    url: '/app/book',
     method: 'POST',
     data,
   });
 }
 
-export function getBookCagetgoryList(data?:any) {
+/**
+ * 更新账本
+ * @param id 账本ID
+ * @param data 账本信息
+ */
+export function updateBook(id: string, data: any) {
   return request({
-    url: '/miniProgram/book/category/list',
-    method: 'POST',
-    data,
-  });
-}
-export function getBookUserList(data?:any) {
-  return request({
-    url: '/miniProgram/book/userList',
-    method: 'POST',
-    data,
-  });
-}
-export function shareCreate(data?:any) {
-  return request({
-    url: '/miniProgram/share/create',
-    method: 'POST',
-    data,
-  });
-}
-export function joinBook(data?:any) {
-  return request({
-    url: '/miniProgram/book/join',
-    method: 'POST',
-    data,
-  });
-}
-export function validateQrCode(data?:any) {
-  return request({
-    url: '/miniProgram/share/qrcode/validate',
-    method: 'POST',
+    url: `/app/book/${id}`,
+    method: 'PUT',
     data,
   });
 }
 
-export function generateCode(data?:any) {
+/**
+ * 删除账本
+ * @param id 账本ID
+ */
+export function deleteBook(id: string) {
   return request({
-    url: '/miniProgram/share/qrcode/generate',
-    method: 'POST',
-    data,
+    url: `/app/book/${id}`,
+    method: 'DELETE',
   });
 }
 
-
-
-export function bookBill(data?:any) {
+/**
+ * 设为默认账本
+ * @param id 账本ID
+ */
+export function setDefaultBook(id: string) {
   return request({
-    url: '/miniProgram/book/bookBill',
-    method: 'POST',
-    data,
-  });
-}
-export function remove(data?:any) {
-  return request({
-    url: '/miniProgram/book/remove',
-    method: 'POST',
-    data,
-  });
-}
-
-export function removeshareUs(data?:any) {
-  return request({
-    url: '/miniProgram/share/removeshareUs',
-    method: 'POST',
-    data,
-  });
-}
-export function removeMutiBook(data?:any) {
-  return request({
-    url: '/miniProgram/share/removeMutiBook',
-    method: 'POST',
-    data,
+    url: `/app/book/${id}/default`,
+    method: 'PUT',
   });
 }
